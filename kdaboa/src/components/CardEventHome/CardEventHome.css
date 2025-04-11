@@ -1,0 +1,20 @@
+:root{
+    --fredoka: 'Fredoka', sans-serif;
+    --notosans: 'Noto Sans', sans-serif;
+    --color_purple1: #6C15D5;
+}
+
+.txt-cardHomeEvent{
+    font-family: var(--notosans) !important;
+}
+
+.btn-cardHomeEvent{
+    border: none;
+    background: none;
+    color: var(--color_purple1);
+    margin-right: 2vh;
+}
+
+.btn-cardHomeEvent:hover{
+    background: none !important;
+}

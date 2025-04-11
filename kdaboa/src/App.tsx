@@ -1,12 +1,17 @@
 import Navbar from './components/Navbar/Navbar'
 import './App.css'
 import { Grid,Box } from '@mui/material'
+import CardEventHome from "./components/CardEventHome/CardEventHome"
 function App() {
 
   return (
-    <Box>
+    <>
+      <Box>
         <Navbar />
-    </Box>
+      </Box>
+      <CardEventHome />
+    </>
+    
   )
 }
 
