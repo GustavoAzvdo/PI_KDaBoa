@@ -1,0 +1,41 @@
+:root{
+    --roxo: #6C15D5;
+    --branco: #FFFFFF;
+    --roxoFraco: #BB8AFF;
+}
+
+
+* {
+    font-family: 'Fredoka', sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 550 !important;
+}
+
+.navbar{
+    background-color: rgb(255, 255, 255) !important;
+    color: #000 !important;
+}
+
+.toolbar{
+    display: flex;
+    justify-content: space-between;
+}
+
+.btns-left, .btns-right{
+    display: flex;
+}
+
+.logo,
+.btnPublicar{
+    padding: 15px !important;
+}
+
+.btnPublicar{
+    background-color: var(--roxo) !important;
+}
+
+button:hover{
+    background-color: var(--roxoFraco) !important;
+   
+}
+
