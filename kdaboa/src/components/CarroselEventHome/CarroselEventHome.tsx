@@ -24,15 +24,15 @@ export default function CarroselEventHome() {
              breakpoints={{
                 300: {
                     slidesPerView: 1,
-                    spaceBetween: 3,
+                    spaceBetween: 20,
                 },
-                500: {
+                530: {
                     slidesPerView: 2,
-                    spaceBetween: 10,
+                    spaceBetween: 30,
                 },
                 1200: {
                     slidesPerView: 3,
-                    spaceBetween: 30,
+                    spaceBetween: 60,
                 },
              }}>
 

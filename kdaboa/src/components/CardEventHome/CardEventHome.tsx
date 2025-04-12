@@ -9,7 +9,6 @@ import "./CardEventHome.css"
 import { Typography } from '@mui/material';
 import CardProps from './props/CardProps';
 
-
 interface CardEventHomeProps {
     card: CardProps;
 }
@@ -17,7 +16,7 @@ interface CardEventHomeProps {
 export default function RecipeReviewCard({ card }: CardEventHomeProps) {
     
 return (
-    <Card className='cardHomeEvent'>
+    <Card sx={{ borderRadius: 4 }} className='cardHomeEvent'>
         <CardMedia
             component="img"
             height="194"
