@@ -17,7 +17,7 @@ interface CardEventHomeProps {
 export default function RecipeReviewCard({ card }: CardEventHomeProps) {
     
 return (
-    <Card sx={{ maxWidth: 345, borderRadius: 4}}>
+    <Card className='cardHomeEvent'>
         <CardMedia
             component="img"
             height="194"

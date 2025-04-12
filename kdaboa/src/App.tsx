@@ -1,9 +1,7 @@
 import Navbar from './components/Navbar/Navbar'
 import './App.css'
 import { Grid,Box } from '@mui/material'
-import CardEventHome from "./components/CardEventHome/CardEventHome"
-import CardsBD from './components/CardEventHome/CardsBD.ts'
-import CardProps from './components/CardEventHome/props/CardProps.ts'
+import CarroselEventHome from './components/CarroselEventHome/CarroselEventHome'
 
 function App() {
   return (
@@ -11,7 +9,8 @@ function App() {
       <Box>
         <Navbar />
       </Box>
-      {CardsBD.map((card : CardProps, index: number) => <CardEventHome key={index} card={card} />)}
+
+      <CarroselEventHome />
     </>
     
   )

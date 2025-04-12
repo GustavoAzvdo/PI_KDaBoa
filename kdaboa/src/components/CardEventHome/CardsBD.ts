@@ -2,7 +2,7 @@ import { CardProps } from "./props/CardProps";
 
 const CardsBD: CardProps[] = [{
     id: 1,
-    title: "Prefixo011 - MC Cabelinho",
+    title: "Prefixo - Cabelinho",
     description: "Cabelinho é o seu marrrento nesse show da Prefixo011!",
     image: "/Image_cardHomeEvent/Cabelinho_Banner.jpg",
     date: "Setembro 14, 2016"
