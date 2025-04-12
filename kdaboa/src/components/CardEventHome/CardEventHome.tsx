@@ -7,15 +7,21 @@ import { red } from '@mui/material/colors';
 
 import "./CardEventHome.css"
 import { Typography } from '@mui/material';
+import CardProps from './props/CardProps';
 
-export default function RecipeReviewCard() {
 
+interface CardEventHomeProps {
+    card: CardProps;
+}
+
+export default function RecipeReviewCard({ card }: CardEventHomeProps) {
+    
 return (
     <Card sx={{ maxWidth: 345, borderRadius: 4}}>
         <CardMedia
             component="img"
             height="194"
-            image="/public/Cabelinho_Banner.jpg"
+            image={card.image}
             alt="Paella dish"
         />
         <CardHeader
@@ -24,12 +30,12 @@ return (
                     P 
                 </Avatar>
             }
-            title="Prefixo011 - MC Cabelinho"
-            subheader="Setembro 14, 2016"
+            title={card.title}
+            subheader={card.date}
         />
         <CardActions sx={{alignItems: "flex-end", display:"flex", justifyContent: "flex-end"}}  disableSpacing>
             <button className='btn-cardHomeEvent' onClick={() => {
-
+                // Insert script for open page of the especific event
             }}>
                 <Typography className='txt-cardHomeEvent'>
                     Ver Mais

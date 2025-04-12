@@ -2,14 +2,16 @@ import Navbar from './components/Navbar/Navbar'
 import './App.css'
 import { Grid,Box } from '@mui/material'
 import CardEventHome from "./components/CardEventHome/CardEventHome"
-function App() {
+import CardsBD from './components/CardEventHome/CardsBD.ts'
+import CardProps from './components/CardEventHome/props/CardProps.ts'
 
+function App() {
   return (
     <>
       <Box>
         <Navbar />
       </Box>
-      <CardEventHome />
+      {CardsBD.map((card : CardProps, index: number) => <CardEventHome key={index} card={card} />)}
     </>
     
   )
