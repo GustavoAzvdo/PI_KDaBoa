@@ -1,0 +1,52 @@
+:root{
+    --fredoka: 'Fredoka', sans-serif;
+    --notosans: 'Noto Sans', sans-serif;
+    --color_purple1: #6C15D5;
+}
+
+.txt-cardHomeEvent{
+    font-family: var(--notosans) !important;
+}
+
+.btn-cardHomeEvent{
+    border: none;
+    background: none;
+    color: var(--color_purple1);
+    margin-right: 2vh;
+    cursor: pointer;
+}
+
+.btn-cardHomeEvent:hover{
+    border-radius: 20px;
+    color: black;
+}
+
+.cardHomeEvent {
+    max-width:50vw;
+    width: 100%; /* Faz o card ocupar toda a largura disponível */
+    height: auto; /* Ajusta a altura automaticamente */
+    margin: 0 auto; /* Centraliza o card dentro do slide */
+    display: flex;
+    flex-direction: column; /* Organiza o conteúdo em coluna */
+    justify-content: space-between; /* Espaça os elementos internos */
+    overflow: hidden; /* Garante que o conteúdo não extrapole o card */
+}
+
+.cardHomeEvent img {
+    width: 100%; /* Faz a imagem ocupar toda a largura do card */
+    object-fit:cover; /* Ajusta a imagem para cobrir o espaço disponível */
+}
+
+.cardHomeEvent-title {
+    font-family: var(--fredoka);
+    overflow: hidden; /* Esconde o texto que ultrapassar o limite */
+    text-overflow: ellipsis; /* Adiciona reticências (...) ao final do texto */
+    max-width: 100%; /* Garante que o título respeite o tamanho do card */
+    text-align: center; /* Centraliza o texto */
+}
+
+.cardHomeEvent-date {
+    font-size: 0.9rem;
+    text-align: center;
+}
+
