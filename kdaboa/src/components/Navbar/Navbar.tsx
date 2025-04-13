@@ -20,22 +20,12 @@ const Navbar = () => {
                                         Encontrar eventos
                                     </Typography>
                                 </Button>
-                                <Button variant='text' color='inherit'>
-                                    <Typography >
-                                        Ajuda
-                                    </Typography>
-                                </Button>
                             </Box>
                         </Box>
                         <Box className='btns-right' sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <Button variant='text' color='inherit' size='large'>
-                                <Typography >
-                                    Entrar
-                                </Typography>
-                            </Button>
                             <Button variant='contained' color='secondary' size='large' className='btnPublicar'>
                                 <Typography>
-                                    Publicar evento
+                                    Entrar
                                 </Typography>
                             </Button>
                         </Box>
