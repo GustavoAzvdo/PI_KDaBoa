@@ -1,0 +1,39 @@
+:root{
+    --corFundo: #FF8e38;
+    --corTexto: #000000;
+    --fredoka: 'Fredoka', sans-serif;
+}
+
+.footer{
+    display: flex;
+    height: 30vh;
+    background-color: var(--corFundo);
+    color: var(--corTexto);
+    align-items : center;
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+ .footer-right, .footer-left{
+    width: 100%;
+
+} 
+.footer-right{
+    display: flex;
+    justify-content: end;
+}
+
+.footer-texts p{
+    font-family: var(--fredoka) !important;
+    font-weight: bold;
+    font-size: 26px;
+}
+.footer-texts .f1{
+
+    margin-top: -5px;
+    font-family: var(--fredoka) !important;
+    font-weight: 450;
+    font-size: 12px;
+}
+
+

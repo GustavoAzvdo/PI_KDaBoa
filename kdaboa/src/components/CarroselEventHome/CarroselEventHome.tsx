@@ -15,6 +15,7 @@ export default function CarroselEventHome() {
             modules={[Navigation, Pagination, A11y]}
             spaceBetween={20}
             slidesPerView={3}
+            
             navigation
             pagination={{ clickable: true,
                 renderBullet: (index, className) => {
