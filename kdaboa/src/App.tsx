@@ -1,11 +1,15 @@
 import Navbar from './components/Navbar/Navbar'
 import './App.css'
-import { Grid,Box } from '@mui/material'
+import {Box } from '@mui/material'
+import Search from './components/Search/Search'
+import BoxInfo from './components/BoxInfo/BoxInfo'
 function App() {
 
   return (
     <Box>
         <Navbar />
+        <Search />
+        <BoxInfo />
     </Box>
   )
 }

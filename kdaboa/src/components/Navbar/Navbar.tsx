@@ -8,12 +8,12 @@ import './Navbar.css'
 
 const Navbar = () => {
     return (
-        <>
+        <div className='nav'>
             <Box>
                 <AppBar position="static" className='navbar' elevation={0}>
                     <Toolbar className='toolbar'>
                         <Box className='btns-left'>
-                            <img src={logo} alt="" style={{ width: 50, height: 50 }} className='logo' />
+                            <img src={logo} alt="" style={{ width: 60, height: 60 }} className='logo' />
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                                 <Button variant='text' color='inherit' size='large'>
                                     <Typography>
@@ -43,7 +43,7 @@ const Navbar = () => {
 
                 </AppBar>
             </Box>
-        </>
+        </div>
     )
 }
 

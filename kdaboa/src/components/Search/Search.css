@@ -1,0 +1,85 @@
+:root {
+    --notosans: 'Noto Sans', sans-serif;
+    --fredoka: 'Fredoka', sans-serif;
+    --roxo: #6C15D5;
+}
+
+
+.search {
+    margin-top: 40px;
+    margin-bottom: 30px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+   
+}
+
+.search p {
+    font-family: var(--fredoka) !important;
+   font-size: 60px!important;
+    font-weight: 500 !important;
+}
+
+.search img {
+    position: relative;
+    top: -4px;
+    vertical-align: middle;
+    margin-left: 20px;
+}
+
+/* Campo de busca (TextField da esquerda) */
+.form-left .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: var(--roxo);
+}
+
+.form-left .MuiInputLabel-root.Mui-focused {
+    color: var(--roxo);
+}
+
+/* Campo de categorias (Autocomplete da direita) */
+.form-right .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: var(--roxo);
+}
+
+.form-right .MuiInputLabel-root.Mui-focused {
+    color: var(--roxo);
+}
+
+.form-left .MuiInputBase-input,
+.form-left .MuiInputLabel-root,
+.form-right .MuiInputBase-input,
+.form-right .MuiInputLabel-root {
+    font-family: var(--notosans) !important;
+    font-size: 18px;
+}
+
+.form-right li {
+    font-family: var(--notosans) !important;
+    font-size: 24px;
+}
+
+/* Chips selecionados */
+.form-right .MuiChip-root {
+    background-color: #E9D8FD !important; /* roxo claro */
+    color: #4B0082 !important; /* roxo mais escuro pra contraste */
+    font-family: var(--notosans);
+    font-weight: 500;
+  }
+  
+  /* Ícone de remover (o X) */
+  .form-right .MuiChip-deleteIcon {
+    color: #6C15D5 !important; /* tom mais forte de roxo */
+  }
+  .MuiOutlinedInput-root {
+    & fieldset {
+      legend {
+        max-width: 0.01px;
+      }
+    }
+  }
+  
+  .MuiInputLabel-root {
+    background-color: white; /* ou a cor do fundo */
+    padding: 0 12px !important;
+  }
+    
