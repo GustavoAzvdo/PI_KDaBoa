@@ -4,6 +4,10 @@
     --color_purple1: #6C15D5;
 }
 
+.header-cardHomeEvent span{
+    font-family: var(--fredoka) !important;
+    font-size:medium;
+}
 .txt-cardHomeEvent{
     font-family: var(--notosans) !important;
 }

@@ -1,3 +1,9 @@
+:root{
+    --fredoka: 'Fredoka', sans-serif; 
+    --notosans: 'Noto Sans', sans-serif; 
+    --color_purple1: #6C15D5; 
+}
+
 .swiper {
     width: 80%;
     padding: 60px 100px; 
@@ -14,7 +20,7 @@
 .swiper-button-prev {
     top: 100%; 
     transform: translateY(-65%);
-    color: #6c63ff;
+    color: var(--color_purple1) !important;
     z-index: 100;
 }
 
@@ -35,7 +41,9 @@
 
 
 .swiper-pagination-bullet {
-    background-color: #6c63ff;
+    font-family: var(--fredoka) !important;
+    background: var(--color_purple1) !important;
+    font-weight: 700;
     min-width: 40px;
     min-height: 40px; 
 
@@ -55,6 +63,7 @@
     }
 
     .swiper-pagination-bullet {
+        font-family: ;
         min-width: 30px;
         min-height: 30px; 
     }

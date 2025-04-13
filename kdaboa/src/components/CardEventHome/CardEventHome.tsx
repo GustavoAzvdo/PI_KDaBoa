@@ -31,7 +31,7 @@ return (
             }
             title={card.title}
             subheader={card.date}
-        />
+            className='header-cardHomeEvent'/>
         <CardActions sx={{alignItems: "flex-end", display:"flex", justifyContent: "flex-end"}}  disableSpacing>
             <button className='btn-cardHomeEvent' onClick={() => {
                 // Insert script for open page of the especific event
