@@ -1,4 +1,4 @@
-import React from 'react'
+
 import './Footer.css'
 import { Box, Typography } from '@mui/material'
 import logo from '../../assets/logo.png'
