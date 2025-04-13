@@ -1,0 +1,54 @@
+:root {
+    --notosans: 'Noto Sans', sans-serif;
+    --fredoka: 'Fredoka', sans-serif;
+    --roxo: #6C15D5;
+}
+
+.box-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.texts p{
+  
+   font-size: 27px;
+   font-weight: 500;
+   margin-top: 10px;
+   font-family: var(--notosans) !important;
+}
+
+.texts .p1 {
+   
+    padding-bottom: 20px;
+}
+
+.btns{
+   
+    margin-top: 20px;    
+    width: 100%;
+    display: flex;
+    align-items: start;
+}
+
+.btns  button{
+   color: var(--roxo) !important;
+}
+.btns button p{
+    
+    font-family: var(--fredoka) !important;
+    font-size: 23px !important;
+}
+
+
+.btns .btn-text p{
+    font-family: var(--fredoka) !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+}
+
+.btns button:hover{
+   
+    color: white !important;
+}
