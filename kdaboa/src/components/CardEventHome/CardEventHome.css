@@ -9,10 +9,12 @@
     font-size:medium;
 }
 .txt-cardHomeEvent{
-    font-family: var(--notosans) !important;
+    font-family: var(--fredoka) !important;
+    font-size: 17px !important;
 }
 
 .btn-cardHomeEvent{
+    padding: 2px;
     border: none;
     background: none;
     color: var(--color_purple1);
@@ -20,10 +22,17 @@
     cursor: pointer;
 }
 
-.btn-cardHomeEvent:hover{
-    border-radius: 20px;
-    color: black;
+.btn-cardHomeEvent {
+    color: var(--color_purple1) !important;
+    font-size: 20px;
+    font-weight: 500;
 }
+
+ .btn-cardHomeEvent p:hover{   
+    color: #fff !important;
+
+} 
+
 
 .cardHomeEvent {
     max-width:50vw;

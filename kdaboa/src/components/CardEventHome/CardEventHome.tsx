@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
 
 import "./CardEventHome.css"
-import { Typography } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import CardProps from './props/CardProps';
 
 interface CardEventHomeProps {
@@ -33,13 +33,13 @@ return (
             subheader={card.date}
             className='header-cardHomeEvent'/>
         <CardActions sx={{alignItems: "flex-end", display:"flex", justifyContent: "flex-end"}}  disableSpacing>
-            <button className='btn-cardHomeEvent' onClick={() => {
+            <Button className='btn-cardHomeEvent' onClick={() => {
                 // Insert script for open page of the especific event
             }}>
                 <Typography className='txt-cardHomeEvent'>
                     Ver Mais
                 </Typography>
-            </button>
+            </Button>
         </CardActions>
     </Card>
 );
