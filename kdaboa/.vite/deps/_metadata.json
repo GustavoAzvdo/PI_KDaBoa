@@ -2,192 +2,204 @@
   "hash": "045e0dc8",
   "configHash": "2e5980cf",
   "lockfileHash": "ece55bbe",
-  "browserHash": "1da9631c",
+  "browserHash": "c6cb4481",
   "optimized": {
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "9a530615",
+      "fileHash": "76c05e1a",
       "needsInterop": true
     },
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "723bbedd",
+      "fileHash": "d6f07d9c",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "193a5e97",
+      "fileHash": "98f4e678",
       "needsInterop": true
     },
     "@mui/material": {
       "src": "../../node_modules/@mui/material/esm/index.js",
       "file": "@mui_material.js",
-      "fileHash": "eeefab49",
+      "fileHash": "a8acfc43",
       "needsInterop": false
     },
     "@mui/material/AppBar": {
       "src": "../../node_modules/@mui/material/esm/AppBar/index.js",
       "file": "@mui_material_AppBar.js",
-      "fileHash": "83abee35",
+      "fileHash": "304e84c6",
       "needsInterop": false
     },
     "@mui/material/Box": {
       "src": "../../node_modules/@mui/material/esm/Box/index.js",
       "file": "@mui_material_Box.js",
-      "fileHash": "e5b4ed19",
+      "fileHash": "94c04ef5",
       "needsInterop": false
     },
     "@mui/material/Toolbar": {
       "src": "../../node_modules/@mui/material/esm/Toolbar/index.js",
       "file": "@mui_material_Toolbar.js",
-      "fileHash": "9334c859",
+      "fileHash": "bb3647cf",
       "needsInterop": false
     },
     "@mui/material/Button": {
       "src": "../../node_modules/@mui/material/esm/Button/index.js",
       "file": "@mui_material_Button.js",
-      "fileHash": "78d4cfb3",
+      "fileHash": "e7c49cc7",
       "needsInterop": false
     },
     "@mui/material/Typography": {
       "src": "../../node_modules/@mui/material/esm/Typography/index.js",
       "file": "@mui_material_Typography.js",
-      "fileHash": "b1e77414",
+      "fileHash": "aaaa6dcf",
       "needsInterop": false
     },
     "@mui/icons-material/CheckBoxOutlineBlank": {
       "src": "../../node_modules/@mui/icons-material/esm/CheckBoxOutlineBlank.js",
       "file": "@mui_icons-material_CheckBoxOutlineBlank.js",
-      "fileHash": "b5677013",
+      "fileHash": "6428ed24",
       "needsInterop": false
     },
     "@mui/icons-material/CheckBox": {
       "src": "../../node_modules/@mui/icons-material/esm/CheckBox.js",
       "file": "@mui_icons-material_CheckBox.js",
-      "fileHash": "4a63c90d",
+      "fileHash": "ab4dc072",
       "needsInterop": false
     },
     "@mui/material/Card": {
       "src": "../../node_modules/@mui/material/esm/Card/index.js",
       "file": "@mui_material_Card.js",
-      "fileHash": "2a5b2bb1",
+      "fileHash": "ea35e86a",
       "needsInterop": false
     },
     "@mui/material/CardHeader": {
       "src": "../../node_modules/@mui/material/esm/CardHeader/index.js",
       "file": "@mui_material_CardHeader.js",
-      "fileHash": "6648e554",
+      "fileHash": "02e11427",
       "needsInterop": false
     },
     "@mui/material/CardMedia": {
       "src": "../../node_modules/@mui/material/esm/CardMedia/index.js",
       "file": "@mui_material_CardMedia.js",
-      "fileHash": "fa81669b",
+      "fileHash": "3255363d",
       "needsInterop": false
     },
     "@mui/material/CardActions": {
       "src": "../../node_modules/@mui/material/esm/CardActions/index.js",
       "file": "@mui_material_CardActions.js",
-      "fileHash": "3d48e2de",
+      "fileHash": "ab955c34",
       "needsInterop": false
     },
     "@mui/material/Avatar": {
       "src": "../../node_modules/@mui/material/esm/Avatar/index.js",
       "file": "@mui_material_Avatar.js",
-      "fileHash": "99eb04d8",
+      "fileHash": "cc9006c0",
       "needsInterop": false
     },
     "@mui/material/colors": {
       "src": "../../node_modules/@mui/material/esm/colors/index.js",
       "file": "@mui_material_colors.js",
-      "fileHash": "91209f37",
+      "fileHash": "5773943c",
       "needsInterop": false
     },
     "swiper/react": {
       "src": "../../node_modules/swiper/swiper-react.mjs",
       "file": "swiper_react.js",
-      "fileHash": "58f4e676",
+      "fileHash": "7f5b181f",
       "needsInterop": false
     },
     "swiper/modules": {
       "src": "../../node_modules/swiper/modules/index.mjs",
       "file": "swiper_modules.js",
-      "fileHash": "1897bb77",
+      "fileHash": "663a1e9b",
+      "needsInterop": false
+    },
+    "@mui/icons-material": {
+      "src": "../../node_modules/@mui/icons-material/esm/index.js",
+      "file": "@mui_icons-material.js",
+      "fileHash": "6fa773d3",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-KAKK377Y": {
-      "file": "chunk-KAKK377Y.js"
+    "chunk-XLOWEJT4": {
+      "file": "chunk-XLOWEJT4.js"
     },
-    "chunk-QOQV5E2B": {
-      "file": "chunk-QOQV5E2B.js"
+    "chunk-SJWOC6TP": {
+      "file": "chunk-SJWOC6TP.js"
     },
-    "chunk-Z2VJB7N7": {
-      "file": "chunk-Z2VJB7N7.js"
-    },
-    "chunk-3LY33E37": {
-      "file": "chunk-3LY33E37.js"
+    "chunk-WWM4PBBA": {
+      "file": "chunk-WWM4PBBA.js"
     },
     "chunk-C6WWHQR7": {
       "file": "chunk-C6WWHQR7.js"
     },
-    "chunk-6QNSCTW4": {
-      "file": "chunk-6QNSCTW4.js"
+    "chunk-Z2VJB7N7": {
+      "file": "chunk-Z2VJB7N7.js"
     },
-    "chunk-UUL52PIB": {
-      "file": "chunk-UUL52PIB.js"
+    "chunk-5B7D2P62": {
+      "file": "chunk-5B7D2P62.js"
     },
-    "chunk-H6BWEEMT": {
-      "file": "chunk-H6BWEEMT.js"
+    "chunk-ML3BZRYY": {
+      "file": "chunk-ML3BZRYY.js"
     },
-    "chunk-VM42XFDS": {
-      "file": "chunk-VM42XFDS.js"
+    "chunk-R7GGSSEN": {
+      "file": "chunk-R7GGSSEN.js"
     },
-    "chunk-2GYMJRQH": {
-      "file": "chunk-2GYMJRQH.js"
+    "chunk-R6YD36C5": {
+      "file": "chunk-R6YD36C5.js"
     },
-    "chunk-OUFQS2MT": {
-      "file": "chunk-OUFQS2MT.js"
+    "chunk-ZRFT24QA": {
+      "file": "chunk-ZRFT24QA.js"
     },
-    "chunk-C2DE7LGF": {
-      "file": "chunk-C2DE7LGF.js"
+    "chunk-QKF4T67R": {
+      "file": "chunk-QKF4T67R.js"
     },
-    "chunk-XLOWEJT4": {
-      "file": "chunk-XLOWEJT4.js"
+    "chunk-GAJNNT7Y": {
+      "file": "chunk-GAJNNT7Y.js"
     },
-    "chunk-OAZAAUMI": {
-      "file": "chunk-OAZAAUMI.js"
+    "chunk-ROABXA6N": {
+      "file": "chunk-ROABXA6N.js"
     },
-    "chunk-G3EJURGU": {
-      "file": "chunk-G3EJURGU.js"
+    "chunk-YKFQG4X5": {
+      "file": "chunk-YKFQG4X5.js"
     },
-    "chunk-GBBDVVGN": {
-      "file": "chunk-GBBDVVGN.js"
+    "chunk-KMU6WNRS": {
+      "file": "chunk-KMU6WNRS.js"
     },
-    "chunk-SP6NVUAY": {
-      "file": "chunk-SP6NVUAY.js"
+    "chunk-B2FWXQIU": {
+      "file": "chunk-B2FWXQIU.js"
     },
-    "chunk-N6YVADPJ": {
-      "file": "chunk-N6YVADPJ.js"
+    "chunk-C6KWZYQ5": {
+      "file": "chunk-C6KWZYQ5.js"
+    },
+    "chunk-XGYD37CI": {
+      "file": "chunk-XGYD37CI.js"
     },
     "chunk-G4FQZWC4": {
       "file": "chunk-G4FQZWC4.js"
     },
-    "chunk-J4NHIEA4": {
-      "file": "chunk-J4NHIEA4.js"
+    "chunk-BZWEKTVZ": {
+      "file": "chunk-BZWEKTVZ.js"
     },
-    "chunk-LQSHQJD2": {
-      "file": "chunk-LQSHQJD2.js"
+    "chunk-OAZAAUMI": {
+      "file": "chunk-OAZAAUMI.js"
     },
-    "chunk-RVXBXY6C": {
-      "file": "chunk-RVXBXY6C.js"
+    "chunk-AZ2CWHFI": {
+      "file": "chunk-AZ2CWHFI.js"
     },
-    "chunk-I4UEBYRA": {
-      "file": "chunk-I4UEBYRA.js"
+    "chunk-JERGYBRX": {
+      "file": "chunk-JERGYBRX.js"
+    },
+    "chunk-6LEI4MCI": {
+      "file": "chunk-6LEI4MCI.js"
+    },
+    "chunk-GPCJ25HW": {
+      "file": "chunk-GPCJ25HW.js"
     },
     "chunk-6SNPRQOH": {
       "file": "chunk-6SNPRQOH.js"
