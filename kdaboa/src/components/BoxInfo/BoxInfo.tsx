@@ -16,7 +16,7 @@ const BoxInfo = () => {
         </Box>
           <Box className="btns">
 
-            <Button variant='text' color='inherit' size='large'>
+            <Button variant='outlined' color='inherit' size='large'>
               <Typography className="btn-text">
                 Quero me cadastrar!
               </Typography>

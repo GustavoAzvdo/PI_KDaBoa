@@ -1,8 +1,9 @@
-import { Box, Grid, TextField, Typography, Autocomplete, Checkbox } from '@mui/material'
+import { Box, Grid, TextField, Typography, Autocomplete, Checkbox, InputAdornment } from '@mui/material'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import hangloose from '../../assets/hangloose.png'
 import { dados } from '../../categorys/dados'
+import {SearchOutlined} from '@mui/icons-material';
 import './Search.css'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
@@ -29,6 +30,11 @@ const Search = () => {
                 id="outlined-basic"
                 label="Pesquisar eventos, shows, baladas ..."
                 variant="outlined"
+                InputProps={{endAdornment: <InputAdornment position="end"  onSubmit={() => window.location.reload()}>
+                                              <SearchOutlined cursor='pointer' 
+                                                              className='icons'
+                                                             />
+                                            </InputAdornment>}}
               />
             </Box>
           </Grid>
@@ -74,13 +80,17 @@ const Search = () => {
                           },
                         }}
                       />
-                      {option.title}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        {option.title}
+                        {option.icon}
+                      </Box>
                     </li>
                   )
                 }}
                 renderInput={(params) => (
                   <TextField {...params} label="Categorias" />
                 )}
+                
               />
             </Box>
           </Grid>

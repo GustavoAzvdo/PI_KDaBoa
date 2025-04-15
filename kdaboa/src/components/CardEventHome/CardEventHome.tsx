@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
-
+import {VisibilityOutlined} from '@mui/icons-material';
 import "./CardEventHome.css"
 import { Typography, Button } from '@mui/material';
 import CardProps from './props/CardProps';
@@ -33,7 +33,7 @@ return (
             subheader={card.date}
             className='header-cardHomeEvent'/>
         <CardActions sx={{alignItems: "flex-end", display:"flex", justifyContent: "flex-end"}}  disableSpacing>
-            <Button className='btn-cardHomeEvent' onClick={() => {
+            <Button className='btn-cardHomeEvent' endIcon={<VisibilityOutlined />} onClick={() => {
                 // Insert script for open page of the especific event
             }}>
                 <Typography className='txt-cardHomeEvent'>

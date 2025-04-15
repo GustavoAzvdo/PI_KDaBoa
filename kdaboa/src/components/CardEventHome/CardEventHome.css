@@ -35,6 +35,7 @@
 
 
 .cardHomeEvent {
+    cursor: pointer;
     max-width:50vw;
     width: 100%; /* Faz o card ocupar toda a largura disponível */
     height: auto; /* Ajusta a altura automaticamente */

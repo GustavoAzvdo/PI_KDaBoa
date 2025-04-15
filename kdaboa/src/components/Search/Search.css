@@ -4,7 +4,13 @@
     --roxo: #6C15D5;
 }
 
+.icons{
+  color: #9c9c9c;
+}
 
+.icons:hover{
+  color: var(--roxo);
+}
 .search {
     margin-top: 40px;
     margin-bottom: 30px;
@@ -82,4 +88,11 @@
     background-color: white; /* ou a cor do fundo */
     padding: 0 12px !important;
   }
-    
+
+  .icons{
+    color: #9c9c9c;
+  }
+  
+  .icons:hover{
+    color: var(--roxo);
+  }
