@@ -1,0 +1,25 @@
+:root{
+    --fredoka: 'Fredoka', sans-serif;
+}
+
+.search {
+    margin-top: 40px;
+    margin-bottom: 30px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+   
+}
+
+.search p {
+    font-family: var(--fredoka) !important;
+   font-size: 60px!important;
+    font-weight: 500 !important;
+}
+
+.search img {
+    position: relative;
+    top: -4px;
+    vertical-align: middle;
+    margin-left: 20px;
+}
