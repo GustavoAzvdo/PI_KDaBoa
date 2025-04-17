@@ -45,4 +45,31 @@ button:hover{
     font-family: var(--fredoka) !important;
 }
 
+.list button  {
+    font-size: 20px;
+    color: var(--roxo);
+    
+}
 
+.list button p {
+    font-size: 20px;
+}
+
+
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-hamburguer{
+    font-size: larger !important;
+    color: var(--roxo) !important;
+}
+
+.btn-hamburguer .menu-icon{
+    font-size: larger !important;
+    display: flex;
+    align-items: center !important;
+}

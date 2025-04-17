@@ -52,3 +52,10 @@
    
     color: white !important;
 }
+
+/* @media (max-width: 1000px) {
+    .image {
+        padding: 0px !important;
+    }
+} */
+

@@ -5,19 +5,21 @@ import Search from './components/Search/Search'
 import Carrousel from './components/CarroselEventHome/CarroselEventHome'
 import BoxInfo from './components/BoxInfo/BoxInfo'
 import Footer from './components/Footer/Footer'
-
+import Login from './components/Forms/Login/Login'
+import Title from './components/Title/Title'
 
 function App() {
   return (
     <>
-        <Box>
+     <Box>
         <Navbar />
+        <Title />
         <Search />
         <Carrousel />
         <BoxInfo />
       </Box>
-      <Footer />  
-      {/* <Login /> */}
+      <Footer />   
+       {/* <Login />  */}
     </>
   )
 }
