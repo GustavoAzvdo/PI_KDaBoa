@@ -1,16 +1,9 @@
-import Navbar from './components/Navbar/Navbar'
 import './App.css'
-import { Grid,Box } from '@mui/material'
-import CarroselEventHome from './components/CarroselEventHome/CarroselEventHome'
-
+import FilterEvent from "./components/FilterEvent/FilterEvent"
 function App() {
   return (
     <>
-      <Box>
-        <Navbar />
-      </Box>
-
-      <CarroselEventHome />
+      <FilterEvent />
     </>
     
   )
