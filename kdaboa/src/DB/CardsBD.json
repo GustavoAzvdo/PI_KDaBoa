@@ -1,0 +1,108 @@
+[
+    {
+        "id": 1,
+        "title": "Prefixo - Cabelinho",
+        "description": "Cabelinho é o seu marrrento nesse show da Prefixo011!",
+        "image": "/Image_cardHomeEvent/Cabelinho_Banner.jpg",
+        "date": "Setembro 14, 2016"
+    },
+    {
+        "id": 2,
+        "title": "CDG Bear - Matue",
+        "description": "Nessa vida nada é de graça irmão, mas a brisa que é esse show vai ser",
+        "image": "/Image_cardHomeEvent/matue.jpeg",
+        "date": "Outubro 19, 2024"
+    },
+    {
+        "id": 3,
+        "title": "CDG Bear - Veigh",
+        "description": "O chão vai tremer no show do Veigh com o carro que pareçe um TANK",
+        "image": "/Image_cardHomeEvent/Veigh.jpeg",
+        "date": "Janeiro 04, 2025"
+    },
+    {
+        "id": 4,
+        "title": "Rolê.Z - MU540",
+        "description": "Traz doril que os cara colocou caixa preta pra toca nesse dia",
+        "image": "/Image_cardHomeEvent/MU540.jpeg",
+        "date": "Janeiro 11, 2025"
+    },
+    {
+        "id": 5,
+        "title": "ZS - Kyan",
+        "description": "Vem conhecer USD e quebrar tudo com Kyan",
+        "image": "/Image_cardHomeEvent/Kyan.jpg",
+        "date": "Agosto 25, 2024"
+    },
+    {
+        "id": 6,
+        "title": "Festa do Capeta - MC PP da VS",
+        "description": "Agua benta e Cruxifixo devem ser levados de casa, se não leva chumbo",
+        "image": "/Image_cardHomeEvent/FestaDoCapeta.jpg",
+        "date": "Dezembro 13, 2020"
+    },
+    {
+        "id": 7,
+        "title": "Army - BTS",
+        "description": "Aqueles lindos dos meninos vão te deixar loca nesse show no ibirapuera",
+        "image": "/Image_cardHomeEvent/BTS.jpeg",
+        "date": "Julho 14, 2024"
+    },
+    {
+        "id": 8,
+        "title": "Panpeiro - Churrasco",
+        "description" : "Churrasco e chimarrão, que você traz de casa viu, é isso que o povo gosta é isso que o povo quer",
+        "imgae": "/Image_cardHomeEvent/Churrasco.jpeg",
+        "date": "Dezembro 25, 2024"
+    },
+    {
+        "id": 9,
+        "title": "Cali club - DJ GP da ZL",
+        "description": "Doril é basico pra acorda bem amanhã",
+        "image": "/Image_cardHomeEvent/GP.jpeg",
+        "date": "Dezembro 13, 2020"
+    },
+    {
+        "id": 10,
+        "title": "CDG - Roupa Nova",
+        "description": "Se aparecer aqui com roupa velha já vai dar meia volta, com o Roupa Nova aqui não",
+        "image": "/Image_cardHomeEvent/RoupaNova.jpeg",
+        "date": "Julho 14, 2024"
+    },
+    {
+        "id": 11,
+        "title": "KIDS - Hidrokid",
+        "description": "Eu chapo nesse menino filho kkskskss",
+        "image": "/Image_cardHomeEvent/Hidorkid.jpeg",
+        "date": "Julho 14, 2024"
+    },
+    {
+        "id": 12,
+        "title": "Villa Fest - MC luuky",
+        "description": "Saindo dos mangas de One Piece pra fazer show no Villa Fest",
+        "image": "/Image_cardHomeEvent/MC_Luuky.jpg",
+        "date": "Julho 14, 2024"
+    },
+    {
+        "id": 13,
+        "title": "BXX - Queen",
+        "description": "O mããããẽeeeeeee eu mantei um homi",
+        "image": "/Image_cardHomeEvent/Queen.jpeg",
+        "date": "Julho 14, 2024"
+    },
+    {
+        "id": 14,
+        "title": "Live Co. - Michael Jackson do Paraguai",
+        "description": "A bille jeans not my love AUHUUAU",
+        "image": "/Image_cardHomeEvent/ReiDoPop.jpeg",
+        "date": "Julho 14, 2024"
+    },
+    {
+        "id": 15,
+        "title": "Encontro para estudar plataforma",
+        "description": "das 8AM até as 20PM vamos estudar varias plataformas e anotar numeros que já ficam anotados para avaliar dados e levantar a realidade da propaganda enganosa",
+        "image": "/Image_cardHomeEvent/Tigrinho.jpeg",
+        "date": "Julho 14, 2024"
+    }
+]
+
