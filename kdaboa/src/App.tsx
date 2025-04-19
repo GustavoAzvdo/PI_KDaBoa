@@ -13,7 +13,9 @@ function App() {
     <>
      <Box>
         <Navbar />
-        <Title />
+        <Title>
+          Qual a boa de hoje?
+         </Title>
         <Search />
         <Carrousel />
         <BoxInfo />
