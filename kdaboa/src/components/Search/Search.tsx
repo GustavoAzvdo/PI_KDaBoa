@@ -5,11 +5,25 @@ import hangloose from '../../assets/hangloose.png'
 import { dados } from '../../categorys/dados'
 import {SearchOutlined} from '@mui/icons-material';
 import './Search.css'
+import { useState } from 'react'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
-const Search = () => {
+interface SearchProps {
+  onCategoryChange: (categories: string[]) => void; // Callback para enviar as categorias selecionadas
+}
+
+const Search = ({onCategoryChange}: SearchProps) => {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const handleCategoryChange = (event: any, value: any) => {
+    const categories = value.map((item: any) => item.title); // Extrai os títulos das categorias selecionadas
+    console.log(categories);
+    setSelectedCategories(categories);
+    onCategoryChange(categories); // Envia as categorias selecionadas para o componente pai
+  };
+  
   return (
     <Grid container spacing={2}>
     
@@ -43,6 +57,7 @@ const Search = () => {
                 options={dados}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.title}
+                onChange={handleCategoryChange}
                 renderOption={(props, option, { selected }) => {
                   const { key, ...optionProps } = props
                   return (
