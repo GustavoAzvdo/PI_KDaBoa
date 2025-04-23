@@ -6,29 +6,56 @@ import Search from "../Search/Search";
 import { useState } from "react";
 import Footer from "../Footer/Footer";
 import "./FilterEvent.css";
+
 const FilterEvetn = () => {
-    const [category, setCategory] = useState<CardProps[]>(BD);
-    
+    const [category, setCategory] = useState<string[]>([]);
+    const [searchText, setSearchText] = useState<string>('');
+    const [filtered, setFiltered] = useState<CardProps[]>(BD);
+
     const handleCategoryChange = (categories: string[]) => {
-        if (categories.length === 0) {
-          setCategory(BD); // Mostra todos os eventos se nenhuma categoria estiver selecionada
-        } else {
-          const filtered = BD.filter((event) =>
-            categories.some((category) => event.category.includes(category))
-          );
-          setCategory(filtered);
-        }
+        setCategory(categories);
+        handleCategoryAndTextChange(categories, searchText);
     };
+
+    const handleTextChange = (selectedText: string) => {
+        setSearchText(selectedText);
+        handleCategoryAndTextChange(category, searchText);
+    };
+
+    const handleCategoryAndTextChange = (selectedCategories: string[], searchText: string) => {
+        let filter = BD;
+
+        if (selectedCategories.length > 0) {
+            filter = filter.filter((event) =>
+                event.category.map((eventCategory) =>
+                    selectedCategories.map((selectedCategory) =>
+                        eventCategory === selectedCategory
+                    ).includes(true)
+                ).includes(true)
+            );
+        }
+
+        console.log(searchText)
+
+        if (searchText.length > 0) {
+            filter = filter.filter((event) =>
+                event.title.toLowerCase().includes(searchText)
+            );
+        }
+
+        setFiltered(filter);
+    };
+
     return (
         <>
         <br />
         <br />
-            <Search onCategoryChange={handleCategoryChange}/>
+            <Search onCategoryChange={handleCategoryChange} onTextChange={handleTextChange}/>
             <Box sx={{ display: 'grid',
                     gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
                     gap: 4, // Espaçamento entre os cards
                     padding: 2, }}>
-                {category.map((card : CardProps, index : number) => (
+                {filtered.map((card : CardProps, index : number) => (
                     <CardEventHome key={index} card={card} />
                 ))}
             </Box>

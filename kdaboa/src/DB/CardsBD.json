@@ -5,7 +5,7 @@
         "description": "Cabelinho é o seu marrrento nesse show da Prefixo011!",
         "image": "/Image_cardHomeEvent/Cabelinho_Banner.jpg",
         "date": "Setembro 14, 2016",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 2,
@@ -13,7 +13,7 @@
         "description": "Nessa vida nada é de graça irmão, mas a brisa que é esse show vai ser",
         "image": "/Image_cardHomeEvent/matue.jpeg",
         "date": "Outubro 19, 2024",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 3,
@@ -21,7 +21,7 @@
         "description": "O chão vai tremer no show do Veigh com o carro que pareçe um TANK",
         "image": "/Image_cardHomeEvent/Veigh.jpeg",
         "date": "Janeiro 04, 2025",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 4,
@@ -29,7 +29,7 @@
         "description": "Traz doril que os cara colocou caixa preta pra toca nesse dia",
         "image": "/Image_cardHomeEvent/MU540.jpeg",
         "date": "Janeiro 11, 2025",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 5,
@@ -37,7 +37,7 @@
         "description": "Vem conhecer USD e quebrar tudo com Kyan",
         "image": "/Image_cardHomeEvent/Kyan.jpg",
         "date": "Agosto 25, 2024",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 6,
@@ -45,7 +45,7 @@
         "description": "Agua benta e Cruxifixo devem ser levados de casa, se não leva chumbo",
         "image": "/Image_cardHomeEvent/FestaDoCapeta.jpeg",
         "date": "Dezembro 13, 2020",
-        "category": "Festival"
+        "category": ["Festival"]
     },
     {
         "id": 7,
@@ -53,7 +53,7 @@
         "description": "Aqueles lindos dos meninos vão te deixar loca nesse show no ibirapuera",
         "image": "/Image_cardHomeEvent/BTS.jpeg",
         "date": "Julho 14, 2024",
-        "category": "Festival"
+        "category": ["Festival"]
     },
     {
         "id": 8,
@@ -61,7 +61,7 @@
         "description" : "Churrasco e chimarrão, que você traz de casa viu, é isso que o povo gosta é isso que o povo quer",
         "image": "/Image_cardHomeEvent/Churrasco.jpeg",
         "date": "Dezembro 25, 2024",
-        "category": "Gastronomia, Comida Caseira"
+        "category": ["Gastronomia", "Comida Caseira"]
     },
     {
         "id": 9,
@@ -69,7 +69,7 @@
         "description": "Doril é basico pra acorda bem amanhã",
         "image": "/Image_cardHomeEvent/GP.jpeg",
         "date": "Dezembro 13, 2020",
-        "category": "Show"
+        "category": ["Show"]
     },
     {
         "id": 10,
@@ -77,7 +77,7 @@
         "description": "Se aparecer aqui com roupa velha já vai dar meia volta, com o Roupa Nova aqui não",
         "image": "/Image_cardHomeEvent/RoupaNova.jpeg",
         "date": "Julho 14, 2024",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 11,
@@ -85,7 +85,7 @@
         "description": "Eu chapo nesse menino filho kkskskss",
         "image": "/Image_cardHomeEvent/Hidrokid.jpeg",
         "date": "Julho 14, 2024",
-        "category": "Festival"
+        "category": ["Festival"]
     },
     {
         "id": 12,
@@ -93,7 +93,7 @@
         "description": "Saindo dos mangas de One Piece pra fazer show no Villa Fest",
         "image": "/Image_cardHomeEvent/MC_Luuky.jpg",
         "date": "Julho 14, 2024",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 13,
@@ -101,7 +101,7 @@
         "description": "O mããããẽeeeeeee eu mantei um homi",
         "image": "/Image_cardHomeEvent/Queen.jpeg",
         "date": "Julho 14, 2024",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 14,
@@ -109,7 +109,7 @@
         "description": "A bille jeans not my love AUHUUAU",
         "image": "/Image_cardHomeEvent/ReiDoPop.jpeg",
         "date": "Julho 14, 2024",
-        "category": "Show, Festival"
+        "category": ["Show", "Festival"]
     },
     {
         "id": 15,
@@ -117,7 +117,7 @@
         "description": "das 8AM até as 20PM vamos estudar varias plataformas e anotar numeros que já ficam anotados para avaliar dados e levantar a realidade da propaganda enganosa",
         "image": "/Image_cardHomeEvent/Tigrinho.jpeg",
         "date": "Julho 14, 2024",
-        "category": "Tecnologia"
+        "category": ["Tecnologia"]
     }
 ]
 

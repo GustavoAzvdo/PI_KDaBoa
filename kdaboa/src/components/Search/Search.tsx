@@ -5,17 +5,19 @@ import hangloose from '../../assets/hangloose.png'
 import { dados } from '../../categorys/dados'
 import {SearchOutlined} from '@mui/icons-material';
 import './Search.css'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 interface SearchProps {
-  onCategoryChange: (categories: string[]) => void; // Callback para enviar as categorias selecionadas
+  onCategoryChange: (categories: string[]) => void;
+  onTextChange: (text: string) => void; // Callback para enviar as categorias selecionadas
 }
 
-const Search = ({onCategoryChange}: SearchProps) => {
+const Search = ({onCategoryChange, onTextChange}: SearchProps) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [searchText, setSearchText] = useState<string>('')
 
   const handleCategoryChange = (event: any, value: any) => {
     const categories = value.map((item: any) => item.title); // Extrai os títulos das categorias selecionadas
@@ -23,6 +25,13 @@ const Search = ({onCategoryChange}: SearchProps) => {
     setSelectedCategories(categories);
     onCategoryChange(categories); // Envia as categorias selecionadas para o componente pai
   };
+
+  const handleSearchTextChange = (value: string) => {
+    const selectedText = value.toLowerCase();
+    console.log(selectedText +", "+ value);
+    setSearchText(selectedText);
+    onTextChange(searchText); 
+  }
   
   return (
     <Grid container spacing={2}>
@@ -35,6 +44,8 @@ const Search = ({onCategoryChange}: SearchProps) => {
             <Box component='form' className='form-left'>
               <TextField
                 fullWidth
+                value={searchText}
+                onChange={(e) => handleSearchTextChange(e.target.value)}
                 id="outlined-basic"
                 label="Pesquisar eventos, shows, baladas ..."
                 variant="outlined"
