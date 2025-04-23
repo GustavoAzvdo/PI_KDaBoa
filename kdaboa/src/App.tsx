@@ -11,7 +11,7 @@ import Title from './components/Title/Title'
 function App() {
   return (
     <>
-     <Box>
+      <Box>
         <Navbar />
         <Title>
           Qual a boa de hoje?
@@ -20,8 +20,8 @@ function App() {
         <Carrousel />
         <BoxInfo />
       </Box>
-      <Footer />   
-       {/* <Login />  */}
+      <Footer />    
+       <Login />   
     </>
   )
 }
