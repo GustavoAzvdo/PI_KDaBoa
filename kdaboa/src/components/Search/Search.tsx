@@ -1,11 +1,10 @@
 import { Box, Grid, TextField, Typography, Autocomplete, Checkbox, InputAdornment } from '@mui/material'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
-import hangloose from '../../assets/hangloose.png'
 import { dados } from '../../categorys/dados'
 import {SearchOutlined} from '@mui/icons-material';
 import './Search.css'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
@@ -21,17 +20,15 @@ const Search = ({onCategoryChange, onTextChange}: SearchProps) => {
 
   const handleCategoryChange = (event: any, value: any) => {
     const categories = value.map((item: any) => item.title); // Extrai os títulos das categorias selecionadas
-    console.log(categories);
     setSelectedCategories(categories);
-    onCategoryChange(categories); // Envia as categorias selecionadas para o componente pai
+    onCategoryChange(categories); 
   };
 
   const handleSearchTextChange = (value: string) => {
     const selectedText = value.toLowerCase();
-    console.log(selectedText +", "+ value);
-    setSearchText(selectedText);
-    onTextChange(searchText); 
-  }
+    setSearchText(selectedText); // Atualiza o estado local
+    onTextChange(selectedText); // Passa o valor atualizado diretamente para o componente pai
+  };
   
   return (
     <Grid container spacing={2}>

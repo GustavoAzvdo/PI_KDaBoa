@@ -6,6 +6,8 @@ import Search from "../Search/Search";
 import { useState } from "react";
 import Footer from "../Footer/Footer";
 import "./FilterEvent.css";
+import Title from "../Title/Title";
+import Navbar from "../Navbar/Navbar";
 
 const FilterEvetn = () => {
     const [category, setCategory] = useState<string[]>([]);
@@ -19,7 +21,7 @@ const FilterEvetn = () => {
 
     const handleTextChange = (selectedText: string) => {
         setSearchText(selectedText);
-        handleCategoryAndTextChange(category, searchText);
+        handleCategoryAndTextChange(category, selectedText);
     };
 
     const handleCategoryAndTextChange = (selectedCategories: string[], searchText: string) => {
@@ -35,8 +37,6 @@ const FilterEvetn = () => {
             );
         }
 
-        console.log(searchText)
-
         if (searchText.length > 0) {
             filter = filter.filter((event) =>
                 event.title.toLowerCase().includes(searchText)
@@ -48,8 +48,11 @@ const FilterEvetn = () => {
 
     return (
         <>
-        <br />
-        <br />
+
+            <Navbar />
+            <Title>
+                 Pesquisar Evento               
+            </Title>
             <Search onCategoryChange={handleCategoryChange} onTextChange={handleTextChange}/>
             <Box sx={{ display: 'grid',
                     gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
