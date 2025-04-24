@@ -21,7 +21,7 @@ function App() {
         <BoxInfo />
       </Box>
       <Footer />    
-       <Login />   
+       {/* <Login />    */}
     </>
   )
 }

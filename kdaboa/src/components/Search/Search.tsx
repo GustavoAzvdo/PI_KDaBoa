@@ -22,7 +22,7 @@ const Search = () => {
               <TextField
                 fullWidth
                 id="outlined-basic"
-                label="Pesquisar eventos, shows, baladas ..."
+                label="Pesquisar eventos ou estabelecimentos"
                 variant="outlined"
                 InputProps={{endAdornment: <InputAdornment position="end"  onSubmit={() => window.location.reload()}>
                                               <SearchOutlined cursor='pointer' 
