@@ -4,26 +4,35 @@
     --color_purple1: #6C15D5;
 }
 
+
+.MuiCardHeader-root span{
+    font-size: large;
+    font-family: var(--fredoka) !important;
+}
 .txt-cardHomeEvent{
     font-family: var(--notosans) !important;
 }
 
-.btn-cardHomeEvent{
+.btn-cardHomeEvent {
     border: none;
     background: none;
-    color: var(--color_purple1);
+    font-family: var(--fredoka);
     margin-right: 2vh;
     cursor: pointer;
 }
 
-.btn-cardHomeEvent:hover{
-    border-radius: 20px;
-    color: black;
+.btn-cardHomeEvent p{
+    font-size: 20px !important;
+   color: var(--color_purple1);
+}
+
+.btn-cardHomeEvent:hover p{
+    color: #fff;
 }
 
 .cardHomeEvent {
     max-width:50vw;
-    width: 100%; /* Faz o card ocupar toda a largura disponível */
+    width: 92%; /* Faz o card ocupar toda a largura disponível */
     height: auto; /* Ajusta a altura automaticamente */
     margin: 0 auto; /* Centraliza o card dentro do slide */
     display: flex;

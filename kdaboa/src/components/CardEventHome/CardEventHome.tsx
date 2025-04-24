@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
 
 import "./CardEventHome.css"
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import CardProps from './props/CardProps';
 
 interface CardEventHomeProps {
@@ -16,8 +16,9 @@ interface CardEventHomeProps {
 export default function RecipeReviewCard({ card }: CardEventHomeProps) {
     
 return (
-    <Card sx={{ borderRadius: 4 }} className='cardHomeEvent'>
+    <Card sx={{ borderRadius: 4 , cursor: "pointer"}} className='cardHomeEvent' title={card.title} >
         <CardMedia
+            
             component="img"
             height="194"
             image={card.image}
@@ -29,17 +30,17 @@ return (
                     P 
                 </Avatar>
             }
-            title={card.title}
+            title={card.title.length > 20 ? card.title.substring(0, 20) + "..." : card.title}
             subheader={card.date}
         />
         <CardActions sx={{alignItems: "flex-end", display:"flex", justifyContent: "flex-end"}}  disableSpacing>
-            <button className='btn-cardHomeEvent' onClick={() => {
+            <Button size='large' className='btn-cardHomeEvent' onClick={() => {
                 // Insert script for open page of the especific event
             }}>
                 <Typography className='txt-cardHomeEvent'>
                     Ver Mais
                 </Typography>
-            </button>
+            </Button>
         </CardActions>
     </Card>
 );

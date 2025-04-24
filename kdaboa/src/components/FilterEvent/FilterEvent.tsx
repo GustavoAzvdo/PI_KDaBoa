@@ -8,7 +8,8 @@ import Footer from "../Footer/Footer";
 import "./FilterEvent.css";
 import Title from "../Title/Title";
 import Navbar from "../Navbar/Navbar";
-
+import search from "../../assets/search.png";
+import Banner from "../Banner/Banner";
 const FilterEvetn = () => {
     const [category, setCategory] = useState<string[]>([]);
     const [searchText, setSearchText] = useState<string>('');
@@ -50,19 +51,34 @@ const FilterEvetn = () => {
         <>
 
             <Navbar />
+            <Banner />
             <Title>
-                 Pesquisar Evento               
+                Pesquisar Evento
+                <img width="70" height="70" src={search} alt="hang-ten" />
             </Title>
-            <Search onCategoryChange={handleCategoryChange} onTextChange={handleTextChange}/>
-            <Box sx={{ display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
-                    gap: 4, // Espaçamento entre os cards
-                    padding: 2, }}>
-                {filtered.map((card : CardProps, index : number) => (
+            <Box className="search-container" sx={{paddingBottom: 10, borderBottom: 1, borderColor: '#e0e0e0' }} >
+                <Search onCategoryChange={handleCategoryChange} onTextChange={handleTextChange} />
+            </Box>
+            <Box className="title-container">
+                <Title>
+                    {filtered.length > 0 ? `${category.length > 0 ? `${category.join(', ')}` : 'Todos os eventos'}` : 'Nenhum evento encontrado'}
+                    
+                </Title>
+            </Box>
+            <Box sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
+                gap: 4, // Espaçamento entre os cards
+                padding: 2,
+            }}> 
+                {
+                    filtered.map((card: CardProps, index: number) => (
                     <CardEventHome key={index} card={card} />
                 ))}
             </Box>
-            <Footer />
+            <Box sx={{marginTop: 10}}>
+                <Footer />
+            </Box>
         </>
     )
 
