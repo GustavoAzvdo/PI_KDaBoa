@@ -9,7 +9,7 @@ const Title = ({children} : any) => {
                 <Grid size={{ xs: 12, md: 12 }}>
                     <Box className='search'>
                         <Typography>
-                            {children} <img width="70" height="70" src={hangloose} alt="hang-ten" />
+                            {children} 
                         </Typography>
                     </Box>
                 </Grid>
