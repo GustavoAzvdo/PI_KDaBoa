@@ -15,11 +15,11 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 const Search = () => {
   return (
-    <Grid container spacing={2} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+    <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, md: 12 }} >
-        <Grid container spacing={2} className='grid-form' justifyContent={'center'}>
+        <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{paddingY:2}} >
           {/* Campo da esquerda */}
-          <Grid size={{ xs: 10, md: 6 , lg: 5 }}>
+          <Grid size={{ xs: 10, md: 6, lg: 5 }}>
             <Box component='form' className='form-left'>
               <TextField
                 fullWidth
@@ -38,18 +38,10 @@ const Search = () => {
           </Grid>
 
           {/* Campo do meio */}
-          <Grid size={{ xs: 10, md: 3, lg: 3 }} sx={{ padding: 0, margin: 0 }}>
-            <Box component='form' className='form-middle'>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['DatePicker']}>
-                  <DatePicker label="Basic date picker" />
-                </DemoContainer>
-              </LocalizationProvider>
-            </Box>
-          </Grid>
+
 
           {/* Campo da direita */}
-          <Grid size={{ xs: 10, md: 3, lg: 3 }}>
+          <Grid size={{ xs: 10, md: 4, lg: 4 }}>
             <Box component='form' className='form-right'>
               <Autocomplete
                 className='txtCategorys'
@@ -101,6 +93,20 @@ const Search = () => {
                 )}
 
               />
+            </Box>
+          </Grid>
+
+          <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ padding: 0, marginTop: '-8px' }}>
+            <Box component='form' className='form-middle'>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']}>
+                  <DatePicker
+                    label="Data do evento"
+                  
+                  />
+
+                </DemoContainer>
+              </LocalizationProvider>
             </Box>
           </Grid>
         </Grid>

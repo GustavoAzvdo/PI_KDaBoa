@@ -76,8 +76,7 @@
 }
 
 .MuiStack-root{
-    padding-top: 0px !important;
-    margin-top: 0px !important;
+   
     font-family: var(--notosans) !important;
 }
 
@@ -87,10 +86,17 @@
     font-size: 18px;
 }
 
-.MuiPickersSectionList-root-MuiPickersInputBase-sectionsContainer-MuiPickersOutlinedInput-sectionsContainer{
-    font-family: var(--notosans) !important;
-    font-size: 18px;
+.MuiFormLabel-root {
+  font-family: var(--notosans) !important;
+  font-size: 18px;
 }
+
+.MuiInputBase-input {
+  font-family: var(--notosans) !important;
+  font-size: 18px;
+}
+
+
 
   .icons{
     color: #9c9c9c;
@@ -99,3 +105,12 @@
   .icons:hover{
     color: var(--roxo);
   }
+
+
+  .form-middle .MuiInputLabel-root {
+    font-family: var(--notosans) !important;
+    font-size: 18px !important;
+  
+  }
+
+  
