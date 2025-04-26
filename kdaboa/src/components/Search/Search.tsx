@@ -3,7 +3,11 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import hangloose from '../../assets/hangloose.png'
 import { dados } from '../../categorys/dados'
-import {SearchOutlined} from '@mui/icons-material';
+import { SearchOutlined } from '@mui/icons-material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
@@ -11,30 +15,41 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 const Search = () => {
   return (
-    <Grid container spacing={2}>
-    
-
-      <Grid size={{xs: 12 , md: 12}}>
+    <Grid container spacing={2} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <Grid size={{ xs: 12, md: 12 }} >
         <Grid container spacing={2} className='grid-form' justifyContent={'center'}>
           {/* Campo da esquerda */}
-          <Grid size={{xs: 10 , md: 6}}>
+          <Grid size={{ xs: 10, md: 6 , lg: 5 }}>
             <Box component='form' className='form-left'>
               <TextField
                 fullWidth
                 id="outlined-basic"
                 label="Pesquisar eventos ou estabelecimentos"
                 variant="outlined"
-                InputProps={{endAdornment: <InputAdornment position="end"  onSubmit={() => window.location.reload()}>
-                                              <SearchOutlined cursor='pointer' 
-                                                              className='icons'
-                                                             />
-                                            </InputAdornment>}}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end" onSubmit={() => window.location.reload()}>
+                    <SearchOutlined cursor='pointer'
+                      className='icons'
+                    />
+                  </InputAdornment>
+                }}
               />
             </Box>
           </Grid>
 
+          {/* Campo do meio */}
+          <Grid size={{ xs: 10, md: 3, lg: 3 }} sx={{ padding: 0, margin: 0 }}>
+            <Box component='form' className='form-middle'>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']}>
+                  <DatePicker label="Basic date picker" />
+                </DemoContainer>
+              </LocalizationProvider>
+            </Box>
+          </Grid>
+
           {/* Campo da direita */}
-          <Grid size={{xs: 10 , md: 4}}>
+          <Grid size={{ xs: 10, md: 3, lg: 3 }}>
             <Box component='form' className='form-right'>
               <Autocomplete
                 className='txtCategorys'
@@ -84,7 +99,7 @@ const Search = () => {
                 renderInput={(params) => (
                   <TextField {...params} label="Categorias" />
                 )}
-                
+
               />
             </Box>
           </Grid>

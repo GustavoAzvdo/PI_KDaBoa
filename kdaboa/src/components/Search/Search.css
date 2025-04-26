@@ -44,6 +44,7 @@
     font-size: 24px;
 }
 
+
 /* Chips selecionados */
 .form-right .MuiChip-root {
     background-color: #E9D8FD !important; /* roxo claro */
@@ -68,6 +69,28 @@
     background-color: white; /* ou a cor do fundo */
     padding: 0 12px !important;
   }
+
+.MuiFormControl-root{
+    width: 100%;
+   
+}
+
+.MuiStack-root{
+    padding-top: 0px !important;
+    margin-top: 0px !important;
+    font-family: var(--notosans) !important;
+}
+
+.MuiPickersInputBase-root span,
+.MuiPickersSectionList-root span{
+    font-family: var(--notosans) !important;
+    font-size: 18px;
+}
+
+.MuiPickersSectionList-root-MuiPickersInputBase-sectionsContainer-MuiPickersOutlinedInput-sectionsContainer{
+    font-family: var(--notosans) !important;
+    font-size: 18px;
+}
 
   .icons{
     color: #9c9c9c;
