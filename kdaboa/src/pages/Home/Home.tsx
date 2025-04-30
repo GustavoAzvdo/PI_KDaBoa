@@ -1,10 +1,10 @@
 import React from 'react'
-import Navbar from '../Navbar/Navbar'
-import Search from '../Search/Search'
-import Carrousel from '../CarroselEventHome/CarroselEventHome'
-import BoxInfo from '../BoxInfo/BoxInfo'
-import Title from '../Title/Title'
-import Footer from '../Footer/Footer'
+import Navbar from '../../components/Navbar/Navbar'
+import Search from '../../components/Search/Search'
+import Carrousel from '../../components/CarroselEventHome/CarroselEventHome'
+import BoxInfo from '../../components/BoxInfo/BoxInfo'
+import Title from '../../components/Title/Title'
+import Footer from '../../components/Footer/Footer'
 import hangloose from '../../assets/hangloose.png'
 const Home = () => {
   return (

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import './App.css'
 import Login from './components/Forms/Login/Login'
-import Home from './components/Home/Home'
+import Home from './pages/Home/Home'
 
 
 function App() {
