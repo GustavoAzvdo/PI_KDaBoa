@@ -1,0 +1,44 @@
+:root{
+    --fredoka: 'Fredoka', sans-serif;
+    --notosans: 'Noto Sans', sans-serif;
+    --roxo: #6C15D5;
+}
+
+
+.container{
+    display: flex;
+    justify-content: center;
+
+}
+
+.grid-form, .left {
+    display: flex;
+}
+
+.grid-form {
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.left p{
+    font-weight: 600;
+    font-size: 25px;
+    font-family: var(--fredoka);
+    padding-left: 15px;;
+}
+
+.btn-share{
+    background-color: var(--roxo) !important;
+}
+
+.btn-share p {
+    font-size: 18px;
+    padding: 2px;
+    font-family: var(--notosans);
+}

@@ -1,0 +1,93 @@
+:root {
+    --fredoka : 'Fredoka', sans-serif;
+    --notosans : 'Noto Sans', sans-serif;
+    --roxo: #6C15D5;
+    --roxoFundo: #BB8AFF53;
+}
+
+.title {
+    padding-bottom: 30px;
+}
+.title h3 {
+    
+    font-weight: 600;
+    font-family: var(--fredoka);
+}
+
+
+.info_left, .info_right {
+    width: 500px;
+    background-color: aqua;
+}
+.text-contacts p,
+.text-calendar p,
+.text-address p {
+    font-size: 28px;
+    font-weight: 600;
+    padding-left: 15px;
+    font-family: var(--notosans);
+}
+.text-contacts-subtitle,
+.text-calendar-subtitle,
+.text-address-subtitle {
+    font-size: 18px !important;
+}
+
+
+.btn-profile {
+    margin-top: 12px !important;
+}
+.btn-profile p,
+.btn-maps p{
+    font-family: var(--notosans) !important;    
+    font-size: 19px;
+    padding-left: 0px !important;
+}
+.btn-profile p {
+    font-size: 18px !important;
+}
+.btn-profile,
+.btn-maps{
+    border-color: var(--roxo) !important;
+    color: var(--roxo) !important;
+}
+
+.btn-profile:hover,
+.btn-maps:hover{
+    background-color: var(--roxo) !important;
+    color: white !important;
+}
+
+.grid-right {
+   display: flex;
+   justify-content: end;
+   
+}
+
+.container-right{
+    height: 140px;
+    width: 80%;
+    box-shadow:
+    0px 10px 100px var(--roxoFundo), 
+    0px -10px 100px var(--roxoFundo); 
+}
+
+.text-profile p{
+    font-size: 21px;
+    font-weight: 500;
+    font-family: var(--notosans);
+}
+
+.title-description h4 {
+    font-family: var(--fredoka);
+    font-weight: 550;
+    font-size: 40px;
+}
+
+.title-description p {
+    padding-left: 0;
+    font-family: var(--notosans);
+    font-size: 20px;
+    font-weight: 500;
+    padding-left: 15px;
+}
