@@ -113,4 +113,23 @@
   
   }
 
-  
+
+.form-middle .MuiOutlinedInput-root {
+    font-family: var(--notosans) !important;
+    font-size: 18px !important;
+  }
+
+.form-middle .MuiInputLabel-root.Mui-focused {
+
+  color: var(--roxo);
+}
+
+.form-middle .MuiPickersInputBase-root.Mui-focused fieldset {
+  border-color: var(--roxo);
+}
+
+
+.MuiDayCalendar .MuiButtonBase-root .MuiPickersDay-root .Mui-selected {
+  background-color: var(--roxo) !important;
+  color: white !important;
+}

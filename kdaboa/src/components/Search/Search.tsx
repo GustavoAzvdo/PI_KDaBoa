@@ -97,12 +97,12 @@ const Search = () => {
           </Grid>
 
           <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ padding: 0, marginTop: '-8px' }}>
-            <Box component='form' className='form-middle'>
+            <Box className='form-middle'>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
                   <DatePicker
                     label="Data do evento"
-                  
+                    
                   />
 
                 </DemoContainer>
