@@ -1,6 +1,7 @@
 :root{
     --roxo: #BB8AFF53;
     --fredoka: 'Fredoka', sans-serif;
+    --notosans: 'Noto Sans', sans-serif;
     --roxoBtn: #6A00F4;
     --roxoForm: #6C15D5;
 }
@@ -8,14 +9,20 @@
 * {
     box-sizing: border-box;
 }
-
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .body{
     border-radius: 10px;
     box-shadow:
         0px 10px 100px var(--roxo), 
         0px -10px 100px var(--roxo); 
     width: 450px;
-    height: 600px;
+    height: 715px !important;
     margin: 0;
     padding: 0;
     position: absolute;
@@ -78,6 +85,13 @@
     padding: 3px;
 }
 
+.btn-login:disabled {
+    background-color: #E0E0E0 !important; 
+    color: #9E9E9E; 
+    cursor: not-allowed; 
+    box-shadow: none; 
+}
+
 .links{
     padding-top: 10px;
     padding-bottom: 10px;
@@ -128,4 +142,8 @@
 }
 .links a:hover{
     text-decoration: underline;
+}
+
+.alert {
+    font-family: var(--notosans) !important;
 }

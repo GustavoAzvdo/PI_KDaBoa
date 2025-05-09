@@ -1,27 +1,27 @@
-import { Box, Typography, TextField, InputAdornment, Button, Link } from '@mui/material'
+import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert } from '@mui/material'
 import { PersonOutlined, HttpsOutlined, MailOutline, VisibilityOutlined, VisibilityOffOutlined } from '@mui/icons-material';
 import logo from '../../../assets/logo.png'
 import { useState } from 'react';
 import './Signin.css'
+import Password from '../../Password/Password';
 const Signin = () => {
-    const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [showPasswordConfirm, setShowPasswordConfirm] = useState<boolean>(false);
+    const [isFormValid, setIsFormValid] = useState<boolean>(false);
+    const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false); // Estado para controlar a Snackbar
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleClickShowPasswordConfirm = () => setShowPasswordConfirm((show) => !show);
-    
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+    const handleValidationChange = (isValid: boolean) => {
+        setIsFormValid(isValid);
     };
-    const handleMouseDownPasswordConfirm = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+
+    const handleCreateAccount = () => {
+        // Lógica para criar a conta (se necessário)
+        setSnackbarOpen(true); // Exibe a Snackbar
     };
-    
-    const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
-    const handleMouseUpPasswordConfirm = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+
+    const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false); // Fecha a Snackbar
     };
 
     return (
@@ -76,75 +76,11 @@ const Signin = () => {
                                 }}
                             />
                         </Box>
-                        <Box>
-                            <TextField
-                                fullWidth
-                                margin='normal'
-                                id="outlined-basic"
-                                type={showPassword ? 'text' : 'password'} required
-                                label="Senha"
-                                variant="outlined"
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end" >
-                                            <Button
-                                                color='inherit'
-                                                onClick={handleClickShowPassword}
-                                                onMouseDown={handleMouseDownPassword}
-                                                onMouseUp={handleMouseUpPassword}
-                                                style={{
-                                                    minWidth: 0, // Remove largura mínima padrão do botão
-                                                    padding: 0, // Remove o padding interno
-                                                }}
-                                            >
-                                                {showPassword ? (
-                                                    <VisibilityOffOutlined className='icons' />
-                                                ) : (
-                                                    <VisibilityOutlined className='icons' />
-                                                )}
-                                            </Button>
-                                            
-                                        </InputAdornment>
-                                    )
-                                }}
-                            />
-                        </Box>
-                        <Box>
-                            <TextField
-                                fullWidth
-                                margin='normal'
-                                id="outlined-basic"
-                                type={showPasswordConfirm ? 'text' : 'password'} required
-                                label="Confirme sua senha"
-                                variant="outlined"
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end" >
-                                            <Button
-                                                color='inherit'
-                                                onClick={handleClickShowPasswordConfirm}
-                                                onMouseDown={handleMouseDownPasswordConfirm}
-                                                onMouseUp={handleMouseUpPasswordConfirm}
-                                                style={{
-                                                    minWidth: 0, // Remove largura mínima padrão do botão
-                                                    padding: 0, // Remove o padding interno
-                                                }}
-                                            >
-                                                {showPasswordConfirm ? (
-                                                    <VisibilityOffOutlined className='icons' />
-                                                ) : (
-                                                    <VisibilityOutlined className='icons' />
-                                                )}
-                                            </Button>
-                                            
-                                        </InputAdornment>
-                                    )
-                                }}
-                            />
-                        </Box>
+
+                        <Password onValidationChange={handleValidationChange} />
                     </Box>
                     <Box className='btn'>
-                        <Button variant="contained" className='btn-login' sx={{ padding: '10px' }}>
+                        <Button variant="contained" className='btn-login' disabled={!isFormValid} sx={{ padding: '10px' }} onClick={handleCreateAccount}>
                             <Typography className='btn'>
                                 Criar conta
                             </Typography>
@@ -159,6 +95,20 @@ const Signin = () => {
                     </Box>
                 </Box>
             </Box>
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} 
+            >
+                <Alert onClose={handleCloseSnackbar} className='alert' severity="success" sx={{
+                    width: '100%', fontSize: '20px', '& .MuiAlert-icon': {
+                        fontSize: '30px', 
+                    },
+                }}>
+                    Conta criada com sucesso!
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }
