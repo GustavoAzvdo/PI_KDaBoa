@@ -53,6 +53,8 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange }) => {
                     variant="outlined"
                     value={password}
                     onChange={handlePasswordChange}
+                    error={!isPasswordValid}
+                    helperText={!isPasswordValid ? 'Senha inválida!' : ''}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -107,6 +109,8 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange }) => {
                     variant="outlined"
                     value={confirmPassword}
                     onChange={handleConfirmPasswordChange}
+                    error={!isConfirmPasswordValid}
+                    helperText={!isConfirmPasswordValid ? 'As senhas não coincidem!' : ''}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
