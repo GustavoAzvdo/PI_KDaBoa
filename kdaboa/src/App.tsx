@@ -5,12 +5,13 @@ import Home from './pages/Home/Home'
 
 import NavbarEvent from './components/NavbarEvent/NavbarEvent'
 import ViewEvent from './pages/ViewEvent/ViewEvent'
+import Profile from './pages/Profile/Profile'
 
 
 function App() {
   return (
     <>
-      <ViewEvent />
+      <Profile />
     </>
   )
 }

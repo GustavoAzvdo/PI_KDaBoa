@@ -1,0 +1,50 @@
+:root {
+    --fredoka: 'Fredoka', sans-serif;
+    --notosans: 'Noto Sans', sans-serif;
+    --roxo: #6C15D5;
+    --roxoFundo: #BB8AFF53;
+}
+
+.title-description h3,
+.info_text h3{
+    font-family: var(--fredoka);
+    font-size: 40px;
+    font-weight: 550;
+}
+
+.title-description p,
+.info_text p{
+    font-family: var(--notosans);
+    font-size: 25px;
+    font-weight: 500;
+}
+
+
+.btn-seemore {
+    color: var(--roxo) !important;
+    border-color: var(--roxo) !important;
+}
+.btn-seemore p {
+    font-family: var(--fredoka) !important;
+    font-size: 20px;
+    font-weight: 500;
+     
+}
+.btn-seemore:hover {
+    background-color: var(--roxo) !important;
+    color: white !important;
+}
+
+.text-address h5,
+.text-contacts h5 {
+    font-family: var(--fredoka);
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.text-address p,
+.text-contacts p {
+    font-family: var(--notosans);
+    font-size: 20px;
+    font-weight: 500;
+}
