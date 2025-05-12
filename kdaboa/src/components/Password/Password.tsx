@@ -83,13 +83,13 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange }) => {
                 {conditions.map((condition, index) => (
                     <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         {condition.valid ? (
-                            <Check sx={{ color: '#14ED23' }} />
+                            <Check sx={{ color: '#276321' }} />
                         ) : (
                             <Clear sx={{ color: '#FB6565' }} />
                         )}
                         <Typography
                             sx={{
-                                color: condition.valid ? '#14ED23' : '#FB6565',
+                                color: condition.valid ? '#276321' : '#FB6565',
                                 fontSize: '14px',
                             }}
                         >
