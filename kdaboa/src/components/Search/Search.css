@@ -81,10 +81,17 @@
 
 /* Estilo para o DatePicker quando focado */
 /* Força a borda roxa no estado focado do DatePicker */
- .MuiPickersOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: var(--roxo) !important; /* Define a borda roxa */
-    /* Ajusta a espessura da borda */
+
+.css-1hgcujo-MuiPickersInputBase-root-MuiPickersOutlinedInput-root.Mui-focused:not(.Mui-error) .MuiPickersOutlinedInput-notchedOutline {
+  border-color: var(--roxo) !important; /* Define a borda roxa */
+  border-width: 2px; /* Ajusta a espessura da borda */
 }
+
+.css-4k4mmf-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  background-color: var(--roxo) !important; /* Define a cor de fundo roxa */
+  color: white !important; /* Define a cor do texto como branco */
+}
+
 
 .form-middle .MuiInputLabel-root.Mui-focused {
  

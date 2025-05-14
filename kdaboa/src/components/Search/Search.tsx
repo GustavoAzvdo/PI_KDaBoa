@@ -123,8 +123,8 @@ const Search = () => {
                       fullWidth: true,
                       sx: {
                         '& .MuiOutlinedInput-root': {
-                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#6C15D5 !', // Define a borda roxa
+                          '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#6C15D5 !impotant', // Define a borda roxa
                             borderWidth: '2px', // Ajusta a espessura da borda
                           },
                         },
