@@ -55,6 +55,7 @@ const Search = () => {
                 id="checkboxes-tags-demo"
                 options={dados}
                 disableCloseOnSelect
+                noOptionsText="Nenhuma categoria encontrada"
                 getOptionLabel={(option) => option.title}
                 renderOption={(props, option, { selected }) => {
                   const { key, ...optionProps } = props
