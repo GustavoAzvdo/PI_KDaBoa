@@ -2,6 +2,7 @@
     --notosans: 'Noto Sans', sans-serif;
     --fredoka: 'Fredoka', sans-serif;
     --roxo: #6C15D5;
+    --roxo-fraco: #BB8AFF;;
 }
 
 .icons{
@@ -92,6 +93,15 @@
   color: white !important; /* Define a cor do texto como branco */
 }
 
+.css-qct7wd-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+  background-color: var(--roxo-fraco) !important; /* Define a cor de fundo roxa */
+  color: black !important; /* Define a cor do texto como branco */
+}
+
+.css-1mvmid-MuiYearCalendar-button.Mui-selected {
+  background-color: var(--roxo) !important; /* Define a cor de fundo roxa */
+  color: white !important; /* Define a cor do texto como branco */
+}
 
 .form-middle .MuiInputLabel-root.Mui-focused {
  
