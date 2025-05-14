@@ -1,4 +1,4 @@
-import { Box, Grid, TextField, Typography, Autocomplete, Checkbox, InputAdornment } from '@mui/material'
+import { Box, Grid, TextField, Typography, Autocomplete, Checkbox, InputAdornment, FilledTextFieldProps, OutlinedTextFieldProps, StandardTextFieldProps, TextFieldVariants } from '@mui/material'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import hangloose from '../../assets/hangloose.png'
@@ -9,15 +9,21 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
+import { useState } from 'react'
+import { JSX } from 'react/jsx-runtime'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 const Search = () => {
+  const [focused, setFocused] = useState(false);
+
+  const handleFocus = () => setFocused(true);
+  const handleBlur = () => setFocused(false);
   return (
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, md: 12 }} >
-        <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{paddingY:2}} >
+        <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{ paddingY: 2 }} >
           {/* Campo da esquerda */}
           <Grid size={{ xs: 10, md: 6, lg: 5 }}>
             <Box component='form' className='form-left'>
@@ -95,17 +101,40 @@ const Search = () => {
               />
             </Box>
           </Grid>
+          <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ marginTop: '-8px' }}>
+            <Box
+              className="form-middle"
 
-          <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ padding: 0, marginTop: '-8px' }}>
-            <Box className='form-middle'>
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexGrow: 1,
+                paddingY: 1,
+                margin: 0,
+                width: '100%',
+              }}
+            >
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['DatePicker']}>
-                  <DatePicker
-                    label="Data do evento"
-                    
-                  />
-
-                </DemoContainer>
+                <DatePicker
+                  label="Data do evento"
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      sx: {
+                        '& .MuiOutlinedInput-root': {
+                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#6C15D5 !', // Define a borda roxa
+                            borderWidth: '2px', // Ajusta a espessura da borda
+                          },
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                          color: '#6C15D5', // Define o rótulo roxo
+                        },
+                      },
+                    },
+                  }}
+                />
               </LocalizationProvider>
             </Box>
           </Grid>
