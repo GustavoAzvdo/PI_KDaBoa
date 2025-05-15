@@ -6,6 +6,7 @@
 }
 
 .title-description h3,
+.title-photos h3,
 .info_text h3{
     font-family: var(--fredoka);
     font-size: 40px;

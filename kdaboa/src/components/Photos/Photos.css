@@ -1,0 +1,25 @@
+/* Personalizar a barra de rolagem */
+:root {
+    --roxo: #6C15D5;
+    --roxoFraco: #BB8AFF;
+   
+}
+
+
+::-webkit-scrollbar {
+  width: 8px; /* Largura da barra de rolagem */
+  height: 8px; /* Altura da barra de rolagem horizontal */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--roxoFraco) !important; /* Cor do "polegar" da barra de rolagem */
+  border-radius: 10px; /* Bordas arredondadas */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color:var(--roxo) !important; /* Cor ao passar o mouse */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Cor do fundo da barra de rolagem */
+}

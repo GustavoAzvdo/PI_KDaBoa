@@ -1,0 +1,20 @@
+.btn-maps{
+    border-color: var(--roxo) !important;
+    color: var(--roxo) !important;
+}
+.btn-maps:hover{
+    background-color: var(--roxo) !important;
+    color: white !important;
+}
+.btn-maps p{
+    font-family: var(--notosans) !important;    
+    font-size: 19px;
+    padding-left: 0px !important;
+}
+
+.text-address-title .t,
+.text-contacts-title .t{
+    font-family: var(--notosans) !important;
+    font-size: 25px;
+    font-weight: 600;
+}
