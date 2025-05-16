@@ -1,26 +1,27 @@
+import './RecuperarSenha.css'
 import { Box, Typography, TextField, InputAdornment, Button, Link } from '@mui/material'
-import {PersonOutlined, HttpsOutlined} from '@mui/icons-material';
+import {PersonOutlined} from '@mui/icons-material';
 import logo from '../../../assets/logo.png'
-import './Login.css'
-const Login = () => {
-    return (
-        <Box className='container_login'>
-            <Box className='body_login'>
-                <Box className='header'>
+const RecuperarSenha = () => {
+  return (
+     <Box className='container_recuperar'>
+            <Box className='body_recuperar'>
+                <Box className='header_recuperar'>
                     <img src={logo} alt="logo" style={{ width: 30, height: 30 }}/>
                     <Typography  className='title'>
                         KDABOA
                     </Typography>
                 </Box>
-                <Box className='title'>
+                <Box className='title' sx={{ marginTop: 5 }}>
                     <Typography  variant='h5'>
-                        Login
+                        Recuperar Senha
                     </Typography>
                 </Box>
-                <Box component='form' className='form'>
+                <Box component='form' className='form_recuperar'>
                     <Box className='inputs'>
                         <Box>
                             <TextField 
+                                
                                 fullWidth 
                                 margin='normal' 
                                 id="outlined-basic" 
@@ -34,49 +35,30 @@ const Login = () => {
                                                             </InputAdornment>}}
                                 />
                         </Box>
-                        <Box>
-                            <TextField 
-                                fullWidth 
-                                margin='normal' 
-                                id="outlined-basic" 
-                                type="password" required 
-                                label="Senha" 
-                                variant="outlined" 
-                                InputProps={{endAdornment: <InputAdornment position="end" >
-                                                                <HttpsOutlined 
-                                                                    className='icons'
-                                                                />
-                                                            </InputAdornment>}}
-                                />
-                        </Box>
+                        
                     </Box>
                     <Box className='btn'>
-                        <Button
-                            variant="contained"
-                            className='btn-login'
-                            component={Link}
-                            href='/dashboard'
-                        >
+                        <Button href="/email-enviado" variant="contained" className='btn-login' sx={{ marginTop: 1 }} component={Link}>
                             <Typography className='btn' >
-                                Entrar
+                                Enviar
                             </Typography>
                         </Button>
-                        <Box className='links'>
+                        <Box className='links_recuperar' sx={{ paddingTop: 2 }}>
                             <Box>
-                                <Link href="/recuperar-senha">Esqueceu a sua senha?</Link>
+                                <Link href="/login">Voltar para o Login</Link>
                             </Box>
                         </Box>
-                        <Box className="links-account-login">
+                        <Box className="links-account" >
                                 <Typography>
-                                    Não tem uma conta? <Link href='/signin'>Crie Uma!</Link>
+                                    Não tem uma conta? <Link href="/signin">Crie Uma!</Link>
                                 </Typography>
-                        </Box>
+                            </Box>
                             
                     </Box>
                 </Box>
             </Box>
         </Box>
-    )
+  )
 }
 
-export default Login
+export default RecuperarSenha

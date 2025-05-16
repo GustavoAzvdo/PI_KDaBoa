@@ -7,20 +7,14 @@
 * {
     box-sizing: border-box;
 }
-.container_signin {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.body_signin{
+
+.body_alterar{
     border-radius: 10px;
     box-shadow:
-        0px 10px 100px var(--roxo),
-    0px -10px 100px var(--roxo) !important;
-    width: 450px;
-    height: 700px;
+        0px 10px 100px var(--roxo), 
+        0px -10px 100px var(--roxo); 
+    width: 400px;
+    height: 560px;
     margin: 0;
     padding: 0;
     position: absolute;
@@ -30,12 +24,10 @@
     align-items: center;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    transition: height 0.3s ease; /* Transição suave ao alterar a altura */
+    transform: translate(-50%, -50%);   
 }
 
-
-.body_signin .header_signin{
+.body_alterar .header{
     width: 100%;
     display: flex;
     align-items: center;
@@ -45,7 +37,7 @@
     padding-left: 20px;  
 }
 
-.header_signin p {
+.header p {
     padding-left: 9px;
     font-weight: 600;
     font-family: var(--fredoka) !important;
@@ -66,10 +58,9 @@
     font-size: 36px;
 }
 
-.form_signin{
-  
-    width: 85%;
-    height: auto;
+.form {
+    width: 83%;
+
 }
 .btn{
     padding-top: 13px;
@@ -86,13 +77,6 @@
     padding: 3px;
 }
 
-.btn-login:disabled {
-    background-color: #E0E0E0 !important; 
-    color: #9E9E9E; 
-    cursor: not-allowed; 
-    box-shadow: none; 
-}
-
 .links{
     padding-top: 10px;
     padding-bottom: 10px;
@@ -106,37 +90,24 @@
     font-family: var(--fredoka) !important;
 }
 
-.links-account-signin {
+.links-account {
+    margin-top: 50px;
     display: flex;
     justify-content: center;
     padding-top: 30px;
    
 }
 
-.links-account-signin p{
+.links-account p{
     font-family: var(--fredoka) !important;
     font-weight: 400;
 }
 
-.links-account-signin a{
+.links-account a{
     text-decoration: none;
     color: var(--roxoBtn);
     font-family: var(--fredoka) !important;
 }
-
-
-.inputs .MuiOutlinedInput-root.Mui-focused fieldset {
-    border-color: var(--roxoForm);
-}
-
-.inputs .MuiInputLabel-root.Mui-focused {
-    color: var(--roxoForm);
-}
-
-/* Campo de categorias (Autocomplete da direita) */
-
-
-
 
 .links-account a:hover{
     text-decoration: underline;
@@ -145,6 +116,11 @@
     text-decoration: underline;
 }
 
-.alert {
-    font-family: var(--notosans) !important;
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: var(--roxoBtn) !important;
+    
+}
+
+.MuiInputLabel-root.Mui-focused {
+    color: var(--roxoBtn) !important;
 }
