@@ -1,6 +1,12 @@
 import { Container, Box, Typography } from '@mui/material'
 import em_breve from '../../assets/em_breve.png'
+import { useEffect } from 'react'
 const ScreenDash = () => {
+
+  useEffect(() => {
+    document.title = 'Dashboard';
+  })
+
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
       <Box>

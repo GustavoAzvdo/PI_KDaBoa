@@ -115,3 +115,13 @@
 .links a:hover{
     text-decoration: underline;
 }
+
+/* alert laranja */
+
+.MuiAlert-root.alert.MuiAlert-info {
+  background-color: #FFA726 !important;
+  color: #fff !important;
+}
+.MuiAlert-root.alert.MuiAlert-info .MuiAlert-icon {
+  color: #fff !important;
+}

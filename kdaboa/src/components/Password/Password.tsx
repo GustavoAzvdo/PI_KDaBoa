@@ -3,6 +3,7 @@ import { Box, Typography, TextField, InputAdornment, Button } from '@mui/materia
 import { VisibilityOutlined, VisibilityOffOutlined, Check, Clear } from '@mui/icons-material';
 
 interface PasswordProps {
+    pegarSenha?: (senha: string, confirma:string) => void;
     onValidationChange?: (isValid: boolean) => void; // Prop para informar o estado de validação
     onPasswordChange?: (password: string) => void;
     reset?: boolean;
@@ -154,15 +155,23 @@ interface PasswordProps {
 //     );
 // };
 
-const Password: React.FC<PasswordProps> = ({ onValidationChange, onPasswordChange, reset, isLoading }) => {
+const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onPasswordChange, reset, isLoading }) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-
+    const [passwordFocused, setPasswordFocused] = useState(false);
+    const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
 
+
+    //pega valor da senha e envia para o componente pai
+    useEffect(() => {
+        if(pegarSenha){
+            pegarSenha(password, confirmPassword);
+        }
+    },[password,confirmPassword, pegarSenha])
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newPassword = event.target.value;
         setPassword(newPassword);
@@ -214,6 +223,8 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange, onPasswordChang
         <>
             <Box>
                 <TextField
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
                     fullWidth
                     disabled={isLoading}
                     margin="normal"
@@ -223,8 +234,8 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange, onPasswordChang
                     variant="outlined"
                     value={password}
                     onChange={handlePasswordChange}
-                    error={!isPasswordValid}
-                    helperText={!isPasswordValid ? 'Senha inválida!' : ''}
+                    error={passwordFocused && !isPasswordValid}
+                    helperText={passwordFocused && !isPasswordValid ? 'Senha inválida!' : ''}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -245,6 +256,8 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange, onPasswordChang
                                 </Button>
                             </InputAdornment>
                         ),
+                        className: isPasswordValid && passwordFocused ? 'valid' : undefined
+
                     }}
                 />
             </Box>
@@ -271,6 +284,8 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange, onPasswordChang
 
             <Box>
                 <TextField
+                    onFocus={() => setConfirmPasswordFocused(true)}
+                    onBlur={() => setConfirmPasswordFocused(false)}
                     disabled={isLoading}
                     fullWidth
                     margin="normal"
@@ -280,8 +295,8 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange, onPasswordChang
                     variant="outlined"
                     value={confirmPassword}
                     onChange={handleConfirmPasswordChange}
-                    error={!isConfirmPasswordValid}
-                    helperText={!isConfirmPasswordValid ? 'As senhas não coincidem!' : ''}
+                    error={confirmPasswordFocused && !isConfirmPasswordValid}
+                    helperText={confirmPasswordFocused && !isConfirmPasswordValid ? 'As senhas não coincidem!' : ''}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -302,6 +317,8 @@ const Password: React.FC<PasswordProps> = ({ onValidationChange, onPasswordChang
                                 </Button>
                             </InputAdornment>
                         ),
+                        className: isConfirmPasswordValid && confirmPasswordFocused ? 'valid' : undefined
+
                     }}
                 />
             </Box>

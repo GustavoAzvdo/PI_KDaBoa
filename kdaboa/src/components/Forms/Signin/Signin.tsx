@@ -3,6 +3,7 @@ import { PersonOutlined, MailOutline } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import logo from '../../../assets/logo.png'
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Signin.css'
 import Password from '../../Password/Password';
 
@@ -10,6 +11,10 @@ import Password from '../../Password/Password';
 import api from '../../../api/api'
 
 const Signin = () => {
+    const [nameFocused, setNameFocused] = useState(false);
+
+    const [nameTouched, setNameTouched] = useState(false);
+    const [emailTouched, setEmailTouched] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -21,13 +26,22 @@ const Signin = () => {
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success'); // Tipo da Snackbar
     const [resetPasswordFields, setResetPasswordFields] = useState<boolean>(false); // Estado para redefinir os campos de senha
 
+    const navigate = useNavigate();
     const handleValidationChange = (isPasswordValid: boolean) => {
         const isNameValid = name.length >= 3;
-        setIsFormValid(isNameValid && isPasswordValid);
+        const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        setIsFormValid(isNameValid && isEmailValid && isPasswordValid);
     };
 
     const handlePasswordChange = (password: string) => {
         setSenha(password);
+    };
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (/^[A-Za-zÀ-ÿ\s]*$/.test(value)) {
+            setName(value);
+        }
     };
 
     const handleCreateAccount = async () => {
@@ -40,16 +54,15 @@ const Signin = () => {
             });
 
             if (response.status === 201) {
-                setSnackbarMessage('Conta criada com sucesso!');
-                setSnackbarSeverity('success');
-                setSnackbarOpen(true);
 
-                setTimeout(() => {
-                    setSnackbarMessage('Foi enviado um email de verificação!');
-                    setSnackbarSeverity('success');
-                    setSnackbarOpen(true);
-                }, 4000);
-
+                navigate('/', {
+                    state: {
+                        snackbars: [
+                            { message: 'Conta criada com sucesso!', severity: 'success' },
+                            { message: 'Foi enviado um email de verificação!', severity: 'warning' }
+                        ]
+                    }
+                });
 
                 setName('');
                 setEmail('');
@@ -61,10 +74,12 @@ const Signin = () => {
         } catch (error: any) {
             const errorMessage = error.response?.data?.error;
             console.log(error.response.data.message);
-            if (error.response?.status === 409) {
-                setSnackbarMessage('Erro nos dados fornecidos. Verifique e tente novamente.');
-            } else if (error.response?.status === 400) {
-                setSnackbarMessage('Este e-mail já está cadastrado!');
+            if (error.response?.status === 400) {
+                setSnackbarMessage('Gerente já existe ou dominio de email não permitido!');
+
+            } else if (error.response?.status === 500) {
+                setSnackbarMessage('Erro interno do servidor!');
+
             } else {
                 setSnackbarMessage(errorMessage || 'Erro ao criar conta!');
             }
@@ -75,7 +90,7 @@ const Signin = () => {
         }
     };
 
-    const handleCloseSnackbar = (e?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleCloseSnackbar = (_e?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -85,9 +100,13 @@ const Signin = () => {
         if (isFormValid) {
             setBodyHeight(735);
         } else {
-            setBodyHeight(785);
+            setBodyHeight(735);
         }
     }, [isFormValid]);
+
+    useEffect(() => {
+        document.title = 'Crie sua conta';
+    })
     return (
         <Box className='container_signin'>
             <Box className="body_signin" sx={{ height: `${bodyHeight}px` }}> {/* Altura dinâmica */}
@@ -106,29 +125,35 @@ const Signin = () => {
                     <Box className='inputs'>
                         <Box>
                             <TextField
+                                onFocus={() => setNameTouched(true)}
+                                onBlur={() => setNameTouched(false)}
                                 disabled={isLoading}
                                 fullWidth
                                 value={name}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                                onChange={handleNameChange}
                                 sx={{ color: 'var(--roxoForm) !important' }}
                                 margin='normal'
                                 id={name.length > 3 ? 'outlined-basic' : 'outlined-error'}
-                                error={name.length < 3}
-                                helperText={name.length < 3 ? 'Nome deve ter no mínimo 3 caracteres!' : ''}
-                                type="text" required
+                                error={nameTouched && name.length < 3}
+                                helperText={nameTouched && name.length < 3 ? 'Nome deve ter no mínimo 3 caracteres!' : ''} type="text" required
                                 label="Nome"
                                 variant="outlined"
                                 InputProps={{
-                                    endAdornment: <InputAdornment position="end" >
+                                    endAdornment: (<InputAdornment position="end" >
                                         <PersonOutlined
                                             className='icons'
                                         />
                                     </InputAdornment>
+                                    ),
+                                    className: nameFocused && name.length >= 3 ? 'valid' : undefined
+
                                 }}
                             />
                         </Box>
                         <Box>
                             <TextField
+                                onFocus={() => setEmailTouched(true)}
+                                onBlur={() => setEmailTouched(false)}
                                 disabled={isLoading}
                                 value={email}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
@@ -138,15 +163,16 @@ const Signin = () => {
                                 id="outlined-basic"
                                 type="email"
                                 label="Email"
-                                error={!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)} // 
-                                helperText={!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Digite um e-mail válido!' : ''}
+                                error={emailTouched && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)} // 
+                                helperText={emailTouched && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Digite um e-mail válido!' : ''}
                                 variant="outlined"
                                 InputProps={{
-                                    endAdornment: <InputAdornment position="end" >
+                                    endAdornment: (<InputAdornment position="end" >
                                         <MailOutline
                                             className='icons'
                                         />
                                     </InputAdornment>
+                                    )
                                 }}
                             />
                         </Box>
@@ -157,8 +183,8 @@ const Signin = () => {
                             onPasswordChange={handlePasswordChange}
                             reset={resetPasswordFields}
                             isLoading={isLoading}
-                        />                    
-                        </Box>
+                        />
+                    </Box>
                     <Box className='btn'>
                         <Button variant="contained" size="large" className='btn-login' disabled={!isFormValid || isLoading} sx={{ padding: '10px', minWidth: '150px', height: '40px' }} onClick={handleCreateAccount}>
                             {isLoading ? (
@@ -179,7 +205,7 @@ const Signin = () => {
             </Box>
             <Snackbar
                 open={snackbarOpen}
-                autoHideDuration={3000}
+                autoHideDuration={5000}
                 onClose={handleCloseSnackbar}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             >
