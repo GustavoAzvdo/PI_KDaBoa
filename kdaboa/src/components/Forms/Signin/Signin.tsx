@@ -28,7 +28,7 @@ const Signin = () => {
 
     const navigate = useNavigate();
     const handleValidationChange = (isPasswordValid: boolean) => {
-        const isNameValid = name.length >= 3;
+        const isNameValid = name.replace(/\s/g, '').length >= 3;
         const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         setIsFormValid(isNameValid && isEmailValid && isPasswordValid);
     };
@@ -43,6 +43,7 @@ const Signin = () => {
             setName(value);
         }
     };
+    const nameLengthWithoutSpaces = name.replace(/\s/g, '');
 
     const handleCreateAccount = async () => {
         setIsLoading(true); // Ativa o estado de carregamento
@@ -134,8 +135,8 @@ const Signin = () => {
                                 sx={{ color: 'var(--roxoForm) !important' }}
                                 margin='normal'
                                 id={name.length > 3 ? 'outlined-basic' : 'outlined-error'}
-                                error={nameTouched && name.length < 3}
-                                helperText={nameTouched && name.length < 3 ? 'Nome deve ter no mínimo 3 caracteres!' : ''} type="text" required
+                                error={nameTouched && nameLengthWithoutSpaces.length < 3}
+                                helperText={nameTouched && nameLengthWithoutSpaces.length < 3 ? 'Nome deve ter no mínimo 3 caracteres válidos!' : ''} type="text" required
                                 label="Nome"
                                 variant="outlined"
                                 InputProps={{
