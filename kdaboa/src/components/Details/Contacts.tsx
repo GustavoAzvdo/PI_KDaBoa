@@ -4,7 +4,7 @@ import './Details.css'
 
 const Contacts = () => {
     return (
-        <Box className="contacts" sx={{ display: "flex", alignItems: "center", width: "100%",justifyContent: "flex-end" }}>
+        <Box className="contacts" sx={{ display: "flex", alignItems: "center", width: "100%", justifyContent: {md: 'flex-end'}}}>
             <Box className="img-maps" sx={{paddingRight: 2}}>
                 <img src={contacts} style={{ width: '60px', height: '60px' }} alt="" />
             </Box>

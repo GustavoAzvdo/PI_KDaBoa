@@ -20,9 +20,11 @@ const Profile = () => {
       <Title>
         Eventos <img src={ticket} style={{ width: 80, height: 80, margin: 0 }} alt="" />
       </Title>
-      <Container>
+      <Box sx={{margin: 'auto', width: '85vw'}}>
          <ViewCards />
-      </Container>
+
+      </Box>
+
       <Footer />
     </Box>
   )
