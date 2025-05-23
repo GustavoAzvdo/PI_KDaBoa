@@ -65,9 +65,9 @@ const InfoEvent = () => {
                     </Box>
                 </Grid>
 
-                <Grid size={{ xs: 12, md: 5 }}  sx={{justifyContent: {xs: 'center', sm: 'center', md: 'flex-end'}, marginY: {xs: 5, md: 0}}}    className="grid-right"  >
+                <Grid size={{ xs: 11, md: 5 }}  sx={{justifyContent: {xs: 'center', sm: 'center', md: 'flex-end'}, marginY: {xs: 9, md: 0}}}    className="grid-right"  >
                     <Box className="container-right" sx={{ display: "flex", alignItems: 'center',justifyContent: 'center' }}>
-                        <Box sx={{paddingX: 2}}>
+                        <Box sx={{paddingX: 2}} className="img-profile" >
                             <Avatar sx={{ width: 56, height: 56 }}>
                                 
                             </Avatar>
@@ -85,8 +85,8 @@ const InfoEvent = () => {
                     </Box>
                    
                 </Grid>
-                
-                <Grid size={{xs: 12, md: 10}} className="grid-description" sx={{paddingTop: 4}}>
+
+                <Grid size={{xs: 12, md: 10}} className="grid-description" sx={{paddingTop: 4, margin: 0, textAlign: 'justify', px: {xs: 2, md: 0}}}>
                     <Box className="title-description">
                         <Typography variant="h4" className="description-title">DESCRIÇÃO DO EVENTO</Typography>
                         <Typography className="description-text" sx={{paddingY: 5}}>O evento mais esperado do ano está chegando! O CDG Beer Garden traz para você a festa de lançamento do novo álbum do Matue, com um line-up incrível e muitas surpresas. Venha curtir uma noite inesquecível com a gente!</Typography>
