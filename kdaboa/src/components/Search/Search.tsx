@@ -11,9 +11,13 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
 import { useState } from 'react'
 import { JSX } from 'react/jsx-runtime'
-
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
+
+
+dayjs.locale('pt-br')
 
 const Search = () => {
   const [focused, setFocused] = useState(false);
@@ -116,9 +120,10 @@ const Search = () => {
                 width: '100%',
               }}
             >
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
                 <DatePicker
                   label="Data do evento"
+                  format="DD/MM/YYYY"
                   slotProps={{
                     textField: {
                       fullWidth: true,
