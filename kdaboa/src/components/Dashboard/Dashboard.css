@@ -1,0 +1,59 @@
+:root{
+    --notosans: 'Noto Sans', sans-serif;
+    --fredoka: 'Fredoka', sans-serif;
+    --roxoForte: #6C15D5;
+    --roxoFraco: #E2CFFC70;
+}
+
+.css-1t2rogw-MuiTypography-root{
+    font-family: var(--notosans) !important;
+    color: #000 !important;
+    font-size: 1.5rem !important;
+    font-weight: 500 !important;
+    padding-left: 15px;  
+}
+
+/* Letras das options do dash */
+.css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiTypography-root,
+.css-85hge4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiTypography-root {
+    color: var(--roxoForte) !important;
+}
+
+
+.css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected,
+.css-85hge4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected{
+    background-color: var(--roxoFraco) !important;
+}
+
+/* Ícones das options do dash */
+.css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiSvgIcon-root,
+.css-85hge4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiSvgIcon-root{
+    color: var(--roxoForte) !important;
+}
+
+.css-r11f8c-MuiSvgIcon-root {
+    fill: var(--roxoForte) !important;
+}
+
+/* Mudar o fundo das options ao passar o mouse */
+.css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root:hover ,
+.css-85hge4-MuiButtonBase-root-MuiListItemButton-root:hover{
+    background-color: var(--roxoFraco) !important;
+}
+
+.css-19kl34n-MuiButtonBase-root-MuiButton-root
+{
+    font-size: 13px !important;
+    font-family: var(--notosans) !important;
+    border: 0px !important;
+    color: #fff !important;
+    background-color: var(--roxoForte) !important;
+}
+
+.css-fa1coj-MuiButtonBase-root-MuiButton-root{
+    font-size: 15px !important;
+    font-family: var(--notosans) !important;
+    border: 0px !important;
+    color: #fff !important;
+    background-color: var(--roxoForte) !important;
+} 

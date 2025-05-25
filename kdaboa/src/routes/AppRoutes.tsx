@@ -6,7 +6,7 @@ import RecuperarSenha from '../components/Forms/RecuperarSenha/RecuperarSenha'
 import AlterarSenha from '../components/Forms/AlterarSenha/AlterarSenha'
 import SendEmail from '../components/SendEmail/SendEmail'
 import ScreenDash from '../components/ScreenDash/ScreenDash'
-
+import Dashboard from '../components/Dashboard/Dashboard'
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Login />} />
@@ -14,7 +14,7 @@ const AppRoutes = () => (
     <Route path="/recuperar-senha" element={<RecuperarSenha />} />
     <Route path="/alterar-senha" element={<AlterarSenha />} />
     <Route path="/email-enviado" element={<SendEmail />} />
-    <Route path="/dashboard" element={<ScreenDash />} />
+    <Route path="/dashboard" element={<Dashboard />} />
     <Route path="*" element={<Navigate to="/" />} />
   </Routes>
 )
