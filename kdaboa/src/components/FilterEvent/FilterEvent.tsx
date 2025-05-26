@@ -52,17 +52,19 @@ const FilterEvetn = () => {
 
             <Navbar />
             <Banner />
-            <Title className ="title-search" sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 5}}>
-                Pesquisar Evento
-                <img width="70" height="70" src={search} alt="hang-ten" />
-            </Title>
-            <Box className="search-container" sx={{paddingBottom: 10, borderBottom: 1, borderColor: '#e0e0e0' }} >
+            <Box sx={{textAlign: {xs: 'center'}}}>
+                <Title className="title-search" sx={{ display: 'flex', flexDirection: 'column', textAlign: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 5 }}>
+                    Pesquisar Evento
+                    <img width="70" height="70" src={search} alt="hang-ten" />
+                </Title>
+            </Box>
+            <Box className="search-container" sx={{ paddingBottom: 10, borderBottom: 1, borderColor: '#e0e0e0' }} >
                 <Search onCategoryChange={handleCategoryChange} onTextChange={handleTextChange} />
             </Box>
-            <Box className="title-container">
+            <Box className="title-container" sx={{ textAlign: 'center' }}>
                 <Title>
                     {filtered.length > 0 ? `${category.length > 0 ? `${category.join(', ')}` : 'Todos os eventos'}` : 'Nenhum evento encontrado'}
-                    
+
                 </Title>
             </Box>
             <Box sx={{
@@ -72,13 +74,13 @@ const FilterEvetn = () => {
                 gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
                 gap: 4, // Espaçamento entre os cards
                 padding: 2,
-            }}> 
+            }}>
                 {
                     filtered.map((card: CardProps, index: number) => (
-                    <CardEventHome key={index} card={card} />
-                ))}
+                        <CardEventHome key={index} card={card} />
+                    ))}
             </Box>
-            <Box sx={{marginTop: 10}}>
+            <Box sx={{ marginTop: 10 }}>
                 <Footer />
             </Box>
         </>
