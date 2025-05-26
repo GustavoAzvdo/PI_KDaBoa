@@ -1,0 +1,37 @@
+:root {
+    --notosans: 'Noto Sans', sans-serif;
+    --fredoka: 'Fredoka', sans-serif;
+    --roxo: #6C15D5;
+}
+
+.cookies h3{
+    font-family: var(--fredoka) !important;
+    font-weight: 450 !important;
+}
+
+.cookies p {
+    padding-top: 15px;
+    font-family: var(--notosans) !important;
+    font-size: 25px !important;
+    font-weight: 450 !important;
+}
+
+.cookies-acept {
+    font-family: var(--notosans) !important;
+    background-color: var(--roxo) !important;
+    
+}
+
+.cookies-reject {
+    font-family: var(--notosans) !important;
+    color: var(--roxo) !important;
+    border-color: var(--roxo) !important;
+}
+
+.cookies-acept p ,
+.cookies-reject p {
+    padding-left: 3px;
+    padding-right: 3px;
+    font-family: var(--notosans) !important;
+    font-size: 20px !important;
+}
