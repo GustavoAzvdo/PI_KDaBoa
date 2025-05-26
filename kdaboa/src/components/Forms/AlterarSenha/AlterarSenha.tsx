@@ -8,7 +8,6 @@ import { useState, useEffect } from 'react'
 
 const AlterarSenha: React.FC = () => {
     const [searchParams] = useSearchParams();
-    const token = searchParams.get('token');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [novaSenha, setNovaSenha] = useState<string>('');
     const [confirmaSenha, setConfirmaSenha] = useState<string>('');
@@ -29,19 +28,26 @@ const AlterarSenha: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!token) {
-            setSnackbarMessage('Token inválido ou expirado!');
-            setSnackbarSeverity('error');
-            setSnackbarOpen(true);
-            return;
-        }
         setIsLoading(true);
+
+        console.log(document.cookie)
+
+        const token = document.cookie.split('; ').find(row => row.startsWith('x-csrf-token='))?.split('=')[1];
+
+        console.log(token)
+
         try {
             await api.put(
                 '/auth/change-password',
                 { senha: novaSenha }, // corpo da requisição
-                { headers: { Authorization: `Bearer ${token}` } } // headers
-            );
+                {   
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-csrf-token': token
+                    },
+                    withCredentials: true,
+                }
+            )
             setSnackbarMessage('Senha alterada com sucesso!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
@@ -58,6 +64,7 @@ const AlterarSenha: React.FC = () => {
                 setSnackbarMessage('Erro interno do servidor.');
                 setSnackbarSeverity('error');
             } else {
+                console.log(error)
                 setSnackbarMessage('Erro ao alterar senha!');
                 setSnackbarSeverity('error');
             }
