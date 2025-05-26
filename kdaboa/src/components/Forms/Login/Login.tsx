@@ -56,8 +56,7 @@ const Login = () => {
             });
 
             if (response.status === 201) {
-
-
+                localStorage.setItem('userEmail', email);
                 navigate('/dashboard');
             } else {
                 console.log('Email ainda nao verificado');

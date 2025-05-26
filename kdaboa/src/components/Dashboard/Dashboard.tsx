@@ -125,35 +125,62 @@ export default function DashboardLayoutBasic(props: any) {
   // Remove this const when copying and pasting into your project.
   const demoWindow = window ? window() : undefined;
 
-  const [session, setSession] = React.useState<Session | null>({
-    user: {
-      name: 'CDG BEER GARDEN',
-      email: 'cdg@gmail.com',
-      image: cdg,
-    },
-  });
+  const [session, setSession] = React.useState<Session | null>(() => {
+  const saved = localStorage.getItem('session');
+  if (saved && saved !== 'undefined') {
+    try {
+      return JSON.parse(saved);
+    } catch {
+      // Se der erro no parse, limpa o localStorage
+      localStorage.removeItem('session');
+      return null;
+    }
+  }
+  
+  const userEmail = localStorage.getItem('userEmail');
+  if (userEmail) {
+    return {
+      user: {
+        email: userEmail,
+        image: cdg,
+      },
+    };
+  }
+  return null;
+});
+
+// Sempre que o session mudar, salva no localStorage
+React.useEffect(() => {
+  if (session) {
+    localStorage.setItem('session', JSON.stringify(session));
+  } else {
+    localStorage.removeItem('session');
+  }
+}, [session]);
 
   const authentication = React.useMemo(() => {
     return {
+
       signIn: () => {
+        const email = window?.prompt('Digite seu e-mail:') || 'user@example.com';
         setSession({
           user: {
-            name: 'CDG BEER GARDEN',
-            email: 'cdg@gmail.com',
+            email,
             image: cdg,
           },
         });
+         localStorage.setItem('userEmail', email); 
+       // salva para próximos reloads
       },
+
       signOut: () => {
         setSession(null);
-        router.navigate('/login')
+        router.navigate('/login');
       },
     };
-  }, []);
-   if (!session) {
-    return null;
-    // Ou, se quiser, retorne <LoginComponent />
-  }
+  }, [router]);
+  
+
   return (
     <AppProvider
       session={session}
