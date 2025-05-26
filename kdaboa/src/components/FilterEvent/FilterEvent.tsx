@@ -11,9 +11,17 @@ import Navbar from "../Navbar/Navbar";
 import search from "../../assets/search.png";
 import Banner from "../Banner/Banner";
 const FilterEvetn = () => {
+    const [selectedDate, setSelectedDate] = useState<string>('');
     const [category, setCategory] = useState<string[]>([]);
     const [searchText, setSearchText] = useState<string>('');
     const [filtered, setFiltered] = useState<CardProps[]>(BD);
+
+    const handleDateChange = (date: string) => {
+        setSelectedDate(date);
+        handleCategoryAndTextChange(category, searchText, date);
+    
+        // Implementar lógica de filtragem por data, se necessário
+    };
 
     const handleCategoryChange = (categories: string[]) => {
         setCategory(categories);
@@ -25,7 +33,7 @@ const FilterEvetn = () => {
         handleCategoryAndTextChange(category, selectedText);
     };
 
-    const handleCategoryAndTextChange = (selectedCategories: string[], searchText: string) => {
+    const handleCategoryAndTextChange = (selectedCategories: string[], searchText: string, date?: string) => {
         let filter = BD;
 
         if (selectedCategories.length > 0) {
@@ -44,6 +52,12 @@ const FilterEvetn = () => {
             );
         }
 
+        if(date && date.length > 0) {
+            filter = filter.filter((event) =>
+
+                event.createdAt === date
+            );
+        }
         setFiltered(filter);
     };
 
@@ -59,7 +73,7 @@ const FilterEvetn = () => {
                 </Title>
             </Box>
             <Box className="search-container" sx={{ paddingBottom: 10, borderBottom: 1, borderColor: '#e0e0e0' }} >
-                <Search onCategoryChange={handleCategoryChange} onTextChange={handleTextChange} />
+                <Search onDateChange={handleDateChange} onCategoryChange={handleCategoryChange} onTextChange={handleTextChange} />
             </Box>
             <Box className="title-container" sx={{ textAlign: 'center' }}>
                 <Title>

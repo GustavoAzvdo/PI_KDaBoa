@@ -1,6 +1,7 @@
 [
     {
         "id": 1,
+        "createdAt": "26/10/2023",
         "title": "Prefixo - Cabelinho",
         "description": "Cabelinho é o seu marrrento nesse show da Prefixo011!",
         "image": "/Image_cardHomeEvent/Cabelinho_Banner.jpg",
@@ -9,6 +10,7 @@
     },
     {
         "id": 2,
+        "createdAt": "26/10/2023",
         "title": "CDG Bear - Matue",
         "description": "Nessa vida nada é de graça irmão, mas a brisa que é esse show vai ser",
         "image": "/Image_cardHomeEvent/matue.jpeg",
@@ -17,6 +19,7 @@
     },
     {
         "id": 3,
+        "createdAt": "26/10/2023",
         "title": "CDG Bear - Veigh",
         "description": "O chão vai tremer no show do Veigh com o carro que pareçe um TANK",
         "image": "/Image_cardHomeEvent/Veigh.jpeg",
@@ -25,6 +28,7 @@
     },
     {
         "id": 4,
+        "createdAt": "26/09/2023",
         "title": "Rolê.Z - MU540",
         "description": "Traz doril que os cara colocou caixa preta pra toca nesse dia",
         "image": "/Image_cardHomeEvent/MU540.jpeg",
@@ -33,6 +37,7 @@
     },
     {
         "id": 5,
+        "createdAt": "26/09/2023",
         "title": "ZS - Kyan",
         "description": "Vem conhecer USD e quebrar tudo com Kyan",
         "image": "/Image_cardHomeEvent/Kyan.jpg",
@@ -41,6 +46,7 @@
     },
     {
         "id": 6,
+        "createdAt": "26/09/2023",
         "title": "Festa do Capeta - MC PP da VS",
         "description": "Agua benta e Cruxifixo devem ser levados de casa, se não leva chumbo",
         "image": "/Image_cardHomeEvent/FestaDoCapeta.jpeg",
@@ -49,6 +55,7 @@
     },
     {
         "id": 7,
+        "createdAt": "26/09/2023",
         "title": "Army - BTS",
         "description": "Aqueles lindos dos meninos vão te deixar loca nesse show no ibirapuera",
         "image": "/Image_cardHomeEvent/BTS.jpeg",
@@ -57,6 +64,7 @@
     },
     {
         "id": 8,
+        "createdAt": "25/09/2023",
         "title": "Panpeiro - Churrasco",
         "description" : "Churrasco e chimarrão, que você traz de casa viu, é isso que o povo gosta é isso que o povo quer",
         "image": "/Image_cardHomeEvent/Churrasco.jpeg",
@@ -65,6 +73,7 @@
     },
     {
         "id": 9,
+        "createdAt": "25/09/2023",
         "title": "Cali club - DJ GP da ZL",
         "description": "Doril é basico pra acorda bem amanhã",
         "image": "/Image_cardHomeEvent/GP.jpeg",
@@ -73,6 +82,7 @@
     },
     {
         "id": 10,
+        "createdAt": "25/09/2023",
         "title": "CDG - Roupa Nova",
         "description": "Se aparecer aqui com roupa velha já vai dar meia volta, com o Roupa Nova aqui não",
         "image": "/Image_cardHomeEvent/RoupaNova.jpeg",
@@ -81,6 +91,7 @@
     },
     {
         "id": 11,
+        "createdAt": "25/09/2023",
         "title": "KIDS - Hidrokid",
         "description": "Eu chapo nesse menino filho kkskskss",
         "image": "/Image_cardHomeEvent/Hidrokid.jpeg",
@@ -89,6 +100,7 @@
     },
     {
         "id": 12,
+        "createdAt": "25/09/2023",
         "title": "Villa Fest - MC luuky",
         "description": "Saindo dos mangas de One Piece pra fazer show no Villa Fest",
         "image": "/Image_cardHomeEvent/MC_Luuky.jpg",
@@ -97,6 +109,7 @@
     },
     {
         "id": 13,
+        "createdAt": "25/09/2023",
         "title": "BXX - Queen",
         "description": "O mããããẽeeeeeee eu mantei um homi",
         "image": "/Image_cardHomeEvent/Queen.jpeg",
@@ -105,6 +118,7 @@
     },
     {
         "id": 14,
+        "createdAt": "25/09/2023",
         "title": "Live Co. - Michael Jackson do Paraguai",
         "description": "A bille jeans not my love AUHUUAU",
         "image": "/Image_cardHomeEvent/ReiDoPop.jpeg",
@@ -113,11 +127,21 @@
     },
     {
         "id": 15,
+        "createdAt": "24/09/2023",
         "title": "Encontro para estudar plataforma",
         "description": "das 8AM até as 20PM vamos estudar varias plataformas e anotar numeros que já ficam anotados para avaliar dados e levantar a realidade da propaganda enganosa",
         "image": "/Image_cardHomeEvent/Tigrinho.jpeg",
         "date": "Julho 14, 2024",
         "category": ["Tecnologia"]
+    },
+    {
+        "id": 16,
+        "createdAt": "27/10/2023",
+        "title": "CDG Bear - Veigh",
+        "description": "O chão vai tremer no show do Veigh com o carro que pareçe um TANK",
+        "image": "/Image_cardHomeEvent/Veigh.jpeg",
+        "date": "Janeiro 04, 2025",
+        "category": ["Show", "Festival"]
     }
 ]
 
