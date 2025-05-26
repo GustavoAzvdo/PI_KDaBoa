@@ -52,7 +52,7 @@ const FilterEvetn = () => {
 
             <Navbar />
             <Banner />
-            <Title>
+            <Title className ="title-search" sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 5}}>
                 Pesquisar Evento
                 <img width="70" height="70" src={search} alt="hang-ten" />
             </Title>
@@ -66,6 +66,8 @@ const FilterEvetn = () => {
                 </Title>
             </Box>
             <Box sx={{
+                margin: '0 auto',
+                width: '85vw',
                 display: 'grid',
                 gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
                 gap: 4, // Espaçamento entre os cards
