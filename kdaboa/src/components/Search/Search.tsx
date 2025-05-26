@@ -1,16 +1,16 @@
-import { Box, Grid, TextField, Typography, Autocomplete, Checkbox, InputAdornment, FilledTextFieldProps, OutlinedTextFieldProps, StandardTextFieldProps, TextFieldVariants } from '@mui/material'
+import { Box, Grid, TextField, Autocomplete, Checkbox, InputAdornment } from '@mui/material'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
-import hangloose from '../../assets/hangloose.png'
+
 import { dados } from '../../categorys/dados'
 import { SearchOutlined } from '@mui/icons-material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
-import { useState } from 'react'
-import { JSX } from 'react/jsx-runtime'
+
+
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
@@ -20,10 +20,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />
 dayjs.locale('pt-br')
 
 const Search = () => {
-  const [focused, setFocused] = useState(false);
 
-  const handleFocus = () => setFocused(true);
-  const handleBlur = () => setFocused(false);
+ 
+  
   return (
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, md: 12 }} >
