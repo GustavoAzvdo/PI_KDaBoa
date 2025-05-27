@@ -1,0 +1,42 @@
+:root{
+    --notosans: 'Noto Sans', sans-serif;
+}
+
+.banner-container {
+    background-image: url('../../assets/banner.png');
+    height: 550px;
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+
+.banner-content{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding-left: 50px;
+    width: 50%;
+}
+
+.banner-content h1{
+    padding: 40px;
+    font-family: var(--notosans);
+    font-size: 80px;
+    font-weight: 650;
+    margin-bottom: 20px;
+}
+
+.title-container{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
+}
+
+.title-container p {
+    font-size: 40px !important;
+}

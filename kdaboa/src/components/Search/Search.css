@@ -2,6 +2,9 @@
     --notosans: 'Noto Sans', sans-serif;
     --fredoka: 'Fredoka', sans-serif;
     --roxo: #6C15D5;
+
+    --roxo-fraco: #BB8AFF;;
+
 }
 
 .icons{
@@ -14,6 +17,7 @@
 
 
 /* Campo de busca (TextField da esquerda) */
+
 .form-left .MuiOutlinedInput-root.Mui-focused fieldset {
     border-color: var(--roxo);
 }
@@ -57,46 +61,12 @@
   .form-right .MuiChip-deleteIcon {
     color: #6C15D5 !important; /* tom mais forte de roxo */
   }
-  .MuiOutlinedInput-root {
-    & fieldset {
-      legend {
-        max-width: 0.01px;
-      }
-    }
-  }
-  
+
+
   .MuiInputLabel-root {
     background-color: white; /* ou a cor do fundo */
-    padding: 0 12px !important;
+    padding: 0 8px !important;
   }
-
-.MuiFormControl-root{
-    width: 100%;
-   
-}
-
-.MuiStack-root{
-   
-    font-family: var(--notosans) !important;
-}
-
-.MuiPickersInputBase-root span,
-.MuiPickersSectionList-root span{
-    font-family: var(--notosans) !important;
-    font-size: 18px;
-}
-
-.MuiFormLabel-root {
-  font-family: var(--notosans) !important;
-  font-size: 18px;
-}
-
-.MuiInputBase-input {
-  font-family: var(--notosans) !important;
-  font-size: 18px;
-}
-
-
 
   .icons{
     color: #9c9c9c;
@@ -106,11 +76,45 @@
     color: var(--roxo);
   }
 
+.form-middle .MuiInputBase-input,
+.form-middle .MuiInputLabel-root {
 
-  .form-middle .MuiInputLabel-root {
-    font-family: var(--notosans) !important;
-    font-size: 18px !important;
-  
-  }
+  font-family: var(--notosans) !important;
+  font-size: 18px;
+}
+
+/* Estilo para o DatePicker quando focado */
+/* Força a borda roxa no estado focado do DatePicker */
+
+.css-1hgcujo-MuiPickersInputBase-root-MuiPickersOutlinedInput-root.Mui-focused:not(.Mui-error) .MuiPickersOutlinedInput-notchedOutline {
+  border-color: var(--roxo) !important; /* Define a borda roxa */
+  border-width: 2px; /* Ajusta a espessura da borda */
+}
+
+.css-4k4mmf-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  background-color: var(--roxo) !important; /* Define a cor de fundo roxa */
+  color: white !important; /* Define a cor do texto como branco */
+}
+
+.css-qct7wd-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+  background-color: var(--roxo-fraco) !important; /* Define a cor de fundo roxa */
+  color: black !important; /* Define a cor do texto como branco */
+}
+
+.css-1mvmid-MuiYearCalendar-button.Mui-selected {
+  background-color: var(--roxo) !important; /* Define a cor de fundo roxa */
+  color: white !important; /* Define a cor do texto como branco */
+}
+
+.form-middle .MuiInputLabel-root.Mui-focused {
+ 
+  color: var(--roxo) !important; /* Define o rótulo roxo */
+}
+
+
+
+
+
+
 
   

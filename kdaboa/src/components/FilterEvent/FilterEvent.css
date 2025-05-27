@@ -1,0 +1,13 @@
+:root{
+    --fredoka: 'Fredoka', sans-serif;
+    --notosans: 'Noto Sans', sans-serif;
+}
+
+.header-cardHomeEvent span{
+    font-family: var(--fredoka) !important;
+    font-size:medium;
+}
+.txt-cardHomeEvent{
+    font-family: var(--fredoka) !important;
+    font-size: 17px !important;
+}

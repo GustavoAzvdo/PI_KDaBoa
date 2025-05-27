@@ -4,28 +4,37 @@
     --color_purple1: #6C15D5;
 }
 
-.header-cardHomeEvent span{
+
+
+.MuiCardHeader-root span{
+    font-size: large;
     font-family: var(--fredoka) !important;
-    font-size:medium;
+
 }
 .txt-cardHomeEvent{
     font-family: var(--fredoka) !important;
     font-size: 17px !important;
 }
 
-.btn-cardHomeEvent{
-    padding: 2px;
+
+.btn-cardHomeEvent {
+
     border: none;
     background: none;
-    color: var(--color_purple1);
+    font-family: var(--fredoka);
     margin-right: 2vh;
     cursor: pointer;
 }
 
-.btn-cardHomeEvent {
-    color: var(--color_purple1) !important;
-    font-size: 20px;
-    font-weight: 500;
+
+.btn-cardHomeEvent p{
+    font-size: 20px !important;
+   color: var(--color_purple1);
+}
+
+.btn-cardHomeEvent:hover p{
+    color: #fff;
+
 }
 
  .btn-cardHomeEvent p:hover{   
@@ -37,7 +46,7 @@
 .cardHomeEvent {
     cursor: pointer;
     max-width:50vw;
-    width: 100%; /* Faz o card ocupar toda a largura disponível */
+    width: 92%; /* Faz o card ocupar toda a largura disponível */
     height: auto; /* Ajusta a altura automaticamente */
     margin: 0 auto; /* Centraliza o card dentro do slide */
     display: flex;

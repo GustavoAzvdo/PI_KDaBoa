@@ -1,27 +1,68 @@
-import { Box, Grid, TextField, Typography, Autocomplete, Checkbox, InputAdornment } from '@mui/material'
+
+import { Box, Grid, TextField, Autocomplete, Checkbox, InputAdornment } from '@mui/material'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
-import hangloose from '../../assets/hangloose.png'
+
 import { dados } from '../../categorys/dados'
 import { SearchOutlined } from '@mui/icons-material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
 
+
+import { useState } from 'react';
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
-const Search = () => {
+
+dayjs.locale('pt-br')
+
+interface SearchProps {
+  onCategoryChange: (categories: string[]) => void;
+  onTextChange: (text: string) => void; // Callback para enviar as categorias selecionadas
+  onDateChange: (date: string) => void; // Callback opcional para enviar a data selecionada
+}
+
+const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) => {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [searchText, setSearchText] = useState<string>('')
+  const [selectedDate, setSelectedDate] = useState<any>(null);
+
+  const handleCategoryChange = (event: any, value: any) => {
+    const categories = value.map((item: any) => item.title); // Extrai os títulos das categorias selecionadas
+    setSelectedCategories(categories);
+    onCategoryChange(categories);
+  };
+
+  const handleSearchTextChange = (value: string) => {
+    const selectedText = value.toLowerCase();
+    setSearchText(selectedText); // Atualiza o estado local
+    onTextChange(selectedText); // Passa o valor atualizado diretamente para o componente pai
+  };
+
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+
+  };
+
   return (
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, md: 12 }} >
-        <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{paddingY:2}} >
+        <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{ paddingY: 2 }} >
+
           {/* Campo da esquerda */}
           <Grid size={{ xs: 10, md: 6, lg: 5 }}>
             <Box component='form' className='form-left'>
               <TextField
+
+                onChange={(e) => handleSearchTextChange(e.target.value)}
+                value={searchText}
+
                 fullWidth
                 id="outlined-basic"
                 label="Pesquisar eventos ou estabelecimentos"
@@ -49,6 +90,10 @@ const Search = () => {
                 id="checkboxes-tags-demo"
                 options={dados}
                 disableCloseOnSelect
+
+                onChange={handleCategoryChange}
+                noOptionsText="Nenhuma categoria encontrada"
+
                 getOptionLabel={(option) => option.title}
                 renderOption={(props, option, { selected }) => {
                   const { key, ...optionProps } = props
@@ -96,16 +141,50 @@ const Search = () => {
             </Box>
           </Grid>
 
-          <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ padding: 0, marginTop: '-8px' }}>
-            <Box component='form' className='form-middle'>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['DatePicker']}>
-                  <DatePicker
-                    label="Data do evento"
-                  
-                  />
+          <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ marginTop: '-8px' }}>
+            <Box
+              className="form-middle"
 
-                </DemoContainer>
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexGrow: 1,
+                paddingY: 1,
+                margin: 0,
+                width: '100%',
+              }}
+            >
+              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+                <DatePicker
+                  label="Data do evento"
+                  format="DD/MM/YYYY"
+                  value={selectedDate}
+                  onChange={(newValue) => {
+                    setSelectedDate(newValue);
+                    if (onDateChange) {
+                      const formatted = newValue ? dayjs(newValue).format('DD/MM/YYYY') : '';
+                      onDateChange(formatted);
+                    }
+                  }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      sx: {
+                        '& .MuiOutlinedInput-root': {
+                          '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#6C15D5 !impotant', // Define a borda roxa
+                            borderWidth: '2px', // Ajusta a espessura da borda
+                          },
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                          color: '#6C15D5', // Define o rótulo roxo
+                        },
+                      },
+                    },
+                  }}
+                />
+
               </LocalizationProvider>
             </Box>
           </Grid>
@@ -115,4 +194,6 @@ const Search = () => {
   )
 }
 
-export default Search
+
+export default Search;
+
