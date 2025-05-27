@@ -1,4 +1,5 @@
 
+
 import {
   Festival,
   MusicNote,
@@ -24,12 +25,14 @@ import {
 } from '@mui/icons-material';
 
 
+
 interface Dados {
   title: string;
   icon: React.ReactNode;
 }
 
 export const dados: Dados[] = [
+
   { title: 'Show', icon: <MusicNote /> },
   { title: 'Festival', icon: <Festival /> },
   { title: 'Tecnologia', icon: <Computer /> },
@@ -71,3 +74,4 @@ export const dados: Dados[] = [
   { title: 'Tarde Cultural / Exposição de Arte', icon: <Palette /> },
   { title: 'Evento Esportivo', icon: <SportsSoccer /> },
 ];
+

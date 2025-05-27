@@ -1,3 +1,4 @@
+
 import { Box, Grid, TextField, Autocomplete, Checkbox, InputAdornment } from '@mui/material'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
@@ -5,10 +6,12 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import { dados } from '../../categorys/dados'
 import { SearchOutlined } from '@mui/icons-material';
 
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
+
 
 import { useState } from 'react';
 import dayjs from 'dayjs';
@@ -51,12 +54,15 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, md: 12 }} >
         <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{ paddingY: 2 }} >
+
           {/* Campo da esquerda */}
           <Grid size={{ xs: 10, md: 6, lg: 5 }}>
             <Box component='form' className='form-left'>
               <TextField
+
                 onChange={(e) => handleSearchTextChange(e.target.value)}
                 value={searchText}
+
                 fullWidth
                 id="outlined-basic"
                 label="Pesquisar eventos ou estabelecimentos"
@@ -84,8 +90,10 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
                 id="checkboxes-tags-demo"
                 options={dados}
                 disableCloseOnSelect
+
                 onChange={handleCategoryChange}
                 noOptionsText="Nenhuma categoria encontrada"
+
                 getOptionLabel={(option) => option.title}
                 renderOption={(props, option, { selected }) => {
                   const { key, ...optionProps } = props
@@ -132,6 +140,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
               />
             </Box>
           </Grid>
+
           <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ marginTop: '-8px' }}>
             <Box
               className="form-middle"
@@ -175,6 +184,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
                     },
                   }}
                 />
+
               </LocalizationProvider>
             </Box>
           </Grid>
@@ -184,4 +194,6 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
   )
 }
 
+
 export default Search;
+

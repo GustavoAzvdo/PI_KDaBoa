@@ -2,7 +2,9 @@
     --notosans: 'Noto Sans', sans-serif;
     --fredoka: 'Fredoka', sans-serif;
     --roxo: #6C15D5;
+
     --roxo-fraco: #BB8AFF;;
+
 }
 
 .icons{
@@ -60,6 +62,7 @@
     color: #6C15D5 !important; /* tom mais forte de roxo */
   }
 
+
   .MuiInputLabel-root {
     background-color: white; /* ou a cor do fundo */
     padding: 0 8px !important;
@@ -107,6 +110,7 @@
  
   color: var(--roxo) !important; /* Define o rótulo roxo */
 }
+
 
 
 

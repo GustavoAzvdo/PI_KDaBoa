@@ -5,21 +5,27 @@
 }
 
 
+
 .MuiCardHeader-root span{
     font-size: large;
     font-family: var(--fredoka) !important;
+
 }
 .txt-cardHomeEvent{
-    font-family: var(--notosans) !important;
+    font-family: var(--fredoka) !important;
+    font-size: 17px !important;
 }
 
+
 .btn-cardHomeEvent {
+
     border: none;
     background: none;
     font-family: var(--fredoka);
     margin-right: 2vh;
     cursor: pointer;
 }
+
 
 .btn-cardHomeEvent p{
     font-size: 20px !important;
@@ -28,9 +34,17 @@
 
 .btn-cardHomeEvent:hover p{
     color: #fff;
+
 }
 
+ .btn-cardHomeEvent p:hover{   
+    color: #fff !important;
+
+} 
+
+
 .cardHomeEvent {
+    cursor: pointer;
     max-width:50vw;
     width: 92%; /* Faz o card ocupar toda a largura disponível */
     height: auto; /* Ajusta a altura automaticamente */
