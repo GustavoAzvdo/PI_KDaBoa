@@ -11,7 +11,7 @@ const Photos = () => {
   return (
     <Container
       sx={{
-        height: '75vh',
+        height: '80vh',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
@@ -23,7 +23,7 @@ const Photos = () => {
       <ImageList
         sx={{ width: '82vw', maxWidth: 1450 }}
         gap={20}
-        cols={isSmallScreen ? 2 : 3}
+        cols={isSmallScreen ? 1 : 2}
         rowHeight={300}
       >                {images.map((item) => (
         <ImageListItem key={item.src}>
