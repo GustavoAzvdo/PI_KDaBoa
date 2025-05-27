@@ -13,7 +13,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
 
 
+
 import { useState } from 'react';
+
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
@@ -21,6 +23,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 
 dayjs.locale('pt-br')
+
 
 interface SearchProps {
   onCategoryChange: (categories: string[]) => void;
@@ -49,6 +52,12 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
     setSelectedDate(date);
 
   };
+
+=======
+const Search = () => {
+
+ 
+  
 
   return (
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -91,8 +100,10 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
                 options={dados}
                 disableCloseOnSelect
 
+
                 onChange={handleCategoryChange}
                 noOptionsText="Nenhuma categoria encontrada"
+
 
                 getOptionLabel={(option) => option.title}
                 renderOption={(props, option, { selected }) => {
@@ -140,10 +151,10 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
               />
             </Box>
           </Grid>
-
           <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ marginTop: '-8px' }}>
             <Box
               className="form-middle"
+
 
               sx={{
                 display: 'flex',
@@ -159,6 +170,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
                 <DatePicker
                   label="Data do evento"
                   format="DD/MM/YYYY"
+
                   value={selectedDate}
                   onChange={(newValue) => {
                     setSelectedDate(newValue);
@@ -167,6 +179,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
                       onDateChange(formatted);
                     }
                   }}
+
                   slotProps={{
                     textField: {
                       fullWidth: true,
@@ -195,5 +208,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
 }
 
 
+
 export default Search;
+
 

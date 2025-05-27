@@ -1,5 +1,4 @@
 
-
 import {
   Festival,
   MusicNote,
@@ -73,5 +72,8 @@ export const dados: Dados[] = [
   { title: 'Stand-up Comedy', icon: <SentimentVerySatisfied /> },
   { title: 'Tarde Cultural / Exposição de Arte', icon: <Palette /> },
   { title: 'Evento Esportivo', icon: <SportsSoccer /> },
+
 ];
+
+
 

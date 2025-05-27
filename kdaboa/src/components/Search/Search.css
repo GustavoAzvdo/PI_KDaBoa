@@ -104,6 +104,13 @@
 .css-1mvmid-MuiYearCalendar-button.Mui-selected {
   background-color: var(--roxo) !important; /* Define a cor de fundo roxa */
   color: white !important; /* Define a cor do texto como branco */
+
+}
+
+.form-middle .MuiInputLabel-root.Mui-focused {
+ 
+  color: var(--roxo) !important; /* Define o rótulo roxo */
+
 }
 
 .form-middle .MuiInputLabel-root.Mui-focused {
