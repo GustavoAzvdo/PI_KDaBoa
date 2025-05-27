@@ -1,0 +1,21 @@
+:root{
+    --notosans: 'Noto Sans', sans-serif;
+    --roxoEmail: #6C15D5;
+}
+
+.text-1 p,
+.text-2 p{
+    font-size: 20px;
+    font-family: var(--notosans) !important;
+    font-weight: 550;
+}
+
+.btn-voltar {
+    background-color: var(--roxoEmail) !important;
+}
+
+.btn-voltar p {
+    font-family: var(--notosans) !important;
+    font-size: 20px;
+    padding: 3px;
+}
