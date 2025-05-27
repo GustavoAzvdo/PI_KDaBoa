@@ -37,9 +37,9 @@
 
 }
 
- .btn-cardHomeEvent p:hover{   
+ .btn-cardHomeEvent:hover{   
     color: #fff !important;
-
+    background-color: var(--color_purple1) !important;
 } 
 
 

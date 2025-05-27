@@ -1,0 +1,21 @@
+/* Personalizar a barra de rolagem */
+:root {
+    --roxo: #6C15D5;
+    --roxoFraco: #BB8AFF;
+    --laranja: #FF8E38;
+}
+.MuiImageList-root {
+  scrollbar-width: 15px;              /* Firefox */
+  scrollbar-color: var(--roxo) #fff;   /* Firefox */
+}
+
+/* Chrome, Edge, Safari */
+.MuiImageList-root::-webkit-scrollbar {
+  width: 15px;
+  background: #fff;
+}
+.MuiImageList-root::-webkit-scrollbar-thumb {
+  background: var(--roxo);
+  border-radius: 8px;
+}
+

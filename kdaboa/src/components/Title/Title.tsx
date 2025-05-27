@@ -1,5 +1,4 @@
 import { Box, Grid, Typography } from '@mui/material'
-import hangloose from '../../assets/hangloose.png'
 
 import './Title.css'
 const Title = ({children} : any) => {
