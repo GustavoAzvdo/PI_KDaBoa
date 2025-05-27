@@ -4,6 +4,7 @@ interface CardProps {
     description: string;
     image: string;
     date: string;
+    category: string[];
 }
 
 export default CardProps;

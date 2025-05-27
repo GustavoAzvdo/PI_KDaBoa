@@ -1,13 +1,13 @@
-import { Box } from '@mui/material'
 import './App.css'
-import Login from './components/Forms/Login/Login'
-import Home from './pages/Home/Home'
-
-
+import ViewEvent from './pages/ViewEvent/ViewEvent'
+import SearchEvent from './pages/SearchEvent/SearchEvent'
+import Profile from './pages/Profile/Profile'
 function App() {
   return (
     <>
-      <Home />
+      <SearchEvent />
+      <ViewEvent />
+      <Profile />
     </>
   )
 }
