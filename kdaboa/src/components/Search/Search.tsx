@@ -36,7 +36,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
   const [searchText, setSearchText] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<any>(null);
 
-  const handleCategoryChange = (event: any, value: any) => {
+  const handleCategoryChange = (_event: any, value: any) => {
     const categories = value.map((item: any) => item.title); // Extrai os títulos das categorias selecionadas
     setSelectedCategories(categories);
     onCategoryChange(categories);
@@ -52,13 +52,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
     setSelectedDate(date);
 
   };
-
-=======
-const Search = () => {
-
- 
   
-
   return (
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, md: 12 }} >
@@ -210,5 +204,3 @@ const Search = () => {
 
 
 export default Search;
-
-
