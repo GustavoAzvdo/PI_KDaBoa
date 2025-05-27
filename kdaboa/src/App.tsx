@@ -1,18 +1,11 @@
-
-
-import { Box } from '@mui/material'
 import './App.css'
-
-import Home from './pages/Home/Home'
-
-import NavbarEvent from './components/NavbarEvent/NavbarEvent'
 import ViewEvent from './pages/ViewEvent/ViewEvent'
-import FilterEvent from "./components/FilterEvent/FilterEvent"
+import SearchEvent from './pages/SearchEvent/SearchEvent'
 import Profile from './pages/Profile/Profile'
 function App() {
   return (
     <>
-      <FilterEvent />
+      <SearchEvent />
       <ViewEvent />
       <Profile />
     </>
