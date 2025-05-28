@@ -45,12 +45,12 @@ const RecuperarSenha = () => {
         <Box className='container_recuperar'>
             <Box className='body_recuperar'>
                 <Box className='header_recuperar'>
-                    <img src={logo} alt="logo" style={{ width: 30, height: 30 }} />
-                    <Typography className='title'>
+                    <img src={logo} alt="logo" className='logo-recuperar' />
+                    <Typography className='title_navbar_recuperar'>
                         KDABOA
                     </Typography>
                 </Box>
-                <Box className='title' sx={{ marginTop: 5 }}>
+                <Box className='title_recuperar' sx={{ marginTop: 5 }}>
                     <Typography variant='h5'>
                         Recuperar Senha
                     </Typography>

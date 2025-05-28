@@ -18,47 +18,47 @@
 
 /* Campo de busca (TextField da esquerda) */
 
-.form-left .MuiOutlinedInput-root.Mui-focused fieldset {
+.form-left-search .MuiOutlinedInput-root.Mui-focused fieldset {
     border-color: var(--roxo);
 }
 
-.form-left .MuiInputLabel-root.Mui-focused {
+.form-left-search .MuiInputLabel-root.Mui-focused {
     color: var(--roxo);
 }
 
 /* Campo de categorias (Autocomplete da direita) */
-.form-right .MuiOutlinedInput-root.Mui-focused fieldset {
+.form-right-search .MuiOutlinedInput-root.Mui-focused fieldset {
     border-color: var(--roxo);
 }
 
-.form-right .MuiInputLabel-root.Mui-focused {
+.form-right-search .MuiInputLabel-root.Mui-focused {
     color: var(--roxo);
 }
 
-.form-left .MuiInputBase-input,
-.form-left .MuiInputLabel-root,
-.form-right .MuiInputBase-input,
-.form-right .MuiInputLabel-root {
+.form-left-search .MuiInputBase-input,
+.form-left-search .MuiInputLabel-root,
+.form-right-search .MuiInputBase-input,
+.form-right-search .MuiInputLabel-root {
     font-family: var(--notosans) !important;
     font-size: 18px;
 }
 
-.form-right li {
+.form-right-search li {
     font-family: var(--notosans) !important;
     font-size: 24px;
 }
 
 
 /* Chips selecionados */
-.form-right .MuiChip-root {
+.form-right-search .MuiChip-root {
     background-color: #E9D8FD !important; /* roxo claro */
     color: #4B0082 !important; /* roxo mais escuro pra contraste */
     font-family: var(--notosans);
     font-weight: 500;
-  }
-  
-  /* Ícone de remover (o X) */
-  .form-right .MuiChip-deleteIcon {
+}
+
+/* Ícone de remover (o X) */
+.form-right-search .MuiChip-deleteIcon {
     color: #6C15D5 !important; /* tom mais forte de roxo */
   }
 
@@ -76,8 +76,8 @@
     color: var(--roxo);
   }
 
-.form-middle .MuiInputBase-input,
-.form-middle .MuiInputLabel-root {
+.form-middle-search .MuiInputBase-input,
+.form-middle-search .MuiInputLabel-root {
 
   font-family: var(--notosans) !important;
   font-size: 18px;
@@ -107,18 +107,20 @@
 
 }
 
-.form-middle .MuiInputLabel-root.Mui-focused {
- 
+.form-middle-search .MuiInputLabel-root.Mui-focused {
+
   color: var(--roxo) !important; /* Define o rótulo roxo */
 
 }
 
-.form-middle .MuiInputLabel-root.Mui-focused {
- 
+.form-middle-search .MuiInputLabel-root.Mui-focused {
+
   color: var(--roxo) !important; /* Define o rótulo roxo */
 }
 
-
+.css-cqwpsm {
+  padding-bottom: 0 !important; /* Remove o padding inferior */
+}
 
 
 

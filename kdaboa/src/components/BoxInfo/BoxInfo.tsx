@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, Button } from "@mui/material"
 import festa from "../../assets/festa.png"
-
+import video from "../../assets/video.gif"
 import './BoxInfo.css'
 const BoxInfo = () => {
   return (
@@ -24,7 +24,7 @@ const BoxInfo = () => {
             alignItems: 'center',
           }}>
 
-          <Button variant='outlined' color='inherit' size='large'>
+          <Button variant='outlined' color='inherit' size='large' href="/signin" className="btn-cadastrar">
             <Typography className="btn-text">
               Quero me cadastrar!
             </Typography>
@@ -33,7 +33,9 @@ const BoxInfo = () => {
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Box className="festa"
+
           sx={{
+
             display: 'flex',
             justifyContent: {
               xs: 'center',
@@ -45,6 +47,8 @@ const BoxInfo = () => {
               sm: 3
             },
             alignItems: 'center',
+            width: {xs: '100%', sm: '100%', md: '100%' },
+            heuight: { xs: '100%', sm: '100%', md: '100%' },
           }}>
           <img src={festa}
             style={{ width: '80%', height: '100%', alignItems: 'center' }}

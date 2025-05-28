@@ -1,5 +1,5 @@
 :root{
-    --roxo: #BB8AFF53;
+    --roxoSignin: #BB8AFF53;
     --fredoka: 'Fredoka', sans-serif;
     --roxoBtn: #6C15D5;
 }
@@ -17,8 +17,8 @@
 .body_signin{
     border-radius: 10px;
     box-shadow:
-        0px 10px 100px var(--roxo),
-    0px -10px 100px var(--roxo) !important;
+        0px 10px 100px var(--roxoSignin),
+    0px -10px 100px var(--roxoSignin) !important;
     width: 450px;
     height: 700px;
     margin: 0;
@@ -52,13 +52,26 @@
 
 }
 
-.title {
+.header_signin .logo-signin {
+    width: 30px;
+    height: 30px;
+}
+
+.title_navbar_signin p{
     display: flex;
     padding-left: 30px;
     width: 100%;
 }
 
-.title h5 {
+.title_signin {
+    width: 87%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    
+}
+
+.title_signin h5 {
     padding-top: 15px;
     padding-bottom: 15px;
     font-family: var(--fredoka) !important;
@@ -67,7 +80,7 @@
 }
 
 .form_signin{
-  
+
     width: 85%;
     height: auto;
 }

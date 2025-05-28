@@ -1,7 +1,7 @@
 :root{
     --fredoka: 'Fredoka', sans-serif;
     --notosans: 'Noto Sans', sans-serif;
-    --roxo: #6C15D5;
+    --roxoNavbar: #6C15D5;
 }
 
 
@@ -34,7 +34,7 @@
 }
 
 .btn-share{
-    background-color: var(--roxo) !important;
+    background-color: var(--roxoNavbar) !important;
 }
 
 .btn-share p {

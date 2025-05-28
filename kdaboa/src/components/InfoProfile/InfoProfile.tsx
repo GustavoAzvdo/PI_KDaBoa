@@ -54,7 +54,7 @@ const InfoProfile = () => {
                     sx={{ display: 'flex', alignItems: { md: 'center' }, justifyContent: { xs: 'center', md: 'space-around' }, margin: 'auto', paddingTop: 4 }}>
 
                     <Grid size={{ xs: 10, md: 5 }}>
-                        <Address />
+                        <Address address={''} />
                     </Grid>
                     <Grid
                         size={{ xs: 10, md: 5 }}

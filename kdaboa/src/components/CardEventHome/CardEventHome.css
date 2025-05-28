@@ -18,29 +18,35 @@
 
 
 .btn-cardHomeEvent {
-
     border: none;
     background: none;
     font-family: var(--fredoka);
     margin-right: 2vh;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
-
-.btn-cardHomeEvent p{
-    font-size: 20px !important;
-   color: var(--color_purple1);
-}
-
-.btn-cardHomeEvent:hover p{
-    color: #fff;
-
-}
-
- .btn-cardHomeEvent:hover{   
+/* Altera cor do texto e ícone ao passar o mouse */
+.btn-cardHomeEvent:hover,
+.btn-cardHomeEvent:focus {
     color: #fff !important;
     background-color: var(--color_purple1) !important;
-} 
+}
+
+/* Garante que o texto (p) e svg (ícone) fiquem brancos no hover */
+.btn-cardHomeEvent:hover p,
+.btn-cardHomeEvent:hover svg {
+    color: #fff !important;
+    fill: #fff !important;
+}
+
+/* Remove hover duplicado e regras conflitantes */
+.btn-cardHomeEvent p {
+    
+    font-size: 19px !important;
+    color: var(--color_purple1);
+}
 
 
 .cardHomeEvent {

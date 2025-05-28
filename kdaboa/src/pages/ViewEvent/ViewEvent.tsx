@@ -13,7 +13,7 @@ const ViewEvent = () => {
         <Title>
             Evento <img src={ticket} style={{ width: 80, height:80, margin: 0 }} alt="" />
         </Title>
-        <BannerEvent />
+        
         <InfoEvent />
         <Footer />
     </>

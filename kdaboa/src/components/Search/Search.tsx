@@ -52,7 +52,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
     setSelectedDate(date);
 
   };
-  
+
   return (
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, md: 12 }} >
@@ -60,7 +60,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
 
           {/* Campo da esquerda */}
           <Grid size={{ xs: 10, md: 6, lg: 5 }}>
-            <Box component='form' className='form-left'>
+            <Box component='form' className='form-left-search'>
               <TextField
 
                 onChange={(e) => handleSearchTextChange(e.target.value)}
@@ -86,7 +86,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
 
           {/* Campo da direita */}
           <Grid size={{ xs: 10, md: 4, lg: 4 }}>
-            <Box component='form' className='form-right'>
+            <Box component='form' className='form-right-search'>
               <Autocomplete
                 className='txtCategorys'
                 multiple
@@ -147,7 +147,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
           </Grid>
           <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ marginTop: '-8px' }}>
             <Box
-              className="form-middle"
+              className="form-middle-search"
 
 
               sx={{
@@ -164,7 +164,7 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
                 <DatePicker
                   label="Data do evento"
                   format="DD/MM/YYYY"
-
+                  sx={{pb: 0}}
                   value={selectedDate}
                   onChange={(newValue) => {
                     setSelectedDate(newValue);

@@ -1,10 +1,11 @@
 import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert } from '@mui/material'
-import { HttpsOutlined, EmailOutlined } from '@mui/icons-material';
+import { PersonOutlined, HttpsOutlined, EmailOutlined, HouseOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api'
 import logo from '../../../assets/logo.png'
 import './Login.css'
+import Maps from '../../Maps/Maps';
 const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -80,19 +81,32 @@ const Login = () => {
 
     return (
         <Box className='container_login'>
+            
             <Box className='body_login'>
-                <Box className='header'>
-                    <img src={logo} alt="logo" style={{ width: 30, height: 30 }} />
-                    <Typography className='title'>
-                        KDABOA
-                    </Typography>
+                <Box className='header_login'>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                        <img src={logo} alt="logo" className='logo-login' />
+                        <Typography className='title_navbar_login'>
+                            KDABOA
+                        </Typography>
+
+                    </Box>
+                    <Box className='home-login' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '50%' }}>
+                        <Link sx={{ display: 'flex', alignItems: 'center' , gap: 1, textDecoration: 'none', '&:hover': { textDecoration: 'underline', textDecorationColor: 'var(--roxoLoginBtn)' } }} href='/home'>
+                            <Typography className='title_home_login'>
+                                Home
+                            </Typography>
+                            <HouseOutlined sx={{ color: 'var(--roxoLoginBtn)' }} />
+                        </Link>
+                    </Box>
                 </Box>
-                <Box className='title'>
+                <Box className='title_login' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                     <Typography variant='h5'>
                         Login
                     </Typography>
                 </Box>
-                <Box component='form' className='form' onSubmit={handleLogin}>
+
+                <Box component='form' className='form_login' onSubmit={handleLogin}>
                     <Box className='inputs'>
                         <Box>
                             <TextField

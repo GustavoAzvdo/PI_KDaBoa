@@ -1,8 +1,17 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography, Modal } from '@mui/material'
 import maps from '../../assets/maps.png'
 import './Details.css'
 
-const Address = () => {
+import { useState } from 'react'
+
+interface AddressProps {
+    address: string;
+}
+
+const Address = ({ address }: AddressProps) => {
+    const [openMap, setOpenMap] = useState<boolean>(false);
+    const endereco = "Rodovia Presidente Dutra, Guará-Lorena, KM 57 - Guaratinguetá - São Paulo, 12504-290";
+    const nome= "CDG Beer Garden";
     return (
         <Box className="address" sx={{ display: "flex", alignItems: "center", width: "100%" }}>
             <Box className="img-maps" sx={{ paddingRight: 2 }}>
@@ -10,15 +19,42 @@ const Address = () => {
             </Box>
             <Box className="text-address">
                 <Box sx={{ display: "flex", alignItems: "center" }} className="text-address-title">
-                    <Typography className='t'>CDG BEER GARDEN </Typography>
-                    <Button  variant="outlined" className="btn-maps" sx={{ marginLeft: 3 }}>
+                    <Typography className='t'>{nome}</Typography>
+                    <Button variant="outlined" className="btn-maps" sx={{ marginLeft: 3 }} onClick={() => setOpenMap(true)}>
                         <Typography >
                             Ver mapa
                         </Typography>
                     </Button>
                 </Box>
 
-                <Typography className="text-address-subtitle" sx={{ paddingTop: 2 }}>Rodovia Presidente Dutra, Guará-Lorena, KM 57 - Guaratinguetá - São Paulo, 12504-290</Typography>
+                <Typography className="text-address-subtitle" sx={{ paddingTop: 2 }}>
+                    {endereco}
+                </Typography>
+                {openMap &&
+                    <Modal open={openMap} onClose={() => setOpenMap(false)}>
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: '80%',
+                                height: '80%',
+                                bgcolor: 'background.paper',
+                                boxShadow: 24,
+                                p: 2,
+                            }}
+                        >
+                            <iframe
+                                src={`https://www.google.com/maps?q=${nome}&output=embed`}
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                loading="lazy"
+                            ></iframe>
+                        </Box>
+                    </Modal>
+                }
 
             </Box>
         </Box>

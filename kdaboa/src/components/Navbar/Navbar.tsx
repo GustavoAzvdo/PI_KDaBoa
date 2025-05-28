@@ -10,6 +10,7 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import logo from '../../assets/logo.png';
+import Link from '@mui/material/Link';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -18,20 +19,22 @@ const Navbar = () => {
   return (
     <div className='nav'>
       <Box>
-        <AppBar position="static" className='navbar' elevation={0}>
-          <Toolbar className='toolbar'>
-            <Box className='btns-left' sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <img src={logo} alt="" style={{ width: 60, height: 60 }} className='logo' />
+        <AppBar position="static" className='navbar-home' elevation={0}>
+          <Toolbar className='toolbar-home'>
+            <Box className='btns-left-home' sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <img src={logo} alt=""  className='logo-home' />
               <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
                 <Button variant='text' color='inherit' size='large'>
-                  <Typography>Encontrar eventos</Typography>
+                  <Link href='/search' sx={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Typography>Encontrar eventos</Typography>
+                  </Link>
                 </Button>
               </Box>
             </Box>
 
             {/* Botões normais no desktop */}
-            <Box className='btns-right' sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-              <Button variant='contained' color='secondary' size='large' className='btnPublicar'>
+            <Box className='btns-right-home' sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
+              <Button variant='contained' color='secondary' href='/' size='large' className='btnPublicar'>
                 <Typography>Entrar</Typography>
               </Button>
             </Box>

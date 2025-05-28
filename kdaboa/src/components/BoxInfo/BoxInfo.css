@@ -59,3 +59,21 @@
     }
 } */
 
+.btn-cadastrar {
+    
+    background-color: #fff !important;
+    border-color: var(--roxo) !important;
+    color: var(--roxo)!important;
+}
+
+.btn-cadastrar p {
+    padding: 2px;
+    font-family: var(--fredoka) !important;
+    font-size: 20px !important;
+    font-weight: 400 !important;
+}
+
+.btn-cadastrar:hover {
+    background-color: var(--roxo) !important;
+    color: #fff !important;
+}

@@ -112,12 +112,12 @@ const Signin = () => {
         <Box className='container_signin'>
             <Box className="body_signin" sx={{ height: `${bodyHeight}px` }}> {/* Altura dinâmica */}
                 <Box className='header_signin'>
-                    <img src={logo} alt="logo" style={{ width: 30, height: 30 }} />
-                    <Typography className='title'>
+                    <img src={logo} alt="logo" className='logo-signin' />
+                    <Typography >
                         KDABOA
                     </Typography>
                 </Box>
-                <Box className='title'>
+                <Box className='title_signin'>
                     <Typography variant='h5'>
                         Crie sua conta
                     </Typography>

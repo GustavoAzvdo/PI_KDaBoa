@@ -61,7 +61,7 @@ const Home = () => {
         </Title>
 
       </Box>
-      <Search />
+      <Search  />
       <Carrousel />
       <BoxInfo />
       <Footer />

@@ -1,5 +1,5 @@
 :root{
-    --roxo: #6C15D5;
+    --roxoNav: #6C15D5;
     --branco: #FFFFFF;
     --roxoFraco: #BB8AFF;
     --notosans: 'Noto Sans', sans-serif;
@@ -7,39 +7,45 @@
 }
 
 
-.navbar{
+.navbar-home{
     background-color: rgb(255, 255, 255) !important;
     color: #000 !important;
     
 }
 
-.toolbar{
+.toolbar-home{
     display: flex;
     justify-content: space-between;
    
 }
 
-.btns-left, .btns-right{
+.btns-left-home, .btns-right-home{
     display: flex;
   
 }
 
-.logo,
+.logo-home {
+    width: 90px;
+    height: 90px;
+}
+.logo-home,
 .btnPublicar{
     padding: 15px !important;
 }
 
+
+
 .btnPublicar{
-    background-color: var(--roxo) !important;
+    background-color: var(--roxoNav) !important;
 }
 
 button:hover{
-    background-color: var(--roxo) !important;
+    background-color: var(--roxoNav) !important;
     color: var(--branco) !important;
 }
 
 /* Aplicando a fonte Fredoka em todos os botões e tipografia */
-.navbar *{
+.navbar-home *{
     font-size: 22px !important;
     font-weight: 500 !important;
     font-family: var(--fredoka) !important;
@@ -47,15 +53,12 @@ button:hover{
 
 .list button  {
     font-size: 20px;
-    color: var(--roxo);
-    
+    color: var(--roxoNav);
 }
 
 .list button p {
     font-size: 20px;
 }
-
-
 
 .list {
     display: flex;
@@ -65,7 +68,7 @@ button:hover{
 
 .btn-hamburguer{
     font-size: larger !important;
-    color: var(--roxo) !important;
+    color: var(--roxoNav) !important;
 }
 
 .btn-hamburguer .menu-icon{

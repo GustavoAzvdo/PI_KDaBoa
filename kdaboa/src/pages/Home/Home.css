@@ -1,7 +1,7 @@
 :root {
     --notosans: 'Noto Sans', sans-serif;
     --fredoka: 'Fredoka', sans-serif;
-    --roxo: #6C15D5;
+    --roxoHome: #6C15D5;
 }
 
 .cookies h3{
@@ -18,14 +18,14 @@
 
 .cookies-acept {
     font-family: var(--notosans) !important;
-    background-color: var(--roxo) !important;
+    background-color: var(--roxoHome) !important;
     
 }
 
 .cookies-reject {
     font-family: var(--notosans) !important;
-    color: var(--roxo) !important;
-    border-color: var(--roxo) !important;
+    color: var(--roxoHome) !important;
+    border-color: var(--roxoHome) !important;
 }
 
 .cookies-acept p ,

@@ -80,13 +80,13 @@ const AlterarSenha: React.FC = () => {
     return (
         <Box className='container_alterar'>
             <Box className='body_alterar'>
-                <Box className='header'>
-                    <img src={logo} alt="logo" style={{ width: 30, height: 30 }} />
-                    <Typography className='title'>
+                <Box className='header-alterar'>
+                    <img src={logo} alt="logo" className='logo-alterar' />
+                    <Typography >
                         KDABOA
                     </Typography>
                 </Box>
-                <Box className='title' sx={{ marginTop: 1 }}>
+                <Box className='title_alterar' sx={{ marginTop: 1 }}>
                     <Typography variant='h5'>
                         Alterar senha
                     </Typography>

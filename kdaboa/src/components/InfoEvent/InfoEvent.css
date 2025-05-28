@@ -5,11 +5,15 @@
     --roxoFundo: #BB8AFF53;
 }
 
-.title {
+.css-42igfv{
+    margin: 0 !important;
+}
+
+.title-event {
     padding-bottom: 30px;
 }
-.title h3 {
-    
+.title-event h3 {
+
     font-weight: 600;
     font-family: var(--fredoka);
 }

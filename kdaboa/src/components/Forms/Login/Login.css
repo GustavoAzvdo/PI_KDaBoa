@@ -1,7 +1,7 @@
 :root{
-    --roxo: #BB8AFF53;
+    --roxoLogin: #BB8AFF53;
     --fredoka: 'Fredoka', sans-serif;
-    --roxoBtn: #6C15D5;
+    --roxoLoginBtn: #6C15D5;
 }
 
 * {
@@ -11,8 +11,8 @@
 .body_login {
     border-radius: 10px;
     box-shadow:
-        0px 10px 100px var(--roxo),
-        0px -10px 100px var(--roxo) !important; 
+        0px 10px 100px var(--roxoLogin),
+        0px -10px 100px var(--roxoLogin) !important; 
     width: 400px;
     height: 500px;
     margin: 0;
@@ -27,30 +27,50 @@
     transform: translate(-50%, -50%);   
 }
 
-.body_login .header{
+.body_login .header_login{
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     padding: 15px;
     padding-top: 20px;
     padding-left: 20px;  
 }
 
-.header p {
+.home-login p{
+    font-size: 18px;
+    font-weight: 450 !important;
+    color: var(--roxoLoginBtn);
+}
+.header_login p {
     padding-left: 9px;
     font-weight: 600;
     font-family: var(--fredoka) !important;
 
 }
 
-.title {
+.header_login .logo-login {
+    width: 30px;
+    height: 30px;
+   
+}
+.title_navbar_login {
     display: flex;
     padding-left: 30px;
     width: 100%;
 }
 
-.title h5 {
+.title_login {
+   width: 87%;
+
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    
+}
+
+.title_login h5 {
+    
     padding-top: 15px;
     padding-bottom: 15px;
     font-family: var(--fredoka) !important;
@@ -58,7 +78,11 @@
     font-size: 36px;
 }
 
-.form {
+.login-home {
+
+}
+
+.form_login {
     width: 85%;
 
 }
@@ -69,7 +93,7 @@
 .btn-login{
 
     width: 100%;
-    background-color: var(--roxoBtn) !important;
+    background-color: var(--roxoLoginBtn) !important;
 }
 
 .btn-login p {
@@ -86,7 +110,7 @@
 
 .links a{
     text-decoration: none;
-    color: var(--roxoBtn);
+    color: var(--roxoLoginBtn);
     font-family: var(--fredoka) !important;
 }
 
@@ -105,7 +129,7 @@
 
 .links-account-login a{
     text-decoration: none;
-    color: var(--roxoBtn);
+    color: var(--roxoLoginBtn);
     font-family: var(--fredoka) !important;
 }
 
@@ -124,4 +148,13 @@
 }
 .MuiAlert-root.alert.MuiAlert-info .MuiAlert-icon {
   color: #fff !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: var(--roxoBtn) !important;
+    
+}
+
+.MuiInputLabel-root.Mui-focused {
+    color: var(--roxoBtn) !important;
 }

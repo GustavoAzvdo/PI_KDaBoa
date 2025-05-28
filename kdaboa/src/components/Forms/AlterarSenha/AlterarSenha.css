@@ -1,5 +1,5 @@
 :root{
-    --roxo: #BB8AFF53;
+    --roxoAlterar: #BB8AFF53;
     --fredoka: 'Fredoka', sans-serif;
     --roxoBtn: #6C15D5;
 }
@@ -11,8 +11,8 @@
 .body_alterar{
     border-radius: 10px;
     box-shadow:
-        0px 10px 100px var(--roxo), 
-        0px -10px 100px var(--roxo); 
+        0px 10px 100px var(--roxoAlterar), 
+        0px -10px 100px var(--roxoAlterar); 
     width: 400px;
     height: 560px;
     margin: 0;
@@ -27,30 +27,34 @@
     transform: translate(-50%, -50%);   
 }
 
-.body_alterar .header{
+.header-alterar{
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     padding: 15px;
-    padding-top: 20px;
     padding-left: 20px;  
 }
 
-.header p {
+.header-alterar p {
     padding-left: 9px;
     font-weight: 600;
     font-family: var(--fredoka) !important;
 
 }
 
-.title {
+.header-alterar img {
+    width: 30px;
+    height: 30px;
+
+}
+.title_alterar {
     display: flex;
     padding-left: 30px;
     width: 100%;
 }
 
-.title h5 {
+.title_alterar h5 {
     padding-top: 15px;
     padding-bottom: 15px;
     font-family: var(--fredoka) !important;
