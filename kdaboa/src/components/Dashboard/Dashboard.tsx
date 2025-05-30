@@ -14,7 +14,9 @@ import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 
+import { User } from './User.props';
 
+const [user, setUser] = React.useState<User | null>(null)
 
 const NAVIGATION: Navigation = [
   {
@@ -123,6 +125,17 @@ const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
   height,
   content: '" "',
 }));
+
+React.useEffect(() => {
+    axios.get<User>('http://localhost:3000/me', { withCredentials: true })
+    .then(res => {
+      setUser(res.data);
+    })
+    .catch(err => {
+      console.error('Não autenticado');
+      window.location.href = '/login';
+    });
+}, [])
 
 export default function DashboardLayoutBasic(props: any) {
   const { window } = props;

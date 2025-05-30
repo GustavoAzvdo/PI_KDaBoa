@@ -54,7 +54,10 @@ const Login = () => {
             const response = await api.post('/auth/login', {
                 email: email,
                 senha: senha,
-            });
+            },
+            {
+                withCredentials: true
+            })
 
             if (response.status === 201) {
                 localStorage.setItem('userEmail', email);

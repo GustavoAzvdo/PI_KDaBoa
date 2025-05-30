@@ -30,21 +30,17 @@ const AlterarSenha: React.FC = () => {
         e.preventDefault();
         setIsLoading(true);
 
-        console.log(document.cookie)
-
-        const token = document.cookie.split('; ').find(row => row.startsWith('x-csrf-token='))?.split('=')[1];
-
-        console.log(token)
+        const token = document.cookie.split('; ').find(row => row.startsWith('x-csrf-token='))?.split('=')[1]; 
 
         try {
             await api.put(
                 '/auth/change-password',
                 { senha: novaSenha }, // corpo da requisição
                 {   
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-csrf-token': token
-                    },
+                    // headers: {
+                    //     'Content-Type': 'application/json',
+                    //     'x-csrf-token': token
+                    // },
                     withCredentials: true,
                 }
             )
