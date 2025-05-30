@@ -3,6 +3,7 @@ import festa from "../../assets/festa.png"
 import video from "../../assets/video.gif"
 import './BoxInfo.css'
 const BoxInfo = () => {
+
   return (
     <Grid container spacing={2} className="box-info-container" sx={{ padding: 10, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} className="box-info">
@@ -11,7 +12,7 @@ const BoxInfo = () => {
             Ei, produtor! O KdAboa é a plataforma perfeita para divulgar seus eventos e atrair seu público.
           </Typography>
           <Typography className="p2">
-            Junte-se aos milhares de produtores que já estão transformando suas vendas com o KdAboa!
+            Junte-se aos produtores que já estão transformando suas vendas com o KdAboa!
           </Typography>
         </Box>
         <Box className="btns" sx={{
@@ -23,7 +24,7 @@ const BoxInfo = () => {
             },
             alignItems: 'center',
           }}>
-
+              
           <Button variant='outlined' color='inherit' size='large' href="/signin" className="btn-cadastrar">
             <Typography className="btn-text">
               Quero me cadastrar!

@@ -5,9 +5,17 @@ import Address from '../Details/Address'
 import Contacts from '../Details/Contacts'
 import Photos from '../Photos/Photos'
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import Cards from '../../DB/CardsBD.json'
 
 const InfoProfile = () => {
-    const fullDescription = "O CDG Beer Garden é um espaço de entretenimento localizado na Rodovia Presidente Dutra, entre Guaratinguetá e Lorena (SP), conhecido por promover grandes shows e eventos musicais. Com uma estrutura voltada para o conforto e diversão do público, o CDG se destaca como uma das principais casas de balada e show da região, recebendo artistas renomados do cenário nacional, como Ferrugem, Marcelo Falcão, Capital Inicial e Roupa Nova. O ambiente é moderno, com áreas de pista, camarotes e opções VIP, além de promover ações interativas com os fãs pelas redes sociais, como sorteios para acesso ao camarim. Os ingressos são vendidos online, facilitando o acesso ao público jovem e conectado. O CDG Beer Garden se firmou como referência em lazer e cultura musical no Vale do Paraíba."
+    const location = useLocation();
+    const card = location.state?.card;
+
+    if (!card) return <div>Evento não encontrado</div>;
+
+    const eventosPublicados = Cards.filter(event => event.location === card.location).length;
+    const fullDescription = card.descriptionProfile || 'Descrição não disponível';
     const [showFull, setShowFull] = useState<boolean>(false)
     const isLong = fullDescription.length > 400;
     const displayText = showFull ? fullDescription : fullDescription.substring(0, 400) + ' ...';
@@ -18,11 +26,11 @@ const InfoProfile = () => {
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Box className="round" >
-                            <Avatar src={cdg} sx={{ width: 130, height: 130 }}></Avatar>
+                            <Avatar  sx={{ width: 130, height: 130 }}></Avatar>
                         </Box>
                         <Box sx={{ paddingLeft: 2, marginLeft: 2 }} className="info_text">
-                            <Typography variant='h3'>CDG BEER GARDEN</Typography>
-                            <Typography >12 eventos publicados</Typography>
+                            <Typography variant='h3'>{card.location}</Typography>
+                            <Typography >{eventosPublicados} eventos publicados</Typography>
                         </Box>
                     </Box>
                 </Grid>
@@ -54,7 +62,7 @@ const InfoProfile = () => {
                     sx={{ display: 'flex', alignItems: { md: 'center' }, justifyContent: { xs: 'center', md: 'space-around' }, margin: 'auto', paddingTop: 4 }}>
 
                     <Grid size={{ xs: 10, md: 5 }}>
-                        <Address address={''} />
+                        <Address address={card.address} location={card.location} />
                     </Grid>
                     <Grid
                         size={{ xs: 10, md: 5 }}
@@ -64,7 +72,7 @@ const InfoProfile = () => {
                             pt: { xs: 5, md: 0 }
                         }}
                     >
-                        <Contacts />
+                        <Contacts email={card.email} telefone1={card.telefone1} telefone2={card.telefone2} />
                     </Grid>
                 </Grid>
 

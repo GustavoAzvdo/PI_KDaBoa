@@ -6,6 +6,7 @@ import CardEventHome from "../CardEventHome/CardEventHome"
 import CardsBD from '../CardEventHome/CardsBD.ts'
 import CardProps from '../CardEventHome/props/CardProps.ts'
 
+import Cards from '../../DB/CardsBD.json';
 import './CarroselEventHome.css'
 
 export default function CarroselEventHome() {
@@ -37,7 +38,7 @@ export default function CarroselEventHome() {
                 },
              }}>
 
-                {CardsBD.map((card : CardProps, index: number) => 
+                {Cards.slice(0, 6).map((card : CardProps, index: number) => 
                     <SwiperSlide key={index}>
                         <CardEventHome card={card} />
                     </SwiperSlide>

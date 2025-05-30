@@ -2,7 +2,13 @@ import { Box, Typography } from '@mui/material'
 import contacts from '../../assets/contacts.png'
 import './Details.css'
 
-const Contacts = () => {
+
+interface ContactsProps {
+    telefone1: string;
+    telefone2: string;
+    email: string
+}
+const Contacts = ({ telefone1, telefone2, email }: ContactsProps) => {
     return (
         <Box className="contacts" sx={{ display: "flex", alignItems: "center", width: "100%"}}>
             <Box className="img-maps" sx={{paddingRight: 2}}>
@@ -14,9 +20,9 @@ const Contacts = () => {
 
                 </Box>
                 <Box>
-                    <Typography className="text-contacts-subtitle" sx={{ paddingTop: 2 }}>Telefone 1: &nbsp; (12) 9770-7070</Typography>
-                    <Typography className="text-contacts-subtitle" sx={{ paddingTop: 0 }}>Telefone 2: &nbsp; (11) 4002-8922</Typography>
-                    <Typography className="text-contacts-subtitle" sx={{ paddingTop: 0 }}>Email:&nbsp; cdg@gmail.com</Typography>
+                    <Typography className="text-contacts-subtitle" sx={{ paddingTop: 2 }}>Telefone 1: &nbsp; {telefone1}</Typography>
+                    <Typography className="text-contacts-subtitle" sx={{ paddingTop: 0 }}>Telefone 2: &nbsp; {telefone2}</Typography>
+                    <Typography className="text-contacts-subtitle" sx={{ paddingTop: 0 }}>Email:&nbsp; {email}</Typography>
                 </Box>
 
 

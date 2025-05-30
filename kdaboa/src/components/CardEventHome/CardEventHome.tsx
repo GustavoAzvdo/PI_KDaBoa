@@ -8,8 +8,10 @@ import { VisibilityOutlined } from '@mui/icons-material';
 import "./CardEventHome.css"
 import {useNavigate} from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
+import CardsBD from '../../DB/CardsBD.json'
 
 import CardProps from './props/CardProps';
+
 
 interface CardEventHomeProps {
     card: CardProps;
@@ -41,7 +43,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                        P
+                        
                     </Avatar>
                 }
 
@@ -51,7 +53,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                 className='header-cardHomeEvent' />
             <CardActions sx={{ alignItems: "flex-end", display: "flex", justifyContent: "flex-end" }} disableSpacing>
 
-                <Button className='btn-cardHomeEvent' sx={{}} endIcon={<VisibilityOutlined sx={{ color: "#6C15D5" }} />} href='/view-event' onClick={() => {
+                <Button className='btn-cardHomeEvent' sx={{}} endIcon={<VisibilityOutlined sx={{ color: "#6C15D5" }} />} href={'/view-event'}onClick={() => {
                          navigate('/view-event', { state: { card } });
                     // Insert script for open page of the especific event
                 }}>

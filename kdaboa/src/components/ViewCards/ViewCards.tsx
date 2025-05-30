@@ -2,8 +2,15 @@ import React from 'react'
 import CardsBD from '../CardEventHome/CardsBD'
 import CardEventHome from '../CardEventHome/CardEventHome'
 import { Box, Container } from '@mui/material'
+import Cards from '../../DB/CardsBD.json'
 
-const ViewCards = () => {
+import {useLocation} from 'react-router-dom'
+const ViewCards = ( ) => {
+    const location = useLocation();
+    const selectedLocation = location.state?.location;
+
+      const filteredCards = Cards.filter(card => card.location === selectedLocation);
+
     return (
         <Box sx={{ 
             display: 'grid',
@@ -13,7 +20,7 @@ const ViewCards = () => {
             paddingBottom: 10
         }}>
             {
-                CardsBD.map((card, index) => (
+                filteredCards.map((card, index) => (
                     <CardEventHome  key={index} card={card} />
                 ))
             }

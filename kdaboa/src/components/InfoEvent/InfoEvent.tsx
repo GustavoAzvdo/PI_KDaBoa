@@ -3,11 +3,12 @@ import "./InfoEvent.css"
 import calendar from "../../assets/calendar.png"
 import Contacts from "../Details/Contacts"
 import Address from "../Details/Address"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import Banner from "../Banner/Banner"
 import BannerEvent from "../BannerEvent/BannerEvent"
 
 const InfoEvent = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const  card = location.state?.card;
     if (!card) {
@@ -37,12 +38,13 @@ const InfoEvent = () => {
                     </Box>
                     <Box className="address" sx={{ display: "flex", alignItems: "center", width: "100%", paddingTop: 8 }}>
                        <Box>
-                            <Address address={""} />
+                            <Address address={card.address}
+                                     location={card.location}    />
                        </Box>
                     </Box>
                     <Box className="contacts" sx={{ display: "flex", alignItems: "center", width: "100%", paddingTop: 8 }}>
                         <Box sx={{margin: 'auto'}}>
-                            <Contacts />
+                            <Contacts email={card.email} telefone1={card.telefone1} telefone2={card.telefone2} />
                         </Box>
                     </Box>
                 </Grid>
@@ -56,9 +58,11 @@ const InfoEvent = () => {
                         </Box>
                         <Box className="text-profile" sx={{paddingRight: 1}}>
                             <Typography>
-                                Produzido por CDG BEER GARDEN
+                                Produzido por {card.location}
                             </Typography>
-                            <Button variant="outlined" className="btn-profile" href="/profile">
+                            <Button variant="outlined" className="btn-profile" href='/profile' onClick={() => {
+                                navigate('/profile', { state: { card , location: card.location} });
+                            }}>
                                 <Typography>
                                     Ver perfil
                                 </Typography>

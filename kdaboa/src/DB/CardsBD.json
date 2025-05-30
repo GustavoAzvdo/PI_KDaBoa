@@ -1,48 +1,94 @@
 [
     {
         "id": 1,
+        "logo": "../assets/logo.png",
+        "descriptionProfile": "",
         "createdAt": "26/10/2023",
         "title": "Prefixo - Cabelinho",
         "description": "Cabelinho é o seu marrrento nesse show da Prefixo011!",
         "image": "/Image_cardHomeEvent/Cabelinho_Banner.jpg",
         "date": "Setembro 14, 2016",
-        "category": ["Show", "Festival"]
+        "location": "Sonora Garden",
+        "address": "R. Comendador Nestor Pereira, 33 - Canindé, São Paulo - SP, 03079-070",
+        "telefone1": "(11) 98300-9943",
+        "telefone2": "(11) 98300-9943",
+        "email": "sonoragarden@gmail.com",
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 2,
+        "descriptionProfile": "O CDG Beer Garden é um espaço de entretenimento localizado na Rodovia Presidente Dutra, entre Guaratinguetá e Lorena (SP), conhecido por promover grandes shows e eventos musicais. Com uma estrutura voltada para o conforto e diversão do público, o CDG se destaca como uma das principais casas de balada e show da região, recebendo artistas renomados do cenário nacional, como Ferrugem, Marcelo Falcão, Capital Inicial e Roupa Nova. O ambiente é moderno, com áreas de pista, camarotes e opções VIP, além de promover ações interativas com os fãs pelas redes sociais, como sorteios para acesso ao camarim. Os ingressos são vendidos online, facilitando o acesso ao público jovem e conectado. O CDG Beer Garden se firmou como referência em lazer e cultura musical no Vale do Paraíba.",
         "createdAt": "26/10/2023",
         "title": "CDG Bear - Matue",
         "description": "Nessa vida nada é de graça irmão, mas a brisa que é esse show vai ser",
         "image": "/Image_cardHomeEvent/matue.jpeg",
         "date": "Outubro 19, 2024",
-        "category": ["Show", "Festival"]
+        "location": "CDG Beer Garden",
+        "address": "Estrada Municipal Darcy Nunes Villela - Aterrado, Lorena - SP",
+        "telefone1": "(35) 99765-6805",
+        "telefone2": "(35) 99765-6805",
+        "email": "cdg@gmail.com",
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 3,
+        "descriptionProfile": "O CDG Beer Garden é um espaço de entretenimento localizado na Rodovia Presidente Dutra, entre Guaratinguetá e Lorena (SP), conhecido por promover grandes shows e eventos musicais. Com uma estrutura voltada para o conforto e diversão do público, o CDG se destaca como uma das principais casas de balada e show da região, recebendo artistas renomados do cenário nacional, como Ferrugem, Marcelo Falcão, Capital Inicial e Roupa Nova. O ambiente é moderno, com áreas de pista, camarotes e opções VIP, além de promover ações interativas com os fãs pelas redes sociais, como sorteios para acesso ao camarim. Os ingressos são vendidos online, facilitando o acesso ao público jovem e conectado. O CDG Beer Garden se firmou como referência em lazer e cultura musical no Vale do Paraíba.",
         "createdAt": "26/10/2023",
         "title": "CDG Bear - Veigh",
         "description": "O chão vai tremer no show do Veigh com o carro que pareçe um TANK",
         "image": "/Image_cardHomeEvent/Veigh.jpeg",
         "date": "Janeiro 04, 2025",
-        "category": ["Show", "Festival"]
+        "location": "CDG Beer Garden",
+        "address": "Estrada Municipal Darcy Nunes Villela - Aterrado, Lorena - SP",
+        "telefone1": "(35) 99765-6805",
+        "telefone2": "(35) 99765-6805",
+        "email": "cdg@gmail.com",
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 4,
         "createdAt": "26/09/2023",
+        "descriptionProfile": "A SaveSix6 é uma casa de eventos localizada na Avenida do Cursino, 2847, no bairro Saúde, em São Paulo. Reconhecida por sua estrutura moderna e ambiente vibrante, a SaveSix6 tornou-se um dos principais pontos de encontro para os amantes de música ao vivo na zona sul da cidade. O local recebe uma variedade de artistas renomados, abrangendo diversos estilos musicais. Entre os nomes que já se apresentaram na casa estão o cantor de samba Arlindinho , o grupo feminino de samba Entre Elas , o rapper Veigh , o funkeiro MC Paiva , a cantora Lara Silva , o rapper Kyan e o sambista Marquinhos Sensação . Além dos shows, a SaveSix6 é conhecida por suas promoções especiais, como ingressos VIP, open bar para o público feminino em determinados horários e drinks em dobro até certo período da noite. O espaço também oferece camarotes e uma pista premium próxima ao palco, proporcionando uma experiência diferenciada para os frequentadores. Para mais informações sobre eventos e reservas, você pode visitar o perfil oficial no Instagram: @savesix6 ou entrar em contato pelo telefone (11) 91319-6431. ",
         "title": "Rolê.Z - MU540",
         "description": "Traz doril que os cara colocou caixa preta pra toca nesse dia",
         "image": "/Image_cardHomeEvent/MU540.jpeg",
         "date": "Janeiro 11, 2025",
-        "category": ["Show", "Festival"]
+        "location": "Cursino Eventos",
+        "address": "Av. do Cursino, 2.847, 04133-300, Saúde, São Paulo, SP",
+        "telefone1": "(11) 91319-6431",
+        "telefone2": "(35) 99765-6805",
+        "email": "cursinoeventos@gmail.com",
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 5,
         "createdAt": "26/09/2023",
+        "descriptionProfile": "O Komplexo Tempo, situado na Av. Henry Ford, 511 – Parque da Mooca, São Paulo, é um espaço multifuncional de eventos com cerca de 6.250 m², distribuídos em cinco galpões restaurados que preservam elementos industriais originais. Desde sua inauguração em 2022, tornou-se um dos principais destinos culturais da cidade, oferecendo infraestrutura moderna com mezaninos, bares e banheiros suspensos em containers artisticamente trabalhados. O local abriga uma variedade de eventos, incluindo festas eletrônicas, festivais, shows e eventos corporativos. Destacam-se apresentações de artistas renomados como Dixon, Jeff Mills, The Blessed Madonna, MC Kevin o Chris, Kayblack e DJ GBR. Além disso, o espaço já sediou eventos como o Festival DGTL, o Festival Híbrido e festas universitárias como a Gioconda Venuta. Com uma programação diversificada e estrutura de ponta, o Komplexo Tempo se consolidou como um dos principais polos culturais e de entretenimento de São Paulo. Para mais informações sobre eventos e reservas, acesse o site oficial:",
         "title": "ZS - Kyan",
         "description": "Vem conhecer USD e quebrar tudo com Kyan",
         "image": "/Image_cardHomeEvent/Kyan.jpg",
         "date": "Agosto 25, 2024",
-        "category": ["Show", "Festival"]
+        "location": "Komplexo Tempo",
+        "address": "Av. Henry Ford, 511 - Parque da Mooca, São Paulo - SP, 03109-001",
+        "telefone1": "(11) 2272-7122",
+        "telefone2": "(11) 2272-7122",
+        "email": "komplexotempo@gmail.com",
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 6,
@@ -51,7 +97,11 @@
         "description": "Agua benta e Cruxifixo devem ser levados de casa, se não leva chumbo",
         "image": "/Image_cardHomeEvent/FestaDoCapeta.jpeg",
         "date": "Dezembro 13, 2020",
-        "category": ["Festival"]
+        "location": "Villa Fest",
+        "address": "Avenida Prefeito Carlos Ferreira Lopes , 1720 - Mogi das Cruzes - São Paulo, 08773490",
+        "category": [
+            "Festival"
+        ]
     },
     {
         "id": 7,
@@ -59,17 +109,26 @@
         "title": "Army - BTS",
         "description": "Aqueles lindos dos meninos vão te deixar loca nesse show no ibirapuera",
         "image": "/Image_cardHomeEvent/BTS.jpeg",
+        "location": "Parque Ibirapuera",
+        "address": "Av. Pedro Álvares Cabral, s/n - Vila Mariana, São Paulo - SP, 04094-050",
         "date": "Julho 14, 2024",
-        "category": ["Festival"]
+        "category": [
+            "Festival"
+        ]
     },
     {
         "id": 8,
         "createdAt": "25/09/2023",
         "title": "Panpeiro - Churrasco",
-        "description" : "Churrasco e chimarrão, que você traz de casa viu, é isso que o povo gosta é isso que o povo quer",
+        "description": "Churrasco e chimarrão, que você traz de casa viu, é isso que o povo gosta é isso que o povo quer",
         "image": "/Image_cardHomeEvent/Churrasco.jpeg",
         "date": "Dezembro 25, 2024",
-        "category": ["Gastronomia", "Comida Caseira"]
+        "location": "O Pampeiro Churrascaria",
+        "address": "Rod. Pres. Dutra, km 52 - Jardim Novo Horizonte, Lorena - SP, 12605-715",
+        "category": [
+            "Gastronomia",
+            "Comida Caseira"
+        ]
     },
     {
         "id": 9,
@@ -77,8 +136,12 @@
         "title": "Cali club - DJ GP da ZL",
         "description": "Doril é basico pra acorda bem amanhã",
         "image": "/Image_cardHomeEvent/GP.jpeg",
+        "location": "Cali Club",
+        "address": "Av. Getúlio Vargas, 14-30 - Jardim America, Bauru - SP, 17017-339",
         "date": "Dezembro 13, 2020",
-        "category": ["Show"]
+        "category": [
+            "Show"
+        ]
     },
     {
         "id": 10,
@@ -87,7 +150,12 @@
         "description": "Se aparecer aqui com roupa velha já vai dar meia volta, com o Roupa Nova aqui não",
         "image": "/Image_cardHomeEvent/RoupaNova.jpeg",
         "date": "Julho 14, 2024",
-        "category": ["Show", "Festival"]
+        "location": "CDG Beer Garden",
+        "address": "Estrada Municipal Darcy Nunes Villela - Aterrado, Lorena - SP",
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 11,
@@ -96,7 +164,9 @@
         "description": "Eu chapo nesse menino filho kkskskss",
         "image": "/Image_cardHomeEvent/Hidrokid.jpeg",
         "date": "Julho 14, 2024",
-        "category": ["Festival"]
+        "category": [
+            "Festival"
+        ]
     },
     {
         "id": 12,
@@ -105,7 +175,10 @@
         "description": "Saindo dos mangas de One Piece pra fazer show no Villa Fest",
         "image": "/Image_cardHomeEvent/MC_Luuky.jpg",
         "date": "Julho 14, 2024",
-        "category": ["Show", "Festival"]
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 13,
@@ -114,7 +187,10 @@
         "description": "O mããããẽeeeeeee eu mantei um homi",
         "image": "/Image_cardHomeEvent/Queen.jpeg",
         "date": "Julho 14, 2024",
-        "category": ["Show", "Festival"]
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 14,
@@ -123,7 +199,10 @@
         "description": "A bille jeans not my love AUHUUAU",
         "image": "/Image_cardHomeEvent/ReiDoPop.jpeg",
         "date": "Julho 14, 2024",
-        "category": ["Show", "Festival"]
+        "category": [
+            "Show",
+            "Festival"
+        ]
     },
     {
         "id": 15,
@@ -132,7 +211,9 @@
         "description": "das 8AM até as 20PM vamos estudar varias plataformas e anotar numeros que já ficam anotados para avaliar dados e levantar a realidade da propaganda enganosa",
         "image": "/Image_cardHomeEvent/Tigrinho.jpeg",
         "date": "Julho 14, 2024",
-        "category": ["Tecnologia"]
+        "category": [
+            "Tecnologia"
+        ]
     },
     {
         "id": 16,
@@ -140,8 +221,12 @@
         "title": "CDG Bear - Veigh",
         "description": "O chão vai tremer no show do Veigh com o carro que pareçe um TANK",
         "image": "/Image_cardHomeEvent/Veigh.jpeg",
+        "location": "CDG Beer Garden",
+        "address": "R. Comendador Nestor Pereira, 33 - Canindé, São Paulo - SP, 03079-070",
         "date": "Janeiro 04, 2025",
-        "category": ["Show", "Festival"]
+        "category": [
+            "Show",
+            "Festival"
+        ]
     }
 ]
-

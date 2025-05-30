@@ -6,12 +6,12 @@ import { useState } from 'react'
 
 interface AddressProps {
     address: string;
+    location: string
 }
 
-const Address = ({ address }: AddressProps) => {
+const Address = ({ address, location }: AddressProps) => {
     const [openMap, setOpenMap] = useState<boolean>(false);
-    const endereco = "Rodovia Presidente Dutra, Guará-Lorena, KM 57 - Guaratinguetá - São Paulo, 12504-290";
-    const nome= "CDG Beer Garden";
+  
     return (
         <Box className="address" sx={{ display: "flex", alignItems: "center", width: "100%" }}>
             <Box className="img-maps" sx={{ paddingRight: 2 }}>
@@ -19,7 +19,7 @@ const Address = ({ address }: AddressProps) => {
             </Box>
             <Box className="text-address">
                 <Box sx={{ display: "flex", alignItems: "center" }} className="text-address-title">
-                    <Typography className='t'>{nome}</Typography>
+                    <Typography className='t'>{location}</Typography>
                     <Button variant="outlined" className="btn-maps" sx={{ marginLeft: 3 }} onClick={() => setOpenMap(true)}>
                         <Typography >
                             Ver mapa
@@ -28,7 +28,7 @@ const Address = ({ address }: AddressProps) => {
                 </Box>
 
                 <Typography className="text-address-subtitle" sx={{ paddingTop: 2 }}>
-                    {endereco}
+                    {address}
                 </Typography>
                 {openMap &&
                     <Modal open={openMap} onClose={() => setOpenMap(false)}>
@@ -46,7 +46,7 @@ const Address = ({ address }: AddressProps) => {
                             }}
                         >
                             <iframe
-                                src={`https://www.google.com/maps?q=${nome}&output=embed`}
+                                src={`https://www.google.com/maps?q=${location}&output=embed`}
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}

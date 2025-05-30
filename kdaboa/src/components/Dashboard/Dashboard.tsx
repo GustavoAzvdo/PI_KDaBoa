@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { createTheme, styled } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-
+import Drawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import logo from '../../assets/logo.png';
 import cdg from '../../assets/cdg.jpg';
 import './Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings } from '@mui/icons-material';
+import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar} from '@mui/icons-material';
+import { Box, TextField } from '@mui/material';
+import Endereco from '../Forms/Endereco/Endereco';
+import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
+import CriarEvento from '../Forms/CriarEvento/CriarEvento';
+
 const NAVIGATION: Navigation = [
   {
     kind: 'header',
@@ -40,6 +40,7 @@ const NAVIGATION: Navigation = [
         icon: <Call />,
       },
     ],
+    
   },
   {
     segment: 'funcionarios',
@@ -54,24 +55,29 @@ const NAVIGATION: Navigation = [
     title: 'Informações',
   },
   {
-    segment: 'reports',
+    segment: 'eventos',
     title: 'Eventos',
     icon: <Celebration />,
     children: [
       {
-        segment: 'sales',
+        segment: 'criar_evento',
+        title: 'Criar Evento',
+        icon: <EditCalendar />,
+      },
+      {
+        segment: 'postados',
         title: 'Postados',
         icon: <Verified />,
       },
       {
-        segment: 'traffic',
+        segment: 'em_analise',
         title: 'Em análise',
         icon: <NewReleases />,
       },
     ],
   },
   {
-    segment: 'integrations',
+    segment: 'configuracoes',
     title: 'Configurações',
     icon: <Settings />,
   },
@@ -101,7 +107,6 @@ function useDemoRouter(initialPath: string): Router {
       pathname,
       searchParams: new URLSearchParams(),
       navigate: (path: string | URL) => {
-        window.location.href = String(path); // <-- Redireciona de verdade!
         setPathname(String(path));
       },
     };
@@ -126,37 +131,37 @@ export default function DashboardLayoutBasic(props: any) {
   const demoWindow = window ? window() : undefined;
 
   const [session, setSession] = React.useState<Session | null>(() => {
-  const saved = localStorage.getItem('session');
-  if (saved && saved !== 'undefined') {
-    try {
-      return JSON.parse(saved);
-    } catch {
-      // Se der erro no parse, limpa o localStorage
-      localStorage.removeItem('session');
-      return null;
+    const saved = localStorage.getItem('session');
+    if (saved && saved !== 'undefined') {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        // Se der erro no parse, limpa o localStorage
+        localStorage.removeItem('session');
+        return null;
+      }
     }
-  }
-  
-  const userEmail = localStorage.getItem('userEmail');
-  if (userEmail) {
-    return {
-      user: {
-        email: userEmail,
-        image: cdg,
-      },
-    };
-  }
-  return null;
-});
 
-// Sempre que o session mudar, salva no localStorage
-React.useEffect(() => {
-  if (session) {
-    localStorage.setItem('session', JSON.stringify(session));
-  } else {
-    localStorage.removeItem('session');
-  }
-}, [session]);
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      return {
+        user: {
+          email: userEmail,
+          image: cdg,
+        },
+      };
+    }
+    return null;
+  });
+
+  // Sempre que o session mudar, salva no localStorage
+  React.useEffect(() => {
+    if (session) {
+      localStorage.setItem('session', JSON.stringify(session));
+    } else {
+      localStorage.removeItem('session');
+    }
+  }, [session]);
 
   const authentication = React.useMemo(() => {
     return {
@@ -169,8 +174,8 @@ React.useEffect(() => {
             image: cdg,
           },
         });
-         localStorage.setItem('userEmail', email); 
-       // salva para próximos reloads
+        localStorage.setItem('userEmail', email);
+        // salva para próximos reloads
       },
 
       signOut: () => {
@@ -179,7 +184,39 @@ React.useEffect(() => {
       },
     };
   }, [router]);
-  
+
+  function renderContent(pathname: string) {
+    switch (pathname) {
+      case '/dashboard':
+        return <Skeleton height={400} />;
+      case '/dashboard/estabelecimento':
+        return (
+          <Estabelecimento/>
+        );
+      case '/dashboard/endereco':
+        return (
+          <Endereco/>
+        );
+      case '/dashboard/contato':
+        return <Skeleton height={400} />;
+      case '/funcionarios':
+        return <Skeleton height={400} />;
+      case '/eventos/criar_evento':
+        return (
+          <CriarEvento/>
+        );
+      case '/eventos/postados':
+        return <Skeleton height={400} />;
+      case '/eventos/em_analise':
+        return <Skeleton height={400} />;
+      case '/configuracoes':
+        return <Skeleton height={400} />;
+      default:
+        return <Box>404 - Página não encontrada</Box>;
+    }
+
+  }
+
 
   return (
     <AppProvider
@@ -196,41 +233,7 @@ React.useEffect(() => {
     >
       <DashboardLayout>
         <PageContainer>
-          <Grid container spacing={1}>
-            <Grid size={5} />
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={4}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={8}>
-              <Skeleton height={100} />
-            </Grid>
-
-            <Grid size={12}>
-              <Skeleton height={150} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={3}>
-              <Skeleton height={100} />
-            </Grid>
-          </Grid>
+          {renderContent(router.pathname)}
         </PageContainer>
       </DashboardLayout>
     </AppProvider>
