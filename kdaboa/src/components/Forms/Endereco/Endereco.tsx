@@ -3,7 +3,12 @@ import { Box, Button, Grid, InputAdornment, TextField, Typography } from '@mui/m
 import { useState } from 'react'
 import ScreenError from '../../ScreenError/ScreenError';
 
-const Endereco = () => {
+interface EnderecoProps {
+    buttonLabel?: string
+    showButton?: boolean
+}
+
+const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true }: EnderecoProps) => {
     const [cep, setCep] = useState<string>('');
     const [logradouro, setLogradouro] = useState<string>('');
     const [bairro, setBairro] = useState<string>('');
@@ -80,11 +85,11 @@ const Endereco = () => {
                         inputProps={{ maxLength: 9 }} // Formato de CEP com traço
                         error={cepError}
                         helperText={cepHelper ? cepHelper : 'Ex: 12345-678'}
-                        InputProps= {{
-                            endAdornment: 
-                            <InputAdornment position="end">
-                                <Place/>
-                            </InputAdornment>
+                        InputProps={{
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <Place />
+                                </InputAdornment>
                         }}
                     />
                 </Box>
@@ -99,11 +104,11 @@ const Endereco = () => {
                         label="Logradouro"
                         variant="outlined"
                         placeholder="Digite o logradouro"
-                        InputProps= {{
-                            endAdornment: 
-                            <InputAdornment position="end">
-                                <Signpost/>
-                            </InputAdornment>
+                        InputProps={{
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <Signpost />
+                                </InputAdornment>
                         }}
                     />
                 </Box>
@@ -118,11 +123,11 @@ const Endereco = () => {
                         type='text'
                         label="Bairro"
                         variant="outlined"
-                        InputProps= {{
-                            endAdornment: 
-                            <InputAdornment position="end">
-                                <Fence/>
-                            </InputAdornment>
+                        InputProps={{
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <Fence />
+                                </InputAdornment>
                         }}
 
                     />
@@ -138,11 +143,11 @@ const Endereco = () => {
                         type='text'
                         label="Cidade"
                         variant="outlined"
-                        InputProps = {{
-                            endAdornment: 
-                            <InputAdornment position="end">
-                                <LocationCity/>
-                            </InputAdornment>
+                        InputProps={{
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <LocationCity />
+                                </InputAdornment>
                         }}
                     />
                 </Box>
@@ -157,11 +162,11 @@ const Endereco = () => {
                         type='text'
                         label="UF"
                         variant="outlined"
-                        InputProps= {{
-                            endAdornment: 
-                            <InputAdornment position="end">
-                                <Flag/>
-                            </InputAdornment>
+                        InputProps={{
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <Flag />
+                                </InputAdornment>
                         }}
                     />
                 </Box>
@@ -176,11 +181,11 @@ const Endereco = () => {
                         type='text'
                         label="Complemento"
                         variant="outlined"
-                        InputProps = {{
-                            endAdornment: 
-                            <InputAdornment position="end">
-                                <MapsHomeWork/>
-                            </InputAdornment>
+                        InputProps={{
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <MapsHomeWork />
+                                </InputAdornment>
                         }}
                     />
                 </Box>
@@ -195,25 +200,27 @@ const Endereco = () => {
                         label="Número"
                         variant="outlined"
                         InputProps={{
-                            endAdornment: 
-                            <InputAdornment position="end">
-                                <Numbers/>
-                            </InputAdornment>
+                            endAdornment:
+                                <InputAdornment position="end">
+                                    <Numbers />
+                                </InputAdornment>
                         }}
                     />
                 </Box>
             </Grid>
-            
-            <Grid size={{ xs: 12, sm: 12, md: 12 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
-                    <Button variant="contained" sx={{ width: '200px', backgroundColor: 'var(--roxo)' }}  onClick={() => alert('Endereço salvo!')}>
-                        <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily:'var(--notosans) !important', p:1 }}>
-                            Salvar Endereço
-                        </Typography>
-                    </Button>
-                </Box>
-            </Grid>
-                        
+
+            {showButton && (
+                <Grid size={{ xs: 12, sm: 12, md: 12 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}>
+                        <Button variant="contained" sx={{ width: '200px', backgroundColor: 'var(--roxo)' }} onClick={() => alert('Endereço salvo!')}>
+                            <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                {buttonLabel}
+                            </Typography>
+                        </Button>
+                    </Box>
+                </Grid>
+            )}
+
         </Grid>
     )
 }

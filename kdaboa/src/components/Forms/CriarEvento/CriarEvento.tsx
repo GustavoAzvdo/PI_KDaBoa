@@ -14,6 +14,7 @@ import { useState } from 'react';
 import 'dayjs/locale/pt-br';
 import { ptBR } from '@mui/x-date-pickers/locales';
 import './CriarEvento.css'
+import Endereco from '../Endereco/Endereco';
 
 dayjs.locale('pt-br');
 dayjs.extend(utc);
@@ -33,12 +34,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
 
     const [fileName, setFileName] = React.useState<string>('');
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const handleButtonClick = () => {
-        if (inputRef.current) {
-            inputRef.current.value = '';
-            inputRef.current.click();
-        }
-    }
+
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -142,9 +138,16 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                         okButtonLabel: 'Confirmar',
                         cancelButtonLabel: 'Cancelar',
                     }}
+
                 >
                     <Stack spacing={2}>
-                        <DateTimePicker value={value} onChange={setValue} label="Data/hora fim" />
+                        <DateTimePicker value={value} onChange={setValue} label="Data/hora fim"
+                            sx={{
+                                '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: 'var(--roxo) !important',
+                                }
+                            }}
+                        />
 
                     </Stack>
                 </LocalizationProvider>
@@ -188,7 +191,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                         variant="contained"
                         tabIndex={-1}
                         startIcon={<CloudUpload />}
-                        onClick={handleButtonClick}
+
                     >
                         <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
                             Escolher foto
@@ -263,12 +266,46 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                     </Button>
                 </Box>
             </Grid>
-            <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <Button variant="contained" sx={{ width: '200px', backgroundColor: 'var(--roxo)' }} onClick={() => alert('Evento criado!')}>
-                    <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important', px: 1 }}>
-                        Criar Evento
+
+            <Grid size={{ xs: 12, sm: 12, md: 12 }}>
+                <Box>
+                    <Typography variant='h4'>
+                        Endereço do evento
                     </Typography>
-                </Button>
+                </Box>
+                <Box>
+                    <Box sx={{ my: 2 }}>
+                        <Typography>
+                            Deseja usar outro endereço ou o endereço do seu perfil?
+                        </Typography>
+                    </Box>
+                    <Box sx={{ my: 2 }}>
+                        <Button variant="contained" sx={{ width: '200px', backgroundColor: 'var(--roxo)' }}>
+                            <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                Manter endereço
+                            </Typography>
+                        </Button>
+                        <Button variant="outlined" sx={{ width: '200px', borderColor: 'var(--roxo)', color: 'var(--roxo)', marginLeft: 3 }}>
+                            <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                Alterar endereço
+                            </Typography>
+                        </Button>
+                    </Box>
+                </Box>
+                <Box>
+                    <Endereco buttonLabel='Criar evento' showButton={false} />
+                </Box>
+                <Grid size={{ xs: 12, sm: 12, md: 12 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', pt: 1 }}>
+                        <Button variant='contained' sx={{
+                            backgroundColor: 'var(--roxo)'
+                        }} onClick={() => alert('Evento criado com sucesso')}>
+                            <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
+                                Criar evento
+                            </Typography>
+                        </Button>
+                    </Box>
+                </Grid>
             </Grid>
         </Grid>
     )

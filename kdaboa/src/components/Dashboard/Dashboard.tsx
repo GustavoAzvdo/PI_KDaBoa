@@ -13,7 +13,7 @@ import { Box, TextField } from '@mui/material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
-
+import Contatos from '../Forms/Contatos/Contatos';
 
 
 const NAVIGATION: Navigation = [
@@ -200,12 +200,15 @@ export default function DashboardLayoutBasic(props: any) {
           <Endereco/>
         );
       case '/dashboard/contato':
-        return <Skeleton height={400} />;
+        return (
+          <Contatos/>
+        );
       case '/funcionarios':
         return <Skeleton height={400} />;
       case '/eventos/criar_evento':
         return (
           <CriarEvento/>
+
         );
       case '/eventos/postados':
         return <Skeleton height={400} />;
