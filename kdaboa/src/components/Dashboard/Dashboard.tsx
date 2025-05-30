@@ -16,7 +16,6 @@ import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 
 import { User } from './User.props';
 
-const [user, setUser] = React.useState<User | null>(null)
 
 const NAVIGATION: Navigation = [
   {
@@ -126,16 +125,6 @@ const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
   content: '" "',
 }));
 
-React.useEffect(() => {
-    axios.get<User>('http://localhost:3000/me', { withCredentials: true })
-    .then(res => {
-      setUser(res.data);
-    })
-    .catch(err => {
-      console.error('Não autenticado');
-      window.location.href = '/login';
-    });
-}, [])
 
 export default function DashboardLayoutBasic(props: any) {
   const { window } = props;
@@ -144,6 +133,9 @@ export default function DashboardLayoutBasic(props: any) {
 
   // Remove this const when copying and pasting into your project.
   const demoWindow = window ? window() : undefined;
+
+
+const [user, setUser] = React.useState<User | null>(null)
 
   const [session, setSession] = React.useState<Session | null>(() => {
     const saved = localStorage.getItem('session');
@@ -177,6 +169,18 @@ export default function DashboardLayoutBasic(props: any) {
       localStorage.removeItem('session');
     }
   }, [session]);
+
+
+React.useEffect(() => {
+    axios.get<User>('http://localhost:3000/auth/dados', { withCredentials: true })
+    .then(res => {
+      setUser(res.data);
+    })
+    .catch(err => {
+      console.error('Não autenticado');
+      window.location.href = '/';
+    });
+}, [])
 
   const authentication = React.useMemo(() => {
     return {
