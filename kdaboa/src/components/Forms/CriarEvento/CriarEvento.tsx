@@ -11,7 +11,11 @@ import { CloudUpload, Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, C
 import { styled } from '@mui/material/styles'
 import { dados } from '../../../categorys/dados';
 import { useState } from 'react';
+import 'dayjs/locale/pt-br';
+import { ptBR } from '@mui/x-date-pickers/locales';
+import './CriarEvento.css'
 
+dayjs.locale('pt-br');
 dayjs.extend(utc);
 const MAX_CHARS = 1000;
 
@@ -114,7 +118,15 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                 />
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider
+                    dateAdapter={AdapterDayjs}
+                    adapterLocale='pt-br'
+                    localeText={{
+                        ...ptBR.components.MuiLocalizationProvider.defaultProps.localeText,
+                        okButtonLabel: 'Confirmar',
+                        cancelButtonLabel: 'Cancelar'
+                    }}
+                >
                     <Stack spacing={2}>
                         <DateTimePicker value={value} onChange={setValue} label="Data/hora inicio" />
 
@@ -122,7 +134,15 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                 </LocalizationProvider>
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider
+                    dateAdapter={AdapterDayjs}
+                    adapterLocale='pt-br'
+                    localeText={{
+                        ...ptBR.components.MuiLocalizationProvider.defaultProps.localeText,
+                        okButtonLabel: 'Confirmar',
+                        cancelButtonLabel: 'Cancelar',
+                    }}
+                >
                     <Stack spacing={2}>
                         <DateTimePicker value={value} onChange={setValue} label="Data/hora fim" />
 
@@ -143,7 +163,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                                 <IconButton onClick={() => setFileName('')}>
                                     <Close />
                                 </IconButton>
-                               
+
                             </>
 
 

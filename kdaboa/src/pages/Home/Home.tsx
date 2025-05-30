@@ -1,4 +1,3 @@
-import React from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import Search from '../../components/Search/Search'
 import Carrousel from '../../components/CarroselEventHome/CarroselEventHome'
@@ -6,12 +5,14 @@ import BoxInfo from '../../components/BoxInfo/BoxInfo'
 import Title from '../../components/Title/Title'
 import Footer from '../../components/Footer/Footer'
 import hangloose from '../../assets/hangloose.png'
-import { Box, Container } from '@mui/material'
+import { Box } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { Drawer, Typography, Button } from '@mui/material'
 import cookies from '../../assets/cookies.png'
 import './Home.css'
+
 const Home = () => {
+  
   const [open, setOpen] = useState<boolean>(false);
   const [accepted, setAccepted] = useState<boolean>(false);
 
@@ -61,7 +62,7 @@ const Home = () => {
         </Title>
 
       </Box>
-      <Search  />
+      <Search />
       <Carrousel />
       <BoxInfo />
       <Footer />

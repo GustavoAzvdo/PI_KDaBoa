@@ -57,3 +57,32 @@
     color: #fff !important;
     background-color: var(--roxoForteDashboard) !important;
 } 
+
+.css-1h6sw33-MuiButtonBase-root-MuiChip-root {
+    background-color: var(--roxoFracoDashboard) !important;
+    color: var(--roxoForteDashboard) !important
+}
+
+.css-1h6sw33-MuiButtonBase-root-MuiChip-root .MuiChip-deleteIcon {
+    color: var(--roxoForteDashboard) !important;
+}
+
+.css-1voni21-MuiButtonBase-root-MuiMenuItem-root-MuiMultiSectionDigitalClockSection-item.Mui-selected {
+    background-color: var(--roxoFracoDashboard) !important;
+    color: var(--roxoForteDashboard) !important
+}
+
+.css-9f15u-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+    background-color: var(--roxoForteDashboard) !important;
+    color: "#fff" !important
+}
+
+.css-169qkty-MuiPickersInputBase-root-MuiPickersOutlinedInput-root{
+    border-color: var(--roxoForteDashboard) !important;
+}
+
+.css-1c4w1e0-MuiYearCalendar-button.Mui-selected{
+    background-color: var(--roxoForteDashboard) !important;
+    color: "#fff" !important
+}
+

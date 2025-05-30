@@ -25,13 +25,15 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />
 dayjs.locale('pt-br')
 
 
+
+
 interface SearchProps {
   onCategoryChange: (categories: string[]) => void;
   onTextChange: (text: string) => void; // Callback para enviar as categorias selecionadas
   onDateChange: (date: string) => void; // Callback opcional para enviar a data selecionada
 }
 
-const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) => {
+const Search = ({ onCategoryChange, onTextChange, onDateChange }: SearchProps) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchText, setSearchText] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<any>(null);
@@ -54,150 +56,153 @@ const Search = ({ onCategoryChange, onTextChange , onDateChange }: SearchProps) 
   };
 
   return (
-    <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Grid size={{ xs: 12, md: 12 }} >
-        <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{ paddingY: 2 }} >
+  
+      <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Grid size={{ xs: 12, md: 12 }} >
+          <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{ paddingY: 2 }} >
 
-          {/* Campo da esquerda */}
-          <Grid size={{ xs: 10, md: 6, lg: 5 }}>
-            <Box component='form' className='form-left-search'>
-              <TextField
+            {/* Campo da esquerda */}
+            <Grid size={{ xs: 10, md: 6, lg: 5 }}>
+              <Box component='form' className='form-left-search'>
+                <TextField
 
-                onChange={(e) => handleSearchTextChange(e.target.value)}
-                value={searchText}
+                  onChange={(e) => handleSearchTextChange(e.target.value)}
+                  value={searchText}
 
-                fullWidth
-                id="outlined-basic"
-                label="Pesquisar eventos ou estabelecimentos"
-                variant="outlined"
-                InputProps={{
-                  endAdornment: <InputAdornment position="end" onSubmit={() => window.location.reload()}>
-                    <SearchOutlined cursor='pointer'
-                      className='icons'
-                    />
-                  </InputAdornment>
-                }}
-              />
-            </Box>
-          </Grid>
-
-          {/* Campo do meio */}
-
-
-          {/* Campo da direita */}
-          <Grid size={{ xs: 10, md: 4, lg: 4 }}>
-            <Box component='form' className='form-right-search'>
-              <Autocomplete
-                className='txtCategorys'
-                multiple
-                id="checkboxes-tags-demo"
-                options={dados}
-                disableCloseOnSelect
-
-
-                onChange={handleCategoryChange}
-                noOptionsText="Nenhuma categoria encontrada"
-
-
-                getOptionLabel={(option) => option.title}
-                renderOption={(props, option, { selected }) => {
-                  const { key, ...optionProps } = props
-                  return (
-                    <li
-                      key={key}
-                      {...optionProps}
-                      style={{
-                        fontFamily: "'Noto Sans', sans-serif",
-                        fontSize: '18px',
-                        color: '#000',
-                        cursor: 'pointer',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f3e8ff'
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent'
-                      }}
-                    >
-                      <Checkbox
-                        icon={icon}
-                        checkedIcon={checkedIcon}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                        sx={{
-                          color: '#9c9c9c',
-                          '&.Mui-checked': {
-                            color: '#6C15D5',
-                          },
-                        }}
+                  fullWidth
+                  id="outlined-basic"
+                  label="Pesquisar eventos ou estabelecimentos"
+                  variant="outlined"
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end" onSubmit={() => window.location.reload()}>
+                      <SearchOutlined cursor='pointer'
+                        className='icons'
                       />
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        {option.title}
-                        {option.icon}
-                      </Box>
-                    </li>
-                  )
-                }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Categorias" />
-                )}
-
-              />
-            </Box>
-          </Grid>
-          <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ marginTop: '-8px' }}>
-            <Box
-              className="form-middle-search"
-
-
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexGrow: 1,
-                paddingY: 1,
-                margin: 0,
-                width: '100%',
-              }}
-            >
-              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
-                <DatePicker
-                  label="Data do evento"
-                  format="DD/MM/YYYY"
-                  sx={{pb: 0}}
-                  value={selectedDate}
-                  onChange={(newValue) => {
-                    setSelectedDate(newValue);
-                    if (onDateChange) {
-                      const formatted = newValue ? dayjs(newValue).format('DD/MM/YYYY') : '';
-                      onDateChange(formatted);
-                    }
-                  }}
-
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      sx: {
-                        '& .MuiOutlinedInput-root': {
-                          '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#6C15D5 !impotant', // Define a borda roxa
-                            borderWidth: '2px', // Ajusta a espessura da borda
-                          },
-                        },
-                        '& .MuiInputLabel-root.Mui-focused': {
-                          color: '#6C15D5', // Define o rótulo roxo
-                        },
-                      },
-                    },
+                    </InputAdornment>
                   }}
                 />
+              </Box>
+            </Grid>
 
-              </LocalizationProvider>
-            </Box>
+            {/* Campo do meio */}
+
+
+            {/* Campo da direita */}
+            <Grid size={{ xs: 10, md: 4, lg: 4 }}>
+              <Box component='form' className='form-right-search'>
+                <Autocomplete
+                  className='txtCategorys'
+                  multiple
+                  id="checkboxes-tags-demo"
+                  options={dados}
+                  disableCloseOnSelect
+
+
+                  onChange={handleCategoryChange}
+                  noOptionsText="Nenhuma categoria encontrada"
+
+
+                  getOptionLabel={(option) => option.title}
+                  renderOption={(props, option, { selected }) => {
+                    const { key, ...optionProps } = props
+                    return (
+                      <li
+                        key={key}
+                        {...optionProps}
+                        style={{
+                          fontFamily: "'Noto Sans', sans-serif",
+                          fontSize: '18px',
+                          color: '#000',
+                          cursor: 'pointer',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#f3e8ff'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent'
+                        }}
+                      >
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                          sx={{
+                            color: '#9c9c9c',
+                            '&.Mui-checked': {
+                              color: '#6C15D5',
+                            },
+                          }}
+                        />
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          {option.title}
+                          {option.icon}
+                        </Box>
+                      </li>
+                    )
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Categorias" />
+                  )}
+
+                />
+              </Box>
+            </Grid>
+            <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ marginTop: '-8px' }}>
+              <Box
+                className="form-middle-search"
+
+
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexGrow: 1,
+                  paddingY: 1,
+                  margin: 0,
+                  width: '100%',
+                }}
+              >
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+                  <DatePicker
+                    label="Data do evento"
+                    format="DD/MM/YYYY"
+                    sx={{ pb: 0 }}
+                    value={selectedDate}
+                    onChange={(newValue) => {
+                      setSelectedDate(newValue);
+                      if (onDateChange) {
+                        const formatted = newValue ? dayjs(newValue).format('DD/MM/YYYY') : '';
+                        onDateChange(formatted);
+                      }
+                    }}
+
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        sx: {
+                          '& .MuiOutlinedInput-root': {
+                            '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                              borderColor: '#6C15D5 !impotant', // Define a borda roxa
+                              borderWidth: '2px', // Ajusta a espessura da borda
+                            },
+                          },
+                          '& .MuiInputLabel-root.Mui-focused': {
+                            color: '#6C15D5', // Define o rótulo roxo
+                          },
+                        },
+                      },
+                    }}
+                  />
+
+                </LocalizationProvider>
+              </Box>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+
+   
   )
 }
 

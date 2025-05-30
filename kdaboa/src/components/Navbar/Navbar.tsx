@@ -22,7 +22,9 @@ const Navbar = () => {
         <AppBar position="static" className='navbar-home' elevation={0}>
           <Toolbar className='toolbar-home'>
             <Box className='btns-left-home' sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <img src={logo} alt=""  className='logo-home' />
+              <Link href='/home' sx={{ pl: 0, display: 'flex', alignItems: 'center' }}>
+                <img src={logo} alt="" className='logo-home' />
+              </Link>
               <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
                 <Button variant='text' color='inherit' size='large'>
                   <Link href='/search' sx={{ textDecoration: 'none', color: 'inherit' }}>
@@ -46,16 +48,16 @@ const Navbar = () => {
               color='inherit'
               sx={{ display: { xs: 'block', md: 'none' }, marginLeft: 'auto' }}
               onClick={() => setOpen(true)}
-             
+
             >
-              <MenuIcon className='menu-icon' color='inherit' sx={{  fontSize: 40 }}/>
+              <MenuIcon className='menu-icon' color='inherit' sx={{ fontSize: 40 }} />
             </Button>
           </Toolbar>
         </AppBar>
 
         {/* Drawer */}
         <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-          <List sx={{ width: 250 , padding: 2 }} className='list'>
+          <List sx={{ width: 250, padding: 2 }} className='list'>
             <ListItem component={Button} onClick={() => setOpen(false)}>
               <Typography >Encontrar eventos</Typography>
             </ListItem>
