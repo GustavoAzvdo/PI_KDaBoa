@@ -124,7 +124,16 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                     }}
                 >
                     <Stack spacing={2}>
-                        <DateTimePicker value={value} onChange={setValue} label="Data/hora inicio" />
+                        <DateTimePicker 
+                            value={value}
+                            onChange={setValue} 
+                            label="Data/hora inicio"
+                            slotProps={{
+                                textField: {
+                                    sx: { borderColor: 'var(--roxo) !important' }
+                                }
+                            }}
+                        />
 
                     </Stack>
                 </LocalizationProvider>
@@ -190,7 +199,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                         role={undefined}
                         variant="contained"
                         tabIndex={-1}
-                        startIcon={<CloudUpload />}
+                        startIcon={<AttachFile />}
 
                     >
                         <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
@@ -206,7 +215,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                 </Box>
             </Grid>
 
-            <Grid size={{ xs: 10, sm: 6, md: 3 }} sx={{ marginTop: 2 }}>
+            <Grid size={{ xs: 10, sm: 6, md: 6 }} sx={{ marginTop: 2 }}>
                 <Box>
                     <Autocomplete
                         multiple
@@ -250,14 +259,15 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                             )
                         }}
                         renderInput={(params) => (
-                            <TextField {...params} label="Categorias" helperText="Envie uma categoria por vez" />
+                            <TextField {...params} label="Categorias"  />
                         )}
 
                     />
                 </Box>
             </Grid>
-
-            <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ marginTop: 2 }}>
+             
+             {/* Botao adicionar Categoria uma por uma no banco */}
+            {/* <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ marginTop: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: 1, width: '100%' }}>
                     <Button startIcon={<LibraryAdd />} variant='contained' sx={{ p: 1, backgroundColor: 'var(--roxo)' }} fullWidth>
                         <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important', px: 1 }}>
@@ -265,7 +275,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                         </Typography>
                     </Button>
                 </Box>
-            </Grid>
+            </Grid> */}
 
             <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                 <Box>

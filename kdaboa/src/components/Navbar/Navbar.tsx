@@ -58,11 +58,47 @@ const Navbar = () => {
         {/* Drawer */}
         <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
           <List sx={{ width: 250, padding: 2 }} className='list'>
-            <ListItem component={Button} onClick={() => setOpen(false)}>
-              <Typography >Encontrar eventos</Typography>
+            <ListItem component={Button} href={'/search'} onClick={() => setOpen(false)}
+              sx={{
+                transition: 'background 0.2s',
+                '&:hover': {
+                  backgroundColor: 'var(--roxoNav)',
+                  '& .MuiTypography-root': {
+                    color: '#fff',
+                  },
+                },
+              }}
+            >
+              <Typography 
+              sx={{
+                color: 'var(--roxoNav)',
+                fontFamily: 'var(--notosans)',
+                fontSize: '1.2rem',
+                fontWeight: ''
+              }}
+              >
+                Encontrar eventos
+              </Typography>
             </ListItem>
-            <ListItem component={Button} onClick={() => setOpen(false)}>
-              <Typography >Entrar</Typography>
+            <ListItem component={Button} href={'/'} onClick={() => setOpen(false)}
+              sx={{
+                transition: 'background 0.2s',
+                '&:hover': {
+                  backgroundColor: 'var(--roxoNav)',
+                  '& .MuiTypography-root': {
+                    color: '#fff',
+                  },
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  color: 'var(--roxoNav)',
+                  fontFamily: 'var(--notosans)',
+                  fontSize: '1.2rem',
+                  fontWeight: ''
+                }}
+              >Entrar</Typography>
             </ListItem>
           </List>
         </Drawer>

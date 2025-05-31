@@ -1,4 +1,5 @@
-import { Box, Button, Grid, TextField, Typography } from '@mui/material'
+import { Mail, MailOutlineOutlined, Phone, PhoneOutlined } from '@mui/icons-material';
+import { Box, Button, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import React from 'react'
 
 const Contatos = () => {
@@ -8,29 +9,41 @@ const Contatos = () => {
 
     return (
         <Grid container spacing={2} sx={{ padding: 2 }}>
-            <Grid size={{ xs: 12, md: 4 }}>
+            <Grid size={{ xs: 12, md: 3 }}>
                 <TextField 
                     fullWidth 
                     variant="outlined" 
                     label="Telefone 1"
                     value={telefone1}
                     onChange= {(e: React.ChangeEvent<HTMLInputElement>) => setTelefone1(e.target.value)}    
+                    InputProps = {{
+                        endAdornment:
+                        <InputAdornment position="end">
+                            <PhoneOutlined/>
+                        </InputAdornment>
+                    }}
                 >
                     
                 </TextField>
             </Grid>
-            <Grid size={{ xs: 12, md: 4 }}>
+            <Grid size={{ xs: 12, md: 3 }}>
                 <TextField 
                     fullWidth  
                     variant="outlined" 
                     label="Telefone 2"
                     value={telefone2}
                     onChange= {(e: React.ChangeEvent<HTMLInputElement>) => setTelefone2(e.target.value)}
+                    InputProps = {{
+                        endAdornment:
+                        <InputAdornment position="end">
+                            <PhoneOutlined/>
+                        </InputAdornment>
+                    }}
                 >
                         
                 </TextField>
             </Grid>
-            <Grid size={{ xs: 12, md: 4 }}>
+            <Grid size={{ xs: 12, md: 3 }}>
                 <TextField 
                     fullWidth 
                     variant="outlined" 
@@ -38,6 +51,12 @@ const Contatos = () => {
                     type='email'
                     value={email}
                     onChange= {(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                    InputProps = {{
+                        endAdornment:
+                        <InputAdornment position="end">
+                            <MailOutlineOutlined/>
+                        </InputAdornment>
+                    }}
                 >
 
                 </TextField>

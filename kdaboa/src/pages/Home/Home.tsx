@@ -62,7 +62,7 @@ const Home = () => {
         </Title>
 
       </Box>
-      <Search />
+      <Search showScreen={true} />
       <Carrousel />
       <BoxInfo />
       <Footer />

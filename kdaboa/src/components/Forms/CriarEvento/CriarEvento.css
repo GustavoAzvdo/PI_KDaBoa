@@ -1,3 +1,11 @@
+:root {
+    --mui-palette-primary-main: #6C15D5 !important;
+}
+
 .css-r75yrr-MuiButtonBase-root-MuiButton-root{
     color: var(--roxoForteDashboard);
+}
+
+.css-1hz47ke-MuiFormControl-root-MuiPickersTextField-root {
+    border-color: var(--roxoForteDashboard) !important;
 }
