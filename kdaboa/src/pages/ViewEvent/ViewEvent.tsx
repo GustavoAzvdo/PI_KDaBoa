@@ -4,9 +4,15 @@ import ticket from "../../assets/ticket.png"
 import BannerEvent from "../../components/BannerEvent/BannerEvent"
 import InfoEvent from "../../components/InfoEvent/InfoEvent"
 import Footer from "../../components/Footer/Footer"
+import { useEffect } from "react"
 
 
 const ViewEvent = () => {
+  
+  useEffect (() => {
+    document.title = "Evento"
+  })
+  
   return (
     <>
         <NavbarEvent />

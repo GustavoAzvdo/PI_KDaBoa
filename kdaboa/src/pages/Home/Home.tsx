@@ -30,6 +30,23 @@ const Home = () => {
     setAccepted(false);
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (accepted) {
+      localStorage.setItem('cookiesAccepted', 'true');
+
+    }
+  }, [accepted]);
+
+  useEffect(() => {
+    if (localStorage.getItem('cookiesAccepted') === 'true') {
+      setOpen(false);
+    }
+  })
+
+  useEffect(() => {
+    document.title = "Home"
+  })
   return (
     <>
 

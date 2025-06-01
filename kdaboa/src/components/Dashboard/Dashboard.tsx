@@ -8,12 +8,14 @@ import Grid from '@mui/material/Grid';
 import logo from '../../assets/logo.png';
 import cdg from '../../assets/cdg.jpg';
 import './Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar} from '@mui/icons-material';
+import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar, Collections} from '@mui/icons-material';
 import { Box, TextField } from '@mui/material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 import Contatos from '../Forms/Contatos/Contatos';
+import Galeria from '../Forms/Galeria/Galeria';
+import ScreenError from '../ScreenError/ScreenError';
 
 
 const NAVIGATION: Navigation = [
@@ -40,6 +42,11 @@ const NAVIGATION: Navigation = [
         segment: 'contato',
         title: 'Contatos',
         icon: <Call />,
+      },
+      {
+        segment: 'galeria',
+        title: 'Galeria',
+        icon: <Collections />,
       },
     ],
     
@@ -203,6 +210,10 @@ export default function DashboardLayoutBasic(props: any) {
         return (
           <Contatos/>
         );
+      case '/dashboard/galeria':
+        return (
+          <Galeria/>
+        );
       case '/funcionarios':
         return <Skeleton height={400} />;
       case '/eventos/criar_evento':
@@ -217,7 +228,9 @@ export default function DashboardLayoutBasic(props: any) {
       case '/configuracoes':
         return <Skeleton height={400} />;
       default:
-        return <Box>404 - Página não encontrada</Box>;
+        return (
+          <ScreenError/>
+        );
     }
 
   }

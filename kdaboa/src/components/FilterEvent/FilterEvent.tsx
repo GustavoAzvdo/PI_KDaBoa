@@ -10,6 +10,7 @@ import Title from "../Title/Title";
 import Navbar from "../Navbar/Navbar";
 import search from "../../assets/search.png";
 import Banner from "../Banner/Banner";
+
 const FilterEvetn = () => {
     const [selectedDate, setSelectedDate] = useState<string>('');
     const [category, setCategory] = useState<string[]>([]);
@@ -20,20 +21,19 @@ const FilterEvetn = () => {
         setSelectedDate(date);
         handleCategoryAndTextChange(category, searchText, date);
     
-        // Implementar lógica de filtragem por data, se necessário
     };
 
     const handleCategoryChange = (categories: string[]) => {
         setCategory(categories);
-        handleCategoryAndTextChange(categories, searchText);
+        handleCategoryAndTextChange(categories, searchText, selectedDate);
     };
 
     const handleTextChange = (selectedText: string) => {
         setSearchText(selectedText);
-        handleCategoryAndTextChange(category, selectedText);
+        handleCategoryAndTextChange(category, selectedText, selectedDate);
     };
 
-    const handleCategoryAndTextChange = (selectedCategories: string[], searchText: string, date?: string) => {
+    const handleCategoryAndTextChange = (selectedCategories: string[], searchText: string, date: string) => {
         let filter = BD;
 
         if (selectedCategories.length > 0) {
