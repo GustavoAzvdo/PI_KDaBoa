@@ -204,7 +204,7 @@ export default function DashboardLayoutBasic(props: any) {
         );
       case '/dashboard/endereco':
         return (
-          <Endereco/>
+          <Endereco disabledComponents={false} />        
         );
       case '/dashboard/contato':
         return (

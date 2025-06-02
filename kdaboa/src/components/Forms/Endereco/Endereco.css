@@ -1,0 +1,10 @@
+:root {
+    --notosans: 'Noto Sans', sans-serif;
+}
+
+
+.paper b {
+   font-family: var(--notosans) !important;
+   font-weight: 600 !important;
+   font-size: 16px !important;
+}

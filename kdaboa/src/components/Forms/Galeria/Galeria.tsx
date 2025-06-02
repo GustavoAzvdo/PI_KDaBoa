@@ -54,6 +54,14 @@ const Galeria = () => {
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <TextField
                     disabled
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderStyle: 'dashed',
+                                borderWidth: 2,
+                            },
+                        },
+                    }}
                     label="Arquivo selecionado"
                     value={fileName}
                     variant="outlined"
@@ -113,6 +121,13 @@ const Galeria = () => {
                         sx={{
                             backgroundColor: 'var(--roxo)',
                             px: 6,
+                            '&.Mui-disabled': {
+                                backgroundColor: '#e0e0e0',
+                                color: '#222',
+                                '& .MuiTypography-root': {
+                                    color: '#222',
+                                },
+                            },
                         }}
                         onClick={handleAddPhoto}
                         disabled={!fileObj || photos.length >= 4}
