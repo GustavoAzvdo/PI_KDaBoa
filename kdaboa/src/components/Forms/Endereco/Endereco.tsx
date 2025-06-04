@@ -1,16 +1,23 @@
-import { Fence, Flag, LocationCity, MapsHomeWork, Numbers, Place, Signpost } from '@mui/icons-material';
-import { Alert, Box, Button, Divider, Grid, InputAdornment, Paper, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Star, StarBorder, Fence, Flag, LocationCity, MapsHomeWork, Numbers, Place, Signpost } from '@mui/icons-material';
+import { Alert, Box, Button, Divider, Grid, IconButton, InputAdornment, Paper, TextField, Typography } from '@mui/material';
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState } from 'react';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import './Endereco.css';
+import { useEffect } from 'react';
+import { useEnderecoContext } from '../../../context/EnderecoContext';
+import { Delete } from '@mui/icons-material';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+
 
 interface EnderecoProps {
     buttonLabel?: string;
     showButton?: boolean;
     disabledComponents?: boolean
+    enderecoSelecionado?: EnderecoData | null;
+    onAddEndereco?: (endereco: EnderecoData) => void;
 }
 
-interface EnderecoData {
+export interface EnderecoData {
     cep: string;
     logradouro: string;
     bairro: string;
@@ -20,7 +27,9 @@ interface EnderecoData {
     numero: string | number;
 }
 
-const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disabledComponents = true}: EnderecoProps) => {
+
+const Endereco = ({ enderecoSelecionado, onAddEndereco, buttonLabel = "Salvar endereço", showButton = true, disabledComponents = true }: EnderecoProps) => {
+
     const [cep, setCep] = useState<string>('');
     const [logradouro, setLogradouro] = useState<string>('');
     const [bairro, setBairro] = useState<string>('');
@@ -35,8 +44,33 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
-    const [enderecos, setEnderecos] = useState<EnderecoData[]>([]);
+    const { enderecos, addEndereco, updateEndereco, removeEndereco, favorito, favoritarEndereco } = useEnderecoContext();
     const [editIndex, setEditIndex] = useState<number | null>(null);
+    const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+    const handleOpenDeleteModal = (idx: number) => {
+        setDeleteIndex(idx);
+        setDeleteModalOpen(true);
+    };
+
+    // Função para confirmar exclusão
+    const handleConfirmDelete = () => {
+        if (deleteIndex !== null) {
+            removeEndereco(deleteIndex);
+            setSnackbarMsg('Endereço excluído com sucesso!');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+        }
+        setDeleteModalOpen(false);
+        setDeleteIndex(null);
+    };
+
+    // Função para cancelar exclusão
+    const handleCancelDelete = () => {
+        setDeleteModalOpen(false);
+        setDeleteIndex(null);
+    };
 
     function formatCep(value: string): string {
         value = value.replace(/\D/g, '');
@@ -109,18 +143,11 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
 
     // Adicionar ou atualizar endereço
     const handleButtonClick = () => {
-        const novoEndereco: EnderecoData = {
-            cep,
-            logradouro,
-            bairro,
-            cidade,
-            uf,
-            complemento,
-            numero,
-        };
 
-        // Verifica duplicidade (CEP + número)
-        const exists = enderecos.some((e, idx) =>
+        const novoEndereco: EnderecoData = { cep, logradouro, bairro, cidade, uf, complemento, numero };
+
+
+        const exists = enderecos.some((e: EnderecoData, idx: number) =>
             e.cep === cep &&
             e.numero === numero &&
             (editIndex === null || idx !== editIndex)
@@ -134,10 +161,7 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
         }
 
         if (editing && editIndex !== null) {
-            // Atualiza endereço existente
-            const novosEnderecos = [...enderecos];
-            novosEnderecos[editIndex] = novoEndereco;
-            setEnderecos(novosEnderecos);
+            updateEndereco(editIndex, novoEndereco); // Usa função do contexto
             setSnackbarMsg('Endereço atualizado com sucesso!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
@@ -145,16 +169,13 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
             setEditIndex(null);
             clearFields();
         } else {
-            // Adiciona novo endereço
-            setEnderecos([...enderecos, novoEndereco]);
+            addEndereco(novoEndereco); // Usa função do contexto
             setSnackbarMsg('Endereço salvo com sucesso!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
             clearFields();
-        }
-    };
-
-    // Preenche campos para edição
+        } clearFields();
+    }
     const handleEdit = (idx: number) => {
         const e = enderecos[idx];
         setCep(e.cep);
@@ -169,6 +190,22 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
         setEditing(true);
         setEditIndex(idx);
     };
+
+    useEffect(() => {
+        if (enderecoSelecionado) {
+            // Preenche os campos quando há um endereço selecionado
+            setCep(enderecoSelecionado.cep || '');
+            setLogradouro(enderecoSelecionado.logradouro || '');
+            setBairro(enderecoSelecionado.bairro || '');
+            setCidade(enderecoSelecionado.cidade || '');
+            setUf(enderecoSelecionado.uf || '');
+            setComplemento(enderecoSelecionado.complemento || '');
+            setNumero(enderecoSelecionado.numero || '');
+        } else {
+            // Limpa os campos quando o endereço selecionado é null/undefined
+            clearFields();
+        }
+    }, [enderecoSelecionado]);
 
     return (
         <>
@@ -185,7 +222,7 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
                     <Box>
                         <TextField
                             fullWidth
-                            disabled={disabled}
+                           
                             value={cep}
                             onBlur={handleCepBlur}
                             onChange={handleCepChange}
@@ -209,7 +246,7 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
-                            disabled={disabled}
+                            disabled
                             fullWidth
                             value={logradouro}
                             onChange={(e) => setLogradouro(e.target.value)}
@@ -289,13 +326,14 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
                 <Grid size={{ xs: 12, sm: 6, md: 6 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
-                            disabled={disabled}
+                            
                             fullWidth
                             value={complemento}
                             onChange={(e) => setComplemento(e.target.value)}
                             type="text"
                             label="Complemento"
                             variant="outlined"
+                            helperText="Opcional"
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
@@ -306,10 +344,10 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 2 }} sx={{ mt: 0 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
-                            disabled={disabled}
+                            
                             type="number"
                             fullWidth
                             value={numero}
@@ -345,40 +383,91 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
                 )}
             </Grid>
 
+            {
+                showButton && (
+                    <Grid container spacing={2} sx={{ padding: 2 }}>
 
-            <Grid container spacing={2} sx={{ padding: 2 }}>
+                        {enderecos.map((e: EnderecoData, idx: number) => (
+                            <Grid size={{ xs: 12, md: 4 }} key={idx}>
+                                <Paper elevation={2} sx={{ p: 2, mb: 2, position: 'relative' }} className='paper'>
+                                    <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
+                                        <IconButton
+                                            onClick={() => {
+                                                favoritarEndereco(idx);
+                                                setSnackbarMsg('Endereço favoritado!');
+                                                setSnackbarSeverity('warning');
+                                                setSnackbarOpen(true);
+                                            }}
+                                            
+                                        >
+                                            {favorito === idx ? <Star sx={{ color: 'var(--roxo)', '&:hover': { color: '#fff' } }} /> : <StarBorder sx={{ color: 'var(--roxo)', '&:hover': { color: '#fff' } }} />}
+                                        </IconButton>
+                                    </Box>
+                                    <Typography variant="subtitle1"><b>CEP:</b> {e.cep}</Typography>
+                                    <Typography variant="subtitle1"><b>Logradouro:</b> {e.logradouro}</Typography>
+                                    <Typography variant="subtitle1"><b>Bairro:</b> {e.bairro}</Typography>
+                                    <Typography variant="subtitle1"><b>Cidade:</b> {e.cidade}</Typography>
+                                    <Typography variant="subtitle1"><b>UF:</b> {e.uf}</Typography>
+                                    <Typography variant="subtitle1"><b>Complemento:</b> {e.complemento}</Typography>
+                                    <Typography variant="subtitle1"><b>Número:</b> {e.numero}</Typography>
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1, gap: 2 }}>
+                                        <Button
+                                            variant="outlined"
 
-                {enderecos.map((e, idx) => (
-                    <Grid size={{ xs: 12, md: 4 }} key={idx}>
-                        <Paper elevation={2} sx={{ p: 2, mb: 2 }} className='paper'>
-                            <Typography variant="subtitle1"><b>CEP:</b> {e.cep}</Typography>
-                            <Typography variant="subtitle1"><b>Logradouro:</b> {e.logradouro}</Typography>
-                            <Typography variant="subtitle1"><b>Bairro:</b> {e.bairro}</Typography>
-                            <Typography variant="subtitle1"><b>Cidade:</b> {e.cidade}</Typography>
-                            <Typography variant="subtitle1"><b>UF:</b> {e.uf}</Typography>
-                            <Typography variant="subtitle1"><b>Complemento:</b> {e.complemento}</Typography>
-                            <Typography variant="subtitle1"><b>Número:</b> {e.numero}</Typography>
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-                                <Button
-                                    variant="outlined"
+                                            onClick={() => handleEdit(idx)}
+                                            sx={{
+                                                color: 'var(--roxo)',
+                                                borderColor: 'var(--roxo)',
+                                            }}
+                                        >
+                                            <Typography sx={{ fontSize: '16px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                                Editar
 
-                                    onClick={() => handleEdit(idx)}
-                                    sx={{
-                                        color: 'var(--roxo)',
-                                        borderColor: 'var(--roxo)',
-                                    }}
-                                >
-                                    <Typography sx={{ fontSize: '16px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
-                                        Editar
-
-                                    </Typography>
-                                </Button>
-                            </Box>
-                        </Paper>
+                                            </Typography>
+                                        </Button>
+                                        <Button
+                                            variant="outlined"
+                                            color="error"
+                                            startIcon={<Delete />}
+                                            onClick={() => handleOpenDeleteModal(idx)}
+                                            sx={{
+                                                '&:hover': {
+                                                    backgroundColor: '#d32f2f !important',
+                                                }
+                                            }}
+                                        >
+                                            <Typography sx={{ fontSize: '16px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                                Excluir
+                                            </Typography>
+                                        </Button>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        ))}
                     </Grid>
-                ))}
-            </Grid>
 
+                )
+            }
+            <Dialog
+                open={deleteModalOpen}
+                onClose={handleCancelDelete}
+                sx={{ fontFamily: 'var(--notosans) !important' }}
+            >
+                <DialogTitle sx={{ fontFamily: 'var(--notosans) !important', fontSize: '20px' }}>Excluir endereço</DialogTitle>
+                <DialogContent>
+                    <DialogContentText sx={{ fontFamily: 'var(--notosans) !important', fontSize: '18px' }}>
+                        Tem certeza que deseja excluir este endereço? Esta ação não pode ser desfeita.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions sx={{ gap: 1 }}>
+                    <Button onClick={handleCancelDelete} sx={{ fontFamily: 'var(--notosans) !important' , fontSize: '16px'}}>
+                        Cancelar
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="error" variant="contained" sx={{ fontFamily: 'var(--notosans) !important', fontSize: '16px', backgroundColor: 'var(--roxo)' }}>
+                        Excluir
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <CustomSnackbar
                 open={snackbarOpen}
                 message={snackbarMsg}
@@ -388,7 +477,8 @@ const Endereco = ({ buttonLabel = "Salvar endereço", showButton = true, disable
         </>
 
     );
-
 };
+
+
 
 export default Endereco;

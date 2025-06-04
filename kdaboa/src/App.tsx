@@ -1,11 +1,13 @@
 import './App.css'
-
+import { EnderecoProvider } from './context/EnderecoContext'
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './routes/AppRoutes'
 function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <EnderecoProvider>
+        <AppRoutes />
+      </EnderecoProvider>
     </BrowserRouter>
   )
 }

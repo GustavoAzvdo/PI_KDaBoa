@@ -11,7 +11,9 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import logo from '../../assets/logo.png';
 import Link from '@mui/material/Link';
+import Person from '@mui/icons-material/Person';
 import './Navbar.css';
+import { Search } from '@mui/icons-material';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -26,7 +28,7 @@ const Navbar = () => {
                 <img src={logo} alt="" className='logo-home' />
               </Link>
               <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-                <Button variant='text' color='inherit' size='large'>
+                <Button variant='text' color='inherit' size='large' endIcon={<Search/>}>
                   <Link href='/search' sx={{ textDecoration: 'none', color: 'inherit' }}>
                     <Typography>Encontrar eventos</Typography>
                   </Link>
@@ -36,7 +38,7 @@ const Navbar = () => {
 
             {/* Botões normais no desktop */}
             <Box className='btns-right-home' sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-              <Button variant='contained' color='secondary' href='/' size='large' className='btnPublicar'>
+              <Button variant='contained' color='secondary' href='/' size='large' className='btnPublicar' endIcon={<Person/>}>
                 <Typography>Entrar</Typography>
               </Button>
             </Box>

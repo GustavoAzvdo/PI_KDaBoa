@@ -3,6 +3,7 @@ import maps from '../../assets/maps.png'
 import './Details.css'
 
 import { useState } from 'react'
+import { LocationOn } from '@mui/icons-material';
 
 interface AddressProps {
     address: string;
@@ -20,7 +21,7 @@ const Address = ({ address, location }: AddressProps) => {
             <Box className="text-address">
                 <Box sx={{ display: "flex", alignItems: "center" }} className="text-address-title">
                     <Typography className='t'>{location}</Typography>
-                    <Button variant="outlined" className="btn-maps" sx={{ marginLeft: 3 }} onClick={() => setOpenMap(true)}>
+                    <Button endIcon={<LocationOn/>} variant="outlined" className="btn-maps" sx={{ marginLeft: 3 }} onClick={() => setOpenMap(true)}>
                         <Typography >
                             Ver mapa
                         </Typography>
