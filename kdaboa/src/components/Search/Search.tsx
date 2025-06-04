@@ -1,5 +1,6 @@
 
-import { Box, Grid, TextField, Autocomplete, Checkbox, InputAdornment , Link} from '@mui/material'
+
+import { Box, Grid, TextField, Autocomplete, Checkbox, InputAdornment, Link } from '@mui/material'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 
@@ -13,9 +14,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
 
 
-
-import { useState } from 'react';
-
+import { useLocation, Link as RouterLink } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { useSearch } from '../../context/SearchContext';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
@@ -34,31 +35,42 @@ interface SearchProps {
   showScreen?: boolean
 }
 
-const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen=false }: SearchProps) => {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [searchText, setSearchText] = useState<string>('')
-  const [selectedDate, setSelectedDate] = useState<any>(null);
+const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = false }: SearchProps) => {
+  const { searchText, categories, date, setSearchText, setCategories, setDate } = useSearch();
+  // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  // const [searchText, setSearchText] = useState<string>('')
+  // const [selectedDate, setSelectedDate] = useState<any>(null);
+  console.log(searchText, categories, date)
 
   const handleCategoryChange = (_event: any, value: any) => {
-    const categories = value.map((item: any) => item.title); // Extrai os títulos das categorias selecionadas
-    setSelectedCategories(categories);
+    const newCategories = value.map((item: any) => item.title);
+    setCategories(newCategories);
     if (onCategoryChange) {
-      onCategoryChange(categories);
+      onCategoryChange(newCategories);
     }
   };
 
   const handleSearchTextChange = (value: string) => {
     const selectedText = value.toLowerCase();
-    setSearchText(selectedText); // Atualiza o estado local
+    setSearchText(selectedText);
     if (onTextChange) {
-      onTextChange(selectedText); // Passa o valor atualizado diretamente para o componente pai
+      onTextChange(selectedText);
     }
   };
 
-  const handleDateChange = (date: string) => {
-    setSelectedDate(date);
-
+  const handleDateChange = (newValue: any) => {
+    const formattedDate = newValue ? dayjs(newValue).format('DD/MM/YYYY') : '';
+    setDate(formattedDate);
+    if (onDateChange) {
+      onDateChange(formattedDate);
+    }
   };
+  useEffect(() => {
+    handleCategoryChange(null, categories)
+    handleDateChange(date)
+    handleSearchTextChange(searchText)
+  }, [])
+
 
   return (
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -79,8 +91,17 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen=false
                 variant="outlined"
                 InputProps={{
                   endAdornment: showScreen ? (
-                    <InputAdornment position="end" sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                      <Link href={'/search'} sx={{padding: 0, margin: 0}}>
+                    <InputAdornment position="end" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Link
+                        component={RouterLink}
+                        to="/search"
+                        state={{
+                          searchText: searchText,
+                          categories: categories,
+                          date: date,
+                        }}
+                        sx={{ padding: 0, margin: 0 }}
+                      >
                         <SearchOutlined cursor='pointer'
                           className='icons'
                         />
@@ -111,6 +132,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen=false
                 options={dados}
                 disableCloseOnSelect
 
+                value={dados.filter(option => categories.includes(option.title))}
 
                 onChange={handleCategoryChange}
                 noOptionsText="Nenhuma categoria encontrada"
@@ -182,14 +204,8 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen=false
                   label="Data do evento"
                   format="DD/MM/YYYY"
                   sx={{ pb: 0 }}
-                  value={selectedDate}
-                  onChange={(newValue) => {
-                    setSelectedDate(newValue);
-                    if (onDateChange) {
-                      const formatted = newValue ? dayjs(newValue).format('DD/MM/YYYY') : '';
-                      onDateChange(formatted);
-                    }
-                  }}
+                  value={date ? dayjs(date, 'DD/MM/YYYY') : null}
+                  onChange={handleDateChange}
 
                   slotProps={{
                     textField: {

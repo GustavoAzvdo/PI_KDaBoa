@@ -13,7 +13,7 @@ import logo from '../../assets/logo.png';
 import Link from '@mui/material/Link';
 import Person from '@mui/icons-material/Person';
 import './Navbar.css';
-import { Search } from '@mui/icons-material';
+import { Home, Search } from '@mui/icons-material';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -28,7 +28,12 @@ const Navbar = () => {
                 <img src={logo} alt="" className='logo-home' />
               </Link>
               <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-                <Button variant='text' color='inherit' size='large' endIcon={<Search/>}>
+                <Button variant='text' color='inherit' size='large' endIcon={<Home />}>
+                  <Link href='/home' sx={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Typography>Home</Typography>
+                  </Link>
+                </Button>
+                <Button variant='text' color='inherit' size='large' endIcon={<Search />}>
                   <Link href='/search' sx={{ textDecoration: 'none', color: 'inherit' }}>
                     <Typography>Encontrar eventos</Typography>
                   </Link>
@@ -38,7 +43,7 @@ const Navbar = () => {
 
             {/* Botões normais no desktop */}
             <Box className='btns-right-home' sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-              <Button variant='contained' color='secondary' href='/' size='large' className='btnPublicar' endIcon={<Person/>}>
+              <Button variant='contained' color='secondary' href='/' size='large' className='btnPublicar' endIcon={<Person />}>
                 <Typography>Entrar</Typography>
               </Button>
             </Box>
@@ -71,17 +76,18 @@ const Navbar = () => {
                 },
               }}
             >
-              <Typography 
-              sx={{
-                color: 'var(--roxoNav)',
-                fontFamily: 'var(--notosans)',
-                fontSize: '1.2rem',
-                fontWeight: ''
-              }}
+              <Typography
+                sx={{
+                  color: 'var(--roxoNav)',
+                  fontFamily: 'var(--notosans)',
+                  fontSize: '1.2rem',
+                  fontWeight: ''
+                }}
               >
                 Encontrar eventos
               </Typography>
             </ListItem>
+
             <ListItem component={Button} href={'/'} onClick={() => setOpen(false)}
               sx={{
                 transition: 'background 0.2s',
@@ -101,6 +107,27 @@ const Navbar = () => {
                   fontWeight: ''
                 }}
               >Entrar</Typography>
+            </ListItem>
+
+            <ListItem component={Button} href={'/home'} onClick={() => setOpen(false)}
+              sx={{
+                transition: 'background 0.2s',
+                '&:hover': {
+                  backgroundColor: 'var(--roxoNav)',
+                  '& .MuiTypography-root': {
+                    color: '#fff',
+                  },
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  color: 'var(--roxoNav)',
+                  fontFamily: 'var(--notosans)',
+                  fontSize: '1.2rem',
+                  fontWeight: ''
+                }}
+              >Home</Typography>
             </ListItem>
           </List>
         </Drawer>
