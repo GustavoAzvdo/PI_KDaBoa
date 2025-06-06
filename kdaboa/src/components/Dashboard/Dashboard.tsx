@@ -17,6 +17,8 @@ import Contatos from '../Forms/Contatos/Contatos';
 import Galeria from '../Forms/Galeria/Galeria';
 import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
 import ScreenError from '../ScreenError/ScreenError';
+import { User } from './User.props';
+import api from '../../api/api';
 
 
 const NAVIGATION: Navigation = [
@@ -145,38 +147,29 @@ export default function DashboardLayoutBasic(props: any) {
   // Remove this const when copying and pasting into your project.
   const demoWindow = window ? window() : undefined;
 
-  const [session, setSession] = React.useState<Session | null>(() => {
-    const saved = localStorage.getItem('session');
-    if (saved && saved !== 'undefined') {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        // Se der erro no parse, limpa o localStorage
-        localStorage.removeItem('session');
-        return null;
-      }
-    }
 
-    const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-      return {
+  const [user, setUser] = React.useState<User | null>(null)
+
+  const [session, setSession] = React.useState<Session | null>(null);
+
+
+React.useEffect(() => {
+    api.get<User>('/auth/dados', { withCredentials: true })
+    .then(res => {
+      console.log(res.data)
+      setUser(res.data);
+      setSession({
         user: {
-          email: userEmail,
+          email: res.data.email,
           image: cdg,
         },
-      };
-    }
-    return null;
-  });
-
-  // Sempre que o session mudar, salva no localStorage
-  React.useEffect(() => {
-    if (session) {
-      localStorage.setItem('session', JSON.stringify(session));
-    } else {
-      localStorage.removeItem('session');
-    }
-  }, [session]);
+      });
+    })
+    .catch(err => {
+      console.error('Não autenticado');
+      window.location.href = '/';
+    });
+}, [])
 
   const authentication = React.useMemo(() => {
     return {
@@ -185,7 +178,7 @@ export default function DashboardLayoutBasic(props: any) {
         const email = window?.prompt('Digite seu e-mail:') || 'user@example.com';
         setSession({
           user: {
-            email,
+            email: user?.email,
             image: cdg,
           },
         });
