@@ -18,6 +18,7 @@ import { User } from './User.props';
 import api from '../../api/api';
 
 
+
 const NAVIGATION: Navigation = [
   {
     kind: 'header',
@@ -136,6 +137,7 @@ const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
   content: '" "',
 }));
 
+
 export default function DashboardLayoutBasic(props: any) {
   const { window } = props;
 
@@ -163,6 +165,18 @@ React.useEffect(() => {
       });
     })
     .catch(_err => {
+      console.error('Não autenticado');
+      window.location.href = '/';
+    });
+}, [])
+
+
+React.useEffect(() => {
+    axios.get<User>('http://localhost:3000/auth/dados', { withCredentials: true })
+    .then(res => {
+      setUser(res.data);
+    })
+    .catch(err => {
       console.error('Não autenticado');
       window.location.href = '/';
     });

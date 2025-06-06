@@ -1,6 +1,8 @@
-export class User{
-    id: string | undefined;
-    nome: string | undefined;
-    email: string | undefined;
-    imagem: string | undefined;
+
+export type User = {
+    id: number,
+    nome: string,
+    email: string,
+    tipo: string,
+    status: number
 }
