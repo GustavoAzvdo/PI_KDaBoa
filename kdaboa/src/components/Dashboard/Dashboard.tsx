@@ -3,13 +3,10 @@ import { createTheme, styled } from '@mui/material/styles';
 import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-import Drawer from '@mui/material/Drawer';
-import Grid from '@mui/material/Grid';
 import logo from '../../assets/logo.png';
 import cdg from '../../assets/cdg.jpg';
 import './Dashboard.css'
 import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar, Collections, Person} from '@mui/icons-material';
-import { Box, TextField } from '@mui/material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
@@ -165,7 +162,7 @@ React.useEffect(() => {
         },
       });
     })
-    .catch(err => {
+    .catch(_err => {
       console.error('Não autenticado');
       window.location.href = '/';
     });
