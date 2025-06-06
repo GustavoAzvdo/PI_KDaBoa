@@ -8,13 +8,14 @@ import Grid from '@mui/material/Grid';
 import logo from '../../assets/logo.png';
 import cdg from '../../assets/cdg.jpg';
 import './Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar, Collections} from '@mui/icons-material';
+import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar, Collections, Person} from '@mui/icons-material';
 import { Box, TextField } from '@mui/material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 import Contatos from '../Forms/Contatos/Contatos';
 import Galeria from '../Forms/Galeria/Galeria';
+import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
 import ScreenError from '../ScreenError/ScreenError';
 
 
@@ -28,6 +29,11 @@ const NAVIGATION: Navigation = [
     title: 'Dados pessoais',
     icon: <Face />,
     children: [
+      {
+        segment: 'info',
+        title: 'Informações cadastrais',
+        icon: <Person />,
+      },
       {
         segment: 'estabelecimento',
         title: 'Estabelecimento',
@@ -198,6 +204,10 @@ export default function DashboardLayoutBasic(props: any) {
     switch (pathname) {
       case '/dashboard':
         return <Skeleton height={400} />;
+      case '/dashboard/info':
+        return (
+          <InfoPessoal/>
+        );
       case '/dashboard/estabelecimento':
         return (
           <Estabelecimento/>
