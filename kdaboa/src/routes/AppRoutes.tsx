@@ -10,7 +10,9 @@ import Home from '../pages/Home/Home'
 import SearchEvent from '../pages/SearchEvent/SearchEvent'
 import Profile from '../pages/Profile/Profile'
 import ViewEvent from '../pages/ViewEvent/ViewEvent'
+
 const AppRoutes = () => (
+
   <Routes>
     <Route path="/" element={<Login />} />
     <Route path="/signin" element={<Signin />} />

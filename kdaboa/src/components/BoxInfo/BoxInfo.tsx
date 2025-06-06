@@ -2,6 +2,7 @@ import { Box, Grid, Typography, Button } from "@mui/material"
 import festa from "../../assets/festa.png"
 import video from "../../assets/video.gif"
 import './BoxInfo.css'
+import { PersonAddAlt1 } from "@mui/icons-material"
 const BoxInfo = () => {
 
   return (
@@ -25,7 +26,7 @@ const BoxInfo = () => {
             alignItems: 'center',
           }}>
               
-          <Button variant='outlined' color='inherit' size='large' href="/signin" className="btn-cadastrar">
+          <Button endIcon={<PersonAddAlt1/>} variant='outlined' color='inherit' size='large' href="/signin" className="btn-cadastrar">
             <Typography className="btn-text">
               Quero me cadastrar!
             </Typography>

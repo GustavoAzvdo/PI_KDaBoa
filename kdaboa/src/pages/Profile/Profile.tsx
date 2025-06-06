@@ -8,8 +8,13 @@ import CardEventHome from '../../components/CardEventHome/CardEventHome'
 import CardsBD from '../../components/CardEventHome/CardsBD'
 import ViewCards from "../../components/ViewCards/ViewCards"
 import ticket from "../../assets/ticket.png"
+import { useEffect } from "react"
 
 const Profile = () => {
+
+  useEffect (() => {
+    document.title = "Perfil"
+  })
   return (
     <Box>
       <NavbarEvent />

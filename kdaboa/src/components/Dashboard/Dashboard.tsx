@@ -3,18 +3,20 @@ import { createTheme, styled } from '@mui/material/styles';
 import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-import Drawer from '@mui/material/Drawer';
-import Grid from '@mui/material/Grid';
 import logo from '../../assets/logo.png';
 import cdg from '../../assets/cdg.jpg';
 import './Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar} from '@mui/icons-material';
-import { Box, TextField } from '@mui/material';
+import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar, Collections, Person} from '@mui/icons-material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
-
+import Contatos from '../Forms/Contatos/Contatos';
+import Galeria from '../Forms/Galeria/Galeria';
+import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
+import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
+import api from '../../api/api';
+
 
 
 const NAVIGATION: Navigation = [
@@ -27,6 +29,11 @@ const NAVIGATION: Navigation = [
     title: 'Dados pessoais',
     icon: <Face />,
     children: [
+      {
+        segment: 'info',
+        title: 'Informações cadastrais',
+        icon: <Person />,
+      },
       {
         segment: 'estabelecimento',
         title: 'Estabelecimento',
@@ -41,6 +48,11 @@ const NAVIGATION: Navigation = [
         segment: 'contato',
         title: 'Contatos',
         icon: <Call />,
+      },
+      {
+        segment: 'galeria',
+        title: 'Galeria',
+        icon: <Collections />,
       },
     ],
     
@@ -135,40 +147,28 @@ export default function DashboardLayoutBasic(props: any) {
   const demoWindow = window ? window() : undefined;
 
 
-const [user, setUser] = React.useState<User | null>(null)
+  const [user, setUser] = React.useState<User | null>(null)
 
-  const [session, setSession] = React.useState<Session | null>(() => {
-    const saved = localStorage.getItem('session');
-    if (saved && saved !== 'undefined') {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        // Se der erro no parse, limpa o localStorage
-        localStorage.removeItem('session');
-        return null;
-      }
-    }
+  const [session, setSession] = React.useState<Session | null>(null);
 
-    const userEmail = localStorage.getItem('userEmail');
-    if (userEmail) {
-      return {
+
+React.useEffect(() => {
+    api.get<User>('/auth/dados', { withCredentials: true })
+    .then(res => {
+      console.log(res.data)
+      setUser(res.data);
+      setSession({
         user: {
-          email: userEmail,
+          email: res.data.email,
           image: cdg,
         },
-      };
-    }
-    return null;
-  });
-
-  // Sempre que o session mudar, salva no localStorage
-  React.useEffect(() => {
-    if (session) {
-      localStorage.setItem('session', JSON.stringify(session));
-    } else {
-      localStorage.removeItem('session');
-    }
-  }, [session]);
+      });
+    })
+    .catch(_err => {
+      console.error('Não autenticado');
+      window.location.href = '/';
+    });
+}, [])
 
 
 React.useEffect(() => {
@@ -189,7 +189,7 @@ React.useEffect(() => {
         const email = window?.prompt('Digite seu e-mail:') || 'user@example.com';
         setSession({
           user: {
-            email,
+            email: user?.email,
             image: cdg,
           },
         });
@@ -208,21 +208,32 @@ React.useEffect(() => {
     switch (pathname) {
       case '/dashboard':
         return <Skeleton height={400} />;
+      case '/dashboard/info':
+        return (
+          <InfoPessoal/>
+        );
       case '/dashboard/estabelecimento':
         return (
           <Estabelecimento/>
         );
       case '/dashboard/endereco':
         return (
-          <Endereco/>
+          <Endereco disabledComponents={false} />        
         );
       case '/dashboard/contato':
-        return <Skeleton height={400} />;
+        return (
+          <Contatos/>
+        );
+      case '/dashboard/galeria':
+        return (
+          <Galeria/>
+        );
       case '/funcionarios':
         return <Skeleton height={400} />;
       case '/eventos/criar_evento':
         return (
           <CriarEvento/>
+
         );
       case '/eventos/postados':
         return <Skeleton height={400} />;
@@ -231,7 +242,9 @@ React.useEffect(() => {
       case '/configuracoes':
         return <Skeleton height={400} />;
       default:
-        return <Box>404 - Página não encontrada</Box>;
+        return (
+          <ScreenError/>
+        );
     }
 
   }

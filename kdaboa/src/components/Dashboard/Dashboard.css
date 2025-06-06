@@ -78,7 +78,7 @@
 }
 
 .css-169qkty-MuiPickersInputBase-root-MuiPickersOutlinedInput-root{
-    border-color: var(--roxoForteDashboard) !important;
+    border-color: 2px solid var(--roxoForteDashboard) !important;
 }
 
 .css-1c4w1e0-MuiYearCalendar-button.Mui-selected{

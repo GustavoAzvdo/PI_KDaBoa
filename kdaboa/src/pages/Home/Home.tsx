@@ -10,12 +10,12 @@ import { useState, useEffect } from 'react'
 import { Drawer, Typography, Button } from '@mui/material'
 import cookies from '../../assets/cookies.png'
 import './Home.css'
-
+import { useSearch } from '../../context/SearchContext'
 const Home = () => {
-  
+  const { setSearchText, setCategories, setDate } = useSearch();  
   const [open, setOpen] = useState<boolean>(false);
   const [accepted, setAccepted] = useState<boolean>(false);
-
+ 
   useEffect(() => {
     // Aqui você pode verificar localStorage se quiser persistência
     setOpen(true);
@@ -30,6 +30,23 @@ const Home = () => {
     setAccepted(false);
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (accepted) {
+      localStorage.setItem('cookiesAccepted', 'true');
+
+    }
+  }, [accepted]);
+
+  useEffect(() => {
+    if (localStorage.getItem('cookiesAccepted') === 'true') {
+      setOpen(false);
+    }
+  })
+
+  useEffect(() => {
+    document.title = "Home"
+  })
   return (
     <>
 
@@ -62,7 +79,12 @@ const Home = () => {
         </Title>
 
       </Box>
-      <Search />
+      <Search 
+        showScreen={true} 
+        onTextChange={setSearchText} 
+        onCategoryChange={setCategories} 
+        onDateChange={setDate}
+      />
       <Carrousel />
       <BoxInfo />
       <Footer />

@@ -6,6 +6,7 @@ import Address from "../Details/Address"
 import { useLocation, useNavigate } from "react-router-dom"
 import Banner from "../Banner/Banner"
 import BannerEvent from "../BannerEvent/BannerEvent"
+import { Person } from "@mui/icons-material"
 
 const InfoEvent = () => {
     const navigate = useNavigate();
@@ -60,7 +61,7 @@ const InfoEvent = () => {
                             <Typography>
                                 Produzido por {card.location}
                             </Typography>
-                            <Button variant="outlined" className="btn-profile" href='/profile' onClick={() => {
+                            <Button endIcon={<Person/>} variant="outlined" className="btn-profile" href='/profile' onClick={() => {
                                 navigate('/profile', { state: { card , location: card.location} });
                             }}>
                                 <Typography>

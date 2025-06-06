@@ -205,19 +205,7 @@ const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onP
     }, [isPasswordValid, isConfirmPasswordValid, onValidationChange]);
 
     // Limpa os campos de senha quando a prop `reset` mudar
-    useEffect(() => {
-        if (reset) {
-            console.log("Resetando campos de senha");
-            setPassword('');
-            setConfirmPassword('');
-            if (onPasswordChange) {
-                onPasswordChange('');
-            }
-            if (onValidationChange) {
-                onValidationChange(false);
-            }
-        }
-    }, [reset]);
+
 
     return (
         <>
