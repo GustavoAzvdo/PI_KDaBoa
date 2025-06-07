@@ -19,6 +19,7 @@ const InfoPessoal = () => {
             const reader = new FileReader()
             reader.onload = () => {
                 const imageDataUrl = reader.result as string
+                console.log(imageDataUrl)
                 setImageUrl(imageDataUrl)
             }
             reader.readAsDataURL(file)

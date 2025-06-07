@@ -3,7 +3,7 @@ import { Box, Typography, TextField, InputAdornment, Button } from '@mui/materia
 import { VisibilityOutlined, VisibilityOffOutlined, Check, Clear } from '@mui/icons-material';
 
 interface PasswordProps {
-    pegarSenha?: (senha: string, confirma:string) => void;
+    pegarSenha?: (senha: string, confirma: string) => void;
     onValidationChange?: (isValid: boolean) => void; // Prop para informar o estado de validação
     onPasswordChange?: (password: string) => void;
     reset?: boolean;
@@ -168,10 +168,10 @@ const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onP
 
     //pega valor da senha e envia para o componente pai
     useEffect(() => {
-        if(pegarSenha){
+        if (pegarSenha) {
             pegarSenha(password, confirmPassword);
         }
-    },[password,confirmPassword, pegarSenha])
+    }, [password, confirmPassword, pegarSenha])
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newPassword = event.target.value;
         setPassword(newPassword);
@@ -231,9 +231,12 @@ const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onP
                                     disabled={isLoading}
                                     color="inherit"
                                     onClick={handleClickShowPassword}
-                                    style={{
+                                    sx={{
                                         minWidth: 0,
                                         padding: 0,
+                                        '&:hover .icons': {
+                                            color: '#fff !important',
+                                        }
                                     }}
                                 >
                                     {showPassword ? (
@@ -289,13 +292,19 @@ const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onP
                         endAdornment: (
                             <InputAdornment position="end">
                                 <Button
+
                                     disabled={isLoading}
-                                    color="inherit"
+
                                     onClick={handleClickShowConfirmPassword}
-                                    style={{
+                                    sx={{
+
                                         minWidth: 0,
                                         padding: 0,
+                                        '&:hover .icons': {
+                                            color: '#fff !important',
+                                        }
                                     }}
+
                                 >
                                     {showConfirmPassword ? (
                                         <VisibilityOffOutlined className="icons" />

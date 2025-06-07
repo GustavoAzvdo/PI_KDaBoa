@@ -171,16 +171,6 @@ React.useEffect(() => {
 }, [])
 
 
-React.useEffect(() => {
-    axios.get<User>('http://localhost:3000/auth/dados', { withCredentials: true })
-    .then(res => {
-      setUser(res.data);
-    })
-    .catch(err => {
-      console.error('Não autenticado');
-      window.location.href = '/';
-    });
-}, [])
 
   const authentication = React.useMemo(() => {
     return {
