@@ -20,7 +20,7 @@ const AppRoutes = () => (
     <Route path="/alterar-senha" element={<AlterarSenha />} />
     <Route path="/email-enviado" element={<SendEmail />} />
     <Route path="/dashboard" element={<Dashboard />} />
-    <Route path="*" element={<Navigate to="/" />} />
+    {/* <Route path="*" element={<Navigate to="/" />} /> */}
     <Route path="/home" element={<Home />} />
     <Route path="/search" element={<SearchEvent />} />
     <Route path="/profile" element={<Profile />} />
