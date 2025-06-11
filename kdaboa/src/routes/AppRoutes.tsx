@@ -1,5 +1,5 @@
 // src/routes/AppRoutes.tsx
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from '../components/Forms/Login/Login'
 import Signin from '../components/Forms/Signin/Signin'
 import RecuperarSenha from '../components/Forms/RecuperarSenha/RecuperarSenha'
@@ -20,7 +20,7 @@ const AppRoutes = () => (
     <Route path="/alterar-senha" element={<AlterarSenha />} />
     <Route path="/email-enviado" element={<SendEmail />} />
     <Route path="/dashboard" element={<Dashboard />} />
-    {/* <Route path="*" element={<Navigate to="/" />} /> */}
+    <Route path="*" element={<Navigate to="/" />} />
     <Route path="/home" element={<Home />} />
     <Route path="/search" element={<SearchEvent />} />
     <Route path="/profile" element={<Profile />} />
