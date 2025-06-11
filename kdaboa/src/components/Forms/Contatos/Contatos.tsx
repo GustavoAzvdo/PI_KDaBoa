@@ -1,4 +1,4 @@
-import { Mail, MailOutlineOutlined, Phone, PhoneOutlined } from '@mui/icons-material';
+import {  MailOutlineOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Box, Button, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import React from 'react'
 

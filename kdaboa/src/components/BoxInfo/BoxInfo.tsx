@@ -1,6 +1,5 @@
 import { Box, Grid, Typography, Button } from "@mui/material"
 import festa from "../../assets/festa.png"
-import video from "../../assets/video.gif"
 import './BoxInfo.css'
 import { PersonAddAlt1 } from "@mui/icons-material"
 const BoxInfo = () => {

@@ -11,7 +11,7 @@ import Password from '../../Password/Password';
 import api from '../../../api/api'
 
 const Signin = () => {
-    const [nameFocused, setNameFocused] = useState(false);
+    const [nameFocused] = useState(false);
 
     const [nameTouched, setNameTouched] = useState(false);
     const [emailTouched, setEmailTouched] = useState(false);

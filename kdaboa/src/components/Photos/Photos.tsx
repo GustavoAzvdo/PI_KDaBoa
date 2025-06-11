@@ -1,4 +1,4 @@
-import { Box, Button, Container, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {  Container,  useMediaQuery, useTheme } from '@mui/material';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { images } from '../Photos/Gallery/Gallery';

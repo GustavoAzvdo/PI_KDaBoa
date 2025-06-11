@@ -1,12 +1,11 @@
 import { Box, Button, Container, Typography } from "@mui/material"
 import logo from '../../assets/logo.png'
-import { useNavigate } from "react-router-dom"
 import { useLocation } from 'react-router-dom'
 import './SendEmail.css'
 import { useEffect } from "react"
 const SendEmail = () => {
 
-    const navigate = useNavigate();
+    
     const location = useLocation();
     const email = location.state?.email || '';
 

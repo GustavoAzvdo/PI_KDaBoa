@@ -3,7 +3,7 @@ import { EnderecoProvider } from './context/EnderecoContext'
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './routes/AppRoutes'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { colors } from '@mui/material';
+
 
 const theme = createTheme({
   components: {

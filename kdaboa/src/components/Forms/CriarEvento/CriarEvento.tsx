@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextareaAutosize, TextField } from '@mui/material'
+import { Autocomplete, Box, Button, Checkbox, FormControl, FormControlLabel,  Grid, IconButton, InputAdornment, Radio, RadioGroup,  TextField } from '@mui/material'
 import * as React from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { CloudUpload, Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, LibraryAdd, Event, ConfirmationNumber, Description, AttachFile } from '@mui/icons-material';
+import {  Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon,  ConfirmationNumber, Description, AttachFile } from '@mui/icons-material';
 import { styled } from '@mui/material/styles'
 import { dados } from '../../../categorys/dados';
 import { useState, useEffect } from 'react';
@@ -32,18 +32,18 @@ interface CategoryProps {
 }
 
 const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [, setSelectedCategories] = useState<string[]>([]);
     const [enderecoModo, setEnderecoModo] = useState<'manter' | 'alterar'>('manter');
     const [fileName, setFileName] = React.useState<string>('');
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const [end, setEnd] = useState<EnderecoData[]>([]);
+    const [, setEnd] = useState<EnderecoData[]>([]);
     const [selectedEndereco, setSelectedEndereco] = useState<EnderecoData | null>(null);
     const { enderecos, favorito } = useEnderecoContext();
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
         setEnd((prev) => [...prev, novoEndereco]);
     }
 
-    const handleSelectEndereco = (event: any, value: EnderecoData | null) => {
+    const handleSelectEndereco = (_event: any, value: EnderecoData | null) => {
         setSelectedEndereco(value);
     }
 

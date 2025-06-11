@@ -155,7 +155,7 @@ interface PasswordProps {
 //     );
 // };
 
-const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onPasswordChange, reset, isLoading }) => {
+const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onPasswordChange,  isLoading }) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [password, setPassword] = useState<string>('');

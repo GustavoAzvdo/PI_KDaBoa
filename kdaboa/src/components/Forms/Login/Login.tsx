@@ -1,11 +1,10 @@
 import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert } from '@mui/material'
-import { PersonOutlined, HttpsOutlined, EmailOutlined, HouseOutlined } from '@mui/icons-material';
+import { HttpsOutlined, EmailOutlined, HouseOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api'
 import logo from '../../../assets/logo.png'
 import './Login.css'
-import Maps from '../../Maps/Maps';
 const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();

@@ -14,8 +14,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
 
 
-import { useLocation, Link as RouterLink } from 'react-router-dom'
-import { useEffect, useState } from 'react';
+import {  Link as RouterLink } from 'react-router-dom'
+import { useEffect } from 'react';
 import { useSearch } from '../../context/SearchContext';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br'

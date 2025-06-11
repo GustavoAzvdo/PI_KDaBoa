@@ -3,7 +3,7 @@ import 'swiper/swiper-bundle.css';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
 
 import CardEventHome from "../CardEventHome/CardEventHome"
-import CardsBD from '../CardEventHome/CardsBD.ts'
+
 import CardProps from '../CardEventHome/props/CardProps.ts'
 
 import Cards from '../../DB/CardsBD.json';

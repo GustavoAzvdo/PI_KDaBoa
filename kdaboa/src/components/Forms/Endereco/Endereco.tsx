@@ -1,6 +1,6 @@
 import { Star, StarBorder, Fence, Flag, LocationCity, MapsHomeWork, Numbers, Place, Signpost } from '@mui/icons-material';
-import { Alert, Box, Button, Divider, Grid, IconButton, InputAdornment, Paper, TextField, Typography } from '@mui/material';
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState } from 'react';
+import {  Box, Button,  Grid, IconButton, InputAdornment, Paper, TextField, Typography } from '@mui/material';
+import {  useState } from 'react';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import './Endereco.css';
 import { useEffect } from 'react';
@@ -28,7 +28,7 @@ export interface EnderecoData {
 }
 
 
-const Endereco = ({ enderecoSelecionado, onAddEndereco, buttonLabel = "Salvar endereço", showButton = true, disabledComponents = true }: EnderecoProps) => {
+const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents = true }: EnderecoProps) => {
 
     const [cep, setCep] = useState<string>('');
     const [logradouro, setLogradouro] = useState<string>('');
@@ -39,7 +39,7 @@ const Endereco = ({ enderecoSelecionado, onAddEndereco, buttonLabel = "Salvar en
     const [numero, setNumero] = useState<string | number>('');
     const [cepError, setCepError] = useState<boolean>(false);
     const [cepHelper, setCepHelper] = useState<string>('');
-    const [disabled, setDisabled] = useState<boolean>(false);
+    const [, setDisabled] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>('');

@@ -3,14 +3,14 @@ import logo from '../../../assets/logo.png'
 import api from '../../../api/api'
 import Password from '../../Password/Password'
 import './AlterarSenha.css'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 const AlterarSenha: React.FC = () => {
-    const [searchParams] = useSearchParams();
+    const [] = useSearchParams();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [novaSenha, setNovaSenha] = useState<string>('');
-    const [confirmaSenha, setConfirmaSenha] = useState<string>('');
+    const [, setConfirmaSenha] = useState<string>('');
     const [resetPasswordFields, setResetPasswordFields] = useState<boolean>(false);
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>('');
@@ -30,7 +30,6 @@ const AlterarSenha: React.FC = () => {
         e.preventDefault();
         setIsLoading(true);
 
-        const token = document.cookie.split('; ').find(row => row.startsWith('x-csrf-token='))?.split('=')[1]; 
 
         try {
             await api.put(

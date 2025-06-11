@@ -1,6 +1,6 @@
 import './RecuperarSenha.css'
 import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, CircularProgress } from '@mui/material'
-import { EmailOutlined, PersonOutlined } from '@mui/icons-material';
+import { EmailOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 import logo from '../../../assets/logo.png'

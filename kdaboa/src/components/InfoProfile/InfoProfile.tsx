@@ -1,6 +1,5 @@
 import { Avatar, Box, Button, Grid, Typography } from '@mui/material'
 import './InfoProfile.css'
-import cdg from '../../assets/cdg.jpg'
 import Address from '../Details/Address'
 import Contacts from '../Details/Contacts'
 import Photos from '../Photos/Photos'

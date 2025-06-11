@@ -4,7 +4,6 @@ import calendar from "../../assets/calendar.png"
 import Contacts from "../Details/Contacts"
 import Address from "../Details/Address"
 import { useLocation, useNavigate } from "react-router-dom"
-import Banner from "../Banner/Banner"
 import BannerEvent from "../BannerEvent/BannerEvent"
 import { Person } from "@mui/icons-material"
 

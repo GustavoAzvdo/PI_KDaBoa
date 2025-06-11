@@ -1,7 +1,6 @@
 import NavbarEvent from "../../components/NavbarEvent/NavbarEvent"
 import Title from "../../components/Title/Title"
 import ticket from "../../assets/ticket.png"
-import BannerEvent from "../../components/BannerEvent/BannerEvent"
 import InfoEvent from "../../components/InfoEvent/InfoEvent"
 import Footer from "../../components/Footer/Footer"
 import { useEffect } from "react"

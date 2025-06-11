@@ -1,7 +1,6 @@
-import React from 'react'
-import CardsBD from '../CardEventHome/CardsBD'
+
 import CardEventHome from '../CardEventHome/CardEventHome'
-import { Box, Container } from '@mui/material'
+import { Box } from '@mui/material'
 import Cards from '../../DB/CardsBD.json'
 
 import {useLocation} from 'react-router-dom'

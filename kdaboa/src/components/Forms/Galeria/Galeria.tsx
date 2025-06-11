@@ -1,4 +1,4 @@
-import { AttachFile, Close, Cloud, CloudUpload, Delete } from '@mui/icons-material';
+import { AttachFile, Close, CloudUpload, Delete } from '@mui/icons-material';
 import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import React from 'react'

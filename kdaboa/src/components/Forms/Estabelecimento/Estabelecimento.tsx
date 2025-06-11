@@ -80,15 +80,6 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     setDisabled(true);
     try {
       console.log(nome, descricao, CNPJ, selectedCategories);
-      const response = await api.post('/gerente/estabelcimento', {
-        nome: nome,
-        descricao: descricao,
-        cnpj: CNPJ,
-        categoria: selectedCategories,
-
-      }, {
-        withCredentials: true
-      });
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Estabelecimento cadastrado com sucesso!', severity: 'success' });
       setEditMode(false);
       setFirstRegister(false);

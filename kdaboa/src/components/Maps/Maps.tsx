@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Modal, Box } from '@mui/material';
+import  { useState } from 'react';
+import {  Modal, Box } from '@mui/material';
 
 interface MapsProps {
     address: string;
@@ -7,7 +7,7 @@ interface MapsProps {
 }
 
 
-const Maps = ({ address, onClose }: MapsProps) => {
+const Maps = ({ address }: MapsProps) => {
     const [open, setOpen] = useState(false);
     return (
         <>

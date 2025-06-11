@@ -8,7 +8,7 @@ import { VisibilityOutlined } from '@mui/icons-material';
 import "./CardEventHome.css"
 import {useNavigate} from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
-import CardsBD from '../../DB/CardsBD.json'
+
 
 import CardProps from './props/CardProps';
 
