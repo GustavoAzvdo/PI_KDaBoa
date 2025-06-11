@@ -1,5 +1,5 @@
 // src/routes/AppRoutes.tsx
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Login from '../components/Forms/Login/Login'
 import Signin from '../components/Forms/Signin/Signin'
 import RecuperarSenha from '../components/Forms/RecuperarSenha/RecuperarSenha'
