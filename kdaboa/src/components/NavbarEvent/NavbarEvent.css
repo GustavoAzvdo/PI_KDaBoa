@@ -42,3 +42,14 @@
     padding: 2px;
     font-family: var(--fredoka);
 }
+
+.btn-hamburguer{
+    font-size: larger !important;
+    color: var(--roxoNav) !important;
+}
+
+.btn-hamburguer .menu-icon{
+    font-size: larger !important;
+    display: flex;
+    align-items: center !important;
+}
