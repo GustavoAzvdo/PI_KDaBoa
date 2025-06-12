@@ -13,17 +13,20 @@ const ViewEvent = () => {
                         <Typography>
                             KDABOA
                         </Typography>
-
-
-
                     </Link>
                     <Link href="/home" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', pl: 3 }}>
                         <Typography sx={{ fontWeight: '500 !important' }}>
                             Home
                         </Typography>
                     </Link>
+
                 </Box>
-                <Box className="right">
+                <Box className="right" sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Link href="/search" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', pl: 3 , pr: 3}}>
+                        <Typography sx={{ fontFamily: 'var(--fredoka)',fontWeight: '500 !important', fontSize: '23px' }}>
+                            Pesquisar outros eventos
+                        </Typography>
+                    </Link>
                     <Button variant="contained" endIcon={<ShareOutlined />} size="large" className="btn-share">
                         <Typography>
                             Compartilhar
