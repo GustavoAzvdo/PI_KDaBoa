@@ -14,14 +14,14 @@ import ViewEvent from '../pages/ViewEvent/ViewEvent'
 const AppRoutes = () => (
 
   <Routes>
-    <Route path="/" element={<Login />} />
+    <Route path="/login" element={<Login />} />
     <Route path="/signin" element={<Signin />} />
     <Route path="/recuperar-senha" element={<RecuperarSenha />} />
     <Route path="/alterar-senha" element={<AlterarSenha />} />
     <Route path="/email-enviado" element={<SendEmail />} />
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="*" element={<Navigate to="/" />} />
-    <Route path="/home" element={<Home />} />
+    <Route path="/" element={<Home />} />
     <Route path="/search" element={<SearchEvent />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/view-event" element={<ViewEvent />} /> 

@@ -122,6 +122,9 @@
   padding-bottom: 0 !important; /* Remove o padding inferior */
 }
 
+.css-1jpopwz-MuiPickersSectionList-sectionContent-MuiPickersInputBase-sectionContent{
+  font-family: var(--notosans) !important;
+}
 
 
 

@@ -23,26 +23,26 @@ const Navbar = () => {
         <AppBar position="static" className='navbar-home' elevation={0}>
           <Toolbar className='toolbar-home'>
             <Box className='btns-left-home' sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Link href='/home' sx={{ pl: 0, display: 'flex', alignItems: 'center' }}>
+              <Link href='/' sx={{ pl: 0, display: 'flex', alignItems: 'center' }}>
                 <img src={logo} alt="" className='logo-home' />
               </Link>
               <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-                <Button variant='text' color='inherit' size='large' endIcon={<Home />}>
-                  <Link href='/home' sx={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link href='/' sx={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Button variant='text' color='inherit' size='large' endIcon={<Home />}>
                     <Typography>Home</Typography>
-                  </Link>
-                </Button>
-                <Button variant='text' color='inherit' size='large' endIcon={<Search />}>
-                  <Link href='/search' sx={{ textDecoration: 'none', color: 'inherit' }}>
+                  </Button>
+                </Link>
+                <Link href='/search' sx={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Button variant='text' color='inherit' size='large' endIcon={<Search />}>
                     <Typography>Encontrar eventos</Typography>
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               </Box>
             </Box>
 
             {/* Botões normais no desktop */}
             <Box className='btns-right-home' sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-              <Button variant='contained' color='secondary' href='/' size='large' className='btnPublicar' endIcon={<Person />}>
+              <Button variant='contained' color='secondary' href='/login' size='large' className='btnPublicar' endIcon={<Person />}>
                 <Typography>Entrar</Typography>
               </Button>
             </Box>

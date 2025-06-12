@@ -14,10 +14,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import './Search.css'
 
 
-import {  Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import { useEffect } from 'react';
 import { useSearch } from '../../context/SearchContext';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/pt-br'
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
@@ -58,8 +58,8 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
     }
   };
 
-  const handleDateChange = (newValue: any) => {
-    const formattedDate = newValue ? dayjs(newValue).format('DD/MM/YYYY') : '';
+  const handleDateChange = (newValue: Dayjs | null) => {
+    const formattedDate = newValue && newValue.isValid() ? newValue.format('DD/MM/YYYY') : '';
     setDate(formattedDate);
     if (onDateChange) {
       onDateChange(formattedDate);
@@ -67,7 +67,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
   };
   useEffect(() => {
     handleCategoryChange(null, categories)
-    handleDateChange(date)
+    handleDateChange(date ? dayjs(date, 'DD/MM/YYYY') : null)
     handleSearchTextChange(searchText)
   }, [])
 
@@ -93,6 +93,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
                   endAdornment: showScreen ? (
                     <InputAdornment position="end" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Link
+                    
                         component={RouterLink}
                         to="/search"
                         state={{
@@ -100,7 +101,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
                           categories: categories,
                           date: date,
                         }}
-                        sx={{ padding: 0, margin: 0 }}
+                        sx={{ padding: 0, margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                       >
                         <SearchOutlined cursor='pointer'
                           className='icons'
@@ -204,13 +205,14 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
                   label="Data do evento"
                   format="DD/MM/YYYY"
                   sx={{ pb: 0 }}
-                  value={date ? dayjs(date, 'DD/MM/YYYY') : null}
+                  value={date && dayjs(date, 'DD/MM/YYYY').isValid() ? dayjs(date, 'DD/MM/YYYY') : null}
                   onChange={handleDateChange}
 
                   slotProps={{
                     textField: {
                       fullWidth: true,
                       sx: {
+                        fontFamily: "'Noto Sans', sans-serif !important",
                         '& .MuiOutlinedInput-root': {
                           '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
                             borderColor: '#6C15D5 !impotant', // Define a borda roxa
