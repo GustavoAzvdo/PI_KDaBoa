@@ -87,7 +87,7 @@ const Navbar = () => {
               </Typography>
             </ListItem>
 
-            <ListItem component={Button} href={'/'} onClick={() => setOpen(false)}
+            <ListItem component={Button} href={'/login'} onClick={() => setOpen(false)}
               sx={{
                 transition: 'background 0.2s',
                 '&:hover': {
