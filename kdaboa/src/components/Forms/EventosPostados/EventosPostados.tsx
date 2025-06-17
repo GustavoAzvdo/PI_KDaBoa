@@ -1,8 +1,8 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, IconButton, Modal, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { useEventos } from '../../../context/EventoContext';
-import { useState } from 'react';
+
 import dayjs from 'dayjs';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+
 
 
 interface EventosPostadosProps {
@@ -11,7 +11,6 @@ interface EventosPostadosProps {
 
 const EventosPostados = ({ router }: EventosPostadosProps) => {
     const { eventos, removeEvento, setEventoEdicao } = useEventos();
-    const [openModalId, setOpenModalId] = useState<string | null>(null);
 
     return (
         <Grid container spacing={2}>
