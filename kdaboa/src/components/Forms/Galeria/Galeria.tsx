@@ -121,18 +121,12 @@ const Galeria = () => {
                         sx={{
                             backgroundColor: 'var(--roxo)',
                             px: 6,
-                            '&.Mui-disabled': {
-                                backgroundColor: '#e0e0e0',
-                                color: '#222',
-                                '& .MuiTypography-root': {
-                                    color: '#222',
-                                },
-                            },
+                           
                         }}
                         onClick={handleAddPhoto}
                         disabled={!fileObj || photos.length >= 4}
                     >
-                        <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important', color: '#fff' }}>
+                        <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
                             Adicionar foto
                         </Typography>
                     </Button>

@@ -398,9 +398,9 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                                                 setSnackbarSeverity('warning');
                                                 setSnackbarOpen(true);
                                             }}
-                                            
+                                            sx={{ color: 'var(--roxo)' }}
                                         >
-                                            {favorito === idx ? <Star sx={{ color: 'var(--roxo)', '&:hover': { color: '#fff' } }} /> : <StarBorder sx={{ color: 'var(--roxo)', '&:hover': { color: '#fff' } }} />}
+                                            {favorito === idx ? <Star /> : <StarBorder />}
                                         </IconButton>
                                     </Box>
                                     <Typography variant="subtitle1"><b>CEP:</b> {e.cep}</Typography>

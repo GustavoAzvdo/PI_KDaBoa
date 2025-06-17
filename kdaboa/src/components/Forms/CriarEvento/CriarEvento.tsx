@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Checkbox, FormControl, FormControlLabel,  Grid, IconButton, InputAdornment, Radio, RadioGroup,  TextField } from '@mui/material'
+import { Autocomplete, Box, Button, Checkbox, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
 import * as React from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import {  Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon,  ConfirmationNumber, Description, AttachFile } from '@mui/icons-material';
+import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, Description, AttachFile } from '@mui/icons-material';
 import { styled } from '@mui/material/styles'
 import { dados } from '../../../categorys/dados';
 import { useState, useEffect } from 'react';
@@ -17,6 +17,10 @@ import './CriarEvento.css'
 import Endereco from '../Endereco/Endereco';
 import { EnderecoData } from '../Endereco/Endereco';
 import { useEnderecoContext } from '../../../context/EnderecoContext';
+import { useEventos } from '../../../context/EventoContext';
+import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
+
+
 dayjs.locale('pt-br');
 dayjs.extend(utc);
 const MAX_CHARS = 1000;
@@ -28,17 +32,39 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 interface CategoryProps {
     onCategoryChange?: (categories: string[]) => void;
-
+    setEventoTitle: (title: string) => void;
 }
 
-const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
-    const [, setSelectedCategories] = useState<string[]>([]);
+const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
+    // valores do form 
+    const [nome, setNome] = useState<string>('');
+    const [descricao, setDescricao] = React.useState<string>('');
+    const [ctg, setCtg] = useState<string[]>([]);
+    const [dataInicio, setDataInicio] = useState<Dayjs | null>(dayjs().startOf('day'));
+    const [dataFim, setDataFim] = useState<Dayjs | null>(dayjs().startOf('day'));
+    const [fotoUrl, setFotoUrl] = useState<string>('');
+    //
+
+    //
+    const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+    const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
+
+    //
+    
     const [enderecoModo, setEnderecoModo] = useState<'manter' | 'alterar'>('manter');
     const [fileName, setFileName] = React.useState<string>('');
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [, setEnd] = useState<EnderecoData[]>([]);
     const [selectedEndereco, setSelectedEndereco] = useState<EnderecoData | null>(null);
     const { enderecos, favorito } = useEnderecoContext();
+    const { addEvento, updateEvento, eventoEdicao, setEventoEdicao } = useEventos();
+    const [isEdit, setIsEdit] = useState(false);
+
+    const enderecoParaExibir = enderecoModo === 'manter' && favorito !== null
+        ? enderecos[favorito]
+        : selectedEndereco;
+
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
         setEnd((prev) => [...prev, novoEndereco]);
     }
@@ -50,9 +76,13 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        console.log(event.target.files);
         if (file) {
             setFileName(file.name);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFotoUrl(reader.result as string); // salva a url base64
+            };
+            reader.readAsDataURL(file);
         }
     }
 
@@ -67,7 +97,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
         whiteSpace: 'nowrap',
         width: 1,
     });
-    const [descricao, setDescricao] = React.useState<string>('');
+
 
     const handleDescricaoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (event.target.value.length <= MAX_CHARS) {
@@ -75,14 +105,14 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
         }
     };
 
-    const [value, setValue] = React.useState<Dayjs | null>(
-        dayjs.utc('2022-04-17T15:30'),
-    );
+
 
     const handleCategoryChange = (_event: any, value: any) => {
         const categories = value.map((item: any) => item.title);
-        setSelectedCategories(categories);
+        setCtg(categories);
+
         if (onCategoryChange) {
+
             onCategoryChange(categories);
         }
     };
@@ -93,11 +123,82 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
             setSelectedEndereco(enderecos[favorito]);
         }
     }, [enderecoModo, favorito, enderecos]);
+
+    useEffect(() => {
+        if (eventoEdicao) {
+            setNome(eventoEdicao.nome || '');
+            setDescricao(eventoEdicao.descricao || '');
+            setCtg(eventoEdicao.categorias || []);
+            setDataInicio(eventoEdicao.dataInicio ? dayjs(eventoEdicao.dataInicio) : null);
+            setDataFim(eventoEdicao.dataFim ? dayjs(eventoEdicao.dataFim) : null);
+            setFotoUrl(eventoEdicao.foto || '');
+            setSelectedEndereco(eventoEdicao.endereco || null); // <-- importante!
+
+            setIsEdit(true);
+        } else {
+            setNome('');
+            setDescricao('');
+            setCtg([]);
+            setDataInicio(dayjs().startOf('day'));
+            setDataFim(dayjs().startOf('day'));
+            setFotoUrl('');
+            setSelectedEndereco(null);
+            setIsEdit(false);
+        }
+    }, [eventoEdicao]);
+
+    useEffect(() => {
+        if (isEdit) {
+            setEventoTitle('Editar Evento');
+        } else {
+            setEventoTitle('Criar Evento');
+        }
+    }, [isEdit, setEventoTitle]);
+
+    const handleSubmit = () => {
+        const evento = {
+            id: isEdit && eventoEdicao ? eventoEdicao.id : Date.now(),
+            nome: nome,
+            descricao: descricao,
+            dataInicio: dataInicio?.toISOString() || '',
+            dataFim: dataFim?.toISOString() || '',
+            categorias: ctg,
+            foto: fotoUrl,
+            endereco: selectedEndereco,
+            // ...outros campos...
+        };
+        if (isEdit) {
+            updateEvento(evento);
+            setIsEdit(false);
+            setEventoEdicao(null);
+            setSnackbarMessage('Evento editado com sucesso!');
+        } else {
+            addEvento(evento);
+            setSnackbarMessage('Evento criado com sucesso!');
+
+        }
+
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+    };
+
+    const allFieldsFilled = () => {
+        return (
+            nome.trim() !== '' &&
+            descricao.trim() !== '' &&
+            dataInicio !== null &&
+            dataFim !== null &&
+            enderecoParaExibir !== null &&  // Verifica se o endereço está selecionado
+            ctg.length > 0                 // Verifica se há pelo menos 1 categoria
+        );
+    };
     return (
         <>
             <Grid container spacing={2} sx={{ padding: 2 }}>
                 <Grid size={{ xs: 12, sm: 6, md: 6 }}>
                     <TextField
+                        value={nome}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNome(e.target.value)}
                         sx={{
                             fontFamily: 'var(--notosans) !important',
                             fontSize: 18,
@@ -144,8 +245,8 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                     >
                         <Stack spacing={2}>
                             <DateTimePicker
-                                value={value}
-                                onChange={setValue}
+                                value={dataInicio}
+                                onChange={(e: any) => setDataInicio(e)}
                                 label="Data/hora inicio"
                                 slotProps={{
                                     textField: {
@@ -169,7 +270,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
 
                     >
                         <Stack spacing={2}>
-                            <DateTimePicker value={value} onChange={setValue} label="Data/hora fim"
+                            <DateTimePicker value={dataFim} onChange={(e: any) => setDataFim(e)} label="Data/hora fim"
                                 sx={{
                                     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                                         borderColor: 'var(--roxo) !important',
@@ -182,6 +283,14 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <TextField
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderStyle: 'dashed',
+                                    borderWidth: 2,
+                                },
+                            },
+                        }}
                         disabled
                         label="Arquivo selecionado"
                         value={fileName}
@@ -237,6 +346,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                 <Grid size={{ xs: 10, sm: 6, md: 6 }} sx={{ marginTop: 2 }}>
                     <Box>
                         <Autocomplete
+                            value={dados.filter((option) => ctg.includes(option.title))}
                             multiple
                             id="checkboxes-tags-demo"
                             options={dados}
@@ -329,7 +439,7 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                                     onChange={e => setEnderecoModo(e.target.value as 'manter' | 'alterar')}
 
                                 >
-                                    <FormControlLabel value="manter" control={<Radio />} label="Manter endereço" />
+                                    <FormControlLabel value="manter" control={<Radio />} label="Endereço favorito" />
                                     <FormControlLabel value="alterar" control={<Radio />} label="Alterar endereço" />
                                     {enderecoModo === 'alterar' && (
                                         <Autocomplete
@@ -363,21 +473,36 @@ const CriarEvento = ({ onCategoryChange }: CategoryProps) => {
                         </Box>
                     </Box>
                     <Box>
-                        <Endereco buttonLabel='Criar evento' showButton={false} disabledComponents={true} enderecoSelecionado={selectedEndereco}
+                        <Endereco buttonLabel='Criar evento'
+                            showButton={false}
+                            disabledComponents={true}
+                            enderecoSelecionado={enderecoParaExibir}
                             onAddEndereco={handleAddEndereco} />
                     </Box>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', pt: 1 }}>
-                        <Button variant='contained' sx={{
-                            backgroundColor: 'var(--roxo)'
-                        }} onClick={() => alert('Evento criado com sucesso')}>
+                        <Button
+                            disabled={!allFieldsFilled()}
+                            sx={{
+                                backgroundColor: 'var(--roxo)'
+                            }}
+                            variant='contained'
+                            onClick={handleSubmit}>
                             <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
-                                Criar evento
+                                {isEdit ? 'Editar evento' : 'Criar evento'}
                             </Typography>
                         </Button>
+
                     </Box>
                 </Grid>
+                <CustomSnackbar
+                    open={snackbarOpen}
+                    message={snackbarMessage}
+                    severity={snackbarSeverity}
+                    onClose={() => setSnackbarOpen(false)}
+                    autoHideDuration={6000}
+                />
             </Grid>
         </>
     )

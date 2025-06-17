@@ -12,9 +12,9 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          '&.Mui-disabled': {
-            backgroundColor: '#e0e0e0 !important',
-            color: '#9e9e9e !important',
+          '.Mui-disabled .MuiTypography-root': {
+            backgroundColor: 'red !important',
+            color: 'white !important',
             opacity: 1,
           }
         }
@@ -23,13 +23,17 @@ const theme = createTheme({
   }
 })
 createRoot(document.getElementById('root')!).render(
+
   <ThemeProvider theme={theme}>
     <StrictMode>
       <SearchProvider>
         <BrowserRouter>
+
           <App />
+
         </BrowserRouter>
       </SearchProvider>
     </StrictMode>
   </ThemeProvider>
+
 )

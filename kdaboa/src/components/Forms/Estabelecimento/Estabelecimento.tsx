@@ -273,18 +273,18 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>
             {firstRegister ? (
               <Button
+              variant='contained'
                 size='large'
                 disabled={disabled || !allFieldsFilled}
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: 'var(--roxo)',
-
+                 
                 }}
                 onClick={handleOpenCnpjModal}
               >
-                <Typography sx={{ color: 'white', fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px', fontWeight: 500 }}>
+                <Typography sx={{  fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px', fontWeight: 500 }}>
                   Cadastrar Informações
                 </Typography>
               </Button>
@@ -297,11 +297,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: 'var(--roxo)',
-                  '&.Mui-disabled': {
-                    backgroundColor: '#9c9c9c !important',
-                    color: '#bdbdbd !important',
-                    opacity: 1,
-                  }
+                 
                 }}
                 onClick={handleEditOrSave}
               >

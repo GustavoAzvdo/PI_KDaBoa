@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import { createTheme, styled } from '@mui/material/styles';
 import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
@@ -13,11 +14,56 @@ import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 import Contatos from '../Forms/Contatos/Contatos';
 import Galeria from '../Forms/Galeria/Galeria';
 import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
+import EventosPostados from '../Forms/EventosPostados/EventosPostados';
 import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
 
 
+
+
+const demoTheme = createTheme({
+  colorSchemes: { light: true, dark: true },
+  cssVariables: {
+    colorSchemeSelector: 'class',
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 600,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
+
+function useDemoRouter(initialPath: string): Router {
+  const [pathname, setPathname] = React.useState(initialPath);
+
+  const router = React.useMemo(() => {
+    return {
+      pathname,
+      searchParams: new URLSearchParams(),
+      navigate: (path: string | URL) => {
+        setPathname(String(path));
+      },
+    };
+  }, [pathname]);
+
+  return router;
+}
+
+const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
+  backgroundColor: theme.palette.action.hover,
+  borderRadius: theme.shape.borderRadius,
+  height,
+  content: '" "',
+}));
+
+
+export default function DashboardLayoutBasic(props: any) {
+const [eventoTitle, setEventoTitle] = useState<string>('Criar evento');
 
 const NAVIGATION: Navigation = [
   {
@@ -76,7 +122,7 @@ const NAVIGATION: Navigation = [
     children: [
       {
         segment: 'criar_evento',
-        title: 'Criar Evento',
+        title: eventoTitle,
         icon: <EditCalendar />,
       },
       {
@@ -97,48 +143,7 @@ const NAVIGATION: Navigation = [
     icon: <Settings />,
   },
 ];
-
-const demoTheme = createTheme({
-  colorSchemes: { light: true, dark: true },
-  cssVariables: {
-    colorSchemeSelector: 'class',
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-function useDemoRouter(initialPath: string): Router {
-  const [pathname, setPathname] = React.useState(initialPath);
-
-  const router = React.useMemo(() => {
-    return {
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path: string | URL) => {
-        setPathname(String(path));
-      },
-    };
-  }, [pathname]);
-
-  return router;
-}
-
-const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: '" "',
-}));
-
-
-export default function DashboardLayoutBasic(props: any) {
+  
   const { window } = props;
 
   const router = useDemoRouter('/dashboard');
@@ -194,7 +199,7 @@ React.useEffect(() => {
     };
   }, [router]);
 
-  function renderContent(pathname: string) {
+  function renderContent(pathname: string, router: Router) {
     switch (pathname) {
       case '/dashboard':
         return <Skeleton height={400} />;
@@ -222,11 +227,12 @@ React.useEffect(() => {
         return <Skeleton height={400} />;
       case '/eventos/criar_evento':
         return (
-          <CriarEvento/>
-
+          <CriarEvento setEventoTitle={setEventoTitle}/>
         );
       case '/eventos/postados':
-        return <Skeleton height={400} />;
+        return (
+          <EventosPostados router={router} />
+        );
       case '/eventos/em_analise':
         return <Skeleton height={400} />;
       case '/configuracoes':
@@ -255,7 +261,7 @@ React.useEffect(() => {
     >
       <DashboardLayout>
         <PageContainer>
-          {renderContent(router.pathname)}
+          {renderContent(router.pathname, router)}
         </PageContainer>
       </DashboardLayout>
     </AppProvider>

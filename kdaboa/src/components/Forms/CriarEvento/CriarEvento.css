@@ -9,3 +9,7 @@
 .css-1hz47ke-MuiFormControl-root-MuiPickersTextField-root {
     border-color: var(--roxoForteDashboard) !important;
 }
+
+.css-1u9omgy-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+    background-color: var(--roxoForteDashboard) !important;
+}

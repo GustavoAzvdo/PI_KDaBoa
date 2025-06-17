@@ -56,7 +56,7 @@ const Signin = () => {
 
             if (response.status === 201) {
 
-                navigate('/', {
+                navigate('/login', {
                     state: {
                         snackbars: [
                             { message: 'Conta criada com sucesso!', severity: 'success' },
