@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://apikdaboa-production.up.railway.app',
+    baseURL: 'https://apikdaboa-production.up.railway.app',
 });
 
 
