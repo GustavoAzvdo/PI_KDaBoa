@@ -1,13 +1,13 @@
 import { Star, StarBorder, Fence, Flag, LocationCity, MapsHomeWork, Numbers, Place, Signpost } from '@mui/icons-material';
-import {  Box, Button,  Grid, IconButton, InputAdornment, Paper, TextField, Typography } from '@mui/material';
-import {  useState } from 'react';
+import { Box, Button, Grid, IconButton, InputAdornment, Paper, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import './Endereco.css';
 import { useEffect } from 'react';
 import { useEnderecoContext } from '../../../context/EnderecoContext';
 import { Delete } from '@mui/icons-material';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
-
+import api from '../../../api/api'
 
 interface EnderecoProps {
     buttonLabel?: string;
@@ -18,6 +18,7 @@ interface EnderecoProps {
 }
 
 export interface EnderecoData {
+    id: boolean
     cep: string;
     logradouro: string;
     bairro: string;
@@ -29,6 +30,9 @@ export interface EnderecoData {
 
 
 const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents = true }: EnderecoProps) => {
+
+    const [] = useState<EnderecoData[]>([]);
+    const [, setLoadingEnderecos] = useState(true);
 
     const [cep, setCep] = useState<string>('');
     const [logradouro, setLogradouro] = useState<string>('');
@@ -44,7 +48,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
-    const { enderecos, addEndereco, updateEndereco, removeEndereco, favorito, favoritarEndereco } = useEnderecoContext();
+    const { setEnderecosDireto, enderecos, addEndereco, updateEndereco, removeEndereco, favorito, favoritarEndereco } = useEnderecoContext();
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -142,9 +146,28 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     };
 
     // Adicionar ou atualizar endereço
-    const handleButtonClick = () => {
+    const handleButtonClick = async () => {
 
-        const novoEndereco: EnderecoData = { cep, logradouro, bairro, cidade, uf, complemento, numero };
+        try {
+            const response = await api.post('/gerente/address', {
+                cep: cep,
+                logradouro: logradouro,
+                numero: numero,
+                bairro: bairro,
+                complemento: complemento,
+                cidade: cidade,
+                estado: uf,
+            }, { withCredentials: true })
+            console.log(response)
+
+        } catch (error) {
+            console.log(error)
+        }
+
+        const novoEndereco: EnderecoData = {
+            id: false, cep, logradouro, bairro, cidade, uf, complemento, numero,
+
+        };
 
 
         const exists = enderecos.some((e: EnderecoData, idx: number) =>
@@ -207,6 +230,21 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         }
     }, [enderecoSelecionado]);
 
+    useEffect(() => {
+        async function carregarEnderecos() {
+            try {
+                const response = await api.get<EnderecoData[]>('/gerente/address', { withCredentials: true });
+                setEnderecosDireto(response.data);
+            } catch (error) {
+                console.error('Erro ao carregar endereços:', error);
+            } finally {
+                setLoadingEnderecos(false);
+            }
+        }
+
+        carregarEnderecos();
+    }, []);
+
     return (
         <>
             <Grid container spacing={2}
@@ -222,7 +260,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                     <Box>
                         <TextField
                             fullWidth
-                           
+
                             value={cep}
                             onBlur={handleCepBlur}
                             onChange={handleCepChange}
@@ -326,7 +364,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 <Grid size={{ xs: 12, sm: 6, md: 6 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
-                            
+
                             fullWidth
                             value={complemento}
                             onChange={(e) => setComplemento(e.target.value)}
@@ -347,7 +385,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 <Grid size={{ xs: 12, sm: 6, md: 2 }} sx={{ mt: 0 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
-                            
+
                             type="number"
                             fullWidth
                             value={numero}
@@ -448,6 +486,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
 
                 )
             }
+
             <Dialog
                 open={deleteModalOpen}
                 onClose={handleCancelDelete}
@@ -460,7 +499,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions sx={{ gap: 1 }}>
-                    <Button onClick={handleCancelDelete} sx={{ fontFamily: 'var(--notosans) !important' , fontSize: '16px'}}>
+                    <Button onClick={handleCancelDelete} sx={{ fontFamily: 'var(--notosans) !important', fontSize: '16px' }}>
                         Cancelar
                     </Button>
                     <Button onClick={handleConfirmDelete} color="error" variant="contained" sx={{ fontFamily: 'var(--notosans) !important', fontSize: '16px', backgroundColor: 'var(--roxo)' }}>

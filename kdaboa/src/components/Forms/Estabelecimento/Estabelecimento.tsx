@@ -6,16 +6,24 @@ import { dados } from '../../../categorys/dados';
 import api from '../../../api/api';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 
+
+
+
 const MAX_CHARS = 1000;
 interface CategoryProps {
   onCategoryChange?: (categories: string[]) => void;
 
+}
+interface PostEstablishmentResponse {
+  id: number;
+  
 }
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
+  const [estabelecimentoId, setEstabelecimentoId] = React.useState<number | null>(null)
   const [nome, setNome] = React.useState<string>('');
   const [descricao, setDescricao] = React.useState<string>('');
   const [CNPJ, setCNPJ] = React.useState<string>('');
@@ -79,7 +87,16 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
 
     setDisabled(true);
     try {
-      console.log(nome, descricao, CNPJ, selectedCategories);
+      const response = await api.post<PostEstablishmentResponse>('/gerente/establishment', {
+        nome : nome,
+        descricao : descricao,
+        cnpj: CNPJ,
+        categoria: selectedCategories,
+      }, { withCredentials: true });
+
+      setEstabelecimentoId(response.data.id)
+     
+
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Estabelecimento cadastrado com sucesso!', severity: 'success' });
       setEditMode(false);
       setFirstRegister(false);
@@ -103,22 +120,24 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       // Salvar alterações (exceto CNPJ)
       setDisabled(true);
       try {
-        await api.put('/gerente/estabelcimento', {
-          nome,
-          descricao,
-          cnpj: CNPJ,
+        await api.put('/gerente/establishment/', {
+          id : estabelecimentoId,
+          nome : nome,
+          descricao : descricao,
           categoria: selectedCategories,
         }, { withCredentials: true });
+
         setSnackbar({ autoHideDuration: 4000, open: true, message: 'Informações salvas com sucesso!', severity: 'success' });
         setEditMode(false);
       } catch (error) {
+        console.log(error);
         setSnackbar({ autoHideDuration: 4000, open: true, message: 'Erro ao salvar informações.', severity: 'warning' });
       } finally {
         setDisabled(false);
       }
     } else {
       setEditMode(true);
-      setSnackbar({ autoHideDuration: 4000, open: true, message: 'Edição habilitada!', severity: 'info' });
+      setSnackbar({ autoHideDuration: 4000, open: true, message: 'Edição habilitada!', severity: 'warning' });
     }
   };
   return (

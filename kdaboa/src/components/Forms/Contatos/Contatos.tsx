@@ -1,11 +1,27 @@
 import {  MailOutlineOutlined, PhoneOutlined } from '@mui/icons-material';
 import { Box, Button, Grid, InputAdornment, TextField, Typography } from '@mui/material'
 import React from 'react'
+import api from '../../../api/api';
+
 
 const Contatos = () => {
     const [telefone1, setTelefone1] = React.useState<string>('');
     const [telefone2, setTelefone2] = React.useState<string>('');
     const [email, setEmail] = React.useState<string>('');
+
+    const handlePost = () => {
+        api.post('/gerente/contact', {
+            tel_cel_1: telefone1,
+            tel_cel_2: telefone2,
+            email: email
+        }, {withCredentials: true})
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 
     return (
         <Grid container spacing={2} sx={{ padding: 2 }}>
@@ -63,7 +79,7 @@ const Contatos = () => {
             </Grid>
             <Grid size={{ xs: 12, md: 12 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant='contained' size='large' sx={{backgroundColor: 'var(--roxo)'}}>
+                    <Button variant='contained' size='large' sx={{backgroundColor: 'var(--roxo)'}} onClick={handlePost}>
                         <Typography sx={{fontFamily : 'Noto Sans, sans-serif !important', fontSize: '18px'}}>
                             Salvar Contato
                         </Typography>

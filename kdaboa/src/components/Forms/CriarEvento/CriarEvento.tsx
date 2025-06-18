@@ -51,7 +51,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
 
     //
-    
+
     const [enderecoModo, setEnderecoModo] = useState<'manter' | 'alterar'>('manter');
     const [fileName, setFileName] = React.useState<string>('');
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -192,6 +192,8 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             ctg.length > 0                 // Verifica se há pelo menos 1 categoria
         );
     };
+
+ 
     return (
         <>
             <Grid container spacing={2} sx={{ padding: 2 }}>
@@ -233,6 +235,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         }}
                     />
                 </Grid>
+                {/* datas */}
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <LocalizationProvider
                         dateAdapter={AdapterDayjs}
@@ -246,7 +249,13 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         <Stack spacing={2}>
                             <DateTimePicker
                                 value={dataInicio}
-                                onChange={(e: any) => setDataInicio(e)}
+                                onChange={(e: any) => {
+                                    setDataInicio(e);
+                                    // Se a data final for anterior à nova data de início
+                                    if (dataFim && e && e.isAfter(dataFim)) {
+                                        setDataFim(e);
+                                    }
+                                }}
                                 label="Data/hora inicio"
                                 slotProps={{
                                     textField: {
@@ -254,10 +263,10 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     }
                                 }}
                             />
-
                         </Stack>
                     </LocalizationProvider>
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <LocalizationProvider
                         dateAdapter={AdapterDayjs}
@@ -267,20 +276,32 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                             okButtonLabel: 'Confirmar',
                             cancelButtonLabel: 'Cancelar',
                         }}
-
                     >
                         <Stack spacing={2}>
-                            <DateTimePicker value={dataFim} onChange={(e: any) => setDataFim(e)} label="Data/hora fim"
+                            <DateTimePicker
+                                value={dataFim}
+                                onChange={(e: any) => {
+                                    // Bloqueia datas anteriores à data de início
+                                    if (dataInicio && e && e.isBefore(dataInicio)) {
+                                        setDataFim(dataInicio);
+                                    } else {
+                                        setDataFim(e);
+                                    }
+                                }}
+                                label="Data/hora fim"
                                 sx={{
                                     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                                         borderColor: 'var(--roxo) !important',
                                     }
                                 }}
                             />
-
                         </Stack>
                     </LocalizationProvider>
                 </Grid>
+                {/* datas */}
+
+
+
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <TextField
                         sx={{
@@ -311,6 +332,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         }}
                     />
                 </Grid>
+
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', pt: 1 }}>
                         <Button

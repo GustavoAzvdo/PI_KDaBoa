@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface EnderecoData {
+  id: boolean;
   cep: string;
   logradouro: string;
   bairro: string;
@@ -17,6 +18,7 @@ interface EnderecoContextType {
   removeEndereco: (index: number) => void;
   favorito: number | null;
   favoritarEndereco: (idx: number) => void
+  setEnderecosDireto: (enderecos: EnderecoData[]) => void
 }
 
 const EnderecoContext = createContext<EnderecoContextType | undefined>(undefined);
@@ -28,6 +30,10 @@ export const EnderecoProvider = ({ children }: { children: ReactNode }) => {
 
   const addEndereco = (endereco: EnderecoData) => {
     setEnderecos((prev) => [...prev, endereco]);
+  };
+
+  const setEnderecosDireto = (novos: EnderecoData[]) => {
+    setEnderecos(novos);
   };
 
   const favoritarEndereco = (idx: number) => {
@@ -46,12 +52,12 @@ export const EnderecoProvider = ({ children }: { children: ReactNode }) => {
     setEnderecos((prev) => prev.filter((_, i) => i !== index));
   };
 
-  return(
-    <EnderecoContext.Provider value={{ enderecos, addEndereco, updateEndereco, removeEndereco, favorito, favoritarEndereco }}>
+  return (
+    <EnderecoContext.Provider value={{ setEnderecosDireto,enderecos, addEndereco, updateEndereco, removeEndereco, favorito, favoritarEndereco }}>
       {children}
     </EnderecoContext.Provider>
   );
-};  
+};
 
 export const useEnderecoContext = () => {
   const context = useContext(EnderecoContext);
