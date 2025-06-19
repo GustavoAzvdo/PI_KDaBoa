@@ -1,12 +1,18 @@
 import { AttachFile, Close, CloudUpload, Delete } from '@mui/icons-material';
 import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import React from 'react'
+import api from '../../../api/api'
 
 const Galeria = () => {
     const [fileName, setFileName] = React.useState<string>('');
     const [fileObj, setFileObj] = React.useState<File | null>(null);
     const [photos, setPhotos] = React.useState<{ name: string; url: string }[]>([]);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarMessage, setSnackbarMessage] = React.useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = React.useState<'success' | 'warning'>('success');
+
     const inputRef = React.useRef<HTMLInputElement>(null);
 
 
@@ -21,8 +27,12 @@ const Galeria = () => {
 
     const handleAddPhoto = () => {
         if (fileObj && photos.length < 4) {
+        
             const url = URL.createObjectURL(fileObj);
             setPhotos([...photos, { name: fileObj.name, url }]);
+            setSnackbarMessage('Foto adicionada com sucesso!');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
             setFileName('');
             setFileObj(null);
             if (inputRef.current) {
@@ -34,7 +44,12 @@ const Galeria = () => {
     const handleRemovePhoto = (index: number) => {
         setPhotos((prev) => {
             URL.revokeObjectURL(prev[index].url);
+            URL.revokeObjectURL(prev[index].url);
+            setSnackbarMessage('Foto removida com sucesso!');
+            setSnackbarSeverity('warning');
+            setSnackbarOpen(true);
             return prev.filter((_, i) => i !== index);
+
         })
     }
     const VisuallyHiddenInput = styled('input')({
@@ -121,7 +136,7 @@ const Galeria = () => {
                         sx={{
                             backgroundColor: 'var(--roxo)',
                             px: 6,
-                           
+
                         }}
                         onClick={handleAddPhoto}
                         disabled={!fileObj || photos.length >= 4}
@@ -158,6 +173,12 @@ const Galeria = () => {
                     </Box>
                 </Grid>
             ))}
+            <CustomSnackbar
+                open={snackbarOpen}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+                onClose={() => setSnackbarOpen(false)}
+            />
         </Grid>
     )
 }

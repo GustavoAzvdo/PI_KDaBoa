@@ -16,7 +16,10 @@ interface CategoryProps {
 }
 interface PostEstablishmentResponse {
   id: number;
-  
+  nome: string;
+  descricao: string;
+  cnpj: string;
+  categoria: Array<object>;
 }
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
@@ -27,7 +30,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [nome, setNome] = React.useState<string>('');
   const [descricao, setDescricao] = React.useState<string>('');
   const [CNPJ, setCNPJ] = React.useState<string>('');
-  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<object[]>([]);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', autoHideDuration: 4000, severity: 'success' as 'success' | 'warning' | 'error' | 'info' });
   const [disabled, setDisabled] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(true);
@@ -35,7 +38,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [showCnpjModal, setShowCnpjModal] = useState<boolean>(false);
   const [modalCountdown, setModalCountdown] = useState<number>(5);
   const [modalButtonEnabled, setModalButtonEnabled] = useState<boolean>(false);
-
+  const [, setSelectedCategoryObjects] = useState<object[]>([])
 
 
   useEffect(() => {
@@ -75,6 +78,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const handleCategoryChange = (_event: any, value: any) => {
     const categories = value.map((item: any) => item.id);
     setSelectedCategories(categories);
+    setSelectedCategoryObjects(value); // os objetos completos
+    setSelectedCategories(value.map((item: any) => item.id));
     if (onCategoryChange) {
       onCategoryChange(categories);
 
@@ -88,14 +93,14 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     setDisabled(true);
     try {
       const response = await api.post<PostEstablishmentResponse>('/gerente/establishment', {
-        nome : nome,
-        descricao : descricao,
+        nome: nome,
+        descricao: descricao,
         cnpj: CNPJ,
         categoria: selectedCategories,
       }, { withCredentials: true });
 
       setEstabelecimentoId(response.data.id)
-     
+
 
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Estabelecimento cadastrado com sucesso!', severity: 'success' });
       setEditMode(false);
@@ -120,10 +125,10 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       // Salvar alterações (exceto CNPJ)
       setDisabled(true);
       try {
-        await api.put('/gerente/establishment/', {
-          id : estabelecimentoId,
-          nome : nome,
-          descricao : descricao,
+        await api.put('/gerente/establishment', {
+          id: estabelecimentoId,
+          nome: nome,
+          descricao: descricao,
           categoria: selectedCategories,
         }, { withCredentials: true });
 
@@ -140,6 +145,34 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Edição habilitada!', severity: 'warning' });
     }
   };
+  useEffect(() => {
+    const loadEstablishment = async () => {
+      try {
+        const response = await api.get<PostEstablishmentResponse>('/gerente/establishment', {
+          withCredentials: true,
+        });
+        console.log('Estabelecimento carregado:', response.data);
+
+        const { id, nome, descricao, cnpj, categoria } = response.data;
+
+        setEstabelecimentoId(id);
+        setNome(nome);
+        setDescricao(descricao);
+        setCNPJ(cnpj);
+        setSelectedCategories(categoria);
+    
+
+        setFirstRegister(false);
+        setEditMode(false);
+      } catch (error) {
+        console.error('Erro ao carregar estabelecimento:', error);
+      }
+    };
+
+    loadEstablishment();
+  }, []);
+
+
   return (
     <>
       <CustomSnackbar
@@ -155,12 +188,12 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2, minWidth: 320,
 
         }}>
-   
-            <Typography sx={{ fontFamily: 'var(--notosans) !important' }} variant="h6" gutterBottom>
-              Confirmar CNPJ:&nbsp; {CNPJ}
-            </Typography>
 
-          
+          <Typography sx={{ fontFamily: 'var(--notosans) !important' }} variant="h6" gutterBottom>
+            Confirmar CNPJ:&nbsp; {CNPJ}
+          </Typography>
+
+
           <Typography sx={{ mb: 2, fontFamily: 'var(--notosans) !important', fontSize: 18 }}>
             Tem certeza que deseja cadastrar este CNPJ? <br />
             <b> {<Warning sx={{ pt: 1, mt: 1, pr: 1 }} />}Você não poderá alterá-lo futuramente.</b>
@@ -238,7 +271,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         <Grid size={{ xs: 12, sm: 12, md: 6 }} >
           <Box>
             <Autocomplete
-
+             
               multiple
               id="checkboxes-tags-demo"
               options={dados}
@@ -282,7 +315,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                 )
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Categorias" />
+                <TextField {...params} label="Categorias"  
+                />
               )}
               disabled={!editMode || disabled}
             />
@@ -292,18 +326,18 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>
             {firstRegister ? (
               <Button
-              variant='contained'
+                variant='contained'
                 size='large'
                 disabled={disabled || !allFieldsFilled}
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                 
+
                 }}
                 onClick={handleOpenCnpjModal}
               >
-                <Typography sx={{  fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px', fontWeight: 500 }}>
+                <Typography sx={{ fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px', fontWeight: 500 }}>
                   Cadastrar Informações
                 </Typography>
               </Button>
@@ -316,7 +350,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: 'var(--roxo)',
-                 
+
                 }}
                 onClick={handleEditOrSave}
               >

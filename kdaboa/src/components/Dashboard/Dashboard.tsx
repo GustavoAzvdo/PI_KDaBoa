@@ -31,8 +31,8 @@ const demoTheme = createTheme({
     values: {
       xs: 0,
       sm: 600,
-      md: 600,
-      lg: 1200,
+      md: 900,
+      lg: 1100,
       xl: 1536,
     },
   },

@@ -18,7 +18,7 @@ interface EnderecoProps {
 }
 
 export interface EnderecoData {
-    id: boolean
+    id: any
     cep: string;
     logradouro: string;
     bairro: string;
@@ -52,6 +52,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
 
     const handleOpenDeleteModal = (idx: number) => {
         setDeleteIndex(idx);
@@ -146,59 +147,86 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     };
 
     // Adicionar ou atualizar endereço
-    const handleButtonClick = async () => {
+  const handleButtonClick = async () => {
+    const novoEndereco: EnderecoData = {
+        id: enderecos[editIndex ?? 0]?.id ?? 0, // usa o ID existente se estiver editando
+        cep,
+        logradouro,
+        bairro,
+        cidade,
+        uf,
+        complemento,
+        numero,
+    };
 
-        try {
-            const response = await api.post('/gerente/address', {
+    const exists = enderecos.some((e: EnderecoData, idx: number) =>
+        e.cep === cep &&
+        e.numero === numero &&
+        (editIndex === null || idx !== editIndex)
+    );
+
+    if (exists) {
+        setSnackbarMsg('Endereço já foi adicionado!');
+        setSnackbarSeverity('warning');
+        setSnackbarOpen(true);
+        return;
+    }
+
+    try {
+        if (editing && editIndex !== null) {
+            // PUT para atualizar o endereço existente
+            
+            const enderecoId = enderecos[editIndex]?.id;
+            await api.put<EnderecoData>(`/gerente/address/`, {
+                id: enderecoId,
                 cep: cep,
                 logradouro: logradouro,
-                numero: numero,
-                bairro: bairro,
+                numero : numero,
+                bairro : bairro,
                 complemento: complemento,
                 cidade: cidade,
                 estado: uf,
-            }, { withCredentials: true })
-            console.log(response)
+            }, { withCredentials: true });
 
-        } catch (error) {
-            console.log(error)
-        }
-
-        const novoEndereco: EnderecoData = {
-            id: false, cep, logradouro, bairro, cidade, uf, complemento, numero,
-
-        };
-
-
-        const exists = enderecos.some((e: EnderecoData, idx: number) =>
-            e.cep === cep &&
-            e.numero === numero &&
-            (editIndex === null || idx !== editIndex)
-        );
-
-        if (exists) {
-            setSnackbarMsg('Endereço já foi adicionado!');
-            setSnackbarSeverity('warning');
-            setSnackbarOpen(true);
-            return;
-        }
-
-        if (editing && editIndex !== null) {
-            updateEndereco(editIndex, novoEndereco); // Usa função do contexto
+            updateEndereco(editIndex, novoEndereco);
             setSnackbarMsg('Endereço atualizado com sucesso!');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
-            setEditing(false);
-            setEditIndex(null);
-            clearFields();
         } else {
-            addEndereco(novoEndereco); // Usa função do contexto
+            // POST para criar novo endereço
+            const response = await api.post<EnderecoData>('/gerente/address', {
+                cep: cep,
+                logradouro: logradouro,
+                numero : numero,
+                bairro : bairro,
+                complemento: complemento,
+                cidade: cidade,
+                estado: uf,
+            }, { withCredentials: true });
+
+            const enderecoSalvo: EnderecoData = {
+                ...novoEndereco,
+                id: response.data.id,
+            };
+
+            addEndereco(enderecoSalvo);
             setSnackbarMsg('Endereço salvo com sucesso!');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
-            clearFields();
-        } clearFields();
+        }
+
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+        clearFields();
+        setEditing(false);
+        setEditIndex(null);
+
+    } catch (error) {
+        console.error(error);
+        setSnackbarMsg('Erro ao salvar endereço');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
     }
+};
+
+
+
     const handleEdit = (idx: number) => {
         const e = enderecos[idx];
         setCep(e.cep);
@@ -235,6 +263,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
             try {
                 const response = await api.get<EnderecoData[]>('/gerente/address', { withCredentials: true });
                 setEnderecosDireto(response.data);
+                
             } catch (error) {
                 console.error('Erro ao carregar endereços:', error);
             } finally {
@@ -243,7 +272,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         }
 
         carregarEnderecos();
-    }, []);
+    }, [enderecos]);
 
     return (
         <>
@@ -256,7 +285,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 }}
             >
                 {/* Campos do endereço */}
-                <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 2 }}>
                     <Box>
                         <TextField
                             fullWidth
@@ -280,7 +309,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 9, md: 6 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
@@ -301,7 +330,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 4 }}   >
+                <Grid size={{ xs: 12, sm: 12, md: 4 }}   >
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             disabled
@@ -321,7 +350,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 4 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             fullWidth
@@ -341,7 +370,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 2 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             disabled
@@ -361,7 +390,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 6 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
@@ -382,7 +411,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 2 }} sx={{ mt: 0 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 2 }} sx={{ mt: 0 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
