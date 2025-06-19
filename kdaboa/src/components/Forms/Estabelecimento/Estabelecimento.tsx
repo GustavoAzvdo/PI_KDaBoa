@@ -19,6 +19,32 @@ interface PostEstablishmentResponse {
   
 }
 
+
+interface Dados {
+  id: number
+  title: string;
+  icon: React.ReactNode;
+}
+
+interface getEstabelecimento{
+  id_estabelecimento: number;
+  nome: string;
+  cnpj: string;
+  descricao: string;
+  status: number;
+  id_contato: number;
+  Usuario: Array<object>;
+  Estabelecimento_Categoria: Array<{id_categoria: number,
+                                    Categoria: {
+                                      nome_categoria: string
+                                    }
+                                    }>;
+  Contato: Array<object>;
+  Estabelecimento_Endereco: Array<object>;
+  Evento: Array<object>;
+  Galeria: Array<object>
+}
+
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
@@ -35,8 +61,12 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [showCnpjModal, setShowCnpjModal] = useState<boolean>(false);
   const [modalCountdown, setModalCountdown] = useState<number>(5);
   const [modalButtonEnabled, setModalButtonEnabled] = useState<boolean>(false);
+//
+  const [categoriasSelecionadas ,setCategoriasSelecionadas] = useState<Dados[]>([])
 
-
+  useEffect(() => {
+    handleGetEstablishment();
+  }, []);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -82,6 +112,31 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   };
 
   const allFieldsFilled = nome.trim() !== '' && CNPJ.trim().length === 18 && descricao.trim() !== '' && selectedCategories.length > 0;
+
+  const handleGetEstablishment = async () => {
+    try {
+      const response = await api.get<getEstabelecimento>('gerente/establishment', {withCredentials: true})
+
+      setEstabelecimentoId(response.data.id_estabelecimento)
+      setNome(response.data.nome)
+      setDescricao(response.data.descricao)
+      setCNPJ(response.data.cnpj)
+
+
+    // extrai os ids das categorias do estabelecimento
+    const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
+
+    // filtra os objetos do array "dados" que possuem os ids acima
+    const categoriasSelecionadas = dados.filter((categoria) => categoriasIds.includes(categoria.id));
+
+    // define como valor inicial selecionado do combobox
+    setCategoriasSelecionadas(categoriasSelecionadas);
+    
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    } 
+  }
 
   const handleCreateEstablishment = async () => {
 
@@ -243,6 +298,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
               id="checkboxes-tags-demo"
               options={dados}
               disableCloseOnSelect
+              value={categoriasSelecionadas}
               onChange={handleCategoryChange}
               noOptionsText="Nenhuma categoria encontrada"
               getOptionLabel={(option) => option.title}
