@@ -6,9 +6,6 @@ import { dados } from '../../../categorys/dados';
 import api from '../../../api/api';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 
-
-
-
 const MAX_CHARS = 1000;
 interface CategoryProps {
   onCategoryChange?: (categories: string[]) => void;
@@ -18,7 +15,6 @@ interface PostEstablishmentResponse {
   id: number;
   
 }
-
 
 interface Dados {
   id: number
@@ -37,8 +33,7 @@ interface getEstabelecimento{
   Estabelecimento_Categoria: Array<{id_categoria: number,
                                     Categoria: {
                                       nome_categoria: string
-                                    }
-                                    }>;
+                                    }}>;
   Contato: Array<object>;
   Estabelecimento_Endereco: Array<object>;
   Evento: Array<object>;
@@ -122,20 +117,22 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       setDescricao(response.data.descricao)
       setCNPJ(response.data.cnpj)
 
+      const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
 
-    // extrai os ids das categorias do estabelecimento
-    const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
+      const categoriasSelecionadas = dados.filter((categoria) => categoriasIds.includes(categoria.id));
 
-    // filtra os objetos do array "dados" que possuem os ids acima
-    const categoriasSelecionadas = dados.filter((categoria) => categoriasIds.includes(categoria.id));
+      setCategoriasSelecionadas(categoriasSelecionadas);
 
-    // define como valor inicial selecionado do combobox
-    setCategoriasSelecionadas(categoriasSelecionadas);
-    
-      console.log(response)
-    } catch (error) {
-      console.log(error)
-    } 
+      setFirstRegister(false)
+      setEditMode(false)
+    } catch (error: any) {
+      if(error.response?.status === 404) {
+        setFirstRegister(true)
+        setEditMode(true)
+      }
+    } finally {
+      setDisabled(false)
+    }
   }
 
   const handleCreateEstablishment = async () => {
@@ -191,6 +188,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         setDisabled(false);
       }
     } else {
+      console.log(disabled)
+      console.log((editMode && !allFieldsFilled))
       setEditMode(true);
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Edição habilitada!', severity: 'warning' });
     }
@@ -299,7 +298,11 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
               options={dados}
               disableCloseOnSelect
               value={categoriasSelecionadas}
-              onChange={handleCategoryChange}
+              //onChange={handleCategoryChange}
+                onChange={(event, newValue) => {
+                setCategoriasSelecionadas(newValue);
+                handleCategoryChange(event, newValue);
+              }}
               noOptionsText="Nenhuma categoria encontrada"
               getOptionLabel={(option) => option.title}
               renderOption={(props, option, { selected }) => {
