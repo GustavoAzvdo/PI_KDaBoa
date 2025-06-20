@@ -48,6 +48,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [nome, setNome] = React.useState<string>('');
   const [descricao, setDescricao] = React.useState<string>('');
   const [CNPJ, setCNPJ] = React.useState<string>('');
+//
+  const [viewCNPJ, setViewCNPJ] = React.useState<string>('');
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', autoHideDuration: 4000, severity: 'success' as 'success' | 'warning' | 'error' | 'info' });
   const [disabled, setDisabled] = useState<boolean>(false);
@@ -88,7 +90,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
 
   const handleCNPJChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const formattedCNPJ = formatCNPJ(event.target.value);
-    setCNPJ(formattedCNPJ);
+    setViewCNPJ(formattedCNPJ)
+    setCNPJ(event.target.value);
   };
 
   const handleDescricaoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -106,7 +109,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     }
   };
 
-  const allFieldsFilled = nome.trim() !== '' && CNPJ.trim().length === 18 && descricao.trim() !== '' && selectedCategories.length > 0;
+  const allFieldsFilled = nome.trim() !== '' && viewCNPJ.trim().length === 18 && descricao.trim() !== '' && selectedCategories.length > 0;
 
   const handleGetEstablishment = async () => {
     try {
@@ -116,6 +119,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       setNome(response.data.nome)
       setDescricao(response.data.descricao)
       setCNPJ(response.data.cnpj)
+      setViewCNPJ(formatCNPJ(response.data.cnpj))
 
       const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
 
@@ -258,7 +262,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <TextField
             required
-            value={CNPJ}
+            value={viewCNPJ}
             onChange={handleCNPJChange}
             fullWidth
             variant="outlined"
