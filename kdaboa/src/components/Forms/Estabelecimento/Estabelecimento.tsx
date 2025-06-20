@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { dados } from '../../../categorys/dados';
 import api from '../../../api/api';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
+import {CircularProgress} from '@mui/material'
 
 const MAX_CHARS = 1000;
 interface CategoryProps {
@@ -60,6 +61,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [modalButtonEnabled, setModalButtonEnabled] = useState<boolean>(false);
 //
   const [categoriasSelecionadas ,setCategoriasSelecionadas] = useState<Dados[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     handleGetEstablishment();
@@ -140,7 +142,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   }
 
   const handleCreateEstablishment = async () => {
-
+    setLoading(true)
     setDisabled(true);
     try {
       const response = await api.post<PostEstablishmentResponse>('/gerente/establishment', {
@@ -165,6 +167,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       console.error('Erro ao criar estabelecimento:', error);
 
     } finally {
+      setLoading(false)
       setDisabled(false);
     }
 
@@ -229,15 +232,14 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!modalButtonEnabled}
+              disabled={!modalButtonEnabled || loading}
               onClick={handleCreateEstablishment}
               sx={{ minWidth: 180 }}
             >
-
-              <Typography sx={{ fontFamily: 'var(--notosans) !important', fontSize: 16 }}>
+              {loading ? (<CircularProgress size={20} color='inherit'/>) : (<Typography sx={{ fontFamily: 'var(--notosans) !important', fontSize: 16 }}>
                 {modalButtonEnabled ? 'Cadastrar' : `Aguarde ${modalCountdown}s`}
 
-              </Typography>
+              </Typography>)}
             </Button>
           </Box>
         </Box>
