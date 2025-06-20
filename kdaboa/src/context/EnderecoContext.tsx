@@ -1,14 +1,14 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface EnderecoData {
-  id: boolean;
-  cep: string;
+  id_endereco: number;
   logradouro: string;
+  numero: string;
+  complemento: string;
   bairro: string;
   cidade: string;
-  uf: string;
-  complemento: string;
-  numero: string | number;
+  estado: string;
+  cep: string;
 }
 
 interface EnderecoContextType {

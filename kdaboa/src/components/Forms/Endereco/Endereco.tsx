@@ -8,7 +8,6 @@ import { useEnderecoContext } from '../../../context/EnderecoContext';
 import { Delete } from '@mui/icons-material';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import api from '../../../api/api'
-import { PickerAnyManager } from '@mui/x-date-pickers/internals';
 
 interface EnderecoProps {
     buttonLabel?: string;
@@ -19,14 +18,14 @@ interface EnderecoProps {
 }
 
 export interface EnderecoData {
-    id: boolean
-    cep: string;
-    logradouro: string;
-    bairro: string;
-    cidade: string;
-    uf: string;
-    complemento: string;
-    numero: string | number;
+  id_endereco: number;
+  logradouro: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep: string;
 }
 
 
@@ -43,7 +42,8 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [cidade, setCidade] = useState<string>('');
     const [uf, setUf] = useState<string>('');
     const [complemento, setComplemento] = useState<string>('');
-    const [numero, setNumero] = useState<string | number>('');
+//
+    const [numero, setNumero] = useState<string>('');
     const [cepError, setCepError] = useState<boolean>(false);
     const [cepHelper, setCepHelper] = useState<string>('');
     const [, setDisabled] = useState<boolean>(false);
@@ -152,8 +152,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const handleButtonClick = async () => {
 
         try {
-            console.log(cep)
-            const response = await api.post('/gerente/address', {
+            const response = await api.post<EnderecoData>('/gerente/address', {
                 cep: cep,
                 logradouro: logradouro,
                 numero: numero,
@@ -162,31 +161,30 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 cidade: cidade,
                 estado: uf,
             }, { withCredentials: true })
-            console.log(response)
 
-        } catch (error) {
-            console.log(error)
-        }
+            console.log(response.data)
+            
+            const novoEndereco: EnderecoData = {
+                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, uf, complemento, numero,
+                
+            };
 
-        const novoEndereco: EnderecoData = {
-            id: false, cep, logradouro, bairro, cidade, uf, complemento, numero,
-
-        };
-
-
-        const exists = enderecos.some((e: EnderecoData, idx: number) =>
-            e.cep === cep &&
+            console.log(novoEndereco)
+            
+            
+            const exists = enderecos.some((e: EnderecoData, idx: number) =>
+                e.cep === cep &&
             e.numero === numero &&
             (editIndex === null || idx !== editIndex)
         );
-
+        
         if (exists) {
             setSnackbarMsg('Endereço já foi adicionado!');
             setSnackbarSeverity('warning');
             setSnackbarOpen(true);
             return;
         }
-
+        
         if (editing && editIndex !== null) {
             updateEndereco(editIndex, novoEndereco); // Usa função do contexto
             setSnackbarMsg('Endereço atualizado com sucesso!');
@@ -202,6 +200,9 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
             setSnackbarOpen(true);
             clearFields();
         } clearFields();
+    } catch (error) {
+        console.log(error)
+    }
     }
     const handleEdit = (idx: number) => {
         const e = enderecos[idx];
@@ -238,7 +239,9 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         async function carregarEnderecos() {
             try {
                 const response = await api.get<EnderecoData[]>('/gerente/address', { withCredentials: true });
+                console.log(response)
                 setEnderecosDireto(response.data);
+                console.log(enderecos)
             } catch (error) {
                 console.error('Erro ao carregar endereços:', error);
             } finally {
