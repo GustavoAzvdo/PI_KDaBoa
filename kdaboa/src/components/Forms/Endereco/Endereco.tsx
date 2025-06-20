@@ -89,6 +89,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
 
     const clearFields = () => {
         setCep('');
+        setViewCep('')
         setLogradouro('');
         setBairro('');
         setCidade('');
@@ -165,7 +166,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
             console.log(response.data)
             
             const novoEndereco: EnderecoData = {
-                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, uf, complemento, numero,
+                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
                 
             };
 
@@ -207,10 +208,11 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const handleEdit = (idx: number) => {
         const e = enderecos[idx];
         setCep(e.cep);
+        setViewCep(formatCep(e.cep))
         setLogradouro(e.logradouro);
         setBairro(e.bairro);
         setCidade(e.cidade);
-        setUf(e.uf);
+        setUf(e.estado);
         setComplemento(e.complemento);
         setNumero(e.numero);
         setEditing(true);
@@ -223,10 +225,11 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         if (enderecoSelecionado) {
             // Preenche os campos quando há um endereço selecionado
             setCep(enderecoSelecionado.cep || '');
+            setViewCep(enderecoSelecionado.cep || '')
             setLogradouro(enderecoSelecionado.logradouro || '');
             setBairro(enderecoSelecionado.bairro || '');
             setCidade(enderecoSelecionado.cidade || '');
-            setUf(enderecoSelecionado.uf || '');
+            setUf(enderecoSelecionado.estado || '');
             setComplemento(enderecoSelecionado.complemento || '');
             setNumero(enderecoSelecionado.numero || '');
         } else {
@@ -455,7 +458,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                                     <Typography variant="subtitle1"><b>Logradouro:</b> {e.logradouro}</Typography>
                                     <Typography variant="subtitle1"><b>Bairro:</b> {e.bairro}</Typography>
                                     <Typography variant="subtitle1"><b>Cidade:</b> {e.cidade}</Typography>
-                                    <Typography variant="subtitle1"><b>UF:</b> {e.uf}</Typography>
+                                    <Typography variant="subtitle1"><b>UF:</b> {e.estado}</Typography>
                                     <Typography variant="subtitle1"><b>Complemento:</b> {e.complemento}</Typography>
                                     <Typography variant="subtitle1"><b>Número:</b> {e.numero}</Typography>
                                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1, gap: 2 }}>
