@@ -13,7 +13,7 @@ interface CategoryProps {
 }
 interface PostEstablishmentResponse {
   id: number;
-  
+  id_estabelecimento: number;
 }
 
 interface Dados {
@@ -150,7 +150,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         categoria: selectedCategories,
       }, { withCredentials: true });
 
-      setEstabelecimentoId(response.data.id)
+      console.log(response)
+      setEstabelecimentoId(response.data.id_estabelecimento)
      
 
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Estabelecimento cadastrado com sucesso!', severity: 'success' });
