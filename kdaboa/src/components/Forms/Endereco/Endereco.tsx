@@ -8,6 +8,7 @@ import { useEnderecoContext } from '../../../context/EnderecoContext';
 import { Delete } from '@mui/icons-material';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import api from '../../../api/api'
+import { PickerAnyManager } from '@mui/x-date-pickers/internals';
 
 interface EnderecoProps {
     buttonLabel?: string;
@@ -35,6 +36,8 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [, setLoadingEnderecos] = useState(true);
 
     const [cep, setCep] = useState<string>('');
+//
+    const [viewCep, setViewCep] = useState<string>('');
     const [logradouro, setLogradouro] = useState<string>('');
     const [bairro, setBairro] = useState<string>('');
     const [cidade, setCidade] = useState<string>('');
@@ -102,7 +105,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         return cepNumerico.length === 8 && numero !== '';
     };
     const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCep(formatCep(e.target.value));
+        setViewCep(formatCep(e.target.value));
         setCepError(false);
         setCepHelper('');
     };
@@ -149,6 +152,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const handleButtonClick = async () => {
 
         try {
+            console.log(cep)
             const response = await api.post('/gerente/address', {
                 cep: cep,
                 logradouro: logradouro,
@@ -261,9 +265,12 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         <TextField
                             fullWidth
 
-                            value={cep}
+                            value={viewCep}
                             onBlur={handleCepBlur}
-                            onChange={handleCepChange}
+                            onChange={(event: any) => {
+                                handleCepChange(event)
+                                setCep(event.target.value.replace(/\D/g, ''))
+                            }}
                             label="CEP"
                             variant="outlined"
                             placeholder="Digite seu CEP"
