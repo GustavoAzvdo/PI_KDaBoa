@@ -85,6 +85,13 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         return value.slice(0, 9);
     }
 
+    const formatCepFromApi = (cep: string): string => {
+        if (!cep) return '';
+        // Remove qualquer formatação existente e aplica a formatação correta
+        const cepNumerico = cep.replace(/\D/g, '');
+        return formatCep(cepNumerico);
+    };
+
     const clearFields = () => {
         setCep('');
         setLogradouro('');
@@ -147,83 +154,83 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     };
 
     // Adicionar ou atualizar endereço
-  const handleButtonClick = async () => {
-    const novoEndereco: EnderecoData = {
-        id: enderecos[editIndex ?? 0]?.id ?? 0, // usa o ID existente se estiver editando
-        cep,
-        logradouro,
-        bairro,
-        cidade,
-        uf,
-        complemento,
-        numero,
-    };
+    const handleButtonClick = async () => {
+        const novoEndereco: EnderecoData = {
+            id: enderecos[editIndex ?? 0]?.id ?? 0, // usa o ID existente se estiver editando
+            cep,
+            logradouro,
+            bairro,
+            cidade,
+            uf,
+            complemento,
+            numero,
+        };
 
-    const exists = enderecos.some((e: EnderecoData, idx: number) =>
-        e.cep === cep &&
-        e.numero === numero &&
-        (editIndex === null || idx !== editIndex)
-    );
+        const exists = enderecos.some((e: EnderecoData, idx: number) =>
+            e.cep === cep &&
+            e.numero === numero &&
+            (editIndex === null || idx !== editIndex)
+        );
 
-    if (exists) {
-        setSnackbarMsg('Endereço já foi adicionado!');
-        setSnackbarSeverity('warning');
-        setSnackbarOpen(true);
-        return;
-    }
-
-    try {
-        if (editing && editIndex !== null) {
-            // PUT para atualizar o endereço existente
-            
-            const enderecoId = enderecos[editIndex]?.id;
-            await api.put<EnderecoData>(`/gerente/address/`, {
-                id: enderecoId,
-                cep: cep,
-                logradouro: logradouro,
-                numero : numero,
-                bairro : bairro,
-                complemento: complemento,
-                cidade: cidade,
-                estado: uf,
-            }, { withCredentials: true });
-
-            updateEndereco(editIndex, novoEndereco);
-            setSnackbarMsg('Endereço atualizado com sucesso!');
-        } else {
-            // POST para criar novo endereço
-            const response = await api.post<EnderecoData>('/gerente/address', {
-                cep: cep,
-                logradouro: logradouro,
-                numero : numero,
-                bairro : bairro,
-                complemento: complemento,
-                cidade: cidade,
-                estado: uf,
-            }, { withCredentials: true });
-
-            const enderecoSalvo: EnderecoData = {
-                ...novoEndereco,
-                id: response.data.id,
-            };
-
-            addEndereco(enderecoSalvo);
-            setSnackbarMsg('Endereço salvo com sucesso!');
+        if (exists) {
+            setSnackbarMsg('Endereço já foi adicionado!');
+            setSnackbarSeverity('warning');
+            setSnackbarOpen(true);
+            return;
         }
 
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
-        clearFields();
-        setEditing(false);
-        setEditIndex(null);
+        try {
+            if (editing && editIndex !== null) {
+                // PUT para atualizar o endereço existente
 
-    } catch (error) {
-        console.error(error);
-        setSnackbarMsg('Erro ao salvar endereço');
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
-    }
-};
+                const enderecoId = enderecos[editIndex]?.id;
+                await api.put<EnderecoData>(`/gerente/address/`, {
+                    id: enderecoId,
+                    cep: cep,
+                    logradouro: logradouro,
+                    numero: numero,
+                    bairro: bairro,
+                    complemento: complemento,
+                    cidade: cidade,
+                    estado: uf,
+                }, { withCredentials: true });
+
+                updateEndereco(editIndex, novoEndereco);
+                setSnackbarMsg('Endereço atualizado com sucesso!');
+            } else {
+                // POST para criar novo endereço
+                const response = await api.post<EnderecoData>('/gerente/address', {
+                    cep: cep,
+                    logradouro: logradouro,
+                    numero: numero,
+                    bairro: bairro,
+                    complemento: complemento,
+                    cidade: cidade,
+                    estado: uf,
+                }, { withCredentials: true });
+
+                const enderecoSalvo: EnderecoData = {
+                    ...novoEndereco,
+                    id: response.data.id,
+                };
+
+                addEndereco(enderecoSalvo);
+                setSnackbarMsg('Endereço salvo com sucesso!');
+            }
+
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+            clearFields();
+            setEditing(false);
+            setEditIndex(null);
+
+        } catch (error) {
+            console.error(error);
+            setSnackbarMsg('Erro ao salvar endereço');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+        }
+    };
 
 
 
@@ -243,9 +250,28 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     };
 
     useEffect(() => {
+        async function carregarEnderecos() {
+            try {
+                const response = await api.get<EnderecoData[]>('/gerente/address', { withCredentials: true });
+                // Formata os CEPs dos endereços carregados
+                const enderecosFormatados = response.data.map(endereco => ({
+                    ...endereco,
+                    cep: formatCepFromApi(endereco.cep)
+                }));
+                setEnderecosDireto(enderecosFormatados);
+            } catch (error) {
+                console.error('Erro ao carregar endereços:', error);
+            } finally {
+                setLoadingEnderecos(false);
+            }
+        }
+
+        carregarEnderecos();
+    }, []); // Removido enderecos das dependências para evitar loop infinito
+
+    useEffect(() => {
         if (enderecoSelecionado) {
-            // Preenche os campos quando há um endereço selecionado
-            setCep(enderecoSelecionado.cep || '');
+            setCep(formatCepFromApi(enderecoSelecionado.cep));
             setLogradouro(enderecoSelecionado.logradouro || '');
             setBairro(enderecoSelecionado.bairro || '');
             setCidade(enderecoSelecionado.cidade || '');
@@ -257,22 +283,6 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
             clearFields();
         }
     }, [enderecoSelecionado]);
-
-    useEffect(() => {
-        async function carregarEnderecos() {
-            try {
-                const response = await api.get<EnderecoData[]>('/gerente/address', { withCredentials: true });
-                setEnderecosDireto(response.data);
-                
-            } catch (error) {
-                console.error('Erro ao carregar endereços:', error);
-            } finally {
-                setLoadingEnderecos(false);
-            }
-        }
-
-        carregarEnderecos();
-    }, [enderecos]);
 
     return (
         <>

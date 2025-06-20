@@ -25,7 +25,7 @@ import {
 
 
 
-interface Dados {
+export interface Dados {
   id: number
   title: string;
   icon: React.ReactNode;

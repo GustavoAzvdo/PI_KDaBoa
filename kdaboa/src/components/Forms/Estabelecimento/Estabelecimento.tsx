@@ -2,7 +2,7 @@ import { Autocomplete, Box, Button, Checkbox, Grid, InputAdornment, Modal, TextF
 import React, { useEffect } from 'react'
 import { Warning, Description, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon } from '@mui/icons-material';
 import { useState } from 'react';
-import { dados } from '../../../categorys/dados';
+import { dados, Dados } from '../../../categorys/dados';
 import api from '../../../api/api';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 
@@ -11,15 +11,20 @@ import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 
 const MAX_CHARS = 1000;
 interface CategoryProps {
-  onCategoryChange?: (categories: string[]) => void;
+  onCategoryChange?: (categories: number[]) => void;
 
 }
+interface CategoryResponse {
+  id: number;
+  nome: string;
+}
+
 interface PostEstablishmentResponse {
   id: number;
   nome: string;
   descricao: string;
   cnpj: string;
-  categoria: Array<object>;
+  categoria: CategoryResponse[];
 }
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
@@ -30,7 +35,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [nome, setNome] = React.useState<string>('');
   const [descricao, setDescricao] = React.useState<string>('');
   const [CNPJ, setCNPJ] = React.useState<string>('');
-  const [selectedCategories, setSelectedCategories] = useState<object[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Dados[]>([]);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', autoHideDuration: 4000, severity: 'success' as 'success' | 'warning' | 'error' | 'info' });
   const [disabled, setDisabled] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(true);
@@ -38,6 +43,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [showCnpjModal, setShowCnpjModal] = useState<boolean>(false);
   const [modalCountdown, setModalCountdown] = useState<number>(5);
   const [modalButtonEnabled, setModalButtonEnabled] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [, setSelectedCategoryObjects] = useState<object[]>([])
 
 
@@ -75,14 +82,10 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     }
   };
 
-  const handleCategoryChange = (_event: any, value: any) => {
-    const categories = value.map((item: any) => item.id);
-    setSelectedCategories(categories);
-    setSelectedCategoryObjects(value); // os objetos completos
-    setSelectedCategories(value.map((item: any) => item.id));
+  const handleCategoryChange = (_event: any, value: Dados[]) => {
+    setSelectedCategories(value);
     if (onCategoryChange) {
-      onCategoryChange(categories);
-
+      onCategoryChange(value.map(item => item.id));
     }
   };
 
@@ -96,7 +99,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         nome: nome,
         descricao: descricao,
         cnpj: CNPJ,
-        categoria: selectedCategories,
+        categoria: selectedCategories.map(item => item.id),
       }, { withCredentials: true });
 
       setEstabelecimentoId(response.data.id)
@@ -129,7 +132,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           id: estabelecimentoId,
           nome: nome,
           descricao: descricao,
-          categoria: selectedCategories,
+          categorias: selectedCategories,
         }, { withCredentials: true });
 
         setSnackbar({ autoHideDuration: 4000, open: true, message: 'Informações salvas com sucesso!', severity: 'success' });
@@ -145,33 +148,55 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Edição habilitada!', severity: 'warning' });
     }
   };
-  useEffect(() => {
-    const loadEstablishment = async () => {
-      try {
-        const response = await api.get<PostEstablishmentResponse>('/gerente/establishment', {
-          withCredentials: true,
-        });
-        console.log('Estabelecimento carregado:', response.data);
 
-        const { id, nome, descricao, cnpj, categoria } = response.data;
+  // Função para buscar dados do estabelecimento
+  const fetchEstablishmentData = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get<PostEstablishmentResponse>('/gerente/establishment', { withCredentials: true });
+      console.log(response.data)
+      setEstabelecimentoId(response.data.id)
+      setNome(response.data.nome);
+      setDescricao(response.data.descricao);
+      setCNPJ(response.data.cnpj);
 
-        setEstabelecimentoId(id);
-        setNome(nome);
-        setDescricao(descricao);
-        setCNPJ(cnpj);
-        setSelectedCategories(categoria);
-    
+      console.log('Dados completos da resposta:', JSON.stringify(response.data, null, 2));
+      console.log('Tipo de categoria:', typeof response.data.categoria);
+      console.log('Valor de categoria:', response.data.categoria);
 
-        setFirstRegister(false);
-        setEditMode(false);
-      } catch (error) {
-        console.error('Erro ao carregar estabelecimento:', error);
+      if (response.data.categoria && Array.isArray(response.data.categoria)) {
+        console.log('Categorias do estabelecimento:', response.data.categoria);
+        
+        // Extrai os IDs das categorias
+        const categoriaIds = response.data.categoria.map(
+          (item: CategoryResponse) => item.nome
+        );
+      
+        console.log('IDs das categorias:', categoriaIds);
+      
+        // Filtra os dados para incluir apenas as categorias cujos IDs estão no array
+        const categoriasSelecionadas = dados.filter(cat =>
+          categoriaIds.includes(cat.title)
+        );
+      
+        console.log('Categorias selecionadas:', categoriasSelecionadas);
+        setSelectedCategories(categoriasSelecionadas);
       }
-    };
+      
+      setEditMode(true);
+      setFirstRegister(false);
 
-    loadEstablishment();
+    } catch (err) {
+      setError('Erro ao carregar dados do estabelecimento');
+      console.error('Erro:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEstablishmentData();
   }, []);
-
 
   return (
     <>
@@ -271,14 +296,15 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         <Grid size={{ xs: 12, sm: 12, md: 6 }} >
           <Box>
             <Autocomplete
-             
               multiple
               id="checkboxes-tags-demo"
               options={dados}
+              value={selectedCategories}
               disableCloseOnSelect
               onChange={handleCategoryChange}
               noOptionsText="Nenhuma categoria encontrada"
               getOptionLabel={(option) => option.title}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               renderOption={(props, option, { selected }) => {
                 const { key, ...optionProps } = props
                 return (
@@ -315,7 +341,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                 )
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Categorias"  
+                <TextField {...params} label="Categorias"
                 />
               )}
               disabled={!editMode || disabled}
