@@ -55,6 +55,8 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+//
+    const [idEndereco ,setIdEndereco] = useState<number>()
 
     const handleOpenDeleteModal = (idx: number) => {
         setDeleteIndex(idx);
@@ -162,8 +164,6 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 cidade: cidade,
                 estado: uf,
             }, { withCredentials: true })
-
-            console.log(response.data)
             
             const novoEndereco: EnderecoData = {
                 id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
@@ -207,6 +207,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     }
     const handleEdit = (idx: number) => {
         const e = enderecos[idx];
+        setIdEndereco(e.id_endereco)
         setCep(e.cep);
         setViewCep(formatCep(e.cep))
         setLogradouro(e.logradouro);
@@ -220,6 +221,59 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         setEditing(true);
         setEditIndex(idx);
     };
+
+    //função para editar algum estbalecimento
+    const handleEditAddress = async () => {
+        try {
+            const response = await api.put<EnderecoData>('/gerente/address',{
+                id: idEndereco,
+                cep: cep,
+                logradouro: logradouro,
+                numero: numero,
+                bairro: bairro,
+                complemento: complemento,
+                cidade: cidade,
+                estado: uf,
+            }, {withCredentials: true})
+         
+            const novoEndereco: EnderecoData = {
+                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
+                
+            };
+     
+            
+            const exists = enderecos.some((e: EnderecoData, idx: number) =>
+                e.cep === cep &&
+            e.numero === numero &&
+            (editIndex === null || idx !== editIndex)
+            );
+            
+            if (exists) {
+                setSnackbarMsg('Endereço já foi adicionado!');
+                setSnackbarSeverity('warning');
+                setSnackbarOpen(true);
+                return;
+            }
+            
+            if (editing && editIndex !== null) {
+                updateEndereco(editIndex, novoEndereco); // Usa função do contexto
+                setSnackbarMsg('Endereço atualizado com sucesso!');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+                setEditing(false);
+                setEditIndex(null);
+                clearFields();
+            } else {
+                addEndereco(novoEndereco); // Usa função do contexto
+                setSnackbarMsg('Endereço salvo com sucesso!');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+                clearFields();
+            } clearFields();
+        } catch (error) {
+            console.log(error) 
+        }
+    }
 
     useEffect(() => {
         if (enderecoSelecionado) {
@@ -422,11 +476,11 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                             <Button
                                 variant="contained"
                                 sx={{ width: '200px', backgroundColor: 'var(--roxo)' }}
-                                onClick={handleButtonClick}
+                                onClick={editing ? handleEditAddress : handleButtonClick}
                                 disabled={!isValid()}
                             >
                                 <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
-                                    {editing ? 'Salvar novo endereço' : 'Salvar endereço'}
+                                    {editing ? 'Salvar endereço' : 'Salvar novo endereço'}
                                 </Typography>
                             </Button>
                         </Box>
