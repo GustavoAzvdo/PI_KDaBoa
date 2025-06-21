@@ -59,20 +59,30 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [idEndereco ,setIdEndereco] = useState<number>()
 
     const handleOpenDeleteModal = (idx: number) => {
+        const e = enderecos[idx];
         setDeleteIndex(idx);
+        setIdEndereco(e.id_endereco)
         setDeleteModalOpen(true);
     };
 
     // Função para confirmar exclusão
-    const handleConfirmDelete = () => {
-        if (deleteIndex !== null) {
-            removeEndereco(deleteIndex);
-            setSnackbarMsg('Endereço excluído com sucesso!');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
+    const handleConfirmDelete = async () => {
+        try {
+            await api.delete(`/gerente/address/?id=${idEndereco}`, {withCredentials: true})
+
+            if (deleteIndex !== null) {
+                removeEndereco(deleteIndex);
+                setSnackbarMsg('Endereço excluído com sucesso!');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+            }
+            setDeleteModalOpen(false);
+            setDeleteIndex(null);
+        } catch (error) {
+            console.log(error)
         }
-        setDeleteModalOpen(false);
-        setDeleteIndex(null);
+
+        
     };
 
     // Função para cancelar exclusão
