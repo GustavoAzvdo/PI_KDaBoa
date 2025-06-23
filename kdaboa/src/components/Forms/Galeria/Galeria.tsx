@@ -3,13 +3,14 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, D
 import { styled } from '@mui/material/styles'
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import React from 'react'
-
+import api from '../../../api/api'
 
 const dicas = [
     'Formatos permitidos: JPG, JPEG, PNG;',
     'Tamanho máximo: 5MB;',
     'Resolução: 1200 x 500.'
 ]
+
 const Galeria = () => {
     const [fileName, setFileName] = React.useState<string>('');
     const [fileObj, setFileObj] = React.useState<File | null>(null);
@@ -29,22 +30,70 @@ const Galeria = () => {
         }
     }
 
-    const handleAddPhoto = () => {
-        const tipoValido = ['image/jpeg', 'image/jpg', 'image/png'].includes(fileObj?.type || '');
-        if (!tipoValido) {
-            setSnackbarMessage('Formato inválido. Aceitos: JPG, JPEG, PNG.');
-            setSnackbarSeverity('warning');
-            setSnackbarOpen(true);
-            return;
-        }
+    // const handleAddPhoto = async () => {
+    //     try {
+    //         const response = await api.post('gerente/gallery', { images: fileObj }, { withCredentials: true })
+    //         console.log(response);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
 
-        if (fileObj?.size && fileObj.size > 5 * 1024 * 1024) { // 5MB
-            setSnackbarMessage('O tamanho máximo permitido é 5MB.');
-            setSnackbarSeverity('warning');
-            setSnackbarOpen(true);
-            return;
-        }
+    //     const tipoValido = ['image/jpeg', 'image/jpg', 'image/png'].includes(fileObj?.type || '');
+    //     if (!tipoValido) {
+    //         setSnackbarMessage('Formato inválido. Aceitos: JPG, JPEG, PNG.');
+    //         setSnackbarSeverity('warning');
+    //         setSnackbarOpen(true);
+    //         return;
+    //     }
 
+    //     if (fileObj?.size && fileObj.size > 5 * 1024 * 1024) { // 5MB
+    //         setSnackbarMessage('O tamanho máximo permitido é 5MB.');
+    //         setSnackbarSeverity('warning');
+    //         setSnackbarOpen(true);
+    //         return;
+    //     }
+
+    //     if (!fileObj) {
+    //         setSnackbarMessage('Nenhum arquivo selecionado.');
+    //         setSnackbarSeverity('warning');
+    //         setSnackbarOpen(true);
+    //         return;
+    //     }
+
+    //     if (photos.length >= 4) {
+    //         setSnackbarMessage('Você atingiu o limite máximo de 4 fotos.');
+    //         setSnackbarSeverity('warning');
+    //         setSnackbarOpen(true);
+    //         return;
+    //     }
+
+    //     // Validação final antes de adicionar
+    //     const img = new Image();
+    //     img.onload = function () {
+
+
+    //         const url = URL.createObjectURL(fileObj);
+    //         setPhotos([...photos, { name: fileObj.name, url }]);
+    //         setSnackbarMessage('Foto adicionada com sucesso!');
+    //         setSnackbarSeverity('success');
+    //         setSnackbarOpen(true);
+    //         setFileName('');
+    //         setFileObj(null);
+    //         if (inputRef.current) {
+    //             inputRef.current.value = '';
+    //         }
+    //     };
+
+    //     img.onerror = function () {
+    //         setSnackbarMessage('Erro ao processar a imagem. Tente novamente.');
+    //         setSnackbarSeverity('warning');
+    //         setSnackbarOpen(true);
+    //     };
+
+    //     img.src = URL.createObjectURL(fileObj);
+    // }
+
+    const handleAddPhoto = async () => {
         if (!fileObj) {
             setSnackbarMessage('Nenhum arquivo selecionado.');
             setSnackbarSeverity('warning');
@@ -52,49 +101,44 @@ const Galeria = () => {
             return;
         }
 
-        if (photos.length >= 4) {
-            setSnackbarMessage('Você atingiu o limite máximo de 4 fotos.');
-            setSnackbarSeverity('warning');
-            setSnackbarOpen(true);
-            return;
-        }
+        const formData = new FormData();
+        formData.append('images', fileObj);
 
-        // Validação final antes de adicionar
-        const img = new Image();
-        img.onload = function () {
-
-
+        try {
+            const response = await api.post('gerente/gallery', formData, {
+                withCredentials: true,
+                
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            
+          
+            console.log(response);
             const url = URL.createObjectURL(fileObj);
-            setPhotos([...photos, { name: fileObj.name, url }]);
+            setPhotos(prev => [...prev, { name: fileObj.name, url }]);
             setSnackbarMessage('Foto adicionada com sucesso!');
             setSnackbarSeverity('success');
+            
+        } catch (error) {
+            console.error('Erro ao fazer upload:', error);
+            setSnackbarMessage('Erro ao fazer upload da imagem. Tente novamente.');
+            setSnackbarSeverity('warning');
+        } finally {
             setSnackbarOpen(true);
             setFileName('');
             setFileObj(null);
-            if (inputRef.current) {
-                inputRef.current.value = '';
-            }
-        };
-
-        img.onerror = function () {
-            setSnackbarMessage('Erro ao processar a imagem. Tente novamente.');
-            setSnackbarSeverity('warning');
-            setSnackbarOpen(true);
-        };
-
-        img.src = URL.createObjectURL(fileObj);
+        }
     }
 
     const handleRemovePhoto = (index: number) => {
-        setPhotos((prev) => {
-            URL.revokeObjectURL(prev[index].url);
-            URL.revokeObjectURL(prev[index].url);
-            setSnackbarMessage('Foto removida com sucesso!');
-            setSnackbarSeverity('warning');
-            setSnackbarOpen(true);
-            return prev.filter((_, i) => i !== index);
+        const newPhotos = [...photos];
+        newPhotos.splice(index, 1);
+        setPhotos(newPhotos);
+        setSnackbarMessage('Foto removida com sucesso!');
+        setSnackbarSeverity('warning');
+        setSnackbarOpen(true);
 
-        })
     }
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
