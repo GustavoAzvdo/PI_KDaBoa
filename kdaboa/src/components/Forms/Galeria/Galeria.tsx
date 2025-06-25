@@ -188,7 +188,7 @@ const Galeria = () => {
                 />
             </Grid>
             {/* Botão de adicionar foto */}
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs: 11, sm: 10, md: 3 }}>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', pt: 1 }}>
                     <Button
                         sx={{
@@ -222,7 +222,7 @@ const Galeria = () => {
             </Grid>
 
             {/* Dicas de como adicionar uma boa foto */}
-            <Grid size={{ xs: 12, sm: 6, md: 1 }}>
+            <Grid size={{ xs: 1, sm: 1, md: 1 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 1 }}>
                     <IconButton color='primary' onClick={() => setOpen(true)}>
                         <InfoOutlined />
@@ -231,7 +231,7 @@ const Galeria = () => {
                 </Box>
             </Grid>
 
-            <Grid size={{ xs: 12, sm: 6, md: 12 }} sx={{ borderBottom: '1px solid #eee' }}>
+            <Grid size={{ xs: 12, sm: 12, md: 12 }} sx={{ borderBottom: '1px solid #eee' }}>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', py: 2 }}>
                     <Button
                         startIcon={<CloudUpload />}
@@ -239,12 +239,13 @@ const Galeria = () => {
                         sx={{
                             backgroundColor: 'var(--roxo)',
                             px: 6,
+                            width: {xs: '100%', sm: '100%', md: '30%'},
 
                         }}
                         onClick={handleAddPhoto}
                         disabled={!fileObj || photos.length >= 4}
                     >
-                        <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
+                        <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important', px: 1 }}>
                             Adicionar foto
                         </Typography>
                     </Button>
