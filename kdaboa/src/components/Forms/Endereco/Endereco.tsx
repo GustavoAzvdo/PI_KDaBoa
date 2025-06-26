@@ -18,14 +18,14 @@ interface EnderecoProps {
 }
 
 export interface EnderecoData {
-  id_endereco: number;
-  logradouro: string;
-  numero: string;
-  complemento: string;
-  bairro: string;
-  cidade: string;
-  estado: string;
-  cep: string;
+    id_endereco: number;
+    logradouro: string;
+    numero: string;
+    complemento: string;
+    bairro: string;
+    cidade: string;
+    estado: string;
+    cep: string;
 }
 
 
@@ -35,14 +35,14 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [, setLoadingEnderecos] = useState(true);
 
     const [cep, setCep] = useState<string>('');
-//
+    //
     const [viewCep, setViewCep] = useState<string>('');
     const [logradouro, setLogradouro] = useState<string>('');
     const [bairro, setBairro] = useState<string>('');
     const [cidade, setCidade] = useState<string>('');
     const [uf, setUf] = useState<string>('');
     const [complemento, setComplemento] = useState<string>('');
-//
+    //
     const [numero, setNumero] = useState<string>('');
     const [cepError, setCepError] = useState<boolean>(false);
     const [cepHelper, setCepHelper] = useState<string>('');
@@ -55,8 +55,8 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-//
-    const [idEndereco ,setIdEndereco] = useState<number>()
+    //
+    const [idEndereco, setIdEndereco] = useState<number>()
 
     const handleOpenDeleteModal = (idx: number) => {
         const e = enderecos[idx];
@@ -68,7 +68,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     // Função para confirmar exclusão
     const handleConfirmDelete = async () => {
         try {
-            await api.delete(`/gerente/address/?id=${idEndereco}`, {withCredentials: true})
+            await api.delete(`/gerente/address/?id=${idEndereco}`, { withCredentials: true })
 
             if (deleteIndex !== null) {
                 removeEndereco(deleteIndex);
@@ -82,7 +82,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
             console.log(error)
         }
 
-        
+
     };
 
     // Função para cancelar exclusão
@@ -174,46 +174,46 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 cidade: cidade,
                 estado: uf,
             }, { withCredentials: true })
-            
+
             const novoEndereco: EnderecoData = {
                 id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
-                
+
             };
 
             console.log(novoEndereco)
-            
-            
+
+
             const exists = enderecos.some((e: EnderecoData, idx: number) =>
                 e.cep === cep &&
-            e.numero === numero &&
-            (editIndex === null || idx !== editIndex)
-        );
-        
-        if (exists) {
-            setSnackbarMsg('Endereço já foi adicionado!');
-            setSnackbarSeverity('warning');
-            setSnackbarOpen(true);
-            return;
+                e.numero === numero &&
+                (editIndex === null || idx !== editIndex)
+            );
+
+            if (exists) {
+                setSnackbarMsg('Endereço já foi adicionado!');
+                setSnackbarSeverity('warning');
+                setSnackbarOpen(true);
+                return;
+            }
+
+            if (editing && editIndex !== null) {
+                updateEndereco(editIndex, novoEndereco); // Usa função do contexto
+                setSnackbarMsg('Endereço atualizado com sucesso!');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+                setEditing(false);
+                setEditIndex(null);
+                clearFields();
+            } else {
+                addEndereco(novoEndereco); // Usa função do contexto
+                setSnackbarMsg('Endereço salvo com sucesso!');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+                clearFields();
+            } clearFields();
+        } catch (error) {
+            console.log(error)
         }
-        
-        if (editing && editIndex !== null) {
-            updateEndereco(editIndex, novoEndereco); // Usa função do contexto
-            setSnackbarMsg('Endereço atualizado com sucesso!');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
-            setEditing(false);
-            setEditIndex(null);
-            clearFields();
-        } else {
-            addEndereco(novoEndereco); // Usa função do contexto
-            setSnackbarMsg('Endereço salvo com sucesso!');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
-            clearFields();
-        } clearFields();
-    } catch (error) {
-        console.log(error)
-    }
     }
     const handleEdit = (idx: number) => {
         const e = enderecos[idx];
@@ -235,7 +235,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     //função para editar algum estbalecimento
     const handleEditAddress = async () => {
         try {
-            const response = await api.put<EnderecoData>('/gerente/address',{
+            const response = await api.put<EnderecoData>('/gerente/address', {
                 id: idEndereco,
                 cep: cep,
                 logradouro: logradouro,
@@ -244,27 +244,27 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 complemento: complemento,
                 cidade: cidade,
                 estado: uf,
-            }, {withCredentials: true})
-         
+            }, { withCredentials: true })
+
             const novoEndereco: EnderecoData = {
                 id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
-                
+
             };
-     
-            
+
+
             const exists = enderecos.some((e: EnderecoData, idx: number) =>
                 e.cep === cep &&
-            e.numero === numero &&
-            (editIndex === null || idx !== editIndex)
+                e.numero === numero &&
+                (editIndex === null || idx !== editIndex)
             );
-            
+
             if (exists) {
                 setSnackbarMsg('Endereço já foi adicionado!');
                 setSnackbarSeverity('warning');
                 setSnackbarOpen(true);
                 return;
             }
-            
+
             if (editing && editIndex !== null) {
                 updateEndereco(editIndex, novoEndereco); // Usa função do contexto
                 setSnackbarMsg('Endereço atualizado com sucesso!');
@@ -281,7 +281,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 clearFields();
             } clearFields();
         } catch (error) {
-            console.log(error) 
+            console.log(error)
         }
     }
 

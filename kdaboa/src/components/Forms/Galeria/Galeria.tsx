@@ -33,14 +33,14 @@ const Galeria = () => {
         }
     }
 
-    const handleAddPhoto = () => {
-        if (fileObj && photos.length < 4) {
+    // const handleAddPhoto = () => {
+    //     if (fileObj && photos.length < 4) {
         
-            const url = URL.createObjectURL(fileObj);
-            setPhotos([...photos, { name: fileObj.name, url }]);
-            setSnackbarMessage('Foto adicionada com sucesso!');
-            setSnackbarSeverity('success');
-        }
+    //         const url = URL.createObjectURL(fileObj);
+    //         setPhotos([...photos, { name: fileObj.name, url }]);
+    //         setSnackbarMessage('Foto adicionada com sucesso!');
+    //         setSnackbarSeverity('success');
+    //     }
     // const handleAddPhoto = async () => {
     //     try {
     //         const response = await api.post('gerente/gallery', { images: fileObj }, { withCredentials: true })
@@ -329,6 +329,6 @@ const Galeria = () => {
             </Dialog>
         </Grid>
     )
-}}
+}
 
 export default Galeria
