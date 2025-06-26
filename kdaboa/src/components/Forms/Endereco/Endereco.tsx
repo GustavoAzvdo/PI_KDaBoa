@@ -166,6 +166,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
 
         try {
             const response = await api.post<EnderecoData>('/gerente/address', {
+            
                 cep: cep,
                 logradouro: logradouro,
                 numero: numero,
@@ -330,7 +331,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 }}
             >
                 {/* Campos do endereço */}
-                <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 3 }}>
                     <Box>
                         <TextField
                             fullWidth
@@ -357,7 +358,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 9, md: 6 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
@@ -378,7 +379,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 4 }}   >
+                <Grid size={{ xs: 12, sm: 12, md: 3 }}   >
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             disabled
@@ -398,7 +399,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 4 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             fullWidth
@@ -418,7 +419,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 2 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             disabled
@@ -438,7 +439,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 6 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
@@ -459,7 +460,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 2 }} sx={{ mt: 0 }}>
+                <Grid size={{ xs: 12, sm: 12, md: 2 }} sx={{ mt: 0 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
