@@ -51,12 +51,28 @@ const BoxInfo = () => {
             width: {xs: '100%', sm: '100%', md: '100%' },
             heuight: { xs: '100%', sm: '100%', md: '100%' },
           }}>
-          <img src={festa}
-            style={{ width: '80%', height: '100%', alignItems: 'center' }}
-            className="festa"
-          />
+          
 
         </Box>
+
+<Box
+  component="img"
+  src={festa}
+  alt="Festa"
+  sx={{
+    width: {
+      xs: '100%',   // celulares (se visível)
+      md: '80%',    // desktops
+    },
+    height: 'auto',
+    display: {
+      xs: 'none',   // 👉 ESCONDE em celulares (até 600px)
+      sm: 'none',   // opcional, garante até ~960px
+      md: 'block',  // 👉 MOSTRA em desktops
+    },
+    maxWidth: '100%',
+  }}
+/>
 
       </Grid>
     </Grid>
