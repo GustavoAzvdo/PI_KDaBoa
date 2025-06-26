@@ -2,29 +2,43 @@ import { Autocomplete, Box, Button, Checkbox, Grid, InputAdornment, Modal, TextF
 import React, { useEffect } from 'react'
 import { Warning, Description, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon } from '@mui/icons-material';
 import { useState } from 'react';
-import { dados, Dados } from '../../../categorys/dados';
+import { dados } from '../../../categorys/dados';
 import api from '../../../api/api';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
-
-
-
+import {CircularProgress} from '@mui/material'
 
 const MAX_CHARS = 1000;
 interface CategoryProps {
-  onCategoryChange?: (categories: number[]) => void;
+  onCategoryChange?: (categories: string[]) => void;
 
 }
-interface CategoryResponse {
-  id: number;
-  nome: string;
-}
-
 interface PostEstablishmentResponse {
   id: number;
+  id_estabelecimento: number;
+}
+
+interface Dados {
+  id: number
+  title: string;
+  icon: React.ReactNode;
+}
+
+interface getEstabelecimento{
+  id_estabelecimento: number;
   nome: string;
-  descricao: string;
   cnpj: string;
-  categoria: CategoryResponse[];
+  descricao: string;
+  status: number;
+  id_contato: number;
+  Usuario: Array<object>;
+  Estabelecimento_Categoria: Array<{id_categoria: number,
+                                    Categoria: {
+                                      nome_categoria: string
+                                    }}>;
+  Contato: Array<object>;
+  Estabelecimento_Endereco: Array<object>;
+  Evento: Array<object>;
+  Galeria: Array<object>
 }
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
@@ -35,7 +49,9 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [nome, setNome] = React.useState<string>('');
   const [descricao, setDescricao] = React.useState<string>('');
   const [CNPJ, setCNPJ] = React.useState<string>('');
-  const [selectedCategories, setSelectedCategories] = useState<Dados[]>([]);
+//
+  const [viewCNPJ, setViewCNPJ] = React.useState<string>('');
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', autoHideDuration: 4000, severity: 'success' as 'success' | 'warning' | 'error' | 'info' });
   const [disabled, setDisabled] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(true);
@@ -43,10 +59,13 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [showCnpjModal, setShowCnpjModal] = useState<boolean>(false);
   const [modalCountdown, setModalCountdown] = useState<number>(5);
   const [modalButtonEnabled, setModalButtonEnabled] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [, setSelectedCategoryObjects] = useState<object[]>([])
+//
+  const [categoriasSelecionadas ,setCategoriasSelecionadas] = useState<Dados[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
 
+  useEffect(() => {
+    handleGetEstablishment();
+  }, []);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -73,7 +92,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
 
   const handleCNPJChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const formattedCNPJ = formatCNPJ(event.target.value);
-    setCNPJ(formattedCNPJ);
+    setViewCNPJ(formattedCNPJ)
+    setCNPJ(event.target.value);
   };
 
   const handleDescricaoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -82,28 +102,59 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     }
   };
 
-  const handleCategoryChange = (_event: any, value: Dados[]) => {
-    setSelectedCategories(value);
+  const handleCategoryChange = (_event: any, value: any) => {
+    const categories = value.map((item: any) => item.id);
+    setSelectedCategories(categories);
     if (onCategoryChange) {
-      onCategoryChange(value.map(item => item.id));
+      onCategoryChange(categories);
+
     }
   };
 
-  const allFieldsFilled = nome.trim() !== '' && CNPJ.trim().length === 18 && descricao.trim() !== '' && selectedCategories.length > 0;
+  const allFieldsFilled = nome.trim() !== '' && viewCNPJ.trim().length === 18 && descricao.trim() !== '' && selectedCategories.length > 0;
+
+  const handleGetEstablishment = async () => {
+    try {
+      const response = await api.get<getEstabelecimento>('gerente/establishment', {withCredentials: true})
+
+      setEstabelecimentoId(response.data.id_estabelecimento)
+      setNome(response.data.nome)
+      setDescricao(response.data.descricao)
+      setCNPJ(response.data.cnpj)
+      setViewCNPJ(formatCNPJ(response.data.cnpj))
+
+      const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
+
+      const categoriasSelecionadas = dados.filter((categoria) => categoriasIds.includes(categoria.id));
+
+      setCategoriasSelecionadas(categoriasSelecionadas);
+
+      setFirstRegister(false)
+      setEditMode(false)
+    } catch (error: any) {
+      if(error.response?.status === 404) {
+        setFirstRegister(true)
+        setEditMode(true)
+      }
+    } finally {
+      setDisabled(false)
+    }
+  }
 
   const handleCreateEstablishment = async () => {
-
+    setLoading(true)
     setDisabled(true);
     try {
       const response = await api.post<PostEstablishmentResponse>('/gerente/establishment', {
-        nome: nome,
-        descricao: descricao,
+        nome : nome,
+        descricao : descricao,
         cnpj: CNPJ,
-        categoria: selectedCategories.map(item => item.id),
+        categoria: selectedCategories,
       }, { withCredentials: true });
 
-      setEstabelecimentoId(response.data.id)
-
+      console.log(response)
+      setEstabelecimentoId(response.data.id_estabelecimento)
+     
 
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Estabelecimento cadastrado com sucesso!', severity: 'success' });
       setEditMode(false);
@@ -116,6 +167,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       console.error('Erro ao criar estabelecimento:', error);
 
     } finally {
+      setLoading(false)
       setDisabled(false);
     }
 
@@ -128,11 +180,11 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       // Salvar alterações (exceto CNPJ)
       setDisabled(true);
       try {
-        await api.put('/gerente/establishment', {
-          id: estabelecimentoId,
-          nome: nome,
-          descricao: descricao,
-          categorias: selectedCategories,
+        await api.put('/gerente/establishment/', {
+          id : estabelecimentoId,
+          nome : nome,
+          descricao : descricao,
+          categoria: selectedCategories,
         }, { withCredentials: true });
 
         setSnackbar({ autoHideDuration: 4000, open: true, message: 'Informações salvas com sucesso!', severity: 'success' });
@@ -144,60 +196,12 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         setDisabled(false);
       }
     } else {
+      console.log(disabled)
+      console.log((editMode && !allFieldsFilled))
       setEditMode(true);
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Edição habilitada!', severity: 'warning' });
     }
   };
-
-  // Função para buscar dados do estabelecimento
-  const fetchEstablishmentData = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get<PostEstablishmentResponse>('/gerente/establishment', { withCredentials: true });
-      console.log(response.data)
-      setEstabelecimentoId(response.data.id)
-      setNome(response.data.nome);
-      setDescricao(response.data.descricao);
-      setCNPJ(response.data.cnpj);
-
-      console.log('Dados completos da resposta:', JSON.stringify(response.data, null, 2));
-      console.log('Tipo de categoria:', typeof response.data.categoria);
-      console.log('Valor de categoria:', response.data.categoria);
-
-      if (response.data.categoria && Array.isArray(response.data.categoria)) {
-        console.log('Categorias do estabelecimento:', response.data.categoria);
-        
-        // Extrai os IDs das categorias
-        const categoriaIds = response.data.categoria.map(
-          (item: CategoryResponse) => item.nome
-        );
-      
-        console.log('IDs das categorias:', categoriaIds);
-      
-        // Filtra os dados para incluir apenas as categorias cujos IDs estão no array
-        const categoriasSelecionadas = dados.filter(cat =>
-          categoriaIds.includes(cat.title)
-        );
-      
-        console.log('Categorias selecionadas:', categoriasSelecionadas);
-        setSelectedCategories(categoriasSelecionadas);
-      }
-      
-      setEditMode(true);
-      setFirstRegister(false);
-
-    } catch (err) {
-      setError('Erro ao carregar dados do estabelecimento');
-      console.error('Erro:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchEstablishmentData();
-  }, []);
-
   return (
     <>
       <CustomSnackbar
@@ -213,12 +217,12 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2, minWidth: 320,
 
         }}>
+   
+            <Typography sx={{ fontFamily: 'var(--notosans) !important' }} variant="h6" gutterBottom>
+              Confirmar CNPJ:&nbsp; {CNPJ}
+            </Typography>
 
-          <Typography sx={{ fontFamily: 'var(--notosans) !important' }} variant="h6" gutterBottom>
-            Confirmar CNPJ:&nbsp; {CNPJ}
-          </Typography>
-
-
+          
           <Typography sx={{ mb: 2, fontFamily: 'var(--notosans) !important', fontSize: 18 }}>
             Tem certeza que deseja cadastrar este CNPJ? <br />
             <b> {<Warning sx={{ pt: 1, mt: 1, pr: 1 }} />}Você não poderá alterá-lo futuramente.</b>
@@ -228,15 +232,14 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!modalButtonEnabled}
+              disabled={!modalButtonEnabled || loading}
               onClick={handleCreateEstablishment}
               sx={{ minWidth: 180 }}
             >
-
-              <Typography sx={{ fontFamily: 'var(--notosans) !important', fontSize: 16 }}>
+              {loading ? (<CircularProgress size={20} color='inherit'/>) : (<Typography sx={{ fontFamily: 'var(--notosans) !important', fontSize: 16 }}>
                 {modalButtonEnabled ? 'Cadastrar' : `Aguarde ${modalCountdown}s`}
 
-              </Typography>
+              </Typography>)}
             </Button>
           </Box>
         </Box>
@@ -262,7 +265,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         <Grid size={{ xs: 12, md: 4 }}>
           <TextField
             required
-            value={CNPJ}
+            value={viewCNPJ}
             onChange={handleCNPJChange}
             fullWidth
             variant="outlined"
@@ -296,15 +299,19 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         <Grid size={{ xs: 12, sm: 12, md: 6 }} >
           <Box>
             <Autocomplete
+
               multiple
               id="checkboxes-tags-demo"
               options={dados}
-              value={selectedCategories}
               disableCloseOnSelect
-              onChange={handleCategoryChange}
+              value={categoriasSelecionadas}
+              //onChange={handleCategoryChange}
+                onChange={(event, newValue) => {
+                setCategoriasSelecionadas(newValue);
+                handleCategoryChange(event, newValue);
+              }}
               noOptionsText="Nenhuma categoria encontrada"
               getOptionLabel={(option) => option.title}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
               renderOption={(props, option, { selected }) => {
                 const { key, ...optionProps } = props
                 return (
@@ -341,8 +348,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                 )
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Categorias"
-                />
+                <TextField {...params} label="Categorias" />
               )}
               disabled={!editMode || disabled}
             />
@@ -352,18 +358,18 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>
             {firstRegister ? (
               <Button
-                variant='contained'
+              variant='contained'
                 size='large'
                 disabled={disabled || !allFieldsFilled}
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-
+                 
                 }}
                 onClick={handleOpenCnpjModal}
               >
-                <Typography sx={{ fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px', fontWeight: 500 }}>
+                <Typography sx={{  fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px', fontWeight: 500 }}>
                   Cadastrar Informações
                 </Typography>
               </Button>
@@ -376,7 +382,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: 'var(--roxo)',
-
+                 
                 }}
                 onClick={handleEditOrSave}
               >

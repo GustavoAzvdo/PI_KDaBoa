@@ -21,17 +21,23 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
     const navigate = useNavigate();
     return (
 
-        <Card sx={{
-            borderRadius: 4,
-            cursor: "pointer",
-            width: "100%",
-            transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
-            boxShadow: 4,
-            '&:hover': {
-                boxShadow: 8,
-                transform: 'translateY(-8px)',
-            },
-        }} className='cardHomeEvent' title={card.title} >
+       <Card
+  sx={{
+    borderRadius: 4,
+    cursor: "pointer",
+    width: { xs: '90%', sm: '80%', md: 400 }, // ex: responsivo, maior no desktop
+    maxWidth: 500, // limite máximo do card (ajuste como quiser)
+    margin: '0 auto', // centralizar horizontalmente
+    transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
+    boxShadow: 4,
+    '&:hover': {
+      boxShadow: 8,
+      transform: 'translateY(-8px)',
+    },
+  }}
+  className='cardHomeEvent'
+  title={card.title}
+>
 
             <CardMedia
 

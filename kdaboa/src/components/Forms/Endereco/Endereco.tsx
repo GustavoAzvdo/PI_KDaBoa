@@ -18,14 +18,14 @@ interface EnderecoProps {
 }
 
 export interface EnderecoData {
-    id: any
-    cep: string;
-    logradouro: string;
-    bairro: string;
-    cidade: string;
-    uf: string;
-    complemento: string;
-    numero: string | number;
+  id_endereco: number;
+  logradouro: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep: string;
 }
 
 
@@ -35,12 +35,15 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [, setLoadingEnderecos] = useState(true);
 
     const [cep, setCep] = useState<string>('');
+//
+    const [viewCep, setViewCep] = useState<string>('');
     const [logradouro, setLogradouro] = useState<string>('');
     const [bairro, setBairro] = useState<string>('');
     const [cidade, setCidade] = useState<string>('');
     const [uf, setUf] = useState<string>('');
     const [complemento, setComplemento] = useState<string>('');
-    const [numero, setNumero] = useState<string | number>('');
+//
+    const [numero, setNumero] = useState<string>('');
     const [cepError, setCepError] = useState<boolean>(false);
     const [cepHelper, setCepHelper] = useState<string>('');
     const [, setDisabled] = useState<boolean>(false);
@@ -52,23 +55,34 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
+//
+    const [idEndereco ,setIdEndereco] = useState<number>()
 
     const handleOpenDeleteModal = (idx: number) => {
+        const e = enderecos[idx];
         setDeleteIndex(idx);
+        setIdEndereco(e.id_endereco)
         setDeleteModalOpen(true);
     };
 
     // Função para confirmar exclusão
-    const handleConfirmDelete = () => {
-        if (deleteIndex !== null) {
-            removeEndereco(deleteIndex);
-            setSnackbarMsg('Endereço excluído com sucesso!');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
+    const handleConfirmDelete = async () => {
+        try {
+            await api.delete(`/gerente/address/?id=${idEndereco}`, {withCredentials: true})
+
+            if (deleteIndex !== null) {
+                removeEndereco(deleteIndex);
+                setSnackbarMsg('Endereço excluído com sucesso!');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+            }
+            setDeleteModalOpen(false);
+            setDeleteIndex(null);
+        } catch (error) {
+            console.log(error)
         }
-        setDeleteModalOpen(false);
-        setDeleteIndex(null);
+
+        
     };
 
     // Função para cancelar exclusão
@@ -85,15 +99,9 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         return value.slice(0, 9);
     }
 
-    const formatCepFromApi = (cep: string): string => {
-        if (!cep) return '';
-        // Remove qualquer formatação existente e aplica a formatação correta
-        const cepNumerico = cep.replace(/\D/g, '');
-        return formatCep(cepNumerico);
-    };
-
     const clearFields = () => {
         setCep('');
+        setViewCep('')
         setLogradouro('');
         setBairro('');
         setCidade('');
@@ -110,7 +118,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         return cepNumerico.length === 8 && numero !== '';
     };
     const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCep(formatCep(e.target.value));
+        setViewCep(formatCep(e.target.value));
         setCepError(false);
         setCepHelper('');
     };
@@ -155,92 +163,67 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
 
     // Adicionar ou atualizar endereço
     const handleButtonClick = async () => {
-        const novoEndereco: EnderecoData = {
-            id: enderecos[editIndex ?? 0]?.id ?? 0, // usa o ID existente se estiver editando
-            cep,
-            logradouro,
-            bairro,
-            cidade,
-            uf,
-            complemento,
-            numero,
-        };
 
-        const exists = enderecos.some((e: EnderecoData, idx: number) =>
-            e.cep === cep &&
+        try {
+            const response = await api.post<EnderecoData>('/gerente/address', {
+                cep: cep,
+                logradouro: logradouro,
+                numero: numero,
+                bairro: bairro,
+                complemento: complemento,
+                cidade: cidade,
+                estado: uf,
+            }, { withCredentials: true })
+            
+            const novoEndereco: EnderecoData = {
+                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
+                
+            };
+
+            console.log(novoEndereco)
+            
+            
+            const exists = enderecos.some((e: EnderecoData, idx: number) =>
+                e.cep === cep &&
             e.numero === numero &&
             (editIndex === null || idx !== editIndex)
         );
-
+        
         if (exists) {
             setSnackbarMsg('Endereço já foi adicionado!');
             setSnackbarSeverity('warning');
             setSnackbarOpen(true);
             return;
         }
-
-        try {
-            if (editing && editIndex !== null) {
-                // PUT para atualizar o endereço existente
-
-                const enderecoId = enderecos[editIndex]?.id;
-                await api.put<EnderecoData>(`/gerente/address/`, {
-                    id: enderecoId,
-                    cep: cep,
-                    logradouro: logradouro,
-                    numero: numero,
-                    bairro: bairro,
-                    complemento: complemento,
-                    cidade: cidade,
-                    estado: uf,
-                }, { withCredentials: true });
-
-                updateEndereco(editIndex, novoEndereco);
-                setSnackbarMsg('Endereço atualizado com sucesso!');
-            } else {
-                // POST para criar novo endereço
-                const response = await api.post<EnderecoData>('/gerente/address', {
-                    cep: cep,
-                    logradouro: logradouro,
-                    numero: numero,
-                    bairro: bairro,
-                    complemento: complemento,
-                    cidade: cidade,
-                    estado: uf,
-                }, { withCredentials: true });
-
-                const enderecoSalvo: EnderecoData = {
-                    ...novoEndereco,
-                    id: response.data.id,
-                };
-
-                addEndereco(enderecoSalvo);
-                setSnackbarMsg('Endereço salvo com sucesso!');
-            }
-
+        
+        if (editing && editIndex !== null) {
+            updateEndereco(editIndex, novoEndereco); // Usa função do contexto
+            setSnackbarMsg('Endereço atualizado com sucesso!');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+            setEditing(false);
+            setEditIndex(null);
+            clearFields();
+        } else {
+            addEndereco(novoEndereco); // Usa função do contexto
+            setSnackbarMsg('Endereço salvo com sucesso!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
             clearFields();
-            setEditing(false);
-            setEditIndex(null);
-
-        } catch (error) {
-            console.error(error);
-            setSnackbarMsg('Erro ao salvar endereço');
-            setSnackbarSeverity('error');
-            setSnackbarOpen(true);
-        }
-    };
-
-
-
+        } clearFields();
+    } catch (error) {
+        console.log(error)
+    }
+    }
     const handleEdit = (idx: number) => {
         const e = enderecos[idx];
+        setIdEndereco(e.id_endereco)
         setCep(e.cep);
+        setViewCep(formatCep(e.cep))
         setLogradouro(e.logradouro);
         setBairro(e.bairro);
         setCidade(e.cidade);
-        setUf(e.uf);
+        setUf(e.estado);
         setComplemento(e.complemento);
         setNumero(e.numero);
         setEditing(true);
@@ -249,16 +232,83 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         setEditIndex(idx);
     };
 
+    //função para editar algum estbalecimento
+    const handleEditAddress = async () => {
+        try {
+            const response = await api.put<EnderecoData>('/gerente/address',{
+                id: idEndereco,
+                cep: cep,
+                logradouro: logradouro,
+                numero: numero,
+                bairro: bairro,
+                complemento: complemento,
+                cidade: cidade,
+                estado: uf,
+            }, {withCredentials: true})
+         
+            const novoEndereco: EnderecoData = {
+                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
+                
+            };
+     
+            
+            const exists = enderecos.some((e: EnderecoData, idx: number) =>
+                e.cep === cep &&
+            e.numero === numero &&
+            (editIndex === null || idx !== editIndex)
+            );
+            
+            if (exists) {
+                setSnackbarMsg('Endereço já foi adicionado!');
+                setSnackbarSeverity('warning');
+                setSnackbarOpen(true);
+                return;
+            }
+            
+            if (editing && editIndex !== null) {
+                updateEndereco(editIndex, novoEndereco); // Usa função do contexto
+                setSnackbarMsg('Endereço atualizado com sucesso!');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+                setEditing(false);
+                setEditIndex(null);
+                clearFields();
+            } else {
+                addEndereco(novoEndereco); // Usa função do contexto
+                setSnackbarMsg('Endereço salvo com sucesso!');
+                setSnackbarSeverity('success');
+                setSnackbarOpen(true);
+                clearFields();
+            } clearFields();
+        } catch (error) {
+            console.log(error) 
+        }
+    }
+
+    useEffect(() => {
+        if (enderecoSelecionado) {
+            // Preenche os campos quando há um endereço selecionado
+            setCep(enderecoSelecionado.cep || '');
+            setViewCep(enderecoSelecionado.cep || '')
+            setLogradouro(enderecoSelecionado.logradouro || '');
+            setBairro(enderecoSelecionado.bairro || '');
+            setCidade(enderecoSelecionado.cidade || '');
+            setUf(enderecoSelecionado.estado || '');
+            setComplemento(enderecoSelecionado.complemento || '');
+            setNumero(enderecoSelecionado.numero || '');
+        } else {
+            // Limpa os campos quando o endereço selecionado é null/undefined
+            clearFields();
+        }
+    }, [enderecoSelecionado]);
+
     useEffect(() => {
         async function carregarEnderecos() {
             try {
                 const response = await api.get<EnderecoData[]>('/gerente/address', { withCredentials: true });
-                // Formata os CEPs dos endereços carregados
-                const enderecosFormatados = response.data.map(endereco => ({
-                    ...endereco,
-                    cep: formatCepFromApi(endereco.cep)
-                }));
-                setEnderecosDireto(enderecosFormatados);
+                console.log(response)
+                setEnderecosDireto(response.data);
+                console.log(enderecos)
             } catch (error) {
                 console.error('Erro ao carregar endereços:', error);
             } finally {
@@ -267,22 +317,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
         }
 
         carregarEnderecos();
-    }, []); // Removido enderecos das dependências para evitar loop infinito
-
-    useEffect(() => {
-        if (enderecoSelecionado) {
-            setCep(formatCepFromApi(enderecoSelecionado.cep));
-            setLogradouro(enderecoSelecionado.logradouro || '');
-            setBairro(enderecoSelecionado.bairro || '');
-            setCidade(enderecoSelecionado.cidade || '');
-            setUf(enderecoSelecionado.uf || '');
-            setComplemento(enderecoSelecionado.complemento || '');
-            setNumero(enderecoSelecionado.numero || '');
-        } else {
-            // Limpa os campos quando o endereço selecionado é null/undefined
-            clearFields();
-        }
-    }, [enderecoSelecionado]);
+    }, []);
 
     return (
         <>
@@ -295,14 +330,17 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 }}
             >
                 {/* Campos do endereço */}
-                <Grid size={{ xs: 12, sm: 12, md: 2 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                     <Box>
                         <TextField
                             fullWidth
 
-                            value={cep}
+                            value={viewCep}
                             onBlur={handleCepBlur}
-                            onChange={handleCepChange}
+                            onChange={(event: any) => {
+                                handleCepChange(event)
+                                setCep(event.target.value.replace(/\D/g, ''))
+                            }}
                             label="CEP"
                             variant="outlined"
                             placeholder="Digite seu CEP"
@@ -319,7 +357,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+                <Grid size={{ xs: 12, sm: 9, md: 6 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
@@ -340,7 +378,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, md: 4 }}   >
+                <Grid size={{ xs: 12, sm: 6, md: 4 }}   >
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             disabled
@@ -360,7 +398,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, md: 4 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             fullWidth
@@ -380,7 +418,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, md: 2 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 2 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
                             disabled
@@ -400,7 +438,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 6 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
@@ -421,7 +459,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                         />
                     </Box>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 12, md: 2 }} sx={{ mt: 0 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 2 }} sx={{ mt: 0 }}>
                     <Box sx={{ marginBottom: 2 }}>
                         <TextField
 
@@ -448,11 +486,11 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                             <Button
                                 variant="contained"
                                 sx={{ width: '200px', backgroundColor: 'var(--roxo)' }}
-                                onClick={handleButtonClick}
+                                onClick={editing ? handleEditAddress : handleButtonClick}
                                 disabled={!isValid()}
                             >
                                 <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
-                                    {editing ? 'Salvar novo endereço' : 'Salvar endereço'}
+                                    {editing ? 'Salvar endereço' : 'Salvar novo endereço'}
                                 </Typography>
                             </Button>
                         </Box>
@@ -484,7 +522,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                                     <Typography variant="subtitle1"><b>Logradouro:</b> {e.logradouro}</Typography>
                                     <Typography variant="subtitle1"><b>Bairro:</b> {e.bairro}</Typography>
                                     <Typography variant="subtitle1"><b>Cidade:</b> {e.cidade}</Typography>
-                                    <Typography variant="subtitle1"><b>UF:</b> {e.uf}</Typography>
+                                    <Typography variant="subtitle1"><b>UF:</b> {e.estado}</Typography>
                                     <Typography variant="subtitle1"><b>Complemento:</b> {e.complemento}</Typography>
                                     <Typography variant="subtitle1"><b>Número:</b> {e.numero}</Typography>
                                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1, gap: 2 }}>
