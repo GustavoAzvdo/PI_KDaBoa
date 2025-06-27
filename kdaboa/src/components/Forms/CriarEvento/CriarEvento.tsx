@@ -193,7 +193,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         );
     };
 
- 
+
     return (
         <>
             <Grid container spacing={2} sx={{ padding: 2 }}>
@@ -442,17 +442,18 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                             </Typography>
                         </Box>
                         <Box sx={{ my: 2 }}>
+                            
                             {/* <Button variant="contained" sx={{ width: '200px', backgroundColor: 'var(--roxo)' }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
-                                Manter endereço
-                            </Typography>
-                        </Button>
-                        <Button variant="outlined" sx={{ width: '200px', borderColor: 'var(--roxo)', color: 'var(--roxo)', marginLeft: 3 }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
-                                Alterar endereço
-                            </Typography>
-                        </Button> */}
-                            <FormControl sx={{ my: 2, display: { xs: 'flex', md: 'none', sm: 'flex' }, justifyContent: { xs: 'center', md: 'center', sm: 'center' } }}>
+                                <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                    Manter endereço
+                                </Typography>
+                            </Button>
+                            <Button variant="outlined" sx={{ width: '200px', borderColor: 'var(--roxo)', color: 'var(--roxo)', marginLeft: 3 }}>
+                                <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                    Alterar endereço
+                                </Typography>
+                            </Button> */}
+                            <FormControl sx={{ my: 2, display: { xs: 'flex', md: 'flex', sm: 'flex' }, justifyContent: { xs: 'center', md: 'center', sm: 'center' } }}>
                                 <RadioGroup
                                     row
                                     aria-labelledby="selecionaEndereco"

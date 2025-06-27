@@ -1,13 +1,12 @@
 import * as React from 'react';
-import {useState} from 'react';
-import { createTheme, styled } from '@mui/material/styles';
+import { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import logo from '../../assets/logo.png';
-import cdg from '../../assets/cdg.jpg';
 import './Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings , EditCalendar, Collections, Person} from '@mui/icons-material';
+import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings, EditCalendar, Collections, Person } from '@mui/icons-material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
@@ -19,24 +18,6 @@ import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
 
-
-
-
-const demoTheme = createTheme({
-  colorSchemes: { light: true, dark: true },
-  cssVariables: {
-    colorSchemeSelector: 'class',
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1100,
-      xl: 1536,
-    },
-  },
-});
 
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
@@ -63,87 +44,87 @@ const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
 
 
 export default function DashboardLayoutBasic(props: any) {
-const [eventoTitle, setEventoTitle] = useState<string>('Criar evento');
+  const [eventoTitle, setEventoTitle] = useState<string>('Criar evento');
 
-const NAVIGATION: Navigation = [
-  {
-    kind: 'header',
-    title: 'Opções',
-  },
-  {
-    segment: 'dashboard',
-    title: 'Dados pessoais',
-    icon: <Face />,
-    children: [
-      {
-        segment: 'info',
-        title: 'Informações cadastrais',
-        icon: <Person />,
-      },
-      {
-        segment: 'estabelecimento',
-        title: 'Estabelecimento',
-        icon: <House />,
-      },
-      {
-        segment: 'endereco',
-        title: 'Endereço',
-        icon: <Map />,
-      },
-      {
-        segment: 'contato',
-        title: 'Contatos',
-        icon: <Call />,
-      },
-      {
-        segment: 'galeria',
-        title: 'Galeria',
-        icon: <Collections />,
-      },
-    ],
-    
-  },
-  {
-    segment: 'funcionarios',
-    title: 'Funcionários',
-    icon: <Group />,
-  },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Informações',
-  },
-  {
-    segment: 'eventos',
-    title: 'Eventos',
-    icon: <Celebration />,
-    children: [
-      {
-        segment: 'criar_evento',
-        title: eventoTitle,
-        icon: <EditCalendar />,
-      },
-      {
-        segment: 'postados',
-        title: 'Postados',
-        icon: <Verified />,
-      },
-      {
-        segment: 'em_analise',
-        title: 'Em análise',
-        icon: <NewReleases />,
-      },
-    ],
-  },
-  {
-    segment: 'configuracoes',
-    title: 'Configurações',
-    icon: <Settings />,
-  },
-];
-  
+  const NAVIGATION: Navigation = [
+    {
+      kind: 'header',
+      title: 'Opções',
+    },
+    {
+      segment: 'dashboard',
+      title: 'Dados pessoais',
+      icon: <Face />,
+      children: [
+        {
+          segment: 'info',
+          title: 'Informações cadastrais',
+          icon: <Person />,
+        },
+        {
+          segment: 'estabelecimento',
+          title: 'Estabelecimento',
+          icon: <House />,
+        },
+        {
+          segment: 'endereco',
+          title: 'Endereço',
+          icon: <Map />,
+        },
+        {
+          segment: 'contato',
+          title: 'Contatos',
+          icon: <Call />,
+        },
+        {
+          segment: 'galeria',
+          title: 'Galeria',
+          icon: <Collections />,
+        },
+      ],
+
+    },
+    {
+      segment: 'funcionarios',
+      title: 'Funcionários',
+      icon: <Group />,
+    },
+    {
+      kind: 'divider',
+    },
+    {
+      kind: 'header',
+      title: 'Informações',
+    },
+    {
+      segment: 'eventos',
+      title: 'Eventos',
+      icon: <Celebration />,
+      children: [
+        {
+          segment: 'criar_evento',
+          title: eventoTitle,
+          icon: <EditCalendar />,
+        },
+        {
+          segment: 'postados',
+          title: 'Postados',
+          icon: <Verified />,
+        },
+        {
+          segment: 'em_analise',
+          title: 'Em análise',
+          icon: <NewReleases />,
+        },
+      ],
+    },
+    {
+      segment: 'configuracoes',
+      title: 'Configurações',
+      icon: <Settings />,
+    },
+  ];
+
   const { window } = props;
 
   const router = useDemoRouter('/dashboard');
@@ -157,23 +138,23 @@ const NAVIGATION: Navigation = [
   const [session, setSession] = React.useState<Session | null>(null);
 
 
-React.useEffect(() => {
+  React.useEffect(() => {
     api.get<User>('/auth/dados', { withCredentials: true })
-    .then(res => {
-      console.log(res.data)
-      setUser(res.data);
-      setSession({
-        user: {
-          email: res.data.email,
-          image: cdg,
-        },
+      .then(res => {
+        console.log(res.data)
+        setUser(res.data);
+        setSession({
+          user: {
+            email: res.data.email,
+
+          },
+        });
+      })
+      .catch(_err => {
+        console.error('Não autenticado');
+        window.location.href = '/';
       });
-    })
-    .catch(_err => {
-      console.error('Não autenticado');
-      window.location.href = '/';
-    });
-}, [])
+  }, [])
 
 
 
@@ -185,7 +166,7 @@ React.useEffect(() => {
         setSession({
           user: {
             email: user?.email,
-            image: cdg,
+
           },
         });
         localStorage.setItem('userEmail', email);
@@ -205,29 +186,29 @@ React.useEffect(() => {
         return <Skeleton height={400} />;
       case '/dashboard/info':
         return (
-          <InfoPessoal/>
+          <InfoPessoal />
         );
       case '/dashboard/estabelecimento':
         return (
-          <Estabelecimento/>
+          <Estabelecimento />
         );
       case '/dashboard/endereco':
         return (
-          <Endereco disabledComponents={false} />        
+          <Endereco disabledComponents={false} />
         );
       case '/dashboard/contato':
         return (
-          <Contatos/>
+          <Contatos />
         );
       case '/dashboard/galeria':
         return (
-          <Galeria/>
+          <Galeria />
         );
       case '/funcionarios':
         return <Skeleton height={400} />;
       case '/eventos/criar_evento':
         return (
-          <CriarEvento setEventoTitle={setEventoTitle}/>
+          <CriarEvento setEventoTitle={setEventoTitle} />
         );
       case '/eventos/postados':
         return (
@@ -239,7 +220,7 @@ React.useEffect(() => {
         return <Skeleton height={400} />;
       default:
         return (
-          <ScreenError/>
+          <ScreenError />
         );
     }
 
@@ -253,12 +234,17 @@ React.useEffect(() => {
       branding={{
         logo: <img src={logo} alt="Logo" />,
         title: 'Area do Gerente',
+
       }}
+
       navigation={NAVIGATION}
       router={router}
-      theme={demoTheme}
+
       window={demoWindow}
     >
+      <style>
+        {`button[title="Change color scheme"], [aria-label="Change color scheme"] { display: none !important; }`}
+      </style>
       <DashboardLayout>
         <PageContainer>
           {renderContent(router.pathname, router)}

@@ -2,7 +2,7 @@ import { AttachFile, Check, Close, CloudUpload, Delete, InfoOutlined } from '@mu
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, ListItem, ListItemIcon, ListItemText, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
-import React from 'react'
+import React, { useEffect } from 'react'
 import api from '../../../api/api'
 
 
@@ -33,76 +33,6 @@ const Galeria = () => {
         }
     }
 
-    // const handleAddPhoto = () => {
-    //     if (fileObj && photos.length < 4) {
-        
-    //         const url = URL.createObjectURL(fileObj);
-    //         setPhotos([...photos, { name: fileObj.name, url }]);
-    //         setSnackbarMessage('Foto adicionada com sucesso!');
-    //         setSnackbarSeverity('success');
-    //     }
-    // const handleAddPhoto = async () => {
-    //     try {
-    //         const response = await api.post('gerente/gallery', { images: fileObj }, { withCredentials: true })
-    //         console.log(response);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-
-    //     const tipoValido = ['image/jpeg', 'image/jpg', 'image/png'].includes(fileObj?.type || '');
-    //     if (!tipoValido) {
-    //         setSnackbarMessage('Formato inválido. Aceitos: JPG, JPEG, PNG.');
-    //         setSnackbarSeverity('warning');
-    //         setSnackbarOpen(true);
-    //         return;
-    //     }
-
-    //     if (fileObj?.size && fileObj.size > 5 * 1024 * 1024) { // 5MB
-    //         setSnackbarMessage('O tamanho máximo permitido é 5MB.');
-    //         setSnackbarSeverity('warning');
-    //         setSnackbarOpen(true);
-    //         return;
-    //     }
-
-    //     if (!fileObj) {
-    //         setSnackbarMessage('Nenhum arquivo selecionado.');
-    //         setSnackbarSeverity('warning');
-    //         setSnackbarOpen(true);
-    //         return;
-    //     }
-
-    //     if (photos.length >= 4) {
-    //         setSnackbarMessage('Você atingiu o limite máximo de 4 fotos.');
-    //         setSnackbarSeverity('warning');
-    //         setSnackbarOpen(true);
-    //         return;
-    //     }
-
-    //     // Validação final antes de adicionar
-    //     const img = new Image();
-    //     img.onload = function () {
-
-
-    //         const url = URL.createObjectURL(fileObj);
-    //         setPhotos([...photos, { name: fileObj.name, url }]);
-    //         setSnackbarMessage('Foto adicionada com sucesso!');
-    //         setSnackbarSeverity('success');
-    //         setSnackbarOpen(true);
-    //         setFileName('');
-    //         setFileObj(null);
-    //         if (inputRef.current) {
-    //             inputRef.current.value = '';
-    //         }
-    //     };
-
-    //     img.onerror = function () {
-    //         setSnackbarMessage('Erro ao processar a imagem. Tente novamente.');
-    //         setSnackbarSeverity('warning');
-    //         setSnackbarOpen(true);
-    //     };
-
-    //     img.src = URL.createObjectURL(fileObj);
-    // }
 
     const handleAddPhoto = async () => {
         if (!fileObj) {
@@ -118,19 +48,17 @@ const Galeria = () => {
         try {
             const response = await api.post('gerente/gallery', formData, {
                 withCredentials: true,
-                
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            
-          
+
             console.log(response);
             const url = URL.createObjectURL(fileObj);
             setPhotos(prev => [...prev, { name: fileObj.name, url }]);
             setSnackbarMessage('Foto adicionada com sucesso!');
             setSnackbarSeverity('success');
-            
+
         } catch (error) {
             console.error('Erro ao fazer upload:', error);
             setSnackbarMessage('Erro ao fazer upload da imagem. Tente novamente.');
@@ -140,6 +68,7 @@ const Galeria = () => {
             setFileName('');
             setFileObj(null);
         }
+        handleGetPhotos();
     }
 
     const handleRemovePhoto = (index: number) => {
@@ -160,6 +89,29 @@ const Galeria = () => {
         setSnackbarOpen(true);
 
     }
+
+    const handleGetPhotos = async () => {
+        try {
+        const response = await api.get<string[]>('/gerente/gallery', { withCredentials: true });
+            console.log(response.data)
+          const nomes: string[] = response.data.map((caminho: string) => {
+            const partes = caminho.split('/');
+            return partes[partes.length - 1];
+          });
+          console.log(nomes)
+          const photos = nomes.map((nome: string) => ({
+            name: nome,
+            url: `${import.meta.env.VITE_API_URL}/gerente/gallery/${encodeURIComponent(nome)}`, // ou hardcoded se preferir
+          }));
+          console.log(photos)
+          setPhotos(photos);
+        } catch (error) {
+          console.error("Erro ao buscar fotos:", error);
+        }
+      };
+      
+
+
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
         clipPath: 'inset(50%)',
@@ -172,6 +124,10 @@ const Galeria = () => {
         width: 1,
     });
 
+
+    useEffect(() => {
+        handleGetPhotos();
+    }, []);
     return (
         <Grid container spacing={2} sx={{ padding: 2 }}>
             {/* Campo de texto q vai receber o nome da foto */}
@@ -259,7 +215,7 @@ const Galeria = () => {
                         sx={{
                             backgroundColor: 'var(--roxo)',
                             px: 6,
-                            width: {xs: '100%', sm: '100%', md: '30%'},
+                            width: { xs: '100%', sm: '100%', md: '30%' },
 
                         }}
                         onClick={handleAddPhoto}
@@ -277,7 +233,7 @@ const Galeria = () => {
                 <Grid size={{ xs: 12, sm: 6, md: 6 }} key={idx}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                         <img
-                            src={photo.url}
+                            src={photo.name}
                             alt={photo.name}
                             style={{ width: '100%', maxHeight: 250, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee' }}
                         />

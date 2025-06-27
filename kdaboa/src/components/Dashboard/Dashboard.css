@@ -86,3 +86,15 @@
     color: "#fff" !important
 }
 
+.css-1sv69n2-MuiButtonBase-root-MuiIconButton-root{
+    display: none;
+}
+
+[data-toolpad-root] header button[title="Change color scheme"] {
+    display: none !important;
+}
+
+button[title="Change color scheme"],
+[aria-label="Change color scheme"] {
+  display: none !important;
+}
