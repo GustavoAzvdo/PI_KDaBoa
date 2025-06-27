@@ -1,13 +1,13 @@
 import { Box, Typography, Grid, Card, CardContent, Button } from '@mui/material';
 import { Group, EditCalendar, Verified, NewReleases } from '@mui/icons-material';
 import logoPC from './logoPC.png'
-const BoasVindasGerente = ({ nome }: { nome?: string }) => {
+const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => {
   return (
     <Box sx={{ p: 4 }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Box>
           <Typography variant="h4" gutterBottom>
-            Bem-vindo, {nome || 'Usuário'}!
+            Bem-vindo, {nome || 'Gerente'}!
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
             Aqui estão seus atalhos e resumo de atividades recentes.
@@ -27,7 +27,7 @@ const BoasVindasGerente = ({ nome }: { nome?: string }) => {
             <CardContent>
               <EditCalendar sx={{ fontSize: 40 }} />
               <Typography variant="h6">Criar Evento</Typography>
-              <Button variant="outlined" color="inherit" size="small" sx={{ mt: 1 }}>Acessar</Button>
+              <Button variant="outlined" color="inherit" size="small" sx={{ mt: 1 }} onClick={() => router.navigate('/eventos/criar_evento')}>Acessar</Button>
             </CardContent>
           </Card>
         </Grid>
