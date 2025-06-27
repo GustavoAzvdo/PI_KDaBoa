@@ -19,7 +19,7 @@ import { EnderecoData } from '../Endereco/Endereco';
 import { useEnderecoContext } from '../../../context/EnderecoContext';
 import { useEventos } from '../../../context/EventoContext';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
-
+import api from '../../../api/api';
 
 dayjs.locale('pt-br');
 dayjs.extend(utc);
@@ -39,7 +39,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     // valores do form 
     const [nome, setNome] = useState<string>('');
     const [descricao, setDescricao] = React.useState<string>('');
-    const [ctg, setCtg] = useState<string[]>([]);
+    const [ctg, setCtg] = useState<number[]>([]);
     const [dataInicio, setDataInicio] = useState<Dayjs | null>(dayjs().startOf('day'));
     const [dataFim, setDataFim] = useState<Dayjs | null>(dayjs().startOf('day'));
     const [fotoUrl, setFotoUrl] = useState<string>('');
@@ -108,7 +108,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
 
     const handleCategoryChange = (_event: any, value: any) => {
-        const categories = value.map((item: any) => item.title);
+        const categories = value.map((item: any) => item.id);
         setCtg(categories);
 
         if (onCategoryChange) {
@@ -128,7 +128,11 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         if (eventoEdicao) {
             setNome(eventoEdicao.nome || '');
             setDescricao(eventoEdicao.descricao || '');
-            setCtg(eventoEdicao.categorias || []);
+            const categoryIds = eventoEdicao.categorias
+                .map(name => dados.find(c => c.title === name)?.id)
+                .filter(id => id !== undefined) as number[];
+
+            setCtg(categoryIds);
             setDataInicio(eventoEdicao.dataInicio ? dayjs(eventoEdicao.dataInicio) : null);
             setDataFim(eventoEdicao.dataFim ? dayjs(eventoEdicao.dataFim) : null);
             setFotoUrl(eventoEdicao.foto || '');
@@ -155,33 +159,93 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     }, [isEdit, setEventoTitle]);
 
-    const handleSubmit = () => {
-        const evento = {
-            id: isEdit && eventoEdicao ? eventoEdicao.id : Date.now(),
-            nome: nome,
-            descricao: descricao,
-            dataInicio: dataInicio?.toISOString() || '',
-            dataFim: dataFim?.toISOString() || '',
-            categorias: ctg,
-            foto: fotoUrl,
-            endereco: selectedEndereco,
-            // ...outros campos...
-        };
-        if (isEdit) {
-            updateEvento(evento);
-            setIsEdit(false);
-            setEventoEdicao(null);
-            setSnackbarMessage('Evento editado com sucesso!');
-        } else {
-            addEvento(evento);
-            setSnackbarMessage('Evento criado com sucesso!');
+    // const handleSubmit = () => {
+    //     const evento = {
+    //         id: isEdit && eventoEdicao ? eventoEdicao.id : Date.now(),
+    //         nome: nome,
+    //         descricao: descricao,
+    //         dataInicio: dataInicio?.toISOString() || '',
+    //         dataFim: dataFim?.toISOString() || '',
+    //         categorias: ctg,
+    //         foto: fotoUrl,
+    //         endereco: selectedEndereco,
+    //         // ...outros campos...
+    //     };
+    //     if (isEdit) {
+    //         updateEvento(evento);
+    //         setIsEdit(false);
+    //         setEventoEdicao(null);
+    //         setSnackbarMessage('Evento editado com sucesso!');
+    //     } else {
+    //         addEvento(evento);
+    //         setSnackbarMessage('Evento criado com sucesso!');
 
+    //     }
+
+    //     setSnackbarSeverity('success');
+    //     setSnackbarOpen(true);
+    // };
+
+    const createFormData = () => {
+        const formData = new FormData();
+
+        // Adiciona campos textuais
+        formData.append('nome', nome);
+        formData.append('descricao', descricao);
+        formData.append('data_inicio', dataInicio?.utc().format('YYYY-MM-DDTHH:mm:ss') || '');
+        formData.append('data_fim', dataFim?.utc().format('YYYY-MM-DDTHH:mm:ss') || '');
+        formData.append('id_endereco', selectedEndereco?.id_endereco?.toString() || '');
+        formData.append('data_criacao', new Date().toISOString());
+        // Adiciona categorias como array
+        ctg.forEach(id => {
+            formData.append('categoria', id.toString());
+        });
+
+        // Adiciona arquivo de imagem
+        if (inputRef.current?.files?.[0]) {
+            formData.append('images', inputRef.current.files[0]);
         }
-
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
+        console.log(formData);
+        return formData;
     };
 
+    const handlePostEvento = async () => {
+        try {
+            const formData = createFormData();
+            console.log(formData);
+            const response = await api.post('/gerente/event', formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            
+            console.log(response.data);
+            setSnackbarMessage('Evento criado com sucesso!');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+
+            // Reset do formulário após sucesso
+            setNome('');
+            setDescricao('');
+            setCtg([]);
+            setFileName('');
+            setFotoUrl('');
+            if (inputRef.current?.files?.[0]) {
+                formData.append('images', inputRef.current.files[0]);
+              } else {
+                // Se estiver editando e não tiver novo arquivo, envie a URL existente
+                if (fotoUrl && isEdit) {
+                  formData.append('fotoExistente', fotoUrl);
+                }
+              }
+        } catch (error) {
+            console.error(error);
+            setSnackbarMessage('Erro ao criar evento');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+        }
+    };
     const allFieldsFilled = () => {
         return (
             nome.trim() !== '' &&
@@ -368,7 +432,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 <Grid size={{ xs: 12, sm: 6, md: 6 }} sx={{ marginTop: 2 }}>
                     <Box>
                         <Autocomplete
-                            value={dados.filter((option) => ctg.includes(option.title))}
+                            value={dados.filter((option) => ctg.includes(option.id))}
                             multiple
                             id="checkboxes-tags-demo"
                             options={dados}
@@ -442,7 +506,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                             </Typography>
                         </Box>
                         <Box sx={{ my: 2 }}>
-                            
+
                             {/* <Button variant="contained" sx={{ width: '200px', backgroundColor: 'var(--roxo)' }}>
                                 <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
                                     Manter endereço
@@ -513,7 +577,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                 width: { xs: '100%', sm: '100%', md: '25%' },
                             }}
                             variant='contained'
-                            onClick={handleSubmit}>
+                            onClick={handlePostEvento}>
                             <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
                                 {isEdit ? 'Editar evento' : 'Criar evento'}
                             </Typography>

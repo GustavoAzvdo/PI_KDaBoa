@@ -5,7 +5,7 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import logo from '../../assets/logo.png';
 import './Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings, EditCalendar, Collections, Person } from '@mui/icons-material';
+import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings, EditCalendar, Collections, Person, Home } from '@mui/icons-material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
@@ -50,6 +50,11 @@ export default function DashboardLayoutBasic(props: any) {
       title: 'Dados pessoais',
       icon: <Face />,
       children: [
+        {
+          segment: 'inicio',
+          title: 'Inicio',
+          icon: <Home/>,
+        },
         {
           segment: 'info',
           title: 'Informações cadastrais',
@@ -175,9 +180,13 @@ export default function DashboardLayoutBasic(props: any) {
 
   function renderContent(pathname: string, router: Router) {
     switch (pathname) {
+      case '/dashboard/inicio':
+        return (
+          <BoasVindasGerente nome={user?.nome} router={router}/>
+        );
       case '/dashboard':
         return (
-          <BoasVindasGerente nome={user?.nome} />
+          <BoasVindasGerente nome={user?.nome} router={router}/>
         );
       case '/dashboard/info':
         return (
@@ -233,7 +242,7 @@ export default function DashboardLayoutBasic(props: any) {
       session={session}
       authentication={authentication}
       branding={{
-        logo: <img src={logo} alt="Logo" />,
+        logo: <img src={logo} alt="Logo" onClick={() => router.navigate('/dashboard')}/>,
         title: 'Area do Gerente',
 
       }}
