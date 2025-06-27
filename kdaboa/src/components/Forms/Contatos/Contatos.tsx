@@ -37,11 +37,11 @@ const Contatos = () => {
   const formatPhone = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 11); // limita a 11 dígitos
     if (digits.length <= 10) {
-      return digits.replace(/(\d{2})(\d{0,4})(\d{0,4})/, (m, p1, p2, p3) =>
+      return digits.replace(/(\d{2})(\d{0,4})(\d{0,4})/, (_m, p1, p2, p3) =>
         p2 ? `(${p1}) ${p2}${p3 ? '-' + p3 : ''}` : `(${p1}`
       );
     } else {
-      return digits.replace(/(\d{2})(\d{0,5})(\d{0,4})/, (m, p1, p2, p3) =>
+      return digits.replace(/(\d{2})(\d{0,5})(\d{0,4})/, (_m, p1, p2, p3) =>
         p2 ? `(${p1}) ${p2}${p3 ? '-' + p3 : ''}` : `(${p1}`
       );
     }
@@ -144,7 +144,7 @@ const Contatos = () => {
 
   return (
     <Grid container spacing={2} sx={{ padding: 2 }}>
-      <Grid size={{ xs: 12, md: 3 }}>
+      <Grid size={{ xs: 12, md: 3 , sm: 12}}>
         <TextField
           disabled={!isEditMode ? true : false}
           fullWidth
@@ -161,7 +161,7 @@ const Contatos = () => {
           }}
         />
       </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
+      <Grid size={{ xs: 12, md: 3, sm: 12 }}>
         <TextField
           disabled={!isEditMode ? true : false}
           fullWidth
@@ -178,7 +178,7 @@ const Contatos = () => {
           }}
         />
       </Grid>
-      <Grid size={{ xs: 12, md: 3 }}>
+      <Grid size={{ xs: 12, md: 3, sm: 12 }}>
         <TextField
           disabled={!isEditMode ? true : false}
           fullWidth
@@ -196,13 +196,13 @@ const Contatos = () => {
           }}
         />
       </Grid>
-      <Grid size={{ xs: 12, md: 12 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Grid size={{ xs: 12, md: 12, sm: 12 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
           {!hasContact ? (
             <Button
               variant="contained"
               size="large"
-              sx={{ backgroundColor: 'var(--roxo)' }}
+              sx={{ backgroundColor: 'var(--roxo)', width: { xs: '100%', sm: '100%', md: '25%' }, }}
               onClick={handlePost}
               disabled={!isFormValid}
             >
@@ -214,7 +214,7 @@ const Contatos = () => {
             <Button
               variant="contained"
               size="large"
-              sx={{ backgroundColor: 'var(--roxo)' }}
+              sx={{ backgroundColor: 'var(--roxo)', width: { xs: '100%', sm: '100%', md: '25%' }, }}
               onClick={() => setIsEditMode(true)}
             >
               <Typography sx={{ fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px' }}>
@@ -225,7 +225,7 @@ const Contatos = () => {
             <Button
               variant="contained"
               size="large"
-              sx={{ backgroundColor: 'var(--roxo)' }}
+              sx={{ backgroundColor: 'var(--roxo)', width: { xs: '100%', sm: '100%', md: '25%' }, }}
               onClick={handlePut}
               disabled={!isFormValid}
             >

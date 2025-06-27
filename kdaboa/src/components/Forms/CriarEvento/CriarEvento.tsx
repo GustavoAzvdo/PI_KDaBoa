@@ -365,7 +365,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                     </Box>
                 </Grid>
 
-                <Grid size={{ xs: 10, sm: 6, md: 6 }} sx={{ marginTop: 2 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 6 }} sx={{ marginTop: 2 }}>
                     <Box>
                         <Autocomplete
                             value={dados.filter((option) => ctg.includes(option.title))}
@@ -508,7 +508,9 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         <Button
                             disabled={!allFieldsFilled()}
                             sx={{
-                                backgroundColor: 'var(--roxo)'
+                                mb: 2,
+                                backgroundColor: 'var(--roxo)',
+                                width: { xs: '100%', sm: '100%', md: '25%' },
                             }}
                             variant='contained'
                             onClick={handleSubmit}>

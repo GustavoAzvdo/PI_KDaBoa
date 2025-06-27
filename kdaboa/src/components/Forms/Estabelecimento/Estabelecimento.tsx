@@ -275,7 +275,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
             disabled={!firstRegister || disabled}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
           <TextField
             required
             label="Descrição do estabelecimento"
@@ -358,14 +358,14 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>
             {firstRegister ? (
               <Button
-              variant='contained'
+                variant='contained'
                 size='large'
                 disabled={disabled || !allFieldsFilled}
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                 
+                  width: { xs: '100%', sm: '100%', md: '25%' },
                 }}
                 onClick={handleOpenCnpjModal}
               >
@@ -382,7 +382,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: 'var(--roxo)',
-                 
+                  width: { xs: '100%', sm: '100%', md: '25%' },
                 }}
                 onClick={handleEditOrSave}
               >

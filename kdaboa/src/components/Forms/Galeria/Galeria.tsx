@@ -131,7 +131,7 @@ const Galeria = () => {
     return (
         <Grid container spacing={2} sx={{ padding: 2 }}>
             {/* Campo de texto q vai receber o nome da foto */}
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs: 12, sm: 12, md: 3 }}>
                 <TextField
 
                     disabled
@@ -239,10 +239,11 @@ const Galeria = () => {
                         />
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                             <Button
+                                color='error'
                                 variant="outlined"
                                 startIcon={<Delete />}
                                 onClick={() => handleRemovePhoto(idx)}
-                                sx={{ mt: 1, width: '50%', borderColor: 'var(--roxo)', color: 'var(--roxo)' }}
+                                sx={{ mt: 1, width: { xs: '100%', sm: '100%', md: '50%' }, borderColor: 'var(--roxo)', color: 'var(--roxo)', '&:hover': { borderColor: 'var(--roxo)', color: 'var(--roxo)' } }}
                             >
                                 <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
                                     Excluir

@@ -482,11 +482,12 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 </Grid>
 
                 {showButton && (
-                    <Grid size={{ xs: 12, md: 12, sm: 6 }}  >
+                    <Grid size={{ xs: 12, md: 12, sm: 12 }}  >
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button
+                            
                                 variant="contained"
-                                sx={{ width: '200px', backgroundColor: 'var(--roxo)' }}
+                                sx={{ width: {xs: '100%', sm: '100%', md: '25%'}, backgroundColor: 'var(--roxo)' }}
                                 onClick={editing ? handleEditAddress : handleButtonClick}
                                 disabled={!isValid()}
                             >
