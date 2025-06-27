@@ -473,7 +473,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                             options={enderecos}
                                             getOptionLabel={(option) => `${option.cep} | ${option.numero}`}
                                             sx={{
-                                                width: 300,
+                                                width: { xs: '100%', sm: '100%', md: '25%' },
                                                 ml: 2,
                                                 opacity: enderecoModo === 'alterar' ? 1 : 0.7,
                                                 transition: 'opacity 0.3s ease'

@@ -2,6 +2,7 @@ import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Ale
 import { HttpsOutlined, EmailOutlined, HouseOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { CircularProgress } from '@mui/material'
 import api from '../../../api/api'
 import logo from '../../../assets/logo.png'
 import './Login.css'
@@ -54,9 +55,9 @@ const Login = () => {
                 email: email,
                 senha: senha,
             },
-            {
-                withCredentials: true
-            })
+                {
+                    withCredentials: true
+                })
 
             if (response.status === 201) {
                 localStorage.setItem('userEmail', email);
@@ -83,7 +84,7 @@ const Login = () => {
 
     return (
         <Box className='container_login'>
-            
+
             <Box className='body_login'>
                 <Box className='header_login'>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
@@ -94,7 +95,7 @@ const Login = () => {
 
                     </Box>
                     <Box className='home-login' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '50%' }}>
-                        <Link sx={{ display: 'flex', alignItems: 'center' , gap: 1, textDecoration: 'none', '&:hover': { textDecoration: 'underline', textDecorationColor: 'var(--roxoLoginBtn)' } }} href='/home'>
+                        <Link sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', '&:hover': { textDecoration: 'underline', textDecorationColor: 'var(--roxoLoginBtn)' } }} href='/home'>
                             <Typography className='title_home_login'>
                                 Home
                             </Typography>
@@ -155,9 +156,10 @@ const Login = () => {
                             className='btn-login'
                             type='submit'
                             disabled={isLoading}
+                            startIcon={isLoading ? <CircularProgress color="inherit" size={20} /> : null}
                         >
                             <Typography className='btn' >
-                                Entrar
+                                {isLoading ? 'Entrando...' : 'Entrar'}
                             </Typography>
                         </Button>
                         <Box className='links'>

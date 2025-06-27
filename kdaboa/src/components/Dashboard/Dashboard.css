@@ -50,13 +50,14 @@
     background-color: var(--roxoForteDashboard) !important;
 }
 
+/* Botão de login e logout e theme removido */
 .css-fa1coj-MuiButtonBase-root-MuiButton-root{
-    font-size: 15px !important;
-    font-family: var(--notosans) !important;
-    border: 0px !important;
-    color: #fff !important;
-    background-color: var(--roxoForteDashboard) !important;
+    display: none !important;
+   
 } 
+.css-1sv69n2-MuiButtonBase-root-MuiIconButton-root{
+    display: none !important;
+}
 
 .css-1h6sw33-MuiButtonBase-root-MuiChip-root {
     background-color: var(--roxoFracoDashboard) !important;
@@ -90,11 +91,14 @@
     display: none;
 }
 
-[data-toolpad-root] header button[title="Change color scheme"] {
-    display: none !important;
+.css-5rtw4-MuiStack-root{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-button[title="Change color scheme"],
-[aria-label="Change color scheme"] {
-  display: none !important;
+.css-1lsv4bv-MuiTypography-root {
+    font-family: var(--notosans) !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
 }

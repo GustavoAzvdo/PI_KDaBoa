@@ -2,7 +2,7 @@ import './Banner.css'
 import { Box, Typography } from '@mui/material'
 const Banner = () => {
   return (
-    <Box className="banner-container" >
+    <Box className="banner-container " sx={{ height: '430px' }} >
       <Box className="banner-content"
         sx={{
           width: { xs: '100%', sm: '100%', md: '50%' },
@@ -15,7 +15,15 @@ const Banner = () => {
           height: '100%', // garante centralização vertical se necessário
         }}
       >
-        <Typography variant='h1'>
+        <Typography variant='h1'
+        sx={{
+            padding: '40px',
+            fontSize: { xs: '62px', sm: '65px', md: '73px' },
+            fontWeight: '650',
+            marginBottom: '20px',
+            fontFamily: 'var(--notosans)',
+        }}
+        >
           Os melhores eventos em um só lugar!
         </Typography>
       </Box>

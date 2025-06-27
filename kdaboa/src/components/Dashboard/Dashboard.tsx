@@ -17,6 +17,7 @@ import EventosPostados from '../Forms/EventosPostados/EventosPostados';
 import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
+import { Button, Dialog, DialogActions, DialogTitle, Link } from '@mui/material';
 
 
 function useDemoRouter(initialPath: string): Router {
@@ -45,7 +46,7 @@ const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
 
 export default function DashboardLayoutBasic(props: any) {
   const [eventoTitle, setEventoTitle] = useState<string>('Criar evento');
-
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const NAVIGATION: Navigation = [
     {
       kind: 'header',
@@ -174,8 +175,7 @@ export default function DashboardLayoutBasic(props: any) {
       },
 
       signOut: () => {
-        setSession(null);
-        router.navigate('/login');
+        setOpenDialog(true);
       },
     };
   }, [router]);
@@ -242,14 +242,27 @@ export default function DashboardLayoutBasic(props: any) {
 
       window={demoWindow}
     >
-      <style>
-        {`button[title="Change color scheme"], [aria-label="Change color scheme"] { display: none !important; }`}
-      </style>
+
       <DashboardLayout>
         <PageContainer>
           {renderContent(router.pathname, router)}
         </PageContainer>
       </DashboardLayout>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Deseja realmente sair?</DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>
+          <Button color="primary"
+            variant='contained'
+            onClick={() => {
+              setSession(null);
+              router.navigate('/login');
+            }}
+          >
+            <Link href="/login" sx={{ color: 'white', textDecoration: 'none' }}>Sair</Link>
+          </Button>
+        </DialogActions>
+      </Dialog>
     </AppProvider>
   );
 }
