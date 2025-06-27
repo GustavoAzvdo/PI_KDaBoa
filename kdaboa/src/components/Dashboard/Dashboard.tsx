@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { styled } from '@mui/material/styles';
 import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
@@ -18,6 +17,7 @@ import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
 import { Button, Dialog, DialogActions, DialogTitle, Link } from '@mui/material';
+import BoasVindasGerente from '../BoasVindas/BoasVindas';
 
 
 function useDemoRouter(initialPath: string): Router {
@@ -35,13 +35,6 @@ function useDemoRouter(initialPath: string): Router {
 
   return router;
 }
-
-const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: '" "',
-}));
 
 
 export default function DashboardLayoutBasic(props: any) {
@@ -183,7 +176,9 @@ export default function DashboardLayoutBasic(props: any) {
   function renderContent(pathname: string, router: Router) {
     switch (pathname) {
       case '/dashboard':
-        return <Skeleton height={400} />;
+        return (
+          <BoasVindasGerente nome={user?.nome} />
+        );
       case '/dashboard/info':
         return (
           <InfoPessoal />
@@ -205,7 +200,9 @@ export default function DashboardLayoutBasic(props: any) {
           <Galeria />
         );
       case '/funcionarios':
-        return <Skeleton height={400} />;
+        return (
+          <ScreenError/>
+        );
       case '/eventos/criar_evento':
         return (
           <CriarEvento setEventoTitle={setEventoTitle} />
@@ -215,9 +212,13 @@ export default function DashboardLayoutBasic(props: any) {
           <EventosPostados router={router} />
         );
       case '/eventos/em_analise':
-        return <Skeleton height={400} />;
+        return (
+          <ScreenError/>
+        );
       case '/configuracoes':
-        return <Skeleton height={400} />;
+        return (
+          <ScreenError/>
+        );
       default:
         return (
           <ScreenError />
