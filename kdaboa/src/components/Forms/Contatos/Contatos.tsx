@@ -182,7 +182,7 @@ const Contatos = () => {
         <TextField
           disabled={!isEditMode ? true : false}
           fullWidth
-          variant="outlined"
+          variant="outlined"  
           label="Email"
           type="email"
           value={email}

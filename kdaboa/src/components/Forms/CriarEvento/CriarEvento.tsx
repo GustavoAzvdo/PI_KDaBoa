@@ -66,7 +66,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         : selectedEndereco;
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
-        setEnd((prev) => [...prev, novoEndereco]);
+        setEnd((prev) => [...prev, novoEndereco]);''
     }
 
     const handleSelectEndereco = (_event: any, value: EnderecoData | null) => {
