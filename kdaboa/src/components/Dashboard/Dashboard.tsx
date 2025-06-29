@@ -13,6 +13,7 @@ import Contatos from '../Forms/Contatos/Contatos';
 import Galeria from '../Forms/Galeria/Galeria';
 import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
 import EventosPostados from '../Forms/EventosPostados/EventosPostados';
+import ScreenDash from '../ScreenDash/ScreenDash';
 import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
@@ -210,7 +211,7 @@ export default function DashboardLayoutBasic(props: any) {
         );
       case '/funcionarios':
         return (
-          <ScreenError/>
+          <ScreenDash/>
         );
       case '/eventos/criar_evento':
         return (
@@ -222,11 +223,11 @@ export default function DashboardLayoutBasic(props: any) {
         );
       case '/eventos/em_analise':
         return (
-          <ScreenError/>
+          <ScreenDash/>
         );
       case '/configuracoes':
         return (
-          <ScreenError/>
+          <ScreenDash/>
         );
       default:
         return (
