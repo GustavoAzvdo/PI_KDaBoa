@@ -5,6 +5,11 @@ const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => 
   return (
     <Box sx={{ p: 4 }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{pr: 5}}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src={logoPC} width={100} height={130} alt="logoPC" />
+          </Box>
+        </Box>
         <Box>
           <Typography variant="h4" gutterBottom>
             Bem-vindo, {nome || 'Gerente'}!
@@ -13,11 +18,6 @@ const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => 
             Aqui estão seus atalhos e resumo de atividades recentes.
           </Typography>
 
-        </Box>
-        <Box sx={{pl: 5}}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={logoPC} width={100} height={130} alt="logoPC" />
-          </Box>
         </Box>
       </Box>
       {/* Atalhos */}
