@@ -159,32 +159,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     }, [isEdit, setEventoTitle]);
 
-    // const handleSubmit = () => {
-    //     const evento = {
-    //         id: isEdit && eventoEdicao ? eventoEdicao.id : Date.now(),
-    //         nome: nome,
-    //         descricao: descricao,
-    //         dataInicio: dataInicio?.toISOString() || '',
-    //         dataFim: dataFim?.toISOString() || '',
-    //         categorias: ctg,
-    //         foto: fotoUrl,
-    //         endereco: selectedEndereco,
-    //         // ...outros campos...
-    //     };
-    //     if (isEdit) {
-    //         updateEvento(evento);
-    //         setIsEdit(false);
-    //         setEventoEdicao(null);
-    //         setSnackbarMessage('Evento editado com sucesso!');
-    //     } else {
-    //         addEvento(evento);
-    //         setSnackbarMessage('Evento criado com sucesso!');
 
-    //     }
-
-    //     setSnackbarSeverity('success');
-    //     setSnackbarOpen(true);
-    // };
 
     const createFormData = () => {
         const formData = new FormData();

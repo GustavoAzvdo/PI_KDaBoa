@@ -242,7 +242,7 @@ export default function DashboardLayoutBasic(props: any) {
       session={session}
       authentication={authentication}
       branding={{
-        logo: <img src={logo} alt="Logo" onClick={() => router.navigate('/dashboard')}/>,
+        logo: <img src={logo} alt="Logo" />,
         title: 'Area do Gerente',
 
       }}

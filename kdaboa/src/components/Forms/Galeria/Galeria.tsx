@@ -128,6 +128,8 @@ const Galeria = () => {
     useEffect(() => {
         handleGetPhotos();
     }, []);
+
+    
     return (
         <Grid container spacing={2} sx={{ padding: 2 }}>
             {/* Campo de texto q vai receber o nome da foto */}
