@@ -1,17 +1,16 @@
 import { AttachFile, Check, Close, CloudUpload, Delete, InfoOutlined } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, ListItem, ListItemIcon, ListItemText, TextField, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, ListItem, ListItemIcon, ListItemText, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import React, { useEffect } from 'react'
 import api from '../../../api/api'
 
-
 const dicas = [
     'Formatos permitidos: JPG, JPEG, PNG;',
     'Tamanho máximo: 5MB;',
     'Resolução: 1200 x 500.'
-
 ]
+
 const Galeria = () => {
     const [fileName, setFileName] = React.useState<string>('');
     const [fileObj, setFileObj] = React.useState<File | null>(null);
@@ -19,7 +18,7 @@ const Galeria = () => {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState('');
     const [snackbarSeverity, setSnackbarSeverity] = React.useState<'success' | 'warning'>('success');
-
+    const [loading, setLoading] = React.useState(false);
     const [open, setOpen] = React.useState(false);
 
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -41,19 +40,21 @@ const Galeria = () => {
             setSnackbarOpen(true);
             return;
         }
-
+    
         const formData = new FormData();
         formData.append('images', fileObj);
 
         try {
+            setLoading(true);
             const response = await api.post('gerente/gallery', formData, {
+
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            console.log(response);
+            console.log(response.data);
             const url = URL.createObjectURL(fileObj);
             setPhotos(prev => [...prev, { name: fileObj.name, url }]);
             setSnackbarMessage('Foto adicionada com sucesso!');
@@ -64,6 +65,7 @@ const Galeria = () => {
             setSnackbarMessage('Erro ao fazer upload da imagem. Tente novamente.');
             setSnackbarSeverity('warning');
         } finally {
+            setLoading(false);
             setSnackbarOpen(true);
             setFileName('');
             setFileObj(null);
@@ -71,45 +73,57 @@ const Galeria = () => {
         handleGetPhotos();
     }
 
-    const handleRemovePhoto = (index: number) => {
-        setPhotos((prev) => {
-            URL.revokeObjectURL(prev[index].url);
-            URL.revokeObjectURL(prev[index].url);
+    const handleRemovePhoto = async (index: number) => {
+        const id = photos[index].name;
+       
+        try {
+            await api.delete(`/gerente/gallery/${id}`, {                
+                withCredentials: true,
+            });
+
+            const novasFotos = [...photos];
+            novasFotos.splice(index, 1);
+            setPhotos(novasFotos);
+
             setSnackbarMessage('Foto removida com sucesso!');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+        } catch (error) {
+            console.error('Erro ao remover a foto:', error);
+            console.log(id)
+            setSnackbarMessage('Erro ao remover a foto. Tente novamente.');
             setSnackbarSeverity('warning');
             setSnackbarOpen(true);
-            return prev.filter((_, i) => i !== index);
+        }
 
-        })
-        const newPhotos = [...photos];
-        newPhotos.splice(index, 1);
-        setPhotos(newPhotos);
-        setSnackbarMessage('Foto removida com sucesso!');
-        setSnackbarSeverity('warning');
-        setSnackbarOpen(true);
+        handleGetPhotos();
+    };
 
-    }
 
     const handleGetPhotos = async () => {
         try {
-        const response = await api.get<string[]>('/gerente/gallery', { withCredentials: true });
+            setLoading(true);
+
+            const response = await api.get<string[]>('/gerente/gallery', { withCredentials: true });
             console.log(response.data)
-          const nomes: string[] = response.data.map((caminho: string) => {
-            const partes = caminho.split('/');
-            return partes[partes.length - 1];
-          });
-          console.log(nomes)
-          const photos = nomes.map((nome: string) => ({
-            name: nome,
-            url: `${import.meta.env.VITE_API_URL}/gerente/gallery/${encodeURIComponent(nome)}`, // ou hardcoded se preferir
-          }));
-          console.log(photos)
-          setPhotos(photos);
+            const nomes: string[] = response.data.map((caminho: string) => {
+                const partes = caminho.split('/');
+                return partes[partes.length - 1];
+            });
+            console.log(nomes)
+            const photos = nomes.map((nome: string) => ({
+                name: nome,
+                url: `http://localhost:3000/gallery/${encodeURIComponent(nome)}`
+            }));
+            console.log(photos)
+            setPhotos(photos);
         } catch (error) {
-          console.error("Erro ao buscar fotos:", error);
+            console.error("Erro ao buscar fotos:", error);
+        } finally {
+            setLoading(false);
         }
-      };
-      
+    };
+
 
 
     const VisuallyHiddenInput = styled('input')({
@@ -129,7 +143,7 @@ const Galeria = () => {
         handleGetPhotos();
     }, []);
 
-    
+
     return (
         <Grid container spacing={2} sx={{ padding: 2 }}>
             {/* Campo de texto q vai receber o nome da foto */}
@@ -230,32 +244,47 @@ const Galeria = () => {
                 </Box>
 
             </Grid>
-
-            {photos.map((photo, idx) => (
-                <Grid size={{ xs: 12, sm: 6, md: 6 }} key={idx}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                        <img
-                            src={photo.name}
-                            alt={photo.name}
-                            style={{ width: '100%', maxHeight: 250, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee' }}
-                        />
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                            <Button
-                                color='error'
-                                variant="outlined"
-                                startIcon={<Delete />}
-                                onClick={() => handleRemovePhoto(idx)}
-                                sx={{ mt: 1, width: { xs: '100%', sm: '100%', md: '50%' }, borderColor: 'var(--roxo)', color: 'var(--roxo)', '&:hover': { borderColor: 'var(--roxo)', color: 'var(--roxo)' } }}
-                            >
-                                <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
-                                    Excluir
-
-                                </Typography>
-                            </Button>
-                        </Box>
+            <Grid size={{ xs: 12, sm: 12, md: 12 }}>
+                {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200 }}>
+                        <CircularProgress />
                     </Box>
-                </Grid>
-            ))}
+                ) : photos.length === 0 ? (
+                    <Typography sx={{ textAlign: 'center', fontSize: 18, mt: 4 }}>
+                        Nenhuma imagem adicionada.
+                    </Typography>
+                ) : (
+                    <Grid container spacing={2}>
+                        {photos.map((photo, idx) => (
+                            <Grid size={{ xs: 12, sm: 6, md: 6 }} key={idx}>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                                    <img
+                                        src={photo.url}
+                                        alt={photo.name}
+                                        style={{ width: '100%', maxHeight: 250, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee' }}
+                                    />
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                                        <Button
+                                            color='error'
+                                            variant="outlined"
+                                            startIcon={<Delete />}
+                                            onClick={() => handleRemovePhoto(idx)}
+                                            sx={{ mt: 1, width: { xs: '100%', sm: '100%', md: '50%' }, borderColor: 'var(--roxo)', color: 'var(--roxo)', '&:hover': { borderColor: 'var(--roxo)', color: 'var(--roxo)' } }}
+                                        >
+                                            <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
+                                                Excluir
+            
+                                            </Typography>
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            </Grid>
+                        ))}
+                      
+                    </Grid>
+                )}
+            </Grid>
+
             <CustomSnackbar
                 open={snackbarOpen}
                 message={snackbarMessage}

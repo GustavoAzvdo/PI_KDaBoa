@@ -43,6 +43,9 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const [dataInicio, setDataInicio] = useState<Dayjs | null>(dayjs().startOf('day'));
     const [dataFim, setDataFim] = useState<Dayjs | null>(dayjs().startOf('day'));
     const [fotoUrl, setFotoUrl] = useState<string>('');
+    const [fotoFile, setFotoFile] = useState<File | null>(null);
+
+
     //
 
     //
@@ -66,25 +69,29 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         : selectedEndereco;
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
-        setEnd((prev) => [...prev, novoEndereco]);''
+        setEnd((prev) => [...prev, novoEndereco]); ''
     }
 
     const handleSelectEndereco = (_event: any, value: EnderecoData | null) => {
         setSelectedEndereco(value);
+        console.log(value?.id_endereco);
     }
 
 
+    
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             setFileName(file.name);
+            setFotoFile(file); // <- ESSENCIAL
             const reader = new FileReader();
             reader.onloadend = () => {
-                setFotoUrl(reader.result as string); // salva a url base64
+                setFotoUrl(reader.result as string);
             };
             reader.readAsDataURL(file);
         }
-    }
+    };
+    
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -160,67 +167,115 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     }, [isEdit, setEventoTitle]);
 
 
+    // const handlePostEvento = async () => {
+    //     try {
+    //         const formData = new FormData();
+    //         formData.append('nome', nome);
+    //         formData.append('descricao', descricao);
+    //         formData.append('data_inicio', dataInicio?.toISOString() || '');
+    //         formData.append('data_fim', dataFim?.toISOString() || '');
+    //         if (selectedEndereco?.id_endereco) {
+    //             formData.append('id_endereco', selectedEndereco.id_endereco.toString());
+    //         }
+    //         formData.append('data_criacao', new Date().toISOString());
 
-    const createFormData = () => {
-        const formData = new FormData();
+    //         // Adiciona cada categoria individualmente
+    //         ctg.forEach(id => {
+    //             formData.append('categoria', id.toString());
+    //         });
 
-        // Adiciona campos textuais
-        formData.append('nome', nome);
-        formData.append('descricao', descricao);
-        formData.append('data_inicio', dataInicio?.utc().format('YYYY-MM-DDTHH:mm:ss') || '');
-        formData.append('data_fim', dataFim?.utc().format('YYYY-MM-DDTHH:mm:ss') || '');
-        formData.append('id_endereco', selectedEndereco?.id_endereco?.toString() || '');
-        formData.append('data_criacao', new Date().toISOString());
-        // Adiciona categorias como array
-        ctg.forEach(id => {
-            formData.append('categoria', id.toString());
-        });
+    //         // Se houver uma imagem, adiciona ao formData
+    //         if (fotoFile) {
+    //             // Se for um arquivo (File/Blob)
+    //             if (fotoFile instanceof File) {
+    //                 formData.append('images', fotoFile);
+    //             }
+    //         }
 
-        // Adiciona arquivo de imagem
-        if (inputRef.current?.files?.[0]) {
-            formData.append('images', inputRef.current.files[0]);
-        }
-        console.log(formData);
-        return formData;
-    };
+    //         const response = await api.post('/gerente/event', formData, {
+    //             withCredentials: true,
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data',
+    //             },
+    //         });
+
+    //         console.log('Resposta do servidor:', response.data);
+    //         setSnackbarMessage('Evento criado com sucesso!');
+    //         setSnackbarSeverity('success');
+    //         setSnackbarOpen(true);
+
+    //         // Reset do formulário após sucesso
+    //         setNome('');
+    //         setDescricao('');
+    //         setCtg([]);
+    //         setFileName('');
+    //         setFotoUrl('');
+
+    //     } catch (error) {
+    //         console.error('Erro ao criar evento:', error);
+    //         setSnackbarMessage('Erro ao criar evento. Tente novamente.');
+    //         setSnackbarSeverity('error');
+    //         setSnackbarOpen(true);
+    //     }
+    // };
 
     const handlePostEvento = async () => {
+        console.log('fotoFile:', fotoFile);
+        console.log('fileName:', fileName); 
         try {
-            const formData = createFormData();
-            console.log(formData);
+            const formData = new FormData();
+            formData.append('nome', nome);
+            formData.append('descricao', descricao);
+            formData.append('data_inicio', dataInicio?.toISOString() || '');
+            formData.append('data_fim', dataFim?.toISOString() || '');
+            if (selectedEndereco?.id_endereco) {
+                formData.append('id_endereco', selectedEndereco.id_endereco.toString());
+            }
+            formData.append('data_criacao', new Date().toISOString());
+    
+            ctg.forEach(id => {
+                formData.append('categoria', id.toString());
+            });
+    
+            // ✅ Se tiver imagem, envia corretamente
+            if (fotoFile) {
+                formData.append('images', fotoFile); // se só for uma
+            }
+    
+            // ✅ DEBUG: ver o que está sendo enviado
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
+    
             const response = await api.post('/gerente/event', formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            
-            console.log(response.data);
+    
+            console.log('Resposta do servidor:', response.data);
             setSnackbarMessage('Evento criado com sucesso!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
-
-            // Reset do formulário após sucesso
+    
+            // Reset
             setNome('');
             setDescricao('');
             setCtg([]);
             setFileName('');
             setFotoUrl('');
-            if (inputRef.current?.files?.[0]) {
-                formData.append('images', inputRef.current.files[0]);
-              } else {
-                // Se estiver editando e não tiver novo arquivo, envie a URL existente
-                if (fotoUrl && isEdit) {
-                  formData.append('fotoExistente', fotoUrl);
-                }
-              }
+            setFotoFile(null); // <- limpa também
+    
         } catch (error) {
-            console.error(error);
-            setSnackbarMessage('Erro ao criar evento');
+            console.error('Erro ao criar evento:', error);
+            setSnackbarMessage('Erro ao criar evento. Tente novamente.');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
     };
+    
+
     const allFieldsFilled = () => {
         return (
             nome.trim() !== '' &&
@@ -232,6 +287,19 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         );
     };
 
+    useEffect(() => {
+        const fetchEventos = async () => {
+            try {
+                const response = await api.get('/gerente/event', {
+                    withCredentials: true
+                })
+                console.log(response.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchEventos()
+    }, [selectedEndereco]);
 
     return (
         <>

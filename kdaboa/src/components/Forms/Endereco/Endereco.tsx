@@ -26,6 +26,7 @@ export interface EnderecoData {
     cidade: string;
     estado: string;
     cep: string;
+    favorito: boolean
 }
 
 
@@ -57,6 +58,8 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     //
     const [idEndereco, setIdEndereco] = useState<number>()
+
+    const [favoritoEndereco, setFavoritoEndereco] = useState<boolean>(false)
 
     const handleOpenDeleteModal = (idx: number) => {
         const e = enderecos[idx];
@@ -166,7 +169,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
 
         try {
             const response = await api.post<EnderecoData>('/gerente/address', {
-            
+
                 cep: cep,
                 logradouro: logradouro,
                 numero: numero,
@@ -174,10 +177,12 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 complemento: complemento,
                 cidade: cidade,
                 estado: uf,
+
+
             }, { withCredentials: true })
 
             const novoEndereco: EnderecoData = {
-                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
+                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero, favorito: false
 
             };
 
@@ -245,10 +250,11 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 complemento: complemento,
                 cidade: cidade,
                 estado: uf,
+                favorito: favoritoEndereco
             }, { withCredentials: true })
 
             const novoEndereco: EnderecoData = {
-                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero,
+                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero, favorito: favoritoEndereco
 
             };
 
@@ -485,9 +491,9 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                     <Grid size={{ xs: 12, md: 12, sm: 12 }}  >
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button
-                            
+
                                 variant="contained"
-                                sx={{ width: {xs: '100%', sm: '100%', md: '25%'}, backgroundColor: 'var(--roxo)' }}
+                                sx={{ width: { xs: '100%', sm: '100%', md: '25%' }, backgroundColor: 'var(--roxo)' }}
                                 onClick={editing ? handleEditAddress : handleButtonClick}
                                 disabled={!isValid()}
                             >
@@ -509,15 +515,36 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                                 <Paper elevation={2} sx={{ p: 2, mb: 2, position: 'relative' }} className='paper'>
                                     <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
                                         <IconButton
-                                            onClick={() => {
-                                                favoritarEndereco(idx);
-                                                setSnackbarMsg('Endereço favoritado!');
-                                                setSnackbarSeverity('warning');
-                                                setSnackbarOpen(true);
+                                            onClick={async () => {
+                                                try {
+                                                    // Atualiza todos os endereços: só o clicado fica como favorito
+                                                    await Promise.all(enderecos.map(async (end) => {
+                                                        const isFavorito = end.id_endereco === e.id_endereco;
+                                                        await api.put(`/gerente/address/${end.id_endereco}`, {
+                                                            favorito: isFavorito,
+                                                        }, { withCredentials: true });
+                                                    }));
+
+                                                    // Atualiza estado local: apenas um com favorito true
+                                                    const atualizados = enderecos.map((end) => ({
+                                                        ...end,
+                                                        favorito: end.id_endereco === e.id_endereco,
+                                                    }));
+                                                    setEnderecosDireto(atualizados);
+
+                                                    setSnackbarMsg('Endereço favoritado!');
+                                                    setSnackbarSeverity('success');
+                                                    setSnackbarOpen(true);
+                                                } catch (err) {
+                                                    console.error(err);
+                                                    setSnackbarMsg('Erro ao favoritar endereço.');
+                                                    setSnackbarSeverity('error');
+                                                    setSnackbarOpen(true);
+                                                }
                                             }}
                                             sx={{ color: 'var(--roxo)' }}
                                         >
-                                            {favorito === idx ? <Star /> : <StarBorder />}
+                                            {e.favorito === true ? <Star /> : <StarBorder />}
                                         </IconButton>
                                     </Box>
                                     <Typography variant="subtitle1"><b>CEP:</b> {e.cep}</Typography>

@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import api from '../api/api';
 
 export interface EnderecoData {
   id_endereco: number;
@@ -9,6 +10,7 @@ export interface EnderecoData {
   cidade: string;
   estado: string;
   cep: string;
+  favorito: boolean
 }
 
 interface EnderecoContextType {
@@ -52,8 +54,10 @@ export const EnderecoProvider = ({ children }: { children: ReactNode }) => {
     setEnderecos((prev) => prev.filter((_, i) => i !== index));
   };
 
+
+
   return (
-    <EnderecoContext.Provider value={{ setEnderecosDireto,enderecos, addEndereco, updateEndereco, removeEndereco, favorito, favoritarEndereco }}>
+    <EnderecoContext.Provider value={{ setEnderecosDireto, enderecos, addEndereco, updateEndereco, removeEndereco, favorito, favoritarEndereco }}>
       {children}
     </EnderecoContext.Provider>
   );
