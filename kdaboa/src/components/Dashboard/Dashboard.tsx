@@ -57,11 +57,6 @@ export default function DashboardLayoutBasic(props: any) {
           icon: <Home/>,
         },
         {
-          segment: 'info',
-          title: 'Informações cadastrais',
-          icon: <Person />,
-        },
-        {
           segment: 'estabelecimento',
           title: 'Estabelecimento',
           icon: <House />,
@@ -80,6 +75,11 @@ export default function DashboardLayoutBasic(props: any) {
           segment: 'galeria',
           title: 'Galeria',
           icon: <Collections />,
+        },
+        {
+          segment: 'info',
+          title: 'Informações cadastrais',
+          icon: <Person />,
         },
       ],
 

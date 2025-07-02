@@ -1,7 +1,39 @@
 import { Box, Typography, Grid, Card, CardContent, Button } from '@mui/material';
 import { Group, EditCalendar, Verified, NewReleases } from '@mui/icons-material';
 import logoPC from './logoPC.png'
+import { useState, useEffect } from 'react';
+import api from '../../api/api'
+
 const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => {
+  const [totalEventos, setTotalEventos] = useState<number>(0);
+  const [nomeGerente, setNomeGerente] = useState<string>('');
+
+  useEffect(() => {
+    const fetchTotalEventos = async () => {
+      try {
+        const response: any = await api.get('/gerente/event');
+        setTotalEventos(response.data.length);
+      } catch (error) {
+        console.error('Erro ao buscar total de eventos:', error);
+      }
+    };
+    fetchTotalEventos();
+  }, [])
+  const capitalizar = (nome: string) => nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
+
+  useEffect(() => {
+    const fetchNomeUsuario = async () => {
+      try {
+        const response: any = await api.get('/gerente/establishment', { withCredentials: true });
+        const nomeUsuario = response.data.Usuario?.[0]?.nome_usuario;
+        setNomeGerente(nomeUsuario || 'Gerente');
+      } catch (err) {
+        console.error('Erro ao buscar nome do usuário:', err);
+      }
+    };
+    fetchNomeUsuario();
+  }, []);
+
   return (
     <Box sx={{ p: 4 }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -12,7 +44,7 @@ const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => 
         </Box>
         <Box>
           <Typography variant="h4" gutterBottom>
-            Bem-vindo, {nome || 'Gerente'}!
+            Bem-vindo(a), {capitalizar(nomeGerente) || 'Gerente'}!
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
             Aqui estão seus atalhos e resumo de atividades recentes.
@@ -21,7 +53,7 @@ const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => 
         </Box>
       </Box>
       {/* Atalhos */}
-      
+
       <Grid container spacing={2} sx={{ mt: 3 }}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{
@@ -78,7 +110,7 @@ const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => 
             <CardContent>
               <Verified sx={{ fontSize: 40 }} />
               <Typography variant="h6">Eventos postados</Typography>
-              <Typography>8</Typography>
+              <Typography>{totalEventos}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -97,7 +129,7 @@ const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => 
             <CardContent>
               <NewReleases sx={{ fontSize: 40 }} />
               <Typography variant="h6">Em análise</Typography>
-              <Typography>3</Typography>
+              <Typography>0</Typography>
             </CardContent>
           </Card>
         </Grid>

@@ -127,7 +127,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
     }, []);
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
             {eventos.map((evento, index) => (
                 <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                     <Card>

@@ -102,7 +102,9 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         } else {
             setIsEdit(false);
             setEventoTitle('Criar evento')
+            setEventoEditando(null)
         }
+        
     }, [eventoEditando]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
@@ -254,13 +256,15 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setFotoUrl('');
             setFotoFile(null); // <- limpa também
             allFieldsFilled()
+            setEventoTitle('Criar evento')
+            setIsEdit(false)
         } catch (error) {
             console.error('Erro ao editar evento:', error);
             setSnackbarMessage('Erro ao editar evento. Tente novamente.');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
-
+        setEventoEditando(null)
     };
 
     const handlePostEvento = async () => {
@@ -317,7 +321,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
-
+        setEventoEditando(null)
     };
 
 
@@ -346,7 +350,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         fetchEventos()
     }, [selectedEndereco]);
 
-
+ 
     return (
         <>
             <Grid container spacing={2} sx={{ padding: 2 }}>
