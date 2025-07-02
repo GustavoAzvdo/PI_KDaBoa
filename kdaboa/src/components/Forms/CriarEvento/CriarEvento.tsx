@@ -18,6 +18,7 @@ import Endereco from '../Endereco/Endereco';
 import { EnderecoData } from '../Endereco/Endereco';
 import { useEnderecoContext } from '../../../context/EnderecoContext';
 import { useEventos } from '../../../context/EventoContext';
+import { useLocation } from 'react-router-dom';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import api from '../../../api/api';
 
@@ -36,7 +37,9 @@ interface CategoryProps {
 }
 
 const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
+
     // valores do form 
+
     const [nome, setNome] = useState<string>('');
     const [descricao, setDescricao] = React.useState<string>('');
     const [ctg, setCtg] = useState<number[]>([]);
@@ -44,11 +47,10 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const [dataFim, setDataFim] = useState<Dayjs | null>(dayjs().startOf('day'));
     const [fotoUrl, setFotoUrl] = useState<string>('');
     const [fotoFile, setFotoFile] = useState<File | null>(null);
+    const [data_criacao, setData_criacao] = useState<Dayjs | null>(null);
+  
+    //pegar o id
 
-
-    //
-
-    //
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
@@ -60,13 +62,48 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [, setEnd] = useState<EnderecoData[]>([]);
     const [selectedEndereco, setSelectedEndereco] = useState<EnderecoData | null>(null);
-    const { enderecos, favorito } = useEnderecoContext();
-    const { addEvento, updateEvento, eventoEdicao, setEventoEdicao } = useEventos();
+    const { enderecos, favorito, enderecoFavorito } = useEnderecoContext();
+    const { addEvento, updateEvento, eventoEdicao, setEventoEdicao, eventoEditando, setEventoEditando } = useEventos();
     const [isEdit, setIsEdit] = useState(false);
 
-    const enderecoParaExibir = enderecoModo === 'manter' && favorito !== null
-        ? enderecos[favorito]
+    const enderecoParaExibir = enderecoModo === 'manter'
+        ? enderecoFavorito
         : selectedEndereco;
+
+    const location = useLocation();
+    const eventoId = location.state?.id;
+
+
+    useEffect(() => {
+        if (!isEdit && enderecoModo === 'manter' && enderecoFavorito) {
+            setSelectedEndereco(enderecoFavorito);
+        }
+    }, [isEdit, enderecoModo, enderecoFavorito]);
+
+    useEffect(() => {
+        if (eventoEditando) {
+            console.log('id_evento:', eventoEditando.id_evento);
+            setEventoTitle('Editar evento')
+            setIsEdit(true);
+            setNome(eventoEditando.nome_evento || '');
+            setDescricao(eventoEditando.descricao || '');
+            setData_criacao(eventoEditando.data_criacao ? dayjs(eventoEditando.data_criacao) : null);
+            setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
+            setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
+            //setFotoFile(eventoEditando.foto || null);
+            setSelectedEndereco(eventoEditando.endereco || null);
+
+            // converte categorias de string para ID
+            const categoriaIds = eventoEditando.categorias
+                .map(cat => dados.find(d => d.title === cat)?.id)
+                .filter((id): id is number => id !== undefined);
+
+            setCtg(categoriaIds);
+        } else {
+            setIsEdit(false);
+            setEventoTitle('Criar evento')
+        }
+    }, [eventoEditando]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
         setEnd((prev) => [...prev, novoEndereco]); ''
@@ -78,7 +115,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     }
 
 
-    
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -91,7 +128,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             reader.readAsDataURL(file);
         }
     };
-    
+
 
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
@@ -131,134 +168,84 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     }, [enderecoModo, favorito, enderecos]);
 
-    useEffect(() => {
-        if (eventoEdicao) {
-            setNome(eventoEdicao.nome || '');
-            setDescricao(eventoEdicao.descricao || '');
-            const categoryIds = eventoEdicao.categorias
-                .map(name => dados.find(c => c.title === name)?.id)
-                .filter(id => id !== undefined) as number[];
+    // useEffect(() => {
+    //     if (eventoEdicao) {
+    //         setNome(eventoEdicao.nome_evento || '');
+    //         setDescricao(eventoEdicao.descricao || '');
+    //         const categoryIds = eventoEdicao.categorias
+    //             .map(name => dados.find(c => c.title === name)?.id)
+    //             .filter(id => id !== undefined) as number[];
 
-            setCtg(categoryIds);
-            setDataInicio(eventoEdicao.dataInicio ? dayjs(eventoEdicao.dataInicio) : null);
-            setDataFim(eventoEdicao.dataFim ? dayjs(eventoEdicao.dataFim) : null);
-            setFotoUrl(eventoEdicao.foto || '');
-            setSelectedEndereco(eventoEdicao.endereco || null); // <-- importante!
+    //         setCtg(categoryIds);
+    //         setDataInicio(eventoEdicao.data_inicio ? dayjs(eventoEdicao.data_inicio) : null);
+    //         setDataFim(eventoEdicao.data_fim ? dayjs(eventoEdicao.data_fim) : null);
+    //         setFotoUrl(eventoEdicao.foto || '');
+    //         setSelectedEndereco(eventoEdicao.endereco || null); // <-- importante!
 
-            setIsEdit(true);
-        } else {
-            setNome('');
-            setDescricao('');
-            setCtg([]);
-            setDataInicio(dayjs().startOf('day'));
-            setDataFim(dayjs().startOf('day'));
-            setFotoUrl('');
-            setSelectedEndereco(null);
-            setIsEdit(false);
-        }
-    }, [eventoEdicao]);
-
-    useEffect(() => {
-        if (isEdit) {
-            setEventoTitle('Editar Evento');
-        } else {
-            setEventoTitle('Criar Evento');
-        }
-    }, [isEdit, setEventoTitle]);
-
-
-    // const handlePostEvento = async () => {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append('nome', nome);
-    //         formData.append('descricao', descricao);
-    //         formData.append('data_inicio', dataInicio?.toISOString() || '');
-    //         formData.append('data_fim', dataFim?.toISOString() || '');
-    //         if (selectedEndereco?.id_endereco) {
-    //             formData.append('id_endereco', selectedEndereco.id_endereco.toString());
-    //         }
-    //         formData.append('data_criacao', new Date().toISOString());
-
-    //         // Adiciona cada categoria individualmente
-    //         ctg.forEach(id => {
-    //             formData.append('categoria', id.toString());
-    //         });
-
-    //         // Se houver uma imagem, adiciona ao formData
-    //         if (fotoFile) {
-    //             // Se for um arquivo (File/Blob)
-    //             if (fotoFile instanceof File) {
-    //                 formData.append('images', fotoFile);
-    //             }
-    //         }
-
-    //         const response = await api.post('/gerente/event', formData, {
-    //             withCredentials: true,
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data',
-    //             },
-    //         });
-
-    //         console.log('Resposta do servidor:', response.data);
-    //         setSnackbarMessage('Evento criado com sucesso!');
-    //         setSnackbarSeverity('success');
-    //         setSnackbarOpen(true);
-
-    //         // Reset do formulário após sucesso
+    //         setIsEdit(true);
+    //     }
+    //         else {
     //         setNome('');
     //         setDescricao('');
     //         setCtg([]);
-    //         setFileName('');
+    //         setDataInicio(dayjs().startOf('day'));
+    //         setDataFim(dayjs().startOf('day'));
     //         setFotoUrl('');
-
-    //     } catch (error) {
-    //         console.error('Erro ao criar evento:', error);
-    //         setSnackbarMessage('Erro ao criar evento. Tente novamente.');
-    //         setSnackbarSeverity('error');
-    //         setSnackbarOpen(true);
+    //         setSelectedEndereco(null);
+    //         setIsEdit(false);
     //     }
-    // };
+    // }, [eventoEdicao]);
 
-    const handlePostEvento = async () => {
+
+
+    const handleEditEvento = async () => {
         console.log('fotoFile:', fotoFile);
-        console.log('fileName:', fileName); 
+        console.log('fileName:', fileName);
         try {
             const formData = new FormData();
+            // formData.append('id_evento', eventoEditando?.id_evento.toString() || '');
             formData.append('nome', nome);
             formData.append('descricao', descricao);
             formData.append('data_inicio', dataInicio?.toISOString() || '');
             formData.append('data_fim', dataFim?.toISOString() || '');
-            if (selectedEndereco?.id_endereco) {
-                formData.append('id_endereco', selectedEndereco.id_endereco.toString());
+            const enderecoUsado = enderecoModo === 'manter' ? enderecoFavorito : selectedEndereco;
+            if (enderecoUsado?.id_endereco) {
+                formData.append('id_endereco', enderecoUsado.id_endereco.toString());
             }
-            formData.append('data_criacao', new Date().toISOString());
-    
+
             ctg.forEach(id => {
                 formData.append('categoria', id.toString());
             });
-    
+
             // ✅ Se tiver imagem, envia corretamente
             if (fotoFile) {
                 formData.append('images', fotoFile); // se só for uma
             }
-    
+
             // ✅ DEBUG: ver o que está sendo enviado
             for (let [key, value] of formData.entries()) {
                 console.log(`${key}:`, value);
             }
-    
-            const response = await api.post('/gerente/event', formData, {
+
+
+            await api.put(`/gerente/event/?id=${eventoEditando?.id_evento}`,{
+                nome: nome,
+                descricao: descricao,
+                data_inicio: dataInicio?.toISOString() || '',
+                data_fim: dataFim?.toISOString() || '',
+                images: fotoFile,
+                id_endereco: enderecoUsado?.id_endereco,
+                categoria: ctg,
+                
+            }, {
                 withCredentials: true,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-    
-            console.log('Resposta do servidor:', response.data);
-            setSnackbarMessage('Evento criado com sucesso!');
+                headers: { 'Content-Type': 'multipart/form-data' },
+              });
+            setSnackbarMessage('Evento editado com sucesso!');
+
+
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
-    
             // Reset
             setNome('');
             setDescricao('');
@@ -266,15 +253,73 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setFileName('');
             setFotoUrl('');
             setFotoFile(null); // <- limpa também
-    
+            allFieldsFilled()
+        } catch (error) {
+            console.error('Erro ao editar evento:', error);
+            setSnackbarMessage('Erro ao editar evento. Tente novamente.');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+        }
+
+    };
+
+    const handlePostEvento = async () => {
+        console.log('fotoFile:', fotoFile);
+        console.log('fileName:', fileName);
+        try {
+            const formData = new FormData();
+            formData.append('nome', nome);
+            formData.append('descricao', descricao);
+            formData.append('data_inicio', dataInicio?.toISOString() || '');
+            formData.append('data_fim', dataFim?.toISOString() || '');
+            const enderecoUsado = enderecoModo === 'manter' ? enderecoFavorito : selectedEndereco;
+            if (enderecoUsado?.id_endereco) {
+                formData.append('id_endereco', enderecoUsado.id_endereco.toString());
+            }
+            formData.append('data_criacao', new Date().toISOString());
+           
+            ctg.forEach(id => {
+                formData.append('categoria', id.toString());
+            });
+
+            // ✅ Se tiver imagem, envia corretamente
+            if (fotoFile) {
+                formData.append('images', fotoFile); // se só for uma
+            }
+
+            // ✅ DEBUG: ver o que está sendo enviado
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
+
+
+
+            await api.post('/gerente/event', formData, {
+                withCredentials: true,
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            setSnackbarMessage('Evento criado com sucesso!');
+
+
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+            // Reset
+            setNome('');
+            setDescricao('');
+            setCtg([]);
+            setFileName('');
+            setFotoUrl('');
+            setFotoFile(null); // <- limpa também
+            allFieldsFilled()
         } catch (error) {
             console.error('Erro ao criar evento:', error);
             setSnackbarMessage('Erro ao criar evento. Tente novamente.');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
+
     };
-    
+
 
     const allFieldsFilled = () => {
         return (
@@ -282,8 +327,8 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             descricao.trim() !== '' &&
             dataInicio !== null &&
             dataFim !== null &&
-            enderecoParaExibir !== null &&  // Verifica se o endereço está selecionado
-            ctg.length > 0                 // Verifica se há pelo menos 1 categoria
+            enderecoParaExibir !== null &&
+            ctg.length > 0
         );
     };
 
@@ -300,6 +345,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
         fetchEventos()
     }, [selectedEndereco]);
+
 
     return (
         <>
@@ -612,20 +658,36 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 </Grid>
                 <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', pt: 1 }}>
-                        <Button
-                            disabled={!allFieldsFilled()}
-                            sx={{
-                                mb: 2,
-                                backgroundColor: 'var(--roxo)',
-                                width: { xs: '100%', sm: '100%', md: '25%' },
-                            }}
-                            variant='contained'
-                            onClick={handlePostEvento}>
-                            <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
-                                {isEdit ? 'Editar evento' : 'Criar evento'}
-                            </Typography>
-                        </Button>
-
+                        {!isEdit ? (
+                            <Button
+                                disabled={!allFieldsFilled()}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'var(--roxo)',
+                                    width: { xs: '100%', sm: '100%', md: '25%' },
+                                }}
+                                variant='contained'
+                                onClick={() => handlePostEvento()}
+                            >
+                                <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
+                                    Criar evento
+                                </Typography>
+                            </Button>
+                        ) : (
+                            <Button
+                                disabled={!allFieldsFilled()}
+                                sx={{
+                                    mb: 2,
+                                    backgroundColor: 'var(--roxo)',
+                                    width: { xs: '100%', sm: '100%', md: '25%' },
+                                }}
+                                variant='contained'
+                                onClick={() => handleEditEvento()}>
+                                <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
+                                    Editar evento
+                                </Typography>
+                            </Button>
+                        )}
                     </Box>
                 </Grid>
                 <CustomSnackbar
@@ -633,7 +695,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                     message={snackbarMessage}
                     severity={snackbarSeverity}
                     onClose={() => setSnackbarOpen(false)}
-                    autoHideDuration={6000}
+                    autoHideDuration={4000}
                 />
             </Grid>
         </>

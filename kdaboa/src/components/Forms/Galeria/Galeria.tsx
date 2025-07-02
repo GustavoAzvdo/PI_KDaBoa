@@ -40,7 +40,7 @@ const Galeria = () => {
             setSnackbarOpen(true);
             return;
         }
-    
+
         const formData = new FormData();
         formData.append('images', fileObj);
 
@@ -74,10 +74,12 @@ const Galeria = () => {
     }
 
     const handleRemovePhoto = async (index: number) => {
-        const id = photos[index].name;
-       
+        const nomeImagem = photos[index].name;
         try {
-            await api.delete(`/gerente/gallery/${id}`, {                
+            await api.request({
+                method: 'DELETE',
+                url: '/gerente/gallery',
+                data: { nome: nomeImagem },
                 withCredentials: true,
             });
 
@@ -90,7 +92,7 @@ const Galeria = () => {
             setSnackbarOpen(true);
         } catch (error) {
             console.error('Erro ao remover a foto:', error);
-            console.log(id)
+            console.log(nomeImagem)
             setSnackbarMessage('Erro ao remover a foto. Tente novamente.');
             setSnackbarSeverity('warning');
             setSnackbarOpen(true);
@@ -273,14 +275,14 @@ const Galeria = () => {
                                         >
                                             <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
                                                 Excluir
-            
+
                                             </Typography>
                                         </Button>
                                     </Box>
                                 </Box>
                             </Grid>
                         ))}
-                      
+
                     </Grid>
                 )}
             </Grid>

@@ -269,8 +269,10 @@ export default function DashboardLayoutBasic(props: any) {
               setSession(null);
               router.navigate('/login');
             }}
+            sx={{ color: 'white', textDecoration: 'none', '&:hover': { backgroundColor: 'var(--roxoForteDashboard)' } }}
+            href="/login"
           >
-            <Link href="/login" sx={{ color: 'white', textDecoration: 'none' }}>Sair</Link>
+            Sair
           </Button>
         </DialogActions>
       </Dialog>

@@ -26,7 +26,7 @@ export interface EnderecoData {
     cidade: string;
     estado: string;
     cep: string;
-    favorito: boolean
+    favorito?: boolean
 }
 
 
@@ -241,8 +241,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     //função para editar algum estbalecimento
     const handleEditAddress = async () => {
         try {
-            const response = await api.put<EnderecoData>('/gerente/address', {
-                id: idEndereco,
+            const response = await api.put<EnderecoData>(`/gerente/address/${idEndereco}`, {
                 cep: cep,
                 logradouro: logradouro,
                 numero: numero,
@@ -250,11 +249,11 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 complemento: complemento,
                 cidade: cidade,
                 estado: uf,
-                favorito: favoritoEndereco
+            
             }, { withCredentials: true })
 
             const novoEndereco: EnderecoData = {
-                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero, favorito: favoritoEndereco
+                id_endereco: response.data?.id_endereco, cep, logradouro, bairro, cidade, estado: uf, complemento, numero
 
             };
 

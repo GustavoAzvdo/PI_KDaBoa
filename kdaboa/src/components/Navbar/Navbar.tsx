@@ -10,9 +10,9 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import logo from '../../assets/logo.png';
 import Link from '@mui/material/Link';
-import Person from '@mui/icons-material/Person';
+import PersonOutlined from '@mui/icons-material/PersonOutlined';
 import './Navbar.css';
-import { Home, Search } from '@mui/icons-material';
+import { HomeOutlined, Search } from '@mui/icons-material';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -28,7 +28,7 @@ const Navbar = () => {
               </Link>
               <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
                 <Link href='/' sx={{ textDecoration: 'none', color: 'inherit' }}>
-                  <Button variant='text' color='inherit' size='large' endIcon={<Home />}>
+                  <Button variant='text' color='inherit' size='large' endIcon={<HomeOutlined />}>
                     <Typography>Home</Typography>
                   </Button>
                 </Link>
@@ -40,9 +40,9 @@ const Navbar = () => {
               </Box>
             </Box>
 
-            {/* Botões normais no desktop */}
+            {/* Botões normais n  o desktop */}
             <Box className='btns-right-home' sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-              <Button variant='contained' color='secondary' href='/login' size='large' className='btnPublicar' endIcon={<Person />}>
+              <Button variant='contained' color='secondary' href='/login' size='large' className='btnPublicar' endIcon={<PersonOutlined />}>
                 <Typography>Entrar</Typography>
               </Button>
             </Box>
