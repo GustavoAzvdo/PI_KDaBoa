@@ -1,7 +1,5 @@
-import BD from "../../DB/CardsBD.json";
 import CardEventHome from "../CardEventHome/CardEventHome";
-import CardProps from "../CardEventHome/props/CardProps";
-import { Box } from '@mui/material'
+import { Box, CardProps } from '@mui/material'
 import Search from "../Search/Search";
 import { useState } from "react";
 import Footer from "../Footer/Footer";
@@ -12,6 +10,8 @@ import search from "../../assets/search.png";
 import Banner from "../Banner/Banner";
 import { useSearch } from "../../context/SearchContext";
 import { useEffect } from "react";
+import api from "../../api/api";
+import EventoProps from "../CardEventHome/props/EventoProps";
 const FilterEvetn = () => {
     const {
         searchText,
@@ -21,21 +21,50 @@ const FilterEvetn = () => {
         setCategories,
         setDate
     } = useSearch();
-      console.log('FilterEvent context values:', searchText, contextCategories, contextDate);
+      //console.log('FilterEvent context values:', searchText, contextCategories, contextDate);
 
     const [displayCategories, setDisplayCategories] = useState<string[]>([]);
-    const [filtered, setFiltered] = useState<CardProps[]>(BD);
+    const [filtered, setFiltered] = useState<EventoProps[]>([]);
+
+    const fetchEventos = async () => {
+        try {
+            const params = {
+                name: searchText || undefined,
+                category: contextCategories[0] ? Number(contextCategories[0]) : undefined, // ajuste se for ID real
+                date: contextDate || undefined,
+              };
+            const queryParams = new URLSearchParams();
+            if (params.name) queryParams.append('name', params.name);
+            if (params.category) queryParams.append('category', params.category.toString());
+            if (params.date) queryParams.append('date', params.date);
+            
+            const queryString = queryParams.toString();
+            const url = `/event${queryString ? `?${queryString}` : ''}`;
+
+            const res: any = await api.get(url);
+            setFiltered(res.data); // <---
+
+        } catch (err) {
+          console.error('Erro ao buscar eventos:', err);
+        }
+      };
+      
+
+
+
+   
 
     useEffect(() => {
-        handleCategoryAndTextChange(contextCategories, searchText, contextDate);
-        setDisplayCategories(contextCategories); // Atualiza as categorias para exibição
-    }, [searchText, contextCategories, contextDate]);
+        fetchEventos();
+        setDisplayCategories(contextCategories);
+      }, [searchText, contextCategories, contextDate]);
 
     const handleDateChange = (date: string) => {
         setDate(date)
     };
 
     const handleCategoryChange = (categories: string[]) => {
+        //console.log(categories);
         setCategories(categories);
     };
 
@@ -43,68 +72,7 @@ const FilterEvetn = () => {
         setSearchText(selectedText);
     };
 
-    // const handleCategoryAndTextChange = (selectedCategories: string[], searchText: string, date: string) => {
-    //     let filter = BD;
 
-    //     if (selectedCategories.length > 0) {
-    //         filter = filter.filter((event) =>
-    //             event.category.map((eventCategory) =>
-    //                 selectedCategories.map((selectedCategory) =>
-    //                     eventCategory === selectedCategory
-    //                 ).includes(true)
-    //             ).includes(true)
-    //         );
-    //     }
-
-    //     if (searchText.length > 0) {
-    //         filter = filter.filter((event) =>
-    //             event.title.toLowerCase().includes(searchText)
-    //         );
-    //     }
-
-    //     if (date && date.length > 0) {
-    //         filter = filter.filter((event) =>
-
-    //             event.createdAt === date
-    //         );
-    //     }
-    //     setFiltered(filter);
-    // };
-
-    const handleCategoryAndTextChange = (
-        selectedCategories: string[],
-        searchText: string,
-        date: string
-    ) => {
-        let filter = BD;
-
-        // Filtro por categorias (mantido seu código original)
-        if (selectedCategories.length > 0) {
-            filter = filter.filter((event) =>
-                event.category.map((eventCategory) =>
-                    selectedCategories.map((selectedCategory) =>
-                        eventCategory === selectedCategory
-                    ).includes(true)
-                ).includes(true)
-            );
-        }
-
-        // Filtro por texto
-        if (searchText.length > 0) {
-            filter = filter.filter((event) =>
-                event.title.toLowerCase().includes(searchText)
-            );
-        }
-
-        // Filtro por data
-        if (date && date.length > 0) {
-            filter = filter.filter((event) =>
-                event.createdAt === date
-            );
-        }
-
-        setFiltered(filter);
-    };
     return (
         <>
 
@@ -134,7 +102,7 @@ const FilterEvetn = () => {
                 padding: 2,
             }}>
                 {
-                    filtered.map((card: CardProps, index: number) => (
+                    filtered.map((card: EventoProps, index: number) => (
                         <CardEventHome key={index} card={card} />
                     ))}
             </Box>

@@ -1,11 +1,11 @@
 interface CardProps {
-    id: number;
-    
-    title: string;
-    description: string;
-    image: string;
-    date: string;
-    category: string[];
+    id_evento: number;
+    nome_evento: string;
+    descricao: string;
+    foto: string;
+    data_inicio: string;
+    data_fim: string;
+    categoria: string[];
 }
 
 export default CardProps;

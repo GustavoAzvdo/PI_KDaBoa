@@ -10,15 +10,22 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 
 
-import CardProps from './props/CardProps';
-
+import EventoProps from './props/EventoProps';
 
 interface CardEventHomeProps {
-    card: CardProps;
+    card: EventoProps;
 }
 
 export default function RecipeReviewCard({ card }: CardEventHomeProps) {
     const navigate = useNavigate();
+    
+    const dataFormatada = new Date(card.data_inicio).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      });
+      
+      
     return (
 
         <Card
@@ -36,14 +43,14 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                 },
             }}
             className='cardHomeEvent'
-            title={card.title}
+            title={card.nome_evento}
         >
 
             <CardMedia
 
                 component="img"
                 height="194"
-                image={card.image}
+                image={card.foto}
                 alt="Paella dish"
             />
             <CardHeader
@@ -53,15 +60,15 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                     </Avatar>
                 }
 
-                title={card.title.length > 20 ? card.title.substring(0, 20) + "..." : card.title}
+                title={card.nome_evento ? (card.nome_evento.length > 20 ? card.nome_evento.substring(0, 20) + "..." : card.nome_evento) : "Sem título"}
 
-                subheader={card.date}
+                subheader={dataFormatada}
                 className='header-cardHomeEvent' />
             <CardActions sx={{ alignItems: "flex-end", display: "flex", justifyContent: "flex-end" }} disableSpacing>
 
                 <Button className='btn-cardHomeEvent' sx={{}} endIcon={<VisibilityOutlined sx={{ color: "#6C15D5" }} />} href={'/view-event'} onClick={() => {
-                    navigate('/view-event', { state: { card } });
-                    // Insert script for open page of the especific event
+                    navigate('/view-event', { state: { id: card.id_evento } });
+                    
                 }}>
 
                     <Typography className='txt-cardHomeEvent' >

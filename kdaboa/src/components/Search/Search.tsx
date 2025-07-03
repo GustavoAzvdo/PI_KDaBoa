@@ -40,7 +40,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
   // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   // const [searchText, setSearchText] = useState<string>('')
   // const [selectedDate, setSelectedDate] = useState<any>(null);
-  console.log(searchText, categories, date)
+  //console.log(searchText, categories, date)
 
   const handleCategoryChange = (_event: any, value: any) => {
     const newCategories = value.map((item: any) => item.title);

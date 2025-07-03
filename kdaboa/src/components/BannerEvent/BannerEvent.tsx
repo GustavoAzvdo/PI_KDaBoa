@@ -1,20 +1,18 @@
 import { Box, Grid } from "@mui/material"
 import "./BannerEvent.css"
-//import banner from "../../../public/Image_cardHomeEvent/matue.jpeg"
+import { useState } from "react";
+import EventoProps from "../CardEventHome/props/EventoProps";
 interface BannerEventProps {
-    card: {
-        title: string;
-        image: string;
-        date: string;
+    card: EventoProps;
     };
-}
+
 const BannerEvent = ({ card }: BannerEventProps) => {
   return (
 
     <Grid container spacing={2} sx={{ padding: 2 }} className="container">
        <Grid size={{ xs: 12, md: 10 }} className="grid-form" >
             <Box className="img-event" sx={{width: "100%", height: "480px"}}>
-                <img src={card.image} style={{width: "100%", height: "100%", objectFit: "cover", borderRadius: '20px' }} alt="" />
+                <img  src={`http://localhost:3000/event/image/${card.foto}`} style={{width: "100%", height: "100%", objectFit: "cover", borderRadius: '20px' }} alt="" />
             </Box>
        </Grid>
     </Grid>

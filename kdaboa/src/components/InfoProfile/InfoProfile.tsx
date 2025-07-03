@@ -6,18 +6,23 @@ import Photos from '../Photos/Photos'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Cards from '../../DB/CardsBD.json'
+import api from '../../api/api'
 
 const InfoProfile = () => {
     const location = useLocation();
     const card = location.state?.card;
 
-    if (!card) return <div>Evento não encontrado</div>;
+    //if (!card) return <div>Evento não encontrado</div>;
 
-    const eventosPublicados = Cards.filter(event => event.location === card.location).length;
-    const fullDescription = card.descriptionProfile || 'Descrição não disponível';
+    //const eventosPublicados = Cards.filter(event => event.Estabelecimento.nome === card?.Estabelecimento.nome).length;
+    const fullDescription = card?.Estabelecimento.descricao || 'Descrição não disponível';
     const [showFull, setShowFull] = useState<boolean>(false)
     const isLong = fullDescription.length > 400;
     const displayText = showFull ? fullDescription : fullDescription.substring(0, 400) + ' ...';
+   
+    const juntaEndereco = `${card?.Endereco.logradouro}, ${card?.Endereco.numero} - ${card?.Endereco.bairro}, ${card?.Endereco.cidade}/${card?.Endereco.estado}`
+
+   
     return (
         <Box>
             <Grid container spacing={2} className="infoProfile">
@@ -28,8 +33,8 @@ const InfoProfile = () => {
                             <Avatar  sx={{ width: 130, height: 130 }}></Avatar>
                         </Box>
                         <Box sx={{ paddingLeft: 2, marginLeft: 2 }} className="info_text">
-                            <Typography variant='h3'>{card.location}</Typography>
-                            <Typography >{eventosPublicados} eventos publicados</Typography>
+                            <Typography variant='h3'>{card?.Estabelecimento.nome}</Typography>
+                            {/* <Typography > {eventosPublicados()} eventos publicados</Typography> */}
                         </Box>
                     </Box>
                 </Grid>
@@ -61,7 +66,7 @@ const InfoProfile = () => {
                     sx={{ display: 'flex', alignItems: { md: 'center' }, justifyContent: { xs: 'center', md: 'space-around' }, margin: 'auto', paddingTop: 4 }}>
 
                     <Grid size={{ xs: 10, md: 5 }}>
-                        <Address address={card.address} location={card.location} />
+                        <Address address={juntaEndereco} location={card?.Estabelecimento.nome} />
                     </Grid>
                     <Grid
                         size={{ xs: 10, md: 5 }}

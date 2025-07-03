@@ -4,12 +4,21 @@ import { Navigation, Pagination, A11y } from 'swiper/modules';
 
 import CardEventHome from "../CardEventHome/CardEventHome"
 
-import CardProps from '../CardEventHome/props/CardProps.ts'
+import EventoProps from '../CardEventHome/props/EventoProps.ts'
 
-import Cards from '../../DB/CardsBD.json';
 import './CarroselEventHome.css'
+import { useEffect, useState } from 'react';
+import api from '../../api/api.ts';
 
 export default function CarroselEventHome() {
+
+    const [cards, setCards] = useState<EventoProps[]>([]);
+
+    useEffect(() => {
+        api.get<any>("/event").then((res) => {
+            setCards(res.data);
+        })
+    }, [])
 
     return (
         <Swiper
@@ -38,7 +47,7 @@ export default function CarroselEventHome() {
                 },
              }}>
 
-                {Cards.slice(0, 6).map((card : CardProps, index: number) => 
+                {cards.slice(0, 6).map((card : EventoProps, index: number) => 
                     <SwiperSlide key={index}>
                         <CardEventHome card={card} />
                     </SwiperSlide>

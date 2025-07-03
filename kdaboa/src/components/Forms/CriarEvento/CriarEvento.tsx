@@ -280,7 +280,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             if (enderecoUsado?.id_endereco) {
                 formData.append('id_endereco', enderecoUsado.id_endereco.toString());
             }
-            formData.append('data_criacao', new Date().toISOString());
+            
            
             ctg.forEach(id => {
                 formData.append('categoria', id.toString());
