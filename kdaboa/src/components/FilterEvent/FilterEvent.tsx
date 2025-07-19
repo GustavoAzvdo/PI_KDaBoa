@@ -1,5 +1,5 @@
 import CardEventHome from "../CardEventHome/CardEventHome";
-import { Box, CardProps } from '@mui/material'
+import { Box, Button, CardProps } from '@mui/material'
 import Search from "../Search/Search";
 import { useState } from "react";
 import Footer from "../Footer/Footer";
@@ -8,11 +8,12 @@ import Title from "../Title/Title";
 import Navbar from "../Navbar/Navbar";
 import search from "../../assets/search.png";
 import Banner from "../Banner/Banner";
+import { KeyboardArrowDownOutlined } from '@mui/icons-material';
 import { useSearch } from "../../context/SearchContext";
 import { useEffect } from "react";
 import api from "../../api/api";
 import EventoProps from "../CardEventHome/props/EventoProps";
-const FilterEvetn = () => {
+const FilterEvent = () => {
     const {
         searchText,
         categories: contextCategories,
@@ -21,23 +22,23 @@ const FilterEvetn = () => {
         setCategories,
         setDate
     } = useSearch();
-      //console.log('FilterEvent context values:', searchText, contextCategories, contextDate);
+    //console.log('FilterEvent context values:', searchText, contextCategories, contextDate);
 
     const [displayCategories, setDisplayCategories] = useState<string[]>([]);
     const [filtered, setFiltered] = useState<EventoProps[]>([]);
-
+    const [visibleCount, setVisibleCount] = useState<number>(6);
     const fetchEventos = async () => {
         try {
             const params = {
                 name: searchText || undefined,
                 category: contextCategories[0] ? Number(contextCategories[0]) : undefined, // ajuste se for ID real
                 date: contextDate || undefined,
-              };
+            };
             const queryParams = new URLSearchParams();
             if (params.name) queryParams.append('name', params.name);
             if (params.category) queryParams.append('category', params.category.toString());
             if (params.date) queryParams.append('date', params.date);
-            
+
             const queryString = queryParams.toString();
             const url = `/event${queryString ? `?${queryString}` : ''}`;
 
@@ -45,19 +46,20 @@ const FilterEvetn = () => {
             setFiltered(res.data); // <---
 
         } catch (err) {
-          console.error('Erro ao buscar eventos:', err);
+            console.error('Erro ao buscar eventos:', err);
         }
-      };
-      
+    };
 
 
 
-   
+
+
 
     useEffect(() => {
         fetchEventos();
         setDisplayCategories(contextCategories);
-      }, [searchText, contextCategories, contextDate]);
+        setVisibleCount(6);
+    }, [searchText, contextCategories, contextDate]);
 
     const handleDateChange = (date: string) => {
         setDate(date)
@@ -90,7 +92,6 @@ const FilterEvetn = () => {
             <Box className="title-container" sx={{ textAlign: 'center' }}>
                 <Title>
                     {filtered.length > 0 ? `${displayCategories.length > 0 ? `${displayCategories.join(', ')}` : 'Todos os eventos'}` : 'Nenhum evento encontrado'}
-
                 </Title>
             </Box>
             <Box sx={{
@@ -102,10 +103,16 @@ const FilterEvetn = () => {
                 padding: 2,
             }}>
                 {
-                    filtered.map((card: EventoProps, index: number) => (
+                    filtered.slice(0, visibleCount).map((card: EventoProps, index: number) => (
                         <CardEventHome key={index} card={card} />
                     ))}
+
             </Box>
+            {visibleCount < filtered.length && (
+                <Box sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', marginTop: 3 }}>
+                    <Button endIcon={<KeyboardArrowDownOutlined />} variant="contained" onClick={() => setVisibleCount(prev => prev + 6)} sx={{ fontSize: 18, fontFamily: 'var(--fredoka)', backgroundColor: 'var(--roxo)' }}>Ver mais</Button>
+                </Box>
+            )}
             <Box sx={{ marginTop: 10 }}>
                 <Footer />
             </Box>
@@ -114,4 +121,4 @@ const FilterEvetn = () => {
 
 }
 
-export default FilterEvetn;
+export default FilterEvent;

@@ -19,8 +19,13 @@ const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => 
     };
     fetchTotalEventos();
   }, [])
-  const capitalizar = (nome: string) => nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
-
+  const capitalizar = (nome: string) =>
+    nome
+      .toLowerCase()
+      .split(' ')
+      .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+      .join(' ');
+      
   useEffect(() => {
     const fetchNomeUsuario = async () => {
       try {

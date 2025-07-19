@@ -28,6 +28,12 @@ interface EventoProps {
       status: string | null;
       imagem: string | null;
       id_contato: number;
+      Contato: {
+        id_contato: number;
+        email: string;
+        tel_cel_1: string;
+        tel_cel_2: string;
+      };
     };
     Evento_Categoria: {
       id_evento: number;

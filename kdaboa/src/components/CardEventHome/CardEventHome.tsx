@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
-import { VisibilityOutlined } from '@mui/icons-material';
+import { CelebrationOutlined } from '@mui/icons-material';
 import "./CardEventHome.css"
 import { useNavigate } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
@@ -18,17 +18,18 @@ interface CardEventHomeProps {
 
 export default function RecipeReviewCard({ card }: CardEventHomeProps) {
     const navigate = useNavigate();
-    
+
     const dataFormatada = new Date(card.data_inicio).toLocaleDateString('pt-BR', {
         day: '2-digit',
         month: 'long',
         year: 'numeric',
-      });
-      
-      
+    });
+
+
     return (
 
         <Card
+            onClick={() => navigate('/view-event', { state: { id: card.id_evento } })}
             sx={{
                 borderRadius: 4,
                 cursor: "pointer",
@@ -66,13 +67,13 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                 className='header-cardHomeEvent' />
             <CardActions sx={{ alignItems: "flex-end", display: "flex", justifyContent: "flex-end" }} disableSpacing>
 
-                <Button className='btn-cardHomeEvent' sx={{}} endIcon={<VisibilityOutlined sx={{ color: "#6C15D5" }} />} href={'/view-event'} onClick={() => {
+                <Button className='btn-cardHomeEvent' sx={{}} endIcon={<CelebrationOutlined sx={{ color: "#6C15D5" }} />} href={'/view-event'} onClick={() => {
                     navigate('/view-event', { state: { id: card.id_evento } });
-                    
+
                 }}>
 
                     <Typography className='txt-cardHomeEvent' >
-                        Ver Mais
+                        Ver evento
                     </Typography>
                 </Button>
             </CardActions>

@@ -4,17 +4,42 @@ import Address from '../Details/Address'
 import Contacts from '../Details/Contacts'
 import Photos from '../Photos/Photos'
 import { useState } from 'react'
+import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import Cards from '../../DB/CardsBD.json'
 import api from '../../api/api'
 
+
+
 const InfoProfile = () => {
     const location = useLocation();
     const card = location.state?.card;
+    const [eventosPublicados, setEventosPublicados] = useState<number>(0);
 
-    //if (!card) return <div>Evento não encontrado</div>;
+    useEffect(() => {
+        const buscarEventos = async () => {
+          try {
+            const response: any = await api.get('/event'); 
+            const todosEventos = response.data;
+      
+            const eventosDoEstabelecimento = todosEventos.filter(
+              (evento: any) => evento.id_estabelecimento === card.Estabelecimento.id_estabelecimento
+            );
+      
+            setEventosPublicados(eventosDoEstabelecimento.length);
+          } catch (error) {
+            console.error('Erro ao buscar eventos:', error);
+          }
+        };
+      
+        if (card?.Estabelecimento?.id_estabelecimento) {
+          buscarEventos();
+        }
+      }, [card]);
 
-    //const eventosPublicados = Cards.filter(event => event.Estabelecimento.nome === card?.Estabelecimento.nome).length;
+
+
+
     const fullDescription = card?.Estabelecimento.descricao || 'Descrição não disponível';
     const [showFull, setShowFull] = useState<boolean>(false)
     const isLong = fullDescription.length > 400;
@@ -22,6 +47,11 @@ const InfoProfile = () => {
    
     const juntaEndereco = `${card?.Endereco.logradouro}, ${card?.Endereco.numero} - ${card?.Endereco.bairro}, ${card?.Endereco.cidade}/${card?.Endereco.estado}`
 
+    function formatarCelular(numero: string): string {
+        return numero
+          .replace(/\D/g, '') // remove tudo que não for dígito
+          .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'); // aplica máscara
+      }
    
     return (
         <Box>
@@ -34,7 +64,7 @@ const InfoProfile = () => {
                         </Box>
                         <Box sx={{ paddingLeft: 2, marginLeft: 2 }} className="info_text">
                             <Typography variant='h3'>{card?.Estabelecimento.nome}</Typography>
-                            {/* <Typography > {eventosPublicados()} eventos publicados</Typography> */}
+                            <Typography > {eventosPublicados} eventos publicados</Typography>
                         </Box>
                     </Box>
                 </Grid>
@@ -76,7 +106,7 @@ const InfoProfile = () => {
                             pt: { xs: 5, md: 0 }
                         }}
                     >
-                        <Contacts email={card.email} telefone1={card.telefone1} telefone2={card.telefone2} />
+                        <Contacts email={card.Estabelecimento.Contato.email} telefone1={formatarCelular(card.Estabelecimento.Contato.tel_cel_1)} telefone2={formatarCelular(card.Estabelecimento.Contato.tel_cel_2)} />
                     </Grid>
                 </Grid>
 
@@ -89,7 +119,7 @@ const InfoProfile = () => {
                     </Box>
                 </Grid>
                 <Grid container size={{ xs: 12, md: 12 }} sx={{ margin: 'auto', paddingTop: 0, display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <Photos />
+                    <Photos card={card}/>
                 </Grid>
             </Grid>
         </Box>

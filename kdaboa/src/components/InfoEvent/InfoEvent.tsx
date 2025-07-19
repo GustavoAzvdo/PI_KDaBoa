@@ -59,6 +59,12 @@ const InfoEvent = ({ id }: { id: number }) => {
 
     const dataFormatadaTermino = `${dia2}/${mes2}/${ano2} - ${hora2}h${minuto2}m`;
 
+
+    function formatarCelular(numero: string): string {
+        return numero
+          .replace(/\D/g, '') // remove tudo que não for dígito
+          .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'); // aplica máscara
+      }
     const catchEvent = async () => {
         try {
             const response: any = await api.get(`/event/${id}`)
@@ -104,7 +110,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                     </Box>
                     <Box className="contacts" sx={{ display: "flex", alignItems: "center", width: "100%", paddingTop: 8 }}>
                         <Box sx={{ margin: 'auto' }}>
-                            {/* <Contacts email={card.Estabelecimento.id_contato.email} telefone1={card.Estabelecimento.id_contato.tel_1} telefone2={card.Estabelecimento.id_contato.tel_2} /> */}
+                            <Contacts email={card.Estabelecimento.Contato.email} telefone1={formatarCelular(card.Estabelecimento.Contato.tel_cel_1)} telefone2={formatarCelular(card.Estabelecimento.Contato.tel_cel_2)} />
                         </Box>
                     </Box>
                 </Grid>

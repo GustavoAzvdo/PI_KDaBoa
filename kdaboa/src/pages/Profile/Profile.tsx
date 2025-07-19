@@ -8,8 +8,12 @@ import Footer from "../../components/Footer/Footer"
 import ViewCards from "../../components/ViewCards/ViewCards"
 import ticket from "../../assets/ticket.png"
 import { useEffect } from "react"
+import { useLocation } from "react-router-dom"
 
 const Profile = () => {
+  const location = useLocation();
+  const card = location.state?.card;
+
 
   useEffect (() => {
     document.title = "Perfil"
@@ -25,7 +29,7 @@ const Profile = () => {
         Eventos <img src={ticket} style={{ width: 80, height: 80, margin: 0 }} alt="" />
       </Title>
       <Box sx={{margin: 'auto', width: '85vw'}}>
-         <ViewCards />
+         <ViewCards idEstabelecimento={card.Estabelecimento.id_estabelecimento} />
 
       </Box>
 
