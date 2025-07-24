@@ -67,7 +67,8 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                 className='header-cardHomeEvent' />
             <CardActions sx={{ alignItems: "flex-end", display: "flex", justifyContent: "flex-end" }} disableSpacing>
 
-                <Button className='btn-cardHomeEvent' sx={{}} endIcon={<CelebrationOutlined sx={{ color: "#6C15D5" }} />} href={'/view-event'} onClick={() => {
+                <Button className='btn-cardHomeEvent' endIcon={<CelebrationOutlined sx={{ color: "#6C15D5" }} />} onClick={() => {
+                    
                     navigate('/view-event', { state: { id: card.id_evento } });
 
                 }}>
