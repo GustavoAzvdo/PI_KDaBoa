@@ -60,7 +60,8 @@ const InfoEvent = ({ id }: { id: number }) => {
     const dataFormatadaTermino = `${dia2}/${mes2}/${ano2} - ${hora2}h${minuto2}m`;
 
 
-    function formatarCelular(numero: string): string {
+    function formatarCelular(numero: string | null | undefined): string {
+        if (!numero) return '';
         return numero
           .replace(/\D/g, '') // remove tudo que não for dígito
           .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'); // aplica máscara
