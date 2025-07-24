@@ -21,7 +21,9 @@ const Contacts = ({ telefone1, telefone2, email }: ContactsProps) => {
                 </Box>
                 <Box>
                     <Typography className="text-contacts-subtitle" sx={{ paddingTop: 2 }}>Telefone 1: &nbsp; {telefone1}</Typography>
-                    <Typography className="text-contacts-subtitle" sx={{ paddingTop: 0 }}>Telefone 2: &nbsp; {telefone2}</Typography>
+                    {telefone2 && 
+                        <Typography className="text-contacts-subtitle" sx={{ paddingTop: 0 }}>Telefone 2: &nbsp; {telefone2}</Typography>
+                    }
                     <Typography className="text-contacts-subtitle" sx={{ paddingTop: 0 }}>Email:&nbsp; {email}</Typography>
                 </Box>
 
