@@ -1,8 +1,8 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Grid, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import  {useEventos}  from '../../../context/EventoContext';
@@ -29,9 +29,9 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [message, setMessage] = useState('');
     const [severity, setSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-    const [autoHideDuration, setAutoHideDuration] = useState(4000);
+    const [autoHideDuration, ] = useState(4000);
    
-    const navigate = useNavigate();
+   
 
     const {setEventoEditando} = useEventos()
     const fetchEventos = async () => {
@@ -106,21 +106,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
       };
 
 
-    // if (!loading) {
-    //     return (
-    //         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-    //             <CircularProgress />
-    //         </Box>
-    //     );
-    // }
-
-    // if (eventos.length === 0) {
-    //     return (
-    //         <Box sx={{ textAlign: 'center', mt: 4 }}>
-    //             <Typography variant="h6">Nenhum evento encontrado</Typography>
-    //         </Box>
-    //     );
-    // }
 
     useEffect(() => {
         fetchEventos();

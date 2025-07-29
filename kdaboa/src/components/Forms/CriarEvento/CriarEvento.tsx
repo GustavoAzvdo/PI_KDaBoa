@@ -18,7 +18,7 @@ import Endereco from '../Endereco/Endereco';
 import { EnderecoData } from '../Endereco/Endereco';
 import { useEnderecoContext } from '../../../context/EnderecoContext';
 import { useEventos } from '../../../context/EventoContext';
-import { useLocation } from 'react-router-dom';
+
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import api from '../../../api/api';
 
@@ -45,9 +45,9 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const [ctg, setCtg] = useState<number[]>([]);
     const [dataInicio, setDataInicio] = useState<Dayjs | null>(dayjs().startOf('day'));
     const [dataFim, setDataFim] = useState<Dayjs | null>(dayjs().startOf('day'));
-    const [fotoUrl, setFotoUrl] = useState<string>('');
+    const [, setFotoUrl] = useState<string>('');
     const [fotoFile, setFotoFile] = useState<File | null>(null);
-    const [data_criacao, setData_criacao] = useState<Dayjs | null>(null);
+    const [, setData_criacao] = useState<Dayjs | null>(null);
   
     //pegar o id
 
@@ -63,15 +63,14 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const [, setEnd] = useState<EnderecoData[]>([]);
     const [selectedEndereco, setSelectedEndereco] = useState<EnderecoData | null>(null);
     const { enderecos, favorito, enderecoFavorito } = useEnderecoContext();
-    const { addEvento, updateEvento, eventoEdicao, setEventoEdicao, eventoEditando, setEventoEditando } = useEventos();
+    const {  eventoEditando, setEventoEditando } = useEventos();
     const [isEdit, setIsEdit] = useState(false);
 
     const enderecoParaExibir = enderecoModo === 'manter'
         ? enderecoFavorito
         : selectedEndereco;
 
-    const location = useLocation();
-    const eventoId = location.state?.id;
+   
 
 
     useEffect(() => {

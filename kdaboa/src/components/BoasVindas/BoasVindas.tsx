@@ -4,7 +4,7 @@ import logoPC from './logoPC.png'
 import { useState, useEffect } from 'react';
 import api from '../../api/api'
 
-const BoasVindasGerente = ({ nome, router }: { nome?: string, router: any }) => {
+const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
   const [totalEventos, setTotalEventos] = useState<number>(0);
   const [nomeGerente, setNomeGerente] = useState<string>('');
 

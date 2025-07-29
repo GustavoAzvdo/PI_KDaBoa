@@ -3,7 +3,7 @@ import "./InfoEvent.css"
 import calendar from "../../assets/calendar.png"
 import Contacts from "../Details/Contacts"
 import Address from "../Details/Address"
-import { useLocation, useNavigate } from "react-router-dom"
+import {  useNavigate } from "react-router-dom"
 import BannerEvent from "../BannerEvent/BannerEvent"
 import { Person } from "@mui/icons-material"
 import api from "../../api/api"
@@ -13,7 +13,7 @@ import { useEffect } from "react";
 
 const InfoEvent = ({ id }: { id: number }) => {
     const navigate = useNavigate();
-    const location = useLocation();
+    
 
     const [card, setCard] = useState<EventoProps | null>(null);
 

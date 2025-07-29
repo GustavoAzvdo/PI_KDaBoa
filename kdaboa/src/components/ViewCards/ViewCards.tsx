@@ -1,9 +1,7 @@
 
 import CardEventHome from '../CardEventHome/CardEventHome'
 import { Box } from '@mui/material'
-import Cards from '../../DB/CardsBD.json'
 
-import {useLocation} from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import api from '../../api/api'
 
@@ -12,10 +10,8 @@ interface ViewCardsProps {
 }
 
 const ViewCards = ( {idEstabelecimento}: ViewCardsProps ) => {
-    const location = useLocation();
-    const selectedLocation = location.state?.location;
 
-      const filteredCards = Cards.filter(card => card.location === selectedLocation);
+
 
       const [eventos, setEventos] = useState<any[]>([]);
       useEffect(() => {

@@ -17,7 +17,7 @@ import ScreenDash from '../ScreenDash/ScreenDash';
 import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
-import { Button, Dialog, DialogActions, DialogTitle, Link } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import BoasVindasGerente from '../BoasVindas/BoasVindas';
 
 

@@ -6,7 +6,7 @@ import Photos from '../Photos/Photos'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import Cards from '../../DB/CardsBD.json'
+
 import api from '../../api/api'
 
 

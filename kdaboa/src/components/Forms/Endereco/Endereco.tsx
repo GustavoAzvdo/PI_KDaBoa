@@ -52,14 +52,14 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarMsg, setSnackbarMsg] = useState<string>('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
-    const { setEnderecosDireto, enderecos, addEndereco, updateEndereco, removeEndereco, favorito, favoritarEndereco } = useEnderecoContext();
+    const { setEnderecosDireto, enderecos, addEndereco, updateEndereco, removeEndereco } = useEnderecoContext();
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     //
     const [idEndereco, setIdEndereco] = useState<number>()
 
-    const [favoritoEndereco, setFavoritoEndereco] = useState<boolean>(false)
+  
 
     const handleOpenDeleteModal = (idx: number) => {
         const e = enderecos[idx];

@@ -1,6 +1,5 @@
 import { Box, Grid } from "@mui/material"
 import "./BannerEvent.css"
-import { useState } from "react";
 import EventoProps from "../CardEventHome/props/EventoProps";
 interface BannerEventProps {
     card: EventoProps;

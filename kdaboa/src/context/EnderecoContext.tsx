@@ -1,5 +1,5 @@
 
-import { createContext, useContext, useState, ReactNode, useEffect, use} from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect} from 'react';
 import api from '../api/api';
 
 export interface EnderecoData {

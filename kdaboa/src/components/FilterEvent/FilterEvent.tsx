@@ -1,5 +1,5 @@
 import CardEventHome from "../CardEventHome/CardEventHome";
-import { Box, Button, CardProps } from '@mui/material'
+import { Box, Button} from '@mui/material'
 import Search from "../Search/Search";
 import { useState } from "react";
 import Footer from "../Footer/Footer";
