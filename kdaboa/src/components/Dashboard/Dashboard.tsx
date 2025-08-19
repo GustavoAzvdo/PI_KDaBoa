@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
@@ -19,7 +19,7 @@ import { User } from './User.props';
 import api from '../../api/api';
 import { Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import BoasVindasGerente from '../BoasVindas/BoasVindas';
-
+import { useTheme } from '@mui/material/styles';
 
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
@@ -39,8 +39,14 @@ function useDemoRouter(initialPath: string): Router {
 
 
 export default function DashboardLayoutBasic(props: any) {
+  const theme = useTheme()
   const [eventoTitle, setEventoTitle] = useState<string>('Criar evento');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+  useEffect(() => {
+    document.title = 'Dashboard'
+  })
+
   const NAVIGATION: Navigation = [
     {
       kind: 'header',
@@ -250,7 +256,7 @@ export default function DashboardLayoutBasic(props: any) {
 
       navigation={NAVIGATION}
       router={router}
-
+      theme={theme}
       window={demoWindow}
     >
 
@@ -262,14 +268,14 @@ export default function DashboardLayoutBasic(props: any) {
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Deseja realmente sair?</DialogTitle>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancelar</Button>
+          <Button sx={{color: 'var(--roxoForteDashboard)'}} onClick={() => setOpenDialog(false)}>Cancelar</Button>
           <Button color="primary"
             variant='contained'
             onClick={() => {
               setSession(null);
               router.navigate('/login');
             }}
-            sx={{ color: 'white', textDecoration: 'none', '&:hover': { backgroundColor: 'var(--roxoForteDashboard)' } }}
+            sx={{ backgroundColor: 'var(--roxoForteDashboard)',color: 'white', textDecoration: 'none', '&:hover': { backgroundColor: 'var(--roxoForteDashboard)' } }}
             href="/login"
           >
             Sair

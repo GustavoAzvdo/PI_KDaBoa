@@ -9,7 +9,12 @@
 .css-1hz47ke-MuiFormControl-root-MuiPickersTextField-root {
     border-color: var(--roxoForteDashboard) !important;
 }
-
+.css-ux17pc-MuiButtonBase-root-MuiMenuItem-root-MuiMultiSectionDigitalClockSection-item.Mui-selected,
+.css-ux17pc-MuiButtonBase-root-MuiMenuItem-root-MuiMultiSectionDigitalClockSection-item.Mui-selected,
 .css-1u9omgy-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
     background-color: var(--roxoForteDashboard) !important;
+}
+
+.css-1jdqmkj-MuiButtonBase-root-MuiButton-root{
+    color: var(--mui-palette-primary-main);
 }

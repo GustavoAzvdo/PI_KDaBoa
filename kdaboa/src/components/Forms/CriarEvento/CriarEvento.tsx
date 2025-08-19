@@ -48,7 +48,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const [, setFotoUrl] = useState<string>('');
     const [fotoFile, setFotoFile] = useState<File | null>(null);
     const [, setData_criacao] = useState<Dayjs | null>(null);
-  
+
     //pegar o id
 
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -63,14 +63,14 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const [, setEnd] = useState<EnderecoData[]>([]);
     const [selectedEndereco, setSelectedEndereco] = useState<EnderecoData | null>(null);
     const { enderecos, favorito, enderecoFavorito } = useEnderecoContext();
-    const {  eventoEditando, setEventoEditando } = useEventos();
+    const { eventoEditando, setEventoEditando } = useEventos();
     const [isEdit, setIsEdit] = useState(false);
 
     const enderecoParaExibir = enderecoModo === 'manter'
         ? enderecoFavorito
         : selectedEndereco;
 
-   
+
 
 
     useEffect(() => {
@@ -103,7 +103,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setEventoTitle('Criar evento')
             setEventoEditando(null)
         }
-        
+
     }, [eventoEditando]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
@@ -229,7 +229,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             }
 
 
-            await api.put(`/gerente/event/?id=${eventoEditando?.id_evento}`,{
+            await api.put(`/gerente/event/?id=${eventoEditando?.id_evento}`, {
                 nome: nome,
                 descricao: descricao,
                 data_inicio: dataInicio?.toISOString() || '',
@@ -237,11 +237,11 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 images: fotoFile,
                 id_endereco: enderecoUsado?.id_endereco,
                 categoria: ctg,
-                
+
             }, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'multipart/form-data' },
-              });
+            });
             setSnackbarMessage('Evento editado com sucesso!');
 
 
@@ -279,8 +279,8 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             if (enderecoUsado?.id_endereco) {
                 formData.append('id_endereco', enderecoUsado.id_endereco.toString());
             }
-            
-           
+
+
             ctg.forEach(id => {
                 formData.append('categoria', id.toString());
             });
@@ -349,7 +349,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         fetchEventos()
     }, [selectedEndereco]);
 
- 
+
     return (
         <>
             <Grid container spacing={2} sx={{ padding: 2 }}>
@@ -415,7 +415,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                 label="Data/hora inicio"
                                 slotProps={{
                                     textField: {
-                                        sx: { borderColor: 'var(--roxo) !important' }
+                                        sx: { borderColor: 'var(--roxoForteDashboard) !important' }
                                     }
                                 }}
                             />
@@ -618,8 +618,20 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     onChange={e => setEnderecoModo(e.target.value as 'manter' | 'alterar')}
 
                                 >
-                                    <FormControlLabel value="manter" control={<Radio />} label="Endereço favorito" />
-                                    <FormControlLabel value="alterar" control={<Radio />} label="Alterar endereço" />
+                                    <FormControlLabel value="manter" control={<Radio sx={{
+                                        color: 'default',
+                                        '&.Mui-checked': {
+                                            color: 'var(--roxoForteDashboard)',
+                                        },
+                                    }} />} label="Endereço favorito" />
+                                    <FormControlLabel value="alterar" control={<Radio
+                                        sx={{
+                                            color: 'default',
+                                            '&.Mui-checked': {
+                                                color: 'var(--roxoForteDashboard)',
+                                            },
+                                        }}
+                                    />} label="Alterar endereço" />
                                     {enderecoModo === 'alterar' && (
                                         <Autocomplete
                                             disablePortal

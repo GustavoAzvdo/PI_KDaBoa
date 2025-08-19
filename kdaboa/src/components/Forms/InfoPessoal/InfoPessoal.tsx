@@ -135,7 +135,7 @@ const InfoPessoal = () => {
             </Grid>
             <Grid size={{ xs: 12, md: 4, sm: 12 }}>
                 <Box  sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 1}}>
-                    <Link href="/recuperar-senha" sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline' }, fontFamily: "'Noto Sans', sans-serif !important", fontSize: '20px' }}>Alterar senha</Link>
+                    <Link href="/recuperar-senha" sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline' }, fontFamily: "'Noto Sans', sans-serif !important", fontSize: '20px' ,color: 'var(--roxoForteDashboard)'}}>Alterar senha</Link>
                 </Box>
             </Grid>
             <Grid size={{ xs: 12, md: 12, sm: 12 }}>
@@ -145,7 +145,7 @@ const InfoPessoal = () => {
                             width: { xs: '100%', sm: '100%', md: '20%' }
                         }}
                     >
-                        <Typography sx={{ fontFamily: "'Noto Sans', sans-serif !important", fontSize: '18px' }}>Salvar</Typography>
+                        <Typography sx={{ fontFamily: "'Noto Sans', sans-serif !important", fontSize: '18px' , bgcolor: 'var(--roxoForteDashboard)'}}>Salvar</Typography>
                     </Button>
                 </Box>
             </Grid>
@@ -156,11 +156,11 @@ const InfoPessoal = () => {
                         Tem certeza que deseja remover a foto?
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setModalOpen(false)}  sx={{fontFamily: "'Noto Sans', sans-serif !important", fontSize: '16px'}}>
+                <DialogActions >
+                    <Button  onClick={() => setModalOpen(false)}  sx={{fontFamily: "'Noto Sans', sans-serif !important", fontSize: '16px', color: 'var(--roxoForteDashboard)'}}>
                         Cancelar
                     </Button>
-                    <Button onClick={handleRemovePhoto}  sx={{fontFamily: "'Noto Sans', sans-serif !important", fontSize: '16px'}}>
+                    <Button onClick={handleRemovePhoto}  sx={{fontFamily: "'Noto Sans', sans-serif !important", fontSize: '16px', color: 'var(--roxoForteDashboard)'}}>
                         Remover
                     </Button>
                 </DialogActions>

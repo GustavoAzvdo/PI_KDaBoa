@@ -1,34 +1,47 @@
-:root{
+:root {
     --notosans: 'Noto Sans', sans-serif;
     --fredoka: 'Fredoka', sans-serif;
     --roxoForteDashboard: #6C15D5;
     --roxoFracoDashboard: #E2CFFC70;
 }
 
-.css-1t2rogw-MuiTypography-root{
+.css-1xnq680-MuiTypography-root {
     font-family: var(--notosans) !important;
     color: #000 !important;
     font-size: 1.5rem !important;
     font-weight: 500 !important;
-    padding-left: 15px;  
+    padding-left: 15px;
+}
+
+.css-1t2rogw-MuiTypography-root {
+    font-family: var(--notosans) !important;
+    color: #000 !important;
+    font-size: 1.5rem !important;
+    font-weight: 500 !important;
+    padding-left: 15px;
 }
 
 /* Letras das options do dash */
+.css-1yndtgp-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiTypography-root,
+.css-njufkc-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiTypography-root,
 .css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiTypography-root,
 .css-85hge4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiTypography-root {
     color: var(--roxoForteDashboard) !important;
 }
-
-
+.css-njufkc-MuiButtonBase-root-MuiListItemButton-root.Mui-selected,
+.css-1yndtgp-MuiButtonBase-root-MuiListItemButton-root.Mui-selected ,
 .css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected,
-.css-85hge4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected{
+.css-85hge4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected {
     background-color: var(--roxoFracoDashboard) !important;
 }
 
 /* Ícones das options do dash */
+
+.css-njufkc-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiSvgIcon-root,
+.css-1yndtgp-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiSvgIcon-root,
 .css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiSvgIcon-root,
-.css-85hge4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiSvgIcon-root{
-    color: var(--roxoForteDashboard) !important; 
+.css-85hge4-MuiButtonBase-root-MuiListItemButton-root.Mui-selected .MuiSvgIcon-root {
+    color: var(--roxoForteDashboard) !important;
 }
 
 .css-r11f8c-MuiSvgIcon-root {
@@ -36,13 +49,14 @@
 }
 
 /* Mudar o fundo das options ao passar o mouse */
-.css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root:hover ,
-.css-85hge4-MuiButtonBase-root-MuiListItemButton-root:hover{
+
+.css-4s2pl4-MuiButtonBase-root-MuiListItemButton-root:hover,
+.css-85hge4-MuiButtonBase-root-MuiListItemButton-root:hover {
     background-color: var(--roxoFracoDashboard) !important;
 }
+.css-1jqvxtg-MuiButtonBase-root-MuiButton-root,
+.css-19kl34n-MuiButtonBase-root-MuiButton-root {
 
-.css-19kl34n-MuiButtonBase-root-MuiButton-root
-{
     font-size: 13px !important;
     font-family: var(--notosans) !important;
     border: 0px !important;
@@ -51,11 +65,12 @@
 }
 
 /* Botão de login e logout e theme removido */
-.css-fa1coj-MuiButtonBase-root-MuiButton-root{
+.css-fa1coj-MuiButtonBase-root-MuiButton-root {
     display: none !important;
-   
-} 
-.css-1sv69n2-MuiButtonBase-root-MuiIconButton-root{
+
+}
+
+.css-1sv69n2-MuiButtonBase-root-MuiIconButton-root {
     display: none !important;
 }
 
@@ -78,20 +93,20 @@
     color: "#fff" !important
 }
 
-.css-169qkty-MuiPickersInputBase-root-MuiPickersOutlinedInput-root{
+.css-169qkty-MuiPickersInputBase-root-MuiPickersOutlinedInput-root {
     border-color: 2px solid var(--roxoForteDashboard) !important;
 }
 
-.css-1c4w1e0-MuiYearCalendar-button.Mui-selected{
+.css-1c4w1e0-MuiYearCalendar-button.Mui-selected {
     background-color: var(--roxoForteDashboard) !important;
     color: "#fff" !important
 }
 
-.css-1sv69n2-MuiButtonBase-root-MuiIconButton-root{
+.css-1sv69n2-MuiButtonBase-root-MuiIconButton-root {
     display: none;
 }
 
-.css-5rtw4-MuiStack-root{
+.css-5rtw4-MuiStack-root {
     display: flex;
     justify-content: center;
     align-items: center;

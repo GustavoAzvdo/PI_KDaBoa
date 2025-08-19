@@ -218,7 +218,16 @@ const Galeria = () => {
             {/* Dicas de como adicionar uma boa foto */}
             <Grid size={{ xs: 1, sm: 1, md: 1 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 1 }}>
-                    <IconButton color='primary' onClick={() => setOpen(true)}>
+                    <IconButton
+                        onClick={() => setOpen(true)}
+                        sx={{
+                            color: 'var(--roxoForteDashboard)',
+                            '&:hover': {
+                                bgcolor: 'var(--roxoForteDashboard)',
+                                color: 'white'
+                            }
+                        }}
+                    >
                         <InfoOutlined />
                     </IconButton>
 
@@ -303,7 +312,7 @@ const Galeria = () => {
                                     dicas.map((value, idx) => (
                                         <ListItem key={idx} sx={{ p: 0 }}>
                                             <ListItemIcon sx={{ p: 0 }}>
-                                                <Check color='primary' />
+                                                <Check sx={{ color: 'var(--roxoForteDashboard)' }} />
                                             </ListItemIcon>
                                             <ListItemText primary={value} sx={{ p: 0 }} />
                                         </ListItem>
@@ -314,11 +323,11 @@ const Galeria = () => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpen(false)} variant="contained" color="primary" sx={{ fontSize: 16 }}>Fechar</Button>
+                    <Button onClick={() => setOpen(false)} variant="contained" color="primary" sx={{ fontSize: 16, bgcolor: 'var(--roxoForteDashboard)' }}>Fechar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>
     )
 }
 
-export default Galeria
+export default Galeria  

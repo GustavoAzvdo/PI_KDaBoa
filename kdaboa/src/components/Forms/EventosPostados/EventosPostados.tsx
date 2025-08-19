@@ -140,7 +140,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                             </Typography>
                         </CardContent>
                         <CardActions sx={{ position: 'relative', minHeight: 40, gap: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                            <Button variant='contained' onClick={() => handleEdit(evento)}>Editar</Button>
+                            <Button variant='contained' sx={{color: 'white', bgcolor: '#6C15D5 '}} onClick={() => handleEdit(evento)}>Editar</Button>
                             <Button variant='contained' color="error" onClick={() => handleDelete(evento.id_evento)}>Excluir</Button>
 
                         </CardActions>
