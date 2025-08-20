@@ -2,13 +2,15 @@
     --mui-palette-primary-main: #6C15D5 !important;
 }
 
+.css-1jdqmkj-MuiButtonBase-root-MuiButton-root,
 .css-r75yrr-MuiButtonBase-root-MuiButton-root{
-    color: var(--roxoForteDashboard);
+    color: var(--roxoForteDashboard) !important;
 }
-
+.css-vycme6-MuiPickersInputBase-root-MuiPickersOutlinedInput-root,
 .css-1hz47ke-MuiFormControl-root-MuiPickersTextField-root {
     border-color: var(--roxoForteDashboard) !important;
 }
+.css-qct7wd-MuiButtonBase-root-MuiPickersDay-root.Mui-selected,
 .css-ux17pc-MuiButtonBase-root-MuiMenuItem-root-MuiMultiSectionDigitalClockSection-item.Mui-selected,
 .css-ux17pc-MuiButtonBase-root-MuiMenuItem-root-MuiMultiSectionDigitalClockSection-item.Mui-selected,
 .css-1u9omgy-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
@@ -16,5 +18,5 @@
 }
 
 .css-1jdqmkj-MuiButtonBase-root-MuiButton-root{
-    color: var(--mui-palette-primary-main);
+    color: var(--mui-palette-primary-main) !important;
 }

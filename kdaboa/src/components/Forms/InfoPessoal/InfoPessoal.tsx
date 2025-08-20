@@ -142,10 +142,11 @@ const InfoPessoal = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                     <Button variant="contained"
                         sx={{
-                            width: { xs: '100%', sm: '100%', md: '20%' }
+                            width: { xs: '100%', sm: '100%', md: '20%' },
+                            bgcolor: 'var(--roxoForteDashboard)'
                         }}
                     >
-                        <Typography sx={{ fontFamily: "'Noto Sans', sans-serif !important", fontSize: '18px' , bgcolor: 'var(--roxoForteDashboard)'}}>Salvar</Typography>
+                        <Typography sx={{ fontFamily: "'Noto Sans', sans-serif !important", fontSize: '18px' , }}>Salvar</Typography>
                     </Button>
                 </Box>
             </Grid>

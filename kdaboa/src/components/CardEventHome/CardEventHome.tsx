@@ -7,7 +7,7 @@ import { red } from '@mui/material/colors';
 import { CelebrationOutlined } from '@mui/icons-material';
 import "./CardEventHome.css"
 import { useNavigate } from 'react-router-dom';
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 
 
 import EventoProps from './props/EventoProps';
@@ -46,14 +46,15 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             className='cardHomeEvent'
             title={card.nome_evento}
         >
+            <Box sx={{width: '400px', height: '200px'}}>
+                <CardMedia
 
-            <CardMedia
-
-                component="img"
-                height="194"
-                image={card.foto}
-                alt="Paella dish"
-            />
+                    component="img"
+                    image={card.foto}
+                    alt="Paella dish"
+                    sx={{width: '100%', height: '100%'}}
+                />
+            </Box>
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -68,7 +69,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             <CardActions sx={{ alignItems: "flex-end", display: "flex", justifyContent: "flex-end" }} disableSpacing>
 
                 <Button className='btn-cardHomeEvent' endIcon={<CelebrationOutlined sx={{ color: "#6C15D5" }} />} onClick={() => {
-                    
+
                     navigate('/view-event', { state: { id: card.id_evento } });
 
                 }}>

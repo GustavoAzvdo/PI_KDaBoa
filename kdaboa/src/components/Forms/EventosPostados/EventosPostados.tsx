@@ -1,11 +1,11 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api';
 import dayjs from 'dayjs';
 
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
-import  {useEventos}  from '../../../context/EventoContext';
+import { useEventos } from '../../../context/EventoContext';
 
 interface Evento {
     data_criacao: string;
@@ -29,18 +29,18 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [message, setMessage] = useState('');
     const [severity, setSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('success');
-    const [autoHideDuration, ] = useState(4000);
-   
-   
+    const [autoHideDuration,] = useState(4000);
 
-    const {setEventoEditando} = useEventos()
+
+
+    const { setEventoEditando } = useEventos()
     const fetchEventos = async () => {
         try {
             const response: any = await api.get('/gerente/event', { withCredentials: true });
             console.log('Dados do evento:', response.data);
-         
+
             const eventosFormatados = response.data.map((evento: any) => {
-                
+
                 return {
                     id_evento: evento.id_evento,
                     nome_evento: evento.nome_evento,
@@ -91,19 +91,19 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
 
     const handleEdit = (evento: Evento) => {
         setEventoEditando({
-          id_evento: evento.id_evento,
-          nome_evento: evento.nome_evento,
-          descricao: evento.descricao,
-          data_criacao: evento.data_criacao,
-          data_inicio: evento.data_inicio,
-          data_fim: evento.data_fim,
-          categorias: evento.Evento_Categoria,
-          foto: evento.foto,
-          endereco: evento.id_endereco,
+            id_evento: evento.id_evento,
+            nome_evento: evento.nome_evento,
+            descricao: evento.descricao,
+            data_criacao: evento.data_criacao,
+            data_inicio: evento.data_inicio,
+            data_fim: evento.data_fim,
+            categorias: evento.Evento_Categoria,
+            foto: evento.foto,
+            endereco: evento.id_endereco,
         });
-      
+
         router.navigate('/eventos/criar_evento');
-      };
+    };
 
 
 
@@ -116,7 +116,10 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
             {eventos.map((evento, index) => (
                 <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                     <Card>
-                        <CardMedia component="img" image={evento.foto} alt={evento.foto} />
+                        <Box sx={{width: '455px', height: '200px'}}>
+                            <CardMedia component="img" image={evento.foto} alt={evento.foto} sx={{width: '100%', height: '100%'}}/>
+
+                        </Box>
                         <CardContent className='card-evento' sx={{ fontFamily: 'Noto Sans, sans-serif !important' }}>
                             <Typography variant='h5' sx={{ mt: 1, fontWeight: 'bold' }}>
                                 {evento.nome_evento}
@@ -140,7 +143,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                             </Typography>
                         </CardContent>
                         <CardActions sx={{ position: 'relative', minHeight: 40, gap: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                            <Button variant='contained' sx={{color: 'white', bgcolor: '#6C15D5 '}} onClick={() => handleEdit(evento)}>Editar</Button>
+                            <Button variant='contained' sx={{ color: 'white', bgcolor: '#6C15D5 ' }} onClick={() => handleEdit(evento)}>Editar</Button>
                             <Button variant='contained' color="error" onClick={() => handleDelete(evento.id_evento)}>Excluir</Button>
 
                         </CardActions>
