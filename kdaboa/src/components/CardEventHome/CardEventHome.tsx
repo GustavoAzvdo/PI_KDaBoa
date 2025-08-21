@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
-import { CelebrationOutlined } from '@mui/icons-material';
+import { CelebrationOutlined, CalendarToday} from '@mui/icons-material';
 import "./CardEventHome.css"
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
@@ -27,7 +27,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
         year: 'numeric',
     });
 
-
+ 
     return (
 
         <Card
@@ -89,8 +89,21 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
 
                 title={card.nome_evento ? (card.nome_evento.length > 20 ? card.nome_evento.substring(0, 20) + "..." : card.nome_evento) : "Sem título"}
 
-                subheader={dataFormatada}
-                className='header-cardHomeEvent' />
+                subheader={
+                    <Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
+                            <CalendarToday fontSize='small' />
+                            {dataFormatada}
+                        </Box>
+                       {/* Local q vai o nome do estabelicimento q esta fazendo o evento */}
+                        {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
+                            <LocalActivityOutlined fontSize='small' />
+                             
+                        </Box> */}
+                    </Box>
+                }
+                className='header-cardHomeEvent'
+            />
             <CardActions sx={{ alignItems: "flex-end", display: "flex", justifyContent: "flex-end" }} disableSpacing>
 
                 <Button className='btn-cardHomeEvent' endIcon={<CelebrationOutlined sx={{ color: "#6C15D5" }} />} onClick={() => {

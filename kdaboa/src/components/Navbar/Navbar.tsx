@@ -20,7 +20,7 @@ const Navbar = () => {
   return (
     <div className='nav'>
       <Box>
-        <AppBar position="static" className='navbar-home' elevation={0}>
+        <AppBar position="static" className='navbar-home' elevation={3}>
           <Toolbar className='toolbar-home'>
             <Box className='btns-left-home' sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Link href='/' sx={{ pl: 0, display: 'flex', alignItems: 'center' }}>
