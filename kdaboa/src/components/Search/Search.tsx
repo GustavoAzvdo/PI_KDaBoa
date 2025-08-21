@@ -124,7 +124,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
 
 
           {/* Campo da direita */}
-          <Grid size={{ xs: 10, md: 4, lg: 4 }}>
+          <Grid size={{ xs: 10, md: 3, lg: 3 }}>
             <Box component='form' className='form-right-search'>
               <Autocomplete
                 className='txtCategorys'
@@ -185,7 +185,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
               />
             </Box>
           </Grid>
-          <Grid size={{ xs: 10, md: 2, lg: 2 }} sx={{ marginTop: '-8px' }}>
+          <Grid size={{ xs: 10, md: 3, lg: 3 }} sx={{ marginTop: '-8px' }}>
             <Box
               className="form-middle-search"
 
