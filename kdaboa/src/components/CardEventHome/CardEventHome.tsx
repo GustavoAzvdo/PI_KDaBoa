@@ -8,8 +8,9 @@ import { CelebrationOutlined } from '@mui/icons-material';
 import "./CardEventHome.css"
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
-
-
+import { useState } from 'react'
+import { Star, StarBorder } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
 import EventoProps from './props/EventoProps';
 
 interface CardEventHomeProps {
@@ -17,6 +18,7 @@ interface CardEventHomeProps {
 }
 
 export default function RecipeReviewCard({ card }: CardEventHomeProps) {
+    const [favorito, setFavorito] = useState(false);
     const navigate = useNavigate();
 
     const dataFormatada = new Date(card.data_inicio).toLocaleDateString('pt-BR', {
@@ -33,7 +35,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             sx={{
                 borderRadius: 4,
                 cursor: "pointer",
-                width: { xs: '90%', sm: '80%', md: 400 }, // ex: responsivo, maior no desktop
+                width: { xs: '90%', sm: '80%', md: '100%' }, // ex: responsivo, maior no desktop
                 maxWidth: 500, // limite máximo do card (ajuste como quiser)
                 margin: '0 auto', // centralizar horizontalmente
                 transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
@@ -46,14 +48,37 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             className='cardHomeEvent'
             title={card.nome_evento}
         >
-            <Box sx={{width: '400px', height: '200px'}}>
+            <Box sx={{ position: "relative", width: "100%", height: 200 }}>
                 <CardMedia
-
                     component="img"
                     image={card.foto}
-                    alt="Paella dish"
-                    sx={{width: '100%', height: '100%'}}
+                    alt={card.nome_evento}
+                    sx={{ width: "100%", height: "100%", borderRadius: "16px 16px 0 0" }}
                 />
+
+                <IconButton
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setFavorito(!favorito);
+                    }}
+                    sx={{
+                        position: "absolute",
+                        top: 10,
+                        right: 10,
+                        backgroundColor: "rgba(255,255,255,0.7)",
+                        transition: "all 0.2s ease-in-out",
+                        "&:hover": {
+                            backgroundColor: "#6C15D5",
+                            "& .MuiSvgIcon-root": { color: "white" },
+                        },
+                    }}
+                >
+                    {favorito ? (
+                        <Star sx={{ color: "#6C15D5" }} />
+                    ) : (
+                        <StarBorder sx={{ color: "#6C15D5" }} />
+                    )}
+                </IconButton>
             </Box>
             <CardHeader
                 avatar={
