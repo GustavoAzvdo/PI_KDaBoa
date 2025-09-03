@@ -27,7 +27,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
         year: 'numeric',
     });
 
- 
+    console.log(card.Estabelecimento);
     return (
 
         <Card
@@ -95,10 +95,10 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                             <CalendarToday fontSize='small' />
                             {dataFormatada}
                         </Box>
-                       {/* Local q vai o nome do estabelicimento q esta fazendo o evento */}
-                        {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
+                       {/* Local q vai o nome do estabelicimento q esta fazendo o evento
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
                             <LocalActivityOutlined fontSize='small' />
-                             
+                            
                         </Box> */}
                     </Box>
                 }

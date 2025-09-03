@@ -5,26 +5,37 @@ import App from './App.tsx'
 import { SearchProvider } from './context/SearchContext.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material'
 
 
 const theme = createTheme({
   components: {
-    MuiButton: {
+
+    MuiTextField: {
       styleOverrides: {
         root: {
-          '.Mui-disabled .MuiTypography-root': {
-            backgroundColor: 'red !important',
-            color: 'white !important',
-            opacity: 1,
-          }
-        }
-      }
-    }
+          "& .MuiOutlinedInput-root": {
+            
+            "& fieldset": {
+              borderColor: "#333333",
+            },
+            "&:hover fieldset": {
+              borderColor: "#6c15d5",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#6c15d5",
+            },
+          },
+        },
+      },
+    },
+  
   }
 })
 createRoot(document.getElementById('root')!).render(
 
   <ThemeProvider theme={theme}>
+    <CssBaseline />
     <StrictMode>
       <SearchProvider>
         <BrowserRouter>

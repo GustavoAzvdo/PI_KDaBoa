@@ -119,7 +119,7 @@ const BoxInfo = () => {
         <Grid container spacing={4} textAlign="center" sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
           {[
             { number: "1000+", label: "Eventos cadastrados", color: '#6C15D5' },
-            { number: "100+", label: "Estabelecimentos parceiros", color: '#FF8e38' },
+            { number: "100+", label: "Estabelecimentos parceiros", color:  '#FF8e38' },
             { number: "200+", label: "Cidades atendidas", color: '#6C15D5' },
 
           ].map((stat, index) => (
