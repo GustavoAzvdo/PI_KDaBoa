@@ -20,6 +20,7 @@ import api from '../../api/api';
 import { Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import BoasVindasGerente from '../BoasVindas/BoasVindas';
 import { useTheme } from '@mui/material/styles';
+import CriarFuncionario from '../Forms/CriarFuncionario/CriarFuncionario';
 
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
@@ -217,7 +218,7 @@ export default function DashboardLayoutBasic(props: any) {
         );
       case '/funcionarios':
         return (
-          <ScreenDash/>
+          <CriarFuncionario/>
         );
       case '/eventos/criar_evento':
         return (

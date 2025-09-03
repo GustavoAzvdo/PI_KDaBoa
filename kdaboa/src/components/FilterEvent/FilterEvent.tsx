@@ -1,5 +1,5 @@
 import CardEventHome from "../CardEventHome/CardEventHome";
-import { Box, Button} from '@mui/material'
+import { Box, Button, Container } from '@mui/material'
 import Search from "../Search/Search";
 import { useState } from "react";
 import Footer from "../Footer/Footer";
@@ -87,7 +87,10 @@ const FilterEvent = () => {
                 </Title>
             </Box>
             <Box className="search-container" sx={{ paddingBottom: 10, borderBottom: 1, borderColor: '#e0e0e0' }} >
-                <Search onDateChange={handleDateChange} onCategoryChange={handleCategoryChange} onTextChange={handleTextChange} />
+                <Container>
+                    <Search onDateChange={handleDateChange} onCategoryChange={handleCategoryChange} onTextChange={handleTextChange} />
+
+                </Container>
             </Box>
             <Box className="title-container" sx={{ textAlign: 'center' }}>
                 <Title>
