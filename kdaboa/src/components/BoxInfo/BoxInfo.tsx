@@ -219,7 +219,7 @@ const BoxInfo = () => {
                     sx={{
                       width: 64,
                       height: 64,
-                      background: "linear-gradient(45deg, #6C15D5, #FF8e38)",
+                      background: "#6C15D5",
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",

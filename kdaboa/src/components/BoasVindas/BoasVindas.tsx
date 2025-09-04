@@ -96,7 +96,7 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
               <Box>
                 <Typography variant="h6">Funcionários</Typography>
               </Box>
-              <Button variant="outlined" color="inherit" size="small" sx={{ mt: 1 }}>Gerenciar</Button>
+              <Button variant="outlined" color="inherit" size="small" sx={{ mt: 1 }} onClick={() => router.navigate('/funcionarios')} >Gerenciar</Button>
             </CardContent>
           </Card>
         </Grid>

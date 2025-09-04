@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
-import { CelebrationOutlined, CalendarToday, LocalActivityOutlined, } from '@mui/icons-material';
+import { CelebrationOutlined, CalendarToday } from '@mui/icons-material';
 import "./CardEventHome.css"
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
@@ -41,7 +41,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                 transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
                 boxShadow: 4,
                 '&:hover': {
-                    boxShadow: 8,
+                     boxShadow: "0px 8px 20px #b789ef61",
                     transform: 'translateY(-8px)',
                 },
             }}
@@ -96,10 +96,10 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                             {dataFormatada}
                         </Box>
                      
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
+                        {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
                             <LocalActivityOutlined fontSize='small' />
                             {card.Endereco.bairro}
-                        </Box>
+                        </Box> */}
                     </Box>
                 }
                 className='header-cardHomeEvent'

@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Checkbox, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
+import { Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
 import * as React from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -415,7 +415,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                 label="Data/hora inicio"
                                 slotProps={{
                                     textField: {
-                                        sx: { borderColor: 'var(--roxoForteDashboard) !important' }
+                                        sx: { border: '1px solid #6c15d5 !important' }
                                     }
                                 }}
                             />
@@ -538,7 +538,6 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     <li
                                         key={key}
                                         {...optionProps}
-
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.backgroundColor = '#f3e8ff'
                                         }}
@@ -565,11 +564,28 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     </li>
                                 )
                             }}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Categorias" />
-                            )}
-
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        {...getTagProps({ index })}
+                                        key={option.id}
+                                        label={option.title}
+                                        sx={{
+                                            backgroundColor: '#f3e8ff', // roxo fraco
+                                            color: '#6C15D5', // texto roxo forte
+                                            '& .MuiChip-deleteIcon': {
+                                                color: '#6C15D5', // X roxo forte
+                                                '&:hover': {
+                                                    color: '#4a0da5',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                ))
+                            }
+                            renderInput={(params) => <TextField {...params} label="Categorias" />}
                         />
+
                     </Box>
                 </Grid>
 

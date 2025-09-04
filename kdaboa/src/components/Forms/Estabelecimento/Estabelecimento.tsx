@@ -1,11 +1,11 @@
-import { Autocomplete, Box, Button, Checkbox, Grid, InputAdornment, Modal, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, Button, Checkbox, Chip, Grid, InputAdornment, Modal, TextField, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import { Warning, Description, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon } from '@mui/icons-material';
 import { useState } from 'react';
 import { dados } from '../../../categorys/dados';
 import api from '../../../api/api';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
-import {CircularProgress} from '@mui/material'
+import { CircularProgress } from '@mui/material'
 
 const MAX_CHARS = 1000;
 interface CategoryProps {
@@ -23,7 +23,7 @@ interface Dados {
   icon: React.ReactNode;
 }
 
-interface getEstabelecimento{
+interface getEstabelecimento {
   id_estabelecimento: number;
   nome: string;
   cnpj: string;
@@ -31,10 +31,12 @@ interface getEstabelecimento{
   status: number;
   id_contato: number;
   Usuario: Array<object>;
-  Estabelecimento_Categoria: Array<{id_categoria: number,
-                                    Categoria: {
-                                      nome_categoria: string
-                                    }}>;
+  Estabelecimento_Categoria: Array<{
+    id_categoria: number,
+    Categoria: {
+      nome_categoria: string
+    }
+  }>;
   Contato: Array<object>;
   Estabelecimento_Endereco: Array<object>;
   Evento: Array<object>;
@@ -49,7 +51,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [nome, setNome] = React.useState<string>('');
   const [descricao, setDescricao] = React.useState<string>('');
   const [CNPJ, setCNPJ] = React.useState<string>('');
-//
+  //
   const [viewCNPJ, setViewCNPJ] = React.useState<string>('');
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', autoHideDuration: 4000, severity: 'success' as 'success' | 'warning' | 'error' | 'info' });
@@ -59,8 +61,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [showCnpjModal, setShowCnpjModal] = useState<boolean>(false);
   const [modalCountdown, setModalCountdown] = useState<number>(5);
   const [modalButtonEnabled, setModalButtonEnabled] = useState<boolean>(false);
-//
-  const [categoriasSelecionadas ,setCategoriasSelecionadas] = useState<Dados[]>([])
+  //
+  const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<Dados[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
@@ -115,7 +117,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
 
   const handleGetEstablishment = async () => {
     try {
-      const response = await api.get<getEstabelecimento>('gerente/establishment', {withCredentials: true})
+      const response = await api.get<getEstabelecimento>('gerente/establishment', { withCredentials: true })
 
       setEstabelecimentoId(response.data.id_estabelecimento)
       setNome(response.data.nome)
@@ -132,7 +134,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       setFirstRegister(false)
       setEditMode(false)
     } catch (error: any) {
-      if(error.response?.status === 404) {
+      if (error.response?.status === 404) {
         setFirstRegister(true)
         setEditMode(true)
       }
@@ -146,15 +148,15 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     setDisabled(true);
     try {
       const response = await api.post<PostEstablishmentResponse>('/gerente/establishment', {
-        nome : nome,
-        descricao : descricao,
+        nome: nome,
+        descricao: descricao,
         cnpj: CNPJ,
         categoria: selectedCategories,
       }, { withCredentials: true });
 
       console.log(response)
       setEstabelecimentoId(response.data.id_estabelecimento)
-     
+
 
       setSnackbar({ autoHideDuration: 4000, open: true, message: 'Estabelecimento cadastrado com sucesso!', severity: 'success' });
       setEditMode(false);
@@ -181,9 +183,9 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       setDisabled(true);
       try {
         await api.put('/gerente/establishment/', {
-          id : estabelecimentoId,
-          nome : nome,
-          descricao : descricao,
+          id: estabelecimentoId,
+          nome: nome,
+          descricao: descricao,
           categoria: selectedCategories,
         }, { withCredentials: true });
 
@@ -217,12 +219,12 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2, minWidth: 320,
 
         }}>
-   
-            <Typography sx={{ fontFamily: 'var(--notosans) !important' }} variant="h6" gutterBottom>
-              Confirmar CNPJ:&nbsp; {CNPJ}
-            </Typography>
 
-          
+          <Typography sx={{ fontFamily: 'var(--notosans) !important' }} variant="h6" gutterBottom>
+            Confirmar CNPJ:&nbsp; {CNPJ}
+          </Typography>
+
+
           <Typography sx={{ mb: 2, fontFamily: 'var(--notosans) !important', fontSize: 18 }}>
             Tem certeza que deseja cadastrar este CNPJ? <br />
             <b> {<Warning sx={{ pt: 1, mt: 1, pr: 1 }} />}Você não poderá alterá-lo futuramente.</b>
@@ -236,7 +238,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
               onClick={handleCreateEstablishment}
               sx={{ minWidth: 180 }}
             >
-              {loading ? (<CircularProgress size={20} color='inherit'/>) : (<Typography sx={{ fontFamily: 'var(--notosans) !important', fontSize: 16 }}>
+              {loading ? (<CircularProgress size={20} color='inherit' />) : (<Typography sx={{ fontFamily: 'var(--notosans) !important', fontSize: 16 }}>
                 {modalButtonEnabled ? 'Cadastrar' : `Aguarde ${modalCountdown}s`}
 
               </Typography>)}
@@ -299,14 +301,12 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         <Grid size={{ xs: 12, sm: 12, md: 6 }} >
           <Box>
             <Autocomplete
-
               multiple
               id="checkboxes-tags-demo"
               options={dados}
               disableCloseOnSelect
               value={categoriasSelecionadas}
-              //onChange={handleCategoryChange}
-                onChange={(event, newValue) => {
+              onChange={(event, newValue) => {
                 setCategoriasSelecionadas(newValue);
                 handleCategoryChange(event, newValue);
               }}
@@ -318,7 +318,6 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                   <li
                     key={key}
                     {...optionProps}
-
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = '#f3e8ff'
                     }}
@@ -340,18 +339,35 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                       disabled={!editMode || disabled}
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-
                       {option.title}
                       {option.icon}
                     </Box>
                   </li>
                 )
               }}
-              renderInput={(params) => (
-                <TextField {...params} label="Categorias" />
-              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={option.id}
+                    label={option.title}
+                    sx={{
+                      backgroundColor: '#f3e8ff', // roxo fraco
+                      color: '#6C15D5',           // texto roxo forte
+                      '& .MuiChip-deleteIcon': {
+                        color: '#6C15D5',
+                        '&:hover': {
+                          color: '#4a0da5',
+                        },
+                      },
+                    }}
+                  />
+                ))
+              }
+              renderInput={(params) => <TextField {...params} label="Categorias" />}
               disabled={!editMode || disabled}
             />
+
           </Box>
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 12 }}>
@@ -369,7 +385,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                 }}
                 onClick={handleOpenCnpjModal}
               >
-                <Typography sx={{  fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px', fontWeight: 500 }}>
+                <Typography sx={{ fontFamily: 'Noto Sans, sans-serif !important', fontSize: '18px', fontWeight: 500 }}>
                   Cadastrar Informações
                 </Typography>
               </Button>

@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { useEventos } from '../../../context/EventoContext';
+import { Delete, Edit } from '@mui/icons-material';
 
 interface Evento {
     data_criacao: string;
@@ -143,8 +144,8 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                             </Typography>
                         </CardContent>
                         <CardActions sx={{ position: 'relative', minHeight: 40, gap: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                            <Button variant='contained' sx={{ color: 'white', bgcolor: '#6C15D5 ' }} onClick={() => handleEdit(evento)}>Editar</Button>
-                            <Button variant='contained' color="error" onClick={() => handleDelete(evento.id_evento)}>Excluir</Button>
+                            <Button variant='contained' sx={{ color: 'white', bgcolor: '#6C15D5 ' }} onClick={() => handleEdit(evento)}  endIcon={<Edit/>}>Editar</Button>
+                            <Button variant='contained' color="error" onClick={() => handleDelete(evento.id_evento)} endIcon={<Delete/>} >Excluir</Button>
 
                         </CardActions>
 

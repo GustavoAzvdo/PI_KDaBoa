@@ -49,7 +49,27 @@ const ViewEvent = () => {
                             pr: 3
                         }}
                     >
-                        <Typography sx={{ fontFamily: 'var(--fredoka)', fontWeight: '500 !important', fontSize: '23px' }}>
+                        <Typography
+                            sx={{
+                                position: "relative",
+                                fontWeight: 500,
+                                fontSize: "23px",
+                                fontFamily: "var(--fredoka)",
+                                "&::after": {
+                                    content: '""',
+                                    position: "absolute",
+                                    left: 0,
+                                    bottom: -2, // distancia do texto
+                                    width: "0%",
+                                    height: "3px",
+                                    backgroundColor: "#6c15d5",
+                                    transition: "width 0.3s ease",
+                                },
+                                "&:hover::after": {
+                                    width: "100%",
+                                },
+                            }}
+                        >
                             Pesquisar outros eventos
                         </Typography>
                     </Link>
@@ -124,7 +144,7 @@ const ViewEvent = () => {
                             Home
                         </Typography>
                     </ListItem>
-                    <ListItem component={Button}  onClick={() => setOpen(false)}
+                    <ListItem component={Button} onClick={() => setOpen(false)}
                         sx={{
                             transition: 'background 0.2s',
                             '&:hover': {
