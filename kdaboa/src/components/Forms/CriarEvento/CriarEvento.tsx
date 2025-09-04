@@ -404,6 +404,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                     >
                         <Stack spacing={2}>
                             <DateTimePicker
+                                
                                 value={dataInicio}
                                 onChange={(e: any) => {
                                     setDataInicio(e);
@@ -413,11 +414,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     }
                                 }}
                                 label="Data/hora inicio"
-                                slotProps={{
-                                    textField: {
-                                        sx: { border: '1px solid #6c15d5 !important' }
-                                    }
-                                }}
+                                
                             />
                         </Stack>
                     </LocalizationProvider>

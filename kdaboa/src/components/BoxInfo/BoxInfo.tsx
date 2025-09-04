@@ -27,7 +27,7 @@ const BoxInfo = () => {
 
         </Container>
       </Grid>
-      <Container sx={{pb: 10}}>
+      <Container sx={{ pb: 10 }}>
         <Grid container spacing={3}>
           {[
             {
@@ -48,19 +48,19 @@ const BoxInfo = () => {
             },
           ].map((event, index) => (
             <Grid size={{ xs: 12, sm: 12, md: 6 }} key={index}>
-              <Card sx={{ p: 3, "&:hover": { boxShadow: 3 } }}>
+              <Card sx={{ p: 3, cursor:'pointer', "&:hover": { boxShadow: "0px 8px 20px #ff84384e",} }}>
                 <Box display="flex" gap={2}>
                   <Box
                     sx={{
                       width: 80,
                       height: 80,
-                      background: "linear-gradient(35deg, #6C15D5, #FF8e38)",
+                      background: "linear-gradient(35deg, #ff7038ff, #FF8e38)",
                       borderRadius: 2,
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "white",
+                      color: "black",
                       fontWeight: "bold",
                       fontFamily: 'var(--notosans)'
                     }}
@@ -116,10 +116,10 @@ const BoxInfo = () => {
 
 
         </Box>
-        <Grid container spacing={4} textAlign="center" sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
+        <Grid container spacing={4} textAlign="center" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
           {[
             { number: "1000+", label: "Eventos cadastrados", color: '#6C15D5' },
-            { number: "100+", label: "Estabelecimentos parceiros", color:  '#FF8e38' },
+            { number: "100+", label: "Estabelecimentos parceiros", color: '#FF8e38' },
             { number: "200+", label: "Cidades atendidas", color: '#6C15D5' },
 
           ].map((stat, index) => (
@@ -139,7 +139,7 @@ const BoxInfo = () => {
             </Grid>
           ))}
         </Grid>
-        
+
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Box className="festa"
@@ -184,16 +184,16 @@ const BoxInfo = () => {
         />
 
       </Grid>
-        <Box sx={{ py: 8, backgroundColor: "white" }}>
+      <Box sx={{ py: 8, backgroundColor: "white" }}>
         <Container maxWidth="lg">
-        <Box sx={{
+          <Box sx={{
             textAlign: { xs: 'center' },
             px: { xs: 2 }
           }}>
             <Title>
               Por que escolher o KDABOA?  <img width="70" height="70" src={check} alt="hang-ten" />
             </Title>
-         
+
           </Box>
           <Grid container spacing={4}>
             {[
@@ -213,7 +213,7 @@ const BoxInfo = () => {
                 description: "Receba sugestões de eventos baseadas nos seus interesses e histórico de participação.",
               },
             ].map((feature, index) => (
-              <Grid size={{xs: 12, sm: 12, md: 4}} key={index} sx={{py: 5}}>
+              <Grid size={{ xs: 12, sm: 12, md: 4 }} key={index} sx={{ py: 5 }}>
                 <Box textAlign="center">
                   <Box
                     sx={{
@@ -227,10 +227,17 @@ const BoxInfo = () => {
                       color: "white",
                       mx: "auto",
                       mb: 2,
+                      transition: "all 0.3s ease",
+                      '&:hover': {
+                        transform: "scale(1.1) rotate(10deg)", // aumenta e gira levemente
+                        background: "#4a0da5",                // roxo mais escuro
+                        boxShadow: "0 8px 20px rgba(108,21,213,0.5)", // glow roxo
+                      },
                     }}
                   >
                     {feature.icon}
                   </Box>
+
                   <Typography variant="h6" sx={{ fontFamily: "var(--fredoka)", fontWeight: 500, mb: 2 }}>
                     {feature.title}
                   </Typography>
@@ -240,7 +247,7 @@ const BoxInfo = () => {
             ))}
           </Grid>
         </Container>
-        <Box sx={{ pt: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <Box sx={{ pt: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Button endIcon={<PersonAddAlt1Outlined />} variant='outlined' color='inherit' size='large' href="/signin" className="btn-cadastrar">
             <Typography className="btn-text">
               Quero me cadastrar!
