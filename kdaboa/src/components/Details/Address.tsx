@@ -47,7 +47,7 @@ const Address = ({ address, location }: AddressProps) => {
                             }}
                         >
                             <iframe
-                                src={`https://www.google.com/maps?q=${location}&output=embed`}
+                                src={`https://www.google.com/maps?q=${address}&output=embed`}
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}

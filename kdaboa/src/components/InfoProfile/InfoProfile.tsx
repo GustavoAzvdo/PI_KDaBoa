@@ -21,7 +21,6 @@ const InfoProfile = () => {
           try {
             const response: any = await api.get('/event'); 
             const todosEventos = response.data;
-      
             const eventosDoEstabelecimento = todosEventos.filter(
               (evento: any) => evento.id_estabelecimento === card.Estabelecimento.id_estabelecimento
             );
