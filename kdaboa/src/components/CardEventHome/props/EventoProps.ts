@@ -1,3 +1,5 @@
+import { JSX } from "react/jsx-runtime";
+
 interface EventoProps {
     id_evento: number;
     nome_evento: string;
@@ -33,6 +35,12 @@ interface EventoProps {
         email: string;
         tel_cel_1: string;
         tel_cel_2: string;
+      };
+      Galeria: {
+        map(arg0: (gal: any) => JSX.Element): NonNullable<import("react").ReactNode>;
+        id_gal: number,
+        foto: string,
+        id_estabelecimento: number,
       };
     };
     Evento_Categoria: {

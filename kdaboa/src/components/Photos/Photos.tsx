@@ -1,12 +1,15 @@
 import { Container, useMediaQuery, useTheme } from '@mui/material';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import './Photos.css';
-const Photos = ({ card }: { card: any }) => {
 
+import EventoProps from '../CardEventHome/props/EventoProps';
+import './Photos.css';
+const Photos = ({ card }: { card: EventoProps  }) => {
+  console.log(card.Estabelecimento.Galeria)
   const theme = useTheme();
   // Se a tela for menor que 900px, use 2 colunas, senão 3
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+  
   return (
     <Container
       sx={{
@@ -25,7 +28,7 @@ const Photos = ({ card }: { card: any }) => {
         cols={isSmallScreen ? 1 : 2}
         rowHeight={300}
       >
-        {card.Estabelecimento.Galeria.map((gal: any) => (
+        {card?.Estabelecimento?.Galeria?.map((gal: any) => (
           <ImageListItem key={gal.foto}>
             <img
               src={`http://localhost:3000/gallery/${gal.foto}`}
@@ -34,7 +37,8 @@ const Photos = ({ card }: { card: any }) => {
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </ImageListItem>
-        ))}
+        ))} 
+    
       </ImageList>
 
     </Container>

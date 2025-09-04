@@ -17,7 +17,7 @@ export default function CarroselEventHome() {
     useEffect(() => {
         api.get<any>("/event").then((res) => {
             setCards(res.data);
-            // console.log(res)
+             console.log(res)
         })
     }, [])
 
