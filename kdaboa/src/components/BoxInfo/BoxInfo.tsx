@@ -123,7 +123,7 @@ const BoxInfo = () => {
             { number: "200+", label: "Cidades atendidas", color: '#6C15D5' },
 
           ].map((stat, index) => (
-            <Grid size={{ xs: 12, sm: 12, md: 3 }} key={index}>
+            <Grid size={{ xs: 4, sm: 4, md: 3 }} key={index}>
               <Typography
                 variant="h3"
                 sx={{
@@ -188,7 +188,7 @@ const BoxInfo = () => {
         <Container maxWidth="lg">
           <Box sx={{
             textAlign: { xs: 'center' },
-            px: { xs: 2 }
+            px: { xs: 1 }
           }}>
             <Title>
               Por que escolher o KDABOA?  <img width="70" height="70" src={check} alt="hang-ten" />

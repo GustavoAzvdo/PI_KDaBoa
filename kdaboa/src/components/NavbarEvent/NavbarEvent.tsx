@@ -1,170 +1,129 @@
 import { Box, Button, Grid, Typography, Drawer, List, ListItem } from "@mui/material"
 import logo from "../../assets/logo.png"
 import { ShareOutlined, Menu as MenuIcon } from '@mui/icons-material';
-import Link from '@mui/material/Link';
 import { useState } from "react";
 import "./NavbarEvent.css"
-
-
 
 const ViewEvent = () => {
     const [open, setOpen] = useState(false);
 
+    const navButtonStyle = {
+        color: "black",
+        fontFamily: "Fredoka, sans-serif",
+        fontWeight: 500,
+        fontSize: "20px",
+        textTransform: "none",
+        position: "relative",
+        "&::after": {
+            content: '""',
+            position: "absolute",
+            left: 0,
+            bottom: -2,
+            width: "0%",
+            height: "3px",
+            backgroundColor: "#6c15d5",
+            transition: "width 0.3s ease",
+        },
+        "&:hover::after": {
+            width: "100%",
+        },
+    };
+
     return (
-        <Grid container spacing={2} sx={{ padding: 2 }} className="container">
-            <Grid size={{ xs: 12, md: 10 }} className="grid-form"  >
-                <Box className="left" sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Link href="/home" sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                        <img src={logo} style={{ width: 50, height: 50 }} alt="" />
-                        <Typography>
-                            KDABOA
-                        </Typography>
-                    </Link>
-                    {/* Home link só aparece em telas médias pra cima */}
-                    <Link
-                        href="/home"
-                        sx={{
-                            display: { xs: 'none', md: 'flex' },
-                            alignItems: 'center',
-                            textDecoration: 'none',
-                            color: 'inherit',
-                            pl: 3
-                        }}
-                    >
-                        <Typography sx={{ fontWeight: '500 !important' }}>
-                            Home
-                        </Typography>
-                    </Link>
-                </Box>
-                <Box className="right" sx={{ display: 'flex', alignItems: 'center' }}>
-                    {/* Esses só aparecem em telas médias pra cima */}
-                    <Link
-                        href="/search"
-                        sx={{
-                            display: { xs: 'none', md: 'flex' },
-                            alignItems: 'center',
-                            textDecoration: 'none',
-                            color: 'inherit',
-                            pl: 3,
-                            pr: 3
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                position: "relative",
-                                fontWeight: 500,
-                                fontSize: "23px",
-                                fontFamily: "var(--fredoka)",
-                                "&::after": {
-                                    content: '""',
-                                    position: "absolute",
-                                    left: 0,
-                                    bottom: -2, // distancia do texto
-                                    width: "0%",
-                                    height: "3px",
-                                    backgroundColor: "#6c15d5",
-                                    transition: "width 0.3s ease",
-                                },
-                                "&:hover::after": {
-                                    width: "100%",
-                                },
-                            }}
-                        >
-                            Pesquisar outros eventos
-                        </Typography>
-                    </Link>
+        <Grid
+            container
+            spacing={2}
+            sx={{
+                padding: 2,
+                backgroundColor: "#fff",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}
+        >
+            {/* Logo + título */}
+            <Grid size={{ xs: 12, md: 10 }} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Button
-                        variant="contained"
-                        endIcon={<ShareOutlined />}
-                        size="large"
-                        className="btn-share"
-                        sx={{ display: { xs: 'none', md: 'flex' } }}
+                        href="/home"
+                        sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'black', textTransform: "none" }}
                     >
-                        <Typography>
-                            Compartilhar
+                        <img src={logo} style={{ width: 50, height: 50, marginRight: 8 }} alt="Logo" />
+                        <Typography sx={{ fontFamily: "Fredoka, sans-serif", fontSize: "22px", fontWeight: "bold" }}>
+                            KDABOA &reg;
                         </Typography>
                     </Button>
+                </Box>
 
-                    {/* Botão hambúrguer só aparece no mobile */}
+                {/* Menu desktop */}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                    <Button href="/home" sx={{ ...navButtonStyle, display: { xs: 'none', md: 'flex' } }}>
+                        Home
+                    </Button>
+                    <Button href="/search" sx={{ ...navButtonStyle, display: { xs: 'none', md: 'flex' } }}>
+                        Pesquisar outros eventos
+                    </Button>
+
                     <Button
-                        className='btn-hamburguer'
-                        variant="outlined"
-                        color='inherit'
-                        sx={{ display: { xs: 'flex', md: 'none' }, marginLeft: 'auto', alignItems: 'center' }}
-                        onClick={() => setOpen(true)}
+                        variant="contained"
 
+                      
+                        endIcon={<ShareOutlined />}
+                        sx={{
+                            backgroundColor: '#6c15d5',
+                            fontFamily: 'Fredoka, sans-serif',
+                            fontSize: '1.2rem',
+                            px: 3,
+                            py: 1,
+                        }}
                     >
-                        <MenuIcon className='menu-icon' color='inherit' sx={{ fontSize: '70px !important' }} />
+                        Compartilhar
+                    </Button>
+
+                    {/* Hambúrguer mobile */}
+                    <Button
+                        variant="outlined"
+                        sx={{
+                            display: { xs: 'flex', md: 'none' },
+                            ml: "auto",
+                            border: "none",
+                            color: "black"
+                        }}
+                        onClick={() => setOpen(true)}
+                    >
+                        <MenuIcon sx={{ fontSize: "40px" }} />
                     </Button>
                 </Box>
             </Grid>
-            {/* Drawer */}
-            <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-                <List sx={{ width: 250, padding: 2 }} className='list'>
-                    <ListItem component={Button} href={'/search'} onClick={() => setOpen(false)}
-                        sx={{
-                            transition: 'background 0.2s',
-                            '&:hover': {
-                                backgroundColor: 'var(--roxoNav)',
-                                '& .MuiTypography-root': {
-                                    color: '#fff',
-                                },
-                            },
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                color: 'var(--roxoNav)',
-                                fontFamily: 'var(--notosans)',
-                                fontSize: '1.2rem',
-                            }}
-                        >
-                            Pesquisar outros eventos
-                        </Typography>
-                    </ListItem>
 
-                    <ListItem component={Button} href={'/home'} onClick={() => setOpen(false)}
-                        sx={{
-                            transition: 'background 0.2s',
-                            '&:hover': {
-                                backgroundColor: 'var(--roxoNav)',
-                                '& .MuiTypography-root': {
-                                    color: '#fff',
-                                },
-                            },
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                color: 'var(--roxoNav)',
-                                fontFamily: 'var(--notosans)',
-                                fontSize: '1.2rem',
-                            }}
-                        >
-                            Home
-                        </Typography>
-                    </ListItem>
-                    <ListItem component={Button} onClick={() => setOpen(false)}
-                        sx={{
-                            transition: 'background 0.2s',
-                            '&:hover': {
-                                backgroundColor: 'var(--roxoNav)',
-                                '& .MuiTypography-root': {
-                                    color: '#fff',
-                                },
-                            },
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                color: 'var(--roxoNav)',
-                                fontFamily: 'var(--notosans)',
-                                fontSize: '1.2rem',
-                            }}
-                        >
-                            Compartilhar
-                        </Typography>
-                    </ListItem>
+            {/* Drawer Mobile */}
+            <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
+                <List sx={{ width: 250, padding: 2 }}>
+                    {[
+                        { label: "Home", href: "/home" },
+                        { label: "Pesquisar outros eventos", href: "/search" },
+                        { label: "Compartilhar", href: "#" },
+                    ].map((item, index) => (
+                        <ListItem key={index} sx={{ padding: 0, mb: 1 }}>
+                            <Button
+                                href={item.href}
+                                onClick={() => setOpen(false)}
+                                sx={{
+                                    width: "100%",
+                                    color: "black",
+                                    fontFamily: "Fredoka, sans-serif",
+                                    fontSize: "1.2rem",
+                                    fontWeight: 500,
+                                    justifyContent: "flex-start",
+                                    textTransform: "none",
+                                    "&:hover": { backgroundColor: 'var(--roxoNav)', color: "#fff" }
+                                }}
+                            >
+                                {item.label}
+                            </Button>
+                        </ListItem>
+                    ))}
                 </List>
             </Drawer>
         </Grid>

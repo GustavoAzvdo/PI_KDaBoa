@@ -55,21 +55,28 @@ const Navbar = () => {
             }}
           >
             <img src={logo} alt="Logo" style={{ height: 50 }} />
+            <Typography sx={{ fontFamily: 'var(--fredoka)', fontWeight: '600', fontSize: '25px', pl: 1, color: 'black' }}>
+              KDABOA &reg;
+            </Typography>
           </Box>
           {/* Logo Mobile */}
-          <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: {xs: '100%', sm: '100%', md: 'auto'}}}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: { xs: '100%', sm: '100%', md: 'auto' } }}>
             <Box
               component="a"
               href="/"
               sx={{
-                
+
                 display: { xs: 'flex', md: 'none' },
-              
+                alignItems: 'center',
                 textDecoration: 'none',
               }}
             >
               <img src={logo} alt="Logo" style={{ height: 45 }} />
+              <Typography sx={{ fontFamily: 'var(--fredoka)', fontWeight: '600', fontSize: '25px', pl: 1, color: 'black' }}>
+                KDABOA &reg;
+              </Typography>
             </Box>
+
             {/* Menu Mobile */}
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
               <IconButton
@@ -80,7 +87,7 @@ const Navbar = () => {
                 onClick={handleOpenNavMenu}
                 sx={{ color: '#6c15d5' }}
               >
-                <MenuIcon fontSize='large'/>
+                <MenuIcon fontSize='large' />
               </IconButton>
               <Menu
                 id="menu-appbar"
