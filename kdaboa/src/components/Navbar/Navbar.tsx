@@ -2,136 +2,179 @@ import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import logo from '../../assets/logo.png';
-import Link from '@mui/material/Link';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
-import './Navbar.css';
 import { HomeOutlined, Search } from '@mui/icons-material';
+import logo from '../../assets/logo.png';
+
+const pages = [
+  { label: 'Home', icon: <HomeOutlined />, href: '/' },
+  { label: 'Encontrar eventos', icon: <Search />, href: '/search' },
+];
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
   return (
-    <div className='nav'>
-      <Box>
-        <AppBar position="static" className='navbar-home' elevation={3}>
-          <Toolbar className='toolbar-home'>
-            <Box className='btns-left-home' sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Link href='/' sx={{ pl: 0, display: 'flex', alignItems: 'center' }}>
-                <img src={logo} alt="" className='logo-home' />
-              </Link>
-              <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-                <Link href='/' sx={{ textDecoration: 'none', color: 'inherit' }}>
-                  <Button variant='text' color='inherit' size='large' endIcon={<HomeOutlined />}>
-                    <Typography>Home</Typography>
-                  </Button>
-                </Link>
-                <Link href='/search' sx={{ textDecoration: 'none', color: 'inherit' }}>
-                  <Button variant='text' color='inherit' size='large' endIcon={<Search />}>
-                    <Typography>Encontrar eventos</Typography>
-                  </Button>
-                </Link>
-              </Box>
-            </Box>
+    <AppBar
+      position="static"
+      elevation={3}
+      sx={{
+        py: 1,
+        bgcolor: 'white',
+        color: 'black',
+        fontFamily: 'Fredoka, sans-serif',
+      }}
+    >
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
 
-            {/* Botões normais n  o desktop */}
-            <Box className='btns-right-home' sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2 }}>
-              <Button variant='contained' color='secondary' href='/login' size='large' className='btnPublicar' endIcon={<PersonOutlined />}>
-                <Typography>Entrar</Typography>
-              </Button>
-            </Box>
-
-            {/* Botão hambúrguer no mobile */}
-            <Button
-              className='btn-hamburguer'
-              variant="outlined"
-              color='inherit'
-              sx={{ display: { xs: 'block', md: 'none' }, marginLeft: 'auto' }}
-              onClick={() => setOpen(true)}
-
-            >
-              <MenuIcon className='menu-icon' color='inherit' sx={{ fontSize: 40 }} />
-            </Button>
-          </Toolbar>
-        </AppBar>
-
-        {/* Drawer */}
-        <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-          <List sx={{ width: 250, padding: 2 }} className='list'>
-            <ListItem component={Button} href={'/search'} onClick={() => setOpen(false)}
+          {/* Logo Desktop */}
+          <Box
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              alignItems: 'center',
+              textDecoration: 'none',
+            }}
+          >
+            <img src={logo} alt="Logo" style={{ height: 50 }} />
+          </Box>
+          {/* Logo Mobile */}
+          <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: {xs: '100%', sm: '100%', md: 'auto'}}}>
+            <Box
+              component="a"
+              href="/"
               sx={{
-                transition: 'background 0.2s',
-                '&:hover': {
-                  backgroundColor: 'var(--roxoNav)',
-                  '& .MuiTypography-root': {
-                    color: '#fff',
-                  },
-                },
+                
+                display: { xs: 'flex', md: 'none' },
+              
+                textDecoration: 'none',
               }}
             >
-              <Typography
+              <img src={logo} alt="Logo" style={{ height: 45 }} />
+            </Box>
+            {/* Menu Mobile */}
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="menu"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                sx={{ color: '#6c15d5' }}
+              >
+                <MenuIcon fontSize='large'/>
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{ display: { xs: 'block', md: 'none' } }}
+              >
+                {pages.map((page) => (
+                  <MenuItem
+                    key={page.label}
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href={page.href}
+                  >
+                    <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                      {page.label}
+                    </Typography>
+                  </MenuItem>
+                ))}
+                <MenuItem onClick={handleCloseNavMenu} component="a" href="/login">
+                  <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                    Entrar
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          </Box>
+
+
+
+          {/* Links Desktop */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 3, ml: 4 }}>
+            {pages.map((page) => (
+              <Button
+                key={page.label}
+                href={page.href}
+                startIcon={page.icon}
                 sx={{
-                  color: 'var(--roxoNav)',
-                  fontFamily: 'var(--notosans)',
+                  color: 'black',
                   fontSize: '1.2rem',
-                  fontWeight: ''
+                  fontWeight: 500,
+                  fontFamily: 'Fredoka, sans-serif',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    width: '0%',
+                    height: '2px',
+                    left: 0,
+                    bottom: 0,
+                    bgcolor: '#6c15d5',
+                    transition: 'width 0.3s ease-in-out',
+                  },
+                  '&:hover::after': {
+                    width: '100%',
+                  },
                 }}
               >
-                Encontrar eventos
-              </Typography>
-            </ListItem>
+                {page.label}
+              </Button>
+            ))}
+          </Box>
 
-            <ListItem component={Button} href={'/login'} onClick={() => setOpen(false)}
+          {/* Botão Entrar */}
+          <Box sx={{ flexGrow: 0, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+            <Button
+              variant="contained"
+
+              href="/login"
+              endIcon={<PersonOutlined />}
               sx={{
-                transition: 'background 0.2s',
-                '&:hover': {
-                  backgroundColor: 'var(--roxoNav)',
-                  '& .MuiTypography-root': {
-                    color: '#fff',
-                  },
-                },
+                backgroundColor: '#6c15d5',
+                fontFamily: 'Fredoka, sans-serif',
+                fontSize: '1.2rem',
+                px: 3,
+                py: 1,
               }}
             >
-              <Typography
-                sx={{
-                  color: 'var(--roxoNav)',
-                  fontFamily: 'var(--notosans)',
-                  fontSize: '1.2rem',
-                  fontWeight: ''
-                }}
-              >Entrar</Typography>
-            </ListItem>
-
-            <ListItem component={Button} href={'/home'} onClick={() => setOpen(false)}
-              sx={{
-                transition: 'background 0.2s',
-                '&:hover': {
-                  backgroundColor: 'var(--roxoNav)',
-                  '& .MuiTypography-root': {
-                    color: '#fff',
-                  },
-                },
-              }}
-            >
-              <Typography
-                sx={{
-                  color: 'var(--roxoNav)',
-                  fontFamily: 'var(--notosans)',
-                  fontSize: '1.2rem',
-                  fontWeight: ''
-                }}
-              >Home</Typography>
-            </ListItem>
-          </List>
-        </Drawer>
-      </Box>
-    </div>
+              Entrar
+            </Button>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 
