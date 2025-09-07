@@ -25,7 +25,7 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
       .split(' ')
       .map(p => p.charAt(0).toUpperCase() + p.slice(1))
       .join(' ');
-      
+
   useEffect(() => {
     const fetchNomeUsuario = async () => {
       try {
@@ -41,22 +41,60 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
 
   return (
     <Box sx={{ p: 4 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Box sx={{ pr: 5 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src={logoPC} width={100} height={130} alt="logoPC" />
-          </Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: { xs: "center", md: "flex-start" },
+          flexDirection: { xs: "column", sm: "row" }, // empilha no mobile, lado a lado em telas maiores
+          gap: { xs: 2, sm: 4 }, // espaçamento entre logo e texto
+          textAlign: { xs: "center", sm: "left" },
+          px: { xs: 2, sm: 0 }, // padding lateral no mobile
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src={logoPC}
+            alt="logoPC"
+            style={{
+              width: "200px",
+              height: "200px",
+              objectFit: "contain",
+            }}
+          />
         </Box>
+
         <Box>
-          <Typography variant="h4" gutterBottom>
-            Bem-vindo(a), {capitalizar(nomeGerente) || 'Gerente'}!
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Aqui estão seus atalhos e resumo de atividades recentes.
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              fontFamily: 'var(--notosans)',
+              fontSize: { xs: "2.2rem", sm: "2.2rem" }, // menor no mobile
+              fontWeight: 500,
+            }}
+          >
+            Bem-vindo(a), {capitalizar(nomeGerente) || "Gerente"}!
           </Typography>
 
+          <Typography
+            variant="subtitle1"
+            gutterBottom
+            sx={{
+              fontSize: { xs: "1.3rem", sm: "1.3rem" },
+            }}
+          >
+            Aqui estão seus atalhos e resumo de atividades recentes.
+          </Typography>
         </Box>
       </Box>
+
       {/* Atalhos */}
 
       <Grid container spacing={2} sx={{ mt: 3 }}>
