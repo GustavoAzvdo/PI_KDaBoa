@@ -12,7 +12,7 @@ interface AddressProps {
 
 const Address = ({ address, location }: AddressProps) => {
     const [openMap, setOpenMap] = useState<boolean>(false);
-  
+
     return (
         <Box className="address" sx={{ display: "flex", alignItems: "center", width: "100%" }}>
             <Box className="img-maps" sx={{ paddingRight: 2 }}>
@@ -21,16 +21,16 @@ const Address = ({ address, location }: AddressProps) => {
             <Box className="text-address">
                 <Box sx={{ display: "flex", alignItems: "center" }} className="text-address-title">
                     <Typography className='t'>{location}</Typography>
-                    <Button endIcon={<LocationOn/>} variant="outlined" className="btn-maps" sx={{ marginLeft: 3 }} onClick={() => setOpenMap(true)}>
-                        <Typography >
-                            Ver mapa
-                        </Typography>
-                    </Button>
                 </Box>
 
                 <Typography className="text-address-subtitle" sx={{ paddingTop: 2 }}>
                     {address}
                 </Typography>
+                <Button endIcon={<LocationOn />} variant="outlined" className="btn-maps" sx={{ ml: 2, mt: 2 }} onClick={() => setOpenMap(true)}>
+                    <Typography >
+                        Ver mapa
+                    </Typography>
+                </Button>
                 {openMap &&
                     <Modal open={openMap} onClose={() => setOpenMap(false)}>
                         <Box

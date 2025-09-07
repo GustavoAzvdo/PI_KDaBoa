@@ -1,9 +1,9 @@
-import { Avatar, Box, Button, Grid, Typography } from "@mui/material"
+import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material"
 import "./InfoEvent.css"
 import calendar from "../../assets/calendar.png"
 import Contacts from "../Details/Contacts"
 import Address from "../Details/Address"
-import {  useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import BannerEvent from "../BannerEvent/BannerEvent"
 import { Person } from "@mui/icons-material"
 import api from "../../api/api"
@@ -13,7 +13,7 @@ import { useEffect } from "react";
 
 const InfoEvent = ({ id }: { id: number }) => {
     const navigate = useNavigate();
-    
+
 
     const [card, setCard] = useState<EventoProps | null>(null);
 
@@ -63,9 +63,9 @@ const InfoEvent = ({ id }: { id: number }) => {
     function formatarCelular(numero: string | null | undefined): string {
         if (!numero) return '';
         return numero
-          .replace(/\D/g, '') // remove tudo que não for dígito
-          .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'); // aplica máscara
-      }
+            .replace(/\D/g, '') // remove tudo que não for dígito
+            .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'); // aplica máscara
+    }
     const catchEvent = async () => {
         try {
             const response: any = await api.get(`/event/${id}`)
@@ -86,7 +86,7 @@ const InfoEvent = ({ id }: { id: number }) => {
             <BannerEvent card={card} />
             <Grid container spacing={2} sx={{ padding: 2, paddingTop: 4 }} className="container">
                 <Grid size={{ xs: 12, md: 5 }} className="grid-left"  >
-                    <Box className='title-event'>
+                    <Box className='title-event' sx={{ display: 'flex', textAlign: { xs: 'center', sm: 'center', md: 'left' } }}>
                         <Typography variant="h3" className="title-text">
                             {card?.nome_evento}
                         </Typography>
@@ -116,32 +116,85 @@ const InfoEvent = ({ id }: { id: number }) => {
                     </Box>
                 </Grid>
 
-                <Grid size={{ xs: 11, md: 5 }} sx={{ justifyContent: { xs: 'center', sm: 'center', md: 'flex-end' }, marginY: { xs: 9, md: 0 } }} className="grid-right"  >
-                    <Box className="container-right" sx={{ display: "flex", alignItems: 'center', justifyContent: 'center' }}>
-                        <Box sx={{ paddingX: 2 }} className="img-profile" >
-                            <Avatar sx={{ width: 56, height: 56 }}>
+                <Grid size={{ xs: 11, md: 5 }}
+                    sx={{
+                        display: "flex",
+                        justifyContent: { xs: "center", md: "flex-end" },
+                        my: { xs: 4, md: 0 },
+                    }}
+                    className="grid-right"
+                >
+                    <Card
+                        elevation={3}
+                        sx={{
+                            height: '250px',
+                            width: "100%",
+                            maxWidth: 360,
+                            borderRadius: 3,
+                            transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
+                            boxShadow: 4,
+                            '&:hover': {
+                                boxShadow: "0px 8px 20px #b789ef61",
+                              
+                            },
+                        }}
+                    >
+                        <CardContent
+                            sx={{
+                                display: "flex",
+                                flexDirection: 'column',
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: { xs: 2, sm: 3 },
+                                textAlign: 'center',
+                            }}
+                        >
+                            <Avatar
+                                sx={{
+                                    width: { xs: 56, sm: 64 },
+                                    height: { xs: 56, sm: 64 },
+                                }}
+                            />
 
-                            </Avatar>
-                        </Box>
-                        <Box className="text-profile" sx={{ paddingRight: 1 }}>
-                            <Typography>
-                                Produzido por {card?.Estabelecimento.nome}
-                            </Typography>
-                            <Button endIcon={<Person />} variant="outlined" className="btn-profile" href='/profile' onClick={() => {
-                                navigate('/profile', { state: { card} });
-                            }}>
-                                <Typography>
-                                    Ver perfil
+                            <Box className="text-profile">
+                                <Typography
+                                    sx={{
+                                        fontSize: { xs: "0.95rem", md: "1rem" },
+                                        fontWeight: 500,
+                                        mb: { xs: 1, sm: 0.5 },
+                                    }}
+                                >
+                                    Produzido por {card?.Estabelecimento.nome}
                                 </Typography>
-                            </Button>
-                        </Box>
-                    </Box>
 
+                                <Button
+                                    endIcon={<Person />}
+                                    variant="outlined"
+                                    className="btn-profile"
+                                    href="/profile"
+                                    onClick={() => {
+                                        navigate("/profile", { state: { card } });
+                                    }}
+                                    sx={{
+                                        fontSize: { xs: "0.75rem", sm: "0.9rem", md: '1.1rem' },
+                                        fontFamily: 'var(--notosans)',
+                                        px: { xs: 2, sm: 3 },
+
+                                    }}
+                                >
+                                    Ver perfil
+                                </Button>
+                            </Box>
+                        </CardContent>
+                    </Card>
                 </Grid>
 
                 <Grid size={{ xs: 12, md: 10 }} className="grid-description" sx={{ paddingTop: 4, margin: 0, textAlign: 'justify', px: { xs: 2, md: 0 } }}>
                     <Box className="title-description" >
-                        <Typography variant="h4" className="description-title" sx={{ alignItems: { xs: 'center', md: 'flex-start' }, justifyContent: { xs: 'center', md: 'flex-start' } }}>DESCRIÇÃO DO EVENTO</Typography>
+                        <Box sx={{ textAlign: { xs: 'center', sm: 'center', md: 'left' } }}>
+                            <Typography variant="h4" className="description-title" sx={{ alignItems: { xs: 'center', md: 'flex-start' }, justifyContent: { xs: 'center', md: 'flex-start' } }}>DESCRIÇÃO DO EVENTO</Typography>
+
+                        </Box>
                         <Typography className="description-text" sx={{ paddingY: 5 }}>{card.descricao}</Typography>
                     </Box>
                 </Grid>
