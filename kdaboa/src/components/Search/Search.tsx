@@ -36,7 +36,7 @@ interface SearchProps {
 }
 
 const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = false }: SearchProps) => {
-  const { searchText, categories, date, setSearchText, setCategories, setDate } = useSearch();
+  const { searchText, categories, idCategory, date, setSearchText, setCategories, setIdCategory, setDate } = useSearch();
   // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   // const [searchText, setSearchText] = useState<string>('')
   // const [selectedDate, setSelectedDate] = useState<any>(null);
@@ -44,6 +44,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
 
   const handleCategoryChange = (_event: any, value: any) => {
     const newCategories = value.map((item: any) => item.title);
+    setIdCategory(value.map((item: any) => String(item.id)))
     setCategories(newCategories);
     if (onCategoryChange) {
       onCategoryChange(newCategories);
@@ -98,7 +99,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
                         to="/search"
                         state={{
                           searchText: searchText,
-                          categories: categories,
+                          categories: idCategory,
                           date: date,
                         }}
                         sx={{ padding: 0, margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
