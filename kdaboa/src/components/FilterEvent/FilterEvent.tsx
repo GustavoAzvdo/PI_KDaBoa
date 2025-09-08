@@ -17,6 +17,7 @@ const FilterEvent = () => {
     const {
         searchText,
         categories: contextCategories,
+        idCategory,
         date: contextDate,
         setSearchText,
         setCategories,
@@ -31,7 +32,7 @@ const FilterEvent = () => {
         try {
             const params = {
                 name: searchText || undefined,
-                category: contextCategories[0] ? Number(contextCategories[0]) : undefined, // ajuste se for ID real
+                category: idCategory.length > 0 ? idCategory : undefined,
                 date: contextDate || undefined,
             };
             const queryParams = new URLSearchParams();
