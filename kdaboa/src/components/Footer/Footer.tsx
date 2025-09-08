@@ -1,74 +1,156 @@
-import './Footer.css'
-import { Box, Typography } from '@mui/material'
+import { Box, Container, Divider, IconButton, Link, Stack, Typography } from '@mui/material'
 import logo from '../../assets/logo.png'
-import { WhatsApp, Instagram, X } from '@mui/icons-material'
+import logoKonectai from '../../assets/logoKonectai.png'
+import { WhatsApp, Instagram, X, Email, Phone } from '@mui/icons-material'
 
 const Footer = () => {
   return (
-    <Box
-      component="footer"
-      className="footer"
-      sx={{
-        display: 'flex',
-        height: '30vh',
-        backgroundColor: 'var(--corFundo)',
-        color: 'var(--corTexto)',
-        alignItems: 'center',
-        padding: '10px 30px',
-        justifyContent: 'space-between',
-        gap: 0,
-        // Media query para telas até 450px 
-        '@media (max-width:450px)': {
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingTop: '10px',
-          gap: 3,
-          textAlign: 'center',
-        },
-      }}
-    >
-      <Box
-        className="footer-left"
-        sx={{
-          width: '100%',
-          display: 'flex',
-          gap: 2,
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          '@media (max-width:450px)': {
-            justifyContent: 'center',
-            flexDirection: 'column',
-            gap: 1,
-          },
-        }}
-      >
-        <Box>
-          <img src={logo} alt="logo" style={{ width: 60, height: 60 }} />
-        </Box>
-        <Box className="footer-texts" sx={{}}>
-          <Typography>KDABOA &reg;</Typography>
-          <Typography className="f1">Todos os direitos reservados</Typography>
-        </Box>
-      </Box>
+    <Box sx={{ bgcolor: '#FF8E38', py: { xs: 6, md: 12 } }}>
+      <Container>
+        {/* Topo do footer */}
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={{ xs: 4, md: 0 }}
+          sx={{
+            alignItems: { xs: 'center', md: 'flex-start' },
+            justifyContent: 'space-between',
+            textAlign: { xs: 'center', md: 'left' }
+          }}
+        >
+          {/* Logo + direitos */}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ width: '50px', height: '50px' }}>
+              <img src={logo} alt="logo" style={{ width: '100%', height: '100%' }} />
+            </Box>
+            <Box sx={{ pl: 1 }}>
+              <Typography sx={{ fontFamily: 'var(--fredoka)', fontWeight: '600', fontSize: '23px' }}>
+                KDABOA &reg;
+              </Typography>
+              <Typography sx={{ fontFamily: 'var(--notosans)', fontSize: '15px' }}>
+                Todos os direitos reservados
+              </Typography>
+            </Box>
+          </Box>
 
-      <Box
-        className="footer-right"
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: 2,
-          '@media (max-width:450px)': {
+          {/* Redes sociais + contatos */}
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={{ xs: 4, md: 10 }}
+            alignItems={{ xs: 'center', md: 'flex-start' }}
+          >
+            {/* Redes Sociais */}
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: 'var(--fredoka)',
+                  fontWeight: 500,
+                  fontSize: '23px',
+                  position: 'relative',
+                  display: 'inline-block',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    width: '0%',
+                    height: '2px',
+                    backgroundColor: 'black',
+                    borderRadius: '12px',
+                    transition: 'width 0.3s ease',
+                  },
+                  '&:hover::after': {
+                    width: '100%',
+                  },
+                }}
+              >
+                Redes Sociais
+              </Typography>
+              <Stack direction="row" spacing={1} sx={{ mt: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                <IconButton><WhatsApp /></IconButton>
+                <IconButton><Instagram /></IconButton>
+                <IconButton><X /></IconButton>
+              </Stack>
+            </Box>
+
+            {/* Contatos */}
+            <Box>
+              <Typography
+                sx={{
+                  fontFamily: 'var(--fredoka)',
+                  fontWeight: 500,
+                  fontSize: '23px',
+                  position: 'relative',
+                  display: 'inline-block',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    width: '0%',
+                    height: '2px',
+                    backgroundColor: 'black',
+                    borderRadius: '12px',
+                    transition: 'width 0.3s ease',
+                  },
+                  '&:hover::after': {
+                    width: '100%',
+                  },
+                }}
+              >
+                Contatos
+              </Typography>
+              <Stack sx={{ fontFamily: 'var(--notosans)', mt: 1 }} spacing={1}>
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                  <Email />
+                  <Typography>contato@kdaboa.com</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                  <Phone />
+                  <Typography>(12) 4002-8922</Typography>
+                </Box>
+              </Stack>
+            </Box>
+          </Stack>
+        </Stack>
+
+        {/* Divider */}
+        <Box sx={{ py: 4 }}>
+          <Divider />
+        </Box>
+
+        {/* Desenvolvido por */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-          },
-        }}
-      >
-        <WhatsApp fontSize="large" sx={{ color: 'var(--corTexto)' }} />
-        <Instagram fontSize="large" sx={{ color: 'var(--corTexto)' }} />
-        <X fontSize="large" sx={{ color: 'var(--corTexto)' }} />
-      </Box>
+            gap: 1,
+            textAlign: 'center'
+          }}
+        >
+          <Typography sx={{ fontFamily: 'var(--notosans)' }}>
+            Desenvolvido por
+            <Link
+              href="https://konectai.vercel.app"
+              sx={{
+                fontWeight: 'bold',
+                pl: 1,
+                textDecoration: 'none',
+                background: 'linear-gradient(90deg, purple, orange)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                WebkitTextStroke: '0.3px black',
+              }}
+            >
+              KonectAi
+            </Link>
+          </Typography>
+          <Box sx={{ width: '25px', height: '25px' }}>
+            <img src={logoKonectai} alt="" style={{ width: '100%', height: '100%' }} />
+          </Box>
+        </Box>
+      </Container>
     </Box>
   )
 }
