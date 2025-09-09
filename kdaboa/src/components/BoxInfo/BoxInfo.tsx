@@ -5,9 +5,69 @@ import { LocationOnOutlined, PersonAddAlt1Outlined, SearchOutlined, StarOutlined
 import Title from "../Title/Title"
 import eventosproximos from '../../assets/eventos-proximos.png'
 import check from '../../assets/check.png'
-import {Link as RouterLink} from 'react-router-dom'
-const BoxInfo = () => {
+import { Link as RouterLink } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import api from '../../api/api'
+import { useNavigate } from "react-router-dom";
 
+const BoxInfo = () => {
+  const navigate = useNavigate()
+  const [eventos, setEventos] = useState<any[]>([]);
+  const [cidadeUsuario, setCidadeUsuario] = useState<string | null>(null);
+  const [estadoUsuario, setEstadoUsuario] = useState<string | null>(null);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+          );
+          const data = await res.json();
+
+          const cidade =
+            data.address?.city || data.address?.town || data.address?.village;
+          const estado = data.address?.state;
+
+          if (cidade && estado) {
+            console.log(cidade);
+            setCidadeUsuario(cidade);
+            setEstadoUsuario(estado);
+          }
+        } catch (err) {
+          console.error("Erro ao buscar cidade:", err);
+        }
+      },
+      (error) => {
+        console.error("Erro ao pegar localização:", error);
+      }
+    );
+  }, []);
+
+  const fetchEventos = async () => {
+    try {
+      const res: any = await api.get("/event");
+      setEventos(res.data);
+    } catch (err) {
+      console.error("Erro ao buscar eventos:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchEventos();
+  }, []);
+  const top2Eventos =
+    cidadeUsuario && estadoUsuario
+      ? eventos
+        .filter(
+          (event) =>
+            event.Endereco?.cidade === cidadeUsuario ||
+            event.Endereco?.estado === estadoUsuario
+        )
+        .slice(0, 2)
+      : eventos.slice(0, 2);
   return (
     <Grid container spacing={2} className="box-info-container" sx={{ py: 10, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, sm: 12, md: 12 }}>
@@ -29,71 +89,55 @@ const BoxInfo = () => {
         </Container>
       </Grid>
       <Container sx={{ pb: 10 }}>
-        <Grid container spacing={3}>
-          {[
-            {
-              title: "Os meninos da nova",
-              description: "Supernova ent",
-              date: "18",
-              month: "DEZ",
-              distance: "2.5 km",
-              attendees: 45,
-            },
-            {
-              title: "Submundo 808",
-              description: "MU540, pretus.wav, só beat bolha",
-              date: "25",
-              month: "DEZ",
-              distance: "1.2 km",
-              attendees: 892,
-            },
-          ].map((event, index) => (
-            <Grid size={{ xs: 12, sm: 12, md: 6 }} key={index}>
-              <Card sx={{ p: 3, cursor:'pointer', "&:hover": { boxShadow: "0px 8px 20px #ff84384e",} }}>
-                <Box display="flex" gap={2}>
-                  <Box
-                    sx={{
-                      width: 80,
-                      height: 80,
-                      background: "linear-gradient(35deg, #ff7038ff, #FF8e38)",
-                      borderRadius: 2,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "black",
-                      fontWeight: "bold",
-                      fontFamily: 'var(--notosans)'
-                    }}
-                  >
-                    <Typography variant="caption">{event.month}</Typography>
-                    <Typography variant="h5">{event.date}</Typography>
-                  </Box>
+       <Grid container spacing={3}>
+      {top2Eventos.map((event) => (
+        <Grid size={{xs: 12, sm: 12, md: 6}} key={event.id_evento}>
+          <Card  onClick={() => navigate("/view-event", { state: { id: event.id_evento } })} sx={{ fontFamily: 'var(--notosans)',p: 3, cursor: "pointer",  "&:hover": { boxShadow: "0px 8px 20px #ff84384e" } }}>
+            <Box display="flex" gap={2}>
+              <Box
+                sx={{
+                  width: 80,
+                  height: 80,
+                  background: "linear-gradient(35deg, #ff7038ff, #FF8e38)",
+                  borderRadius: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "black",
+                  fontWeight: "bold",
+                }}
+              >
+                <Typography variant="caption">
+                  {new Date(event.data_inicio).toLocaleString("pt-BR", {
+                    month: "short",
+                  }).toUpperCase()}
+                </Typography>
+                <Typography variant="h5">
+                  {new Date(event.data_inicio).getDate()}
+                </Typography>
+              </Box>
 
-                  <Box flex={1}>
-                    <Typography variant="h6" sx={{ fontFamily: "var(--fredoka)", fontWeight: 500, mb: 1 }}>
-                      {event.title}
-                    </Typography>
-                    <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
-                      {event.description}
-                    </Typography>
+              <Box flex={1}>
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  {event.nome_evento}
+                </Typography>
+                <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
+                  {event.descricao}
+                </Typography>
 
-                    <Box display="flex" gap={2} color="text.secondary" alignItems={'center'} justifyContent={'space-between'}>
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        <LocationOnOutlined fontSize="small" />
-                        <Typography variant="body2">{event.distance} de distância</Typography>
-                      </Box>
-                      {/* <Box display="flex" alignItems="center" gap={0.5}>
-                        <PeopleOutlined fontSize="small" />
-                        <Typography variant="body2">{event.attendees} interessados</Typography>
-                      </Box> */}
-                    </Box>
-                  </Box>
+                <Box display="flex" gap={1} alignItems={"center"}>
+                  <LocationOnOutlined fontSize="small" sx={{color: 'text.secondary'}} />
+                  <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                    {event.Endereco.cidade}, {event.Endereco.estado}
+                  </Typography>
                 </Box>
-              </Card>
-            </Grid>
-          ))}
+              </Box>
+            </Box>
+          </Card>
         </Grid>
+      ))}
+    </Grid>
 
       </Container>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} className="box-info">
@@ -249,7 +293,7 @@ const BoxInfo = () => {
           </Grid>
         </Container>
         <Box sx={{ pt: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Button endIcon={<PersonAddAlt1Outlined />} component={RouterLink}  variant='outlined' color='inherit' size='large' to="/signin" className="btn-cadastrar">
+          <Button endIcon={<PersonAddAlt1Outlined />} component={RouterLink} variant='outlined' color='inherit' size='large' to="/signin" className="btn-cadastrar">
             <Typography className="btn-text">
               Quero me cadastrar!
             </Typography>
