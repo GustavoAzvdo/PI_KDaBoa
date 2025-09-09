@@ -132,6 +132,7 @@ const Footer = () => {
           <Typography sx={{ fontFamily: 'var(--notosans)' }}>
             Desenvolvido por
             <Link
+              target='_blank'
               href="https://konectai.vercel.app"
               sx={{
                 fontWeight: 'bold',
