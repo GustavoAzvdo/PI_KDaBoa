@@ -18,23 +18,23 @@ const InfoProfile = () => {
 
     useEffect(() => {
         const buscarEventos = async () => {
-          try {
-            const response: any = await api.get('/event'); 
-            const todosEventos = response.data;
-            const eventosDoEstabelecimento = todosEventos.filter(
-              (evento: any) => evento.id_estabelecimento === card.Estabelecimento.id_estabelecimento
-            );
-      
-            setEventosPublicados(eventosDoEstabelecimento.length);
-          } catch (error) {
-            console.error('Erro ao buscar eventos:', error);
-          }
+            try {
+                const response: any = await api.get('/event');
+                const todosEventos = response.data;
+                const eventosDoEstabelecimento = todosEventos.filter(
+                    (evento: any) => evento.id_estabelecimento === card.Estabelecimento.id_estabelecimento
+                );
+
+                setEventosPublicados(eventosDoEstabelecimento.length);
+            } catch (error) {
+                console.error('Erro ao buscar eventos:', error);
+            }
         };
-      
+
         if (card?.Estabelecimento?.id_estabelecimento) {
-          buscarEventos();
+            buscarEventos();
         }
-      }, [card]);
+    }, [card]);
 
 
 
@@ -43,30 +43,59 @@ const InfoProfile = () => {
     const [showFull, setShowFull] = useState<boolean>(false)
     const isLong = fullDescription.length > 400;
     const displayText = showFull ? fullDescription : fullDescription.substring(0, 400) + ' ...';
-   
+
     const juntaEndereco = `${card?.Endereco.logradouro}, ${card?.Endereco.numero} - ${card?.Endereco.bairro}, ${card?.Endereco.cidade}/${card?.Endereco.estado}`
 
     function formatarCelular(numero: string): string {
         return numero
-          .replace(/\D/g, '') // remove tudo que não for dígito
-          .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'); // aplica máscara
-      }
-   
+            .replace(/\D/g, '') // remove tudo que não for dígito
+            .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'); // aplica máscara
+    }
+
     return (
         <Box>
             <Grid container spacing={2} className="infoProfile">
-                <Grid size={{ xs: 12, md: 6 }} className="info_left" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box className="round" >
-                            <Avatar  sx={{ width: 130, height: 130 }}></Avatar>
-                        </Box>
-                        <Box sx={{ paddingLeft: 2, marginLeft: 2 }} className="info_text">
-                            <Typography variant='h3'>{card?.Estabelecimento.nome}</Typography>
-                            <Typography > {eventosPublicados} eventos publicados</Typography>
+                <Grid size={{xs: 12, sm: 12, md: 6}}
+                    className="info_left"
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: 2,
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: { xs: 'column', md: 'row' },
+                            alignItems: 'center',
+                            gap: 2, // espaçamento entre avatar e texto
+                        }}
+                    >
+                        <Avatar
+                            sx={{
+                                width: { xs: 80, md: 130 },
+                                height: { xs: 80, md: 130 },
+                            }}
+                        />
+                        <Box
+                            sx={{
+                                textAlign: { xs: 'center', md: 'left' },
+                            }}
+                        >
+                            <Typography
+                                variant="h3"
+                                sx={{ fontSize: { xs: '2.2rem', md: '2.5rem' }, fontFamily: 'var(--fredoka)', fontWeight: '500' }}
+                            >
+                                {card?.Estabelecimento.nome}
+                            </Typography>
+                            <Typography sx={{ fontSize: { xs: '1.3rem', md: '1.5rem' }, fontFamily: 'var(--notosans)' }}>
+                                {eventosPublicados} eventos publicados
+                            </Typography>
                         </Box>
                     </Box>
                 </Grid>
+
 
                 <Grid size={{ xs: 12, md: 10 }} className="description" sx={{ paddingTop: 4, margin: 'auto', textAlign: 'justify' }}>
                     <Box className="title-description" sx={{ paddingX: { xs: 5, md: 0 }, }}>
@@ -118,7 +147,7 @@ const InfoProfile = () => {
                     </Box>
                 </Grid>
                 <Grid container size={{ xs: 12, md: 12 }} sx={{ margin: 'auto', paddingTop: 0, display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <Photos card={card}/>
+                    <Photos card={card} />
                 </Grid>
             </Grid>
         </Box>

@@ -5,6 +5,7 @@ import { LocationOnOutlined, PersonAddAlt1Outlined, SearchOutlined, StarOutlined
 import Title from "../Title/Title"
 import eventosproximos from '../../assets/eventos-proximos.png'
 import check from '../../assets/check.png'
+import {Link as RouterLink} from 'react-router-dom'
 const BoxInfo = () => {
 
   return (
@@ -248,7 +249,7 @@ const BoxInfo = () => {
           </Grid>
         </Container>
         <Box sx={{ pt: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Button endIcon={<PersonAddAlt1Outlined />} variant='outlined' color='inherit' size='large' href="/signin" className="btn-cadastrar">
+          <Button endIcon={<PersonAddAlt1Outlined />} component={RouterLink}  variant='outlined' color='inherit' size='large' to="/signin" className="btn-cadastrar">
             <Typography className="btn-text">
               Quero me cadastrar!
             </Typography>

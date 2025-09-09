@@ -13,6 +13,7 @@ import { useSearch } from "../../context/SearchContext";
 import { useEffect } from "react";
 import api from "../../api/api";
 import EventoProps from "../CardEventHome/props/EventoProps";
+import sad from '../../assets/sad.png'
 const FilterEvent = () => {
     const {
         searchText,
@@ -93,25 +94,50 @@ const FilterEvent = () => {
 
                 </Container>
             </Box>
-            <Box className="title-container" sx={{ textAlign: 'center' }}>
-                <Title>
-                    {filtered.length > 0 ? `${displayCategories.length > 0 ? `${displayCategories.join(', ')}` : 'Todos os eventos'}` : 'Nenhum evento encontrado'}
-                </Title>
-            </Box>
-            <Box sx={{
-                margin: '0 auto',
-                width: '85vw',
-                display: 'grid',
-                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
-                gap: 7, // Espaçamento entre os cards
-                padding: 2,
-            }}>
-                {
-                    filtered.slice(0, visibleCount).map((card: EventoProps, index: number) => (
-                        <CardEventHome key={index} card={card} />
-                    ))}
+            <Box className="title-container" sx={{ textAlign: 'center' , display: 'flex'}}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 2,
+                        flexDirection: { xs: 'column', md: 'row' }, // column no mobile, row no desktop
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Title>
+                        {filtered.length > 0
+                            ? displayCategories.length > 0
+                                ? displayCategories.join(', ')
+                                : 'Todos os eventos'
+                            : 'Nenhum evento encontrado'}
+                    </Title>
+
+                    {filtered.length === 0 && (
+                        <Box sx={{ height: 70, width: 70 }}>
+                            <img src={sad} alt="sad" style={{ width: '100%', height: '100%' }} />
+                        </Box>
+                    )}
+                </Box>
+
 
             </Box>
+            <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+                <Box sx={{
+                    margin: '0 auto',
+                    width: '90vw',
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
+                    gap: 4, // Espaçamento entre os cards
+
+                }}>
+                    {
+                        filtered.slice(0, visibleCount).map((card: EventoProps, index: number) => (
+                            <CardEventHome key={index} card={card} />
+                        ))}
+
+                </Box>
+            </Container>
             {visibleCount < filtered.length && (
                 <Box sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', marginTop: 3 }}>
                     <Button endIcon={<KeyboardArrowDownOutlined />} variant="contained" onClick={() => setVisibleCount(prev => prev + 6)} sx={{ fontSize: 18, fontFamily: 'var(--fredoka)', backgroundColor: 'var(--roxo)' }}>Ver mais</Button>

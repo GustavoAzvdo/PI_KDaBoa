@@ -6,6 +6,7 @@ import { CircularProgress } from '@mui/material'
 import api from '../../../api/api'
 import logo from '../../../assets/logo.png'
 import './Login.css'
+import {Link as RouterLink} from 'react-router-dom'
 const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -95,7 +96,7 @@ const Login = () => {
 
                     </Box>
                     <Box className='home-login' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '50%' }}>
-                        <Link sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', '&:hover': { textDecoration: 'underline', textDecorationColor: 'var(--roxoLoginBtn)' } }} href='/home'>
+                        <Link component={RouterLink} sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', '&:hover': { textDecoration: 'underline', textDecorationColor: 'var(--roxoLoginBtn)' } }} to='/home'>
                             <Typography className='title_home_login'>
                                 Home
                             </Typography>
@@ -164,12 +165,12 @@ const Login = () => {
                         </Button>
                         <Box className='links'>
                             <Box>
-                                <Link href="/recuperar-senha">Esqueceu a sua senha?</Link>
+                                <Link component={RouterLink} to="/recuperar-senha">Esqueceu a sua senha?</Link>
                             </Box>
                         </Box>
                         <Box className="links-account-login">
                             <Typography>
-                                Não tem uma conta? <Link href='/signin'>Crie Uma!</Link>
+                                Não tem uma conta? <Link component={RouterLink} to='/signin'>Crie Uma!</Link>
                             </Typography>
                         </Box>
 

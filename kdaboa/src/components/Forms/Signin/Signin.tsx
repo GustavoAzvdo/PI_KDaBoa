@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Signin.css'
 import Password from '../../Password/Password';
-
+import {Link as RouterLink} from 'react-router-dom'
 //API
 import api from '../../../api/api'
 
@@ -197,7 +197,7 @@ const Signin = () => {
 
                         <Box className="links-account-signin">
                             <Typography>
-                                Já tem uma conta? <Link href="/login">Faça login!</Link>
+                                Já tem uma conta? <Link component={RouterLink} to="/login">Faça login!</Link>
                             </Typography>
                         </Box>
 

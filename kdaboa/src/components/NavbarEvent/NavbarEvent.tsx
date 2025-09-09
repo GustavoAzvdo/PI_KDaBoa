@@ -18,6 +18,7 @@ import {
 } from "@mui/icons-material";
 import logo from "../../assets/logo.png";
 import './NavbarEvent.css'
+import { Link as RouterLink} from "react-router-dom";
 const pages = [
   { label: "Home", icon: <HomeOutlined />, href: "/home" },
   { label: "Pesquisar outros eventos", icon: <Search />, href: "/search" },
@@ -49,8 +50,8 @@ const NavbarEvent = () => {
         <Toolbar disableGutters>
           {/* Logo Desktop */}
           <Box
-            component="a"
-            href="/home"
+            component={RouterLink}
+            to="/home"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -82,8 +83,8 @@ const NavbarEvent = () => {
             }}
           >
             <Box
-              component="a"
-              href="/home"
+              component={RouterLink}
+              to="/home"
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -134,8 +135,8 @@ const NavbarEvent = () => {
                   <MenuItem
                     key={page.label}
                     onClick={handleCloseNavMenu}
-                    component="a"
-                    href={page.href}
+                    component={RouterLink}
+                    to={page.href}
                   >
                     <Typography
                       textAlign="center"
@@ -168,8 +169,9 @@ const NavbarEvent = () => {
           >
             {pages.map((page) => (
               <Button
+                component={RouterLink}
                 key={page.label}
-                href={page.href}
+                to={page.href}
                 startIcon={page.icon}
                 sx={{
                   color: "black",

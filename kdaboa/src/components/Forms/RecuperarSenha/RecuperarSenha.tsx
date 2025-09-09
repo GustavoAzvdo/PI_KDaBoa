@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 import logo from '../../../assets/logo.png'
 import api from '../../../api/api';
-
+import {Link as RouterLink} from 'react-router-dom'
 const RecuperarSenha = () => {
     const [email, setEmail] = useState<string>('');
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -89,12 +89,12 @@ const RecuperarSenha = () => {
                         </Button>
                         <Box className='links_recuperar' sx={{ paddingTop: 2 }}>
                             <Box>
-                                <Link href="/login">Voltar para o Login</Link>
+                                <Link component={RouterLink} to="/login">Voltar para o Login</Link>
                             </Box>
                         </Box>
                         <Box className="links-account" >
                             <Typography>
-                                Não tem uma conta? <Link href="/signin">Crie Uma!</Link>
+                                Não tem uma conta? <Link component={RouterLink} to="/signin">Crie Uma!</Link>
                             </Typography>
                         </Box>
 

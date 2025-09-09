@@ -12,6 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
 import { HomeOutlined, Search } from '@mui/icons-material';
 import logo from '../../assets/logo.png';
+import {Link as RouterLink} from 'react-router-dom'
 
 const pages = [
   { label: 'Home', icon: <HomeOutlined />, href: '/' },
@@ -31,11 +32,11 @@ const Navbar = () => {
 
   return (
     <AppBar
-      position="static"
+      position='sticky'
       elevation={3}
       sx={{
         py: 1,
-        bgcolor: 'white',
+        bgcolor: 'rgba(255, 255, 255, 0.9)',
         color: 'black',
         fontFamily: 'Fredoka, sans-serif',
       }}
@@ -45,8 +46,8 @@ const Navbar = () => {
 
           {/* Logo Desktop */}
           <Box
-            component="a"
-            href="/"
+            component={RouterLink}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -62,8 +63,8 @@ const Navbar = () => {
           {/* Logo Mobile */}
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: { xs: '100%', sm: '100%', md: 'auto' } }}>
             <Box
-              component="a"
-              href="/"
+              component={RouterLink}
+              to="/"
               sx={{
 
                 display: { xs: 'flex', md: 'none' },
@@ -109,15 +110,15 @@ const Navbar = () => {
                   <MenuItem
                     key={page.label}
                     onClick={handleCloseNavMenu}
-                    component="a"
-                    href={page.href}
+                    component={RouterLink}
+                    to={page.href}
                   >
                     <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
                       {page.label}
                     </Typography>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={handleCloseNavMenu} component="a" href="/login">
+                <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/login">
                   <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
                     Entrar
                   </Typography>
@@ -132,8 +133,9 @@ const Navbar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 3, ml: 4 }}>
             {pages.map((page) => (
               <Button
+                component={RouterLink}
                 key={page.label}
-                href={page.href}
+                to={page.href}
                 startIcon={page.icon}
                 sx={{
                   color: 'black',
@@ -165,8 +167,8 @@ const Navbar = () => {
           <Box sx={{ flexGrow: 0, display: { xs: 'none', sm: 'none', md: 'flex' } }}>
             <Button
               variant="contained"
-
-              href="/login"
+              component={RouterLink}
+              to="/login"
               endIcon={<PersonOutlined />}
               sx={{
                 backgroundColor: '#6c15d5',
