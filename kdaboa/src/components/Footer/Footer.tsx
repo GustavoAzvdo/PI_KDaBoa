@@ -1,7 +1,7 @@
 import { Box, Container, Divider, IconButton, Link, Stack, Typography } from '@mui/material'
 import logo from '../../assets/logo.png'
 import logoKonectai from '../../assets/logoKonectai.png'
-import { WhatsApp, Instagram, X, Email, Phone } from '@mui/icons-material'
+import { WhatsApp, Instagram, X, EmailOutlined, PhoneOutlined } from '@mui/icons-material'
 
 const Footer = () => {
   return (
@@ -101,11 +101,11 @@ const Footer = () => {
               </Typography>
               <Stack sx={{ fontFamily: 'var(--notosans)', mt: 1 }} spacing={1}>
                 <Box sx={{ display: 'flex', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
-                  <Email />
+                  <EmailOutlined sx={{color: 'text.secondary'}} />
                   <Typography>contato@kdaboa.com</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
-                  <Phone />
+                  <PhoneOutlined sx={{color: 'text.secondary'}} />
                   <Typography>(12) 4002-8922</Typography>
                 </Box>
               </Stack>
