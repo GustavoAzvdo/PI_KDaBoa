@@ -80,7 +80,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
 
           {/* Campo da esquerda */}
           <Grid size={{ xs: 10, md: 6, lg: 5 }}>
-            <Box component='form' className='form-left-search'>
+            <Box className='form-left-search'>
               <TextField
 
                 onChange={(e) => handleSearchTextChange(e.target.value)}

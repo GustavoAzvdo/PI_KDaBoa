@@ -12,7 +12,8 @@ const ViewEvent = () => {
 
   useEffect (() => {
     document.title = "Evento"
-  })
+     window.scrollTo(0,0); 
+  },[id])
   
   return (
     <>

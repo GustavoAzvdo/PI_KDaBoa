@@ -27,7 +27,7 @@ const Footer = () => {
                 KDABOA &reg;
               </Typography>
               <Typography sx={{ fontFamily: 'var(--notosans)', fontSize: '15px' }}>
-                Todos os direitos reservados
+                2025 © Todos os direitos reservados
               </Typography>
             </Box>
           </Box>
