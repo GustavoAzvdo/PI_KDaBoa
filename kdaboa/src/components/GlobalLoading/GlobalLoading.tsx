@@ -14,7 +14,7 @@ export const GlobalLoading = () => {
         left: 0,
         width: '100vw',
         height: '100vh',
-        bgcolor: 'rgba(0,0,0,0.3)',
+        bgcolor: 'rgba(0,0,0,0.2)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
