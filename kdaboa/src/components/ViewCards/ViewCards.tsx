@@ -33,8 +33,8 @@ const ViewCards = ( {idEstabelecimento}: ViewCardsProps ) => {
         <Box sx={{ 
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, // 1 coluna em telas pequenas, 2 em médias, 3 em grandes
-            gap: 4, // Espaçamento entre os cards
-            padding: 2,
+            gap: 3, // Espaçamento entre os cards
+            padding: 1,
             paddingBottom: 10
         }}>
             {

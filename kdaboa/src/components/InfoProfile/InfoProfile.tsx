@@ -140,7 +140,7 @@ const InfoProfile = () => {
 
 
                 <Grid container size={{ xs: 12, md: 10 }} sx={{ margin: 'auto', paddingTop: 4, display: 'flex', justifyContent: 'start', width: '100%' }}>
-                    <Box className="title-photos" >
+                    <Box className="title-photos" sx={{textAlign: {xs: 'center', sm: 'center', md: 'start'}}}>
                         <Typography variant='h3' className='title-photos-text' sx={{ paddingTop: 1, px: { xs: 5, md: 0 }, pb: 3 }}>
                             FOTOS DO ESTABELECIMENTO
                         </Typography>
