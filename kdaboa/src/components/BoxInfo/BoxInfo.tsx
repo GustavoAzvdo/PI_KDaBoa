@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, Button, Container, Card } from "@mui/material"
 import festa from "../../assets/festa.png"
 import './BoxInfo.css'
-import { LocationOnOutlined, PersonAddAlt1Outlined, SearchOutlined, StarOutlined, TrendingUpOutlined } from "@mui/icons-material"
+import { LocalActivityOutlined, LocationOnOutlined, PersonAddAlt1Outlined, SearchOutlined, StarOutlined } from "@mui/icons-material"
 import Title from "../Title/Title"
 import eventosproximos from '../../assets/eventos-proximos.png'
 import check from '../../assets/check.png'
@@ -15,7 +15,11 @@ const BoxInfo = () => {
   const [eventos, setEventos] = useState<any[]>([]);
   const [cidadeUsuario, setCidadeUsuario] = useState<string | null>(null);
   const [estadoUsuario, setEstadoUsuario] = useState<string | null>(null);
-
+  const [stats, setStats] = useState({
+    eventos: 0,
+    estabelecimentos: 0,
+    cidades: 0,
+  });
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
@@ -46,14 +50,29 @@ const BoxInfo = () => {
     );
   }, []);
 
+  const calculaStats = (eventosData: any[]) => {
+    const totalEventos = eventosData.length;
+    const cidadesUnicas = new Set(eventosData.map((e: any) => e.Endereco.cidade)).size;
+    const estabUnicos = new Set(eventosData.map((e: any) => e.id_estabelecimento)).size;
+
+    setStats({
+      eventos: totalEventos,
+      estabelecimentos: estabUnicos,
+      cidades: cidadesUnicas,
+    })
+  }
+  
   const fetchEventos = async () => {
     try {
       const res: any = await api.get("/event");
-      setEventos(res.data);
+      const eventosData = res.data;
+      setEventos(eventosData);
+      calculaStats(eventosData);
     } catch (err) {
       console.error("Erro ao buscar eventos:", err);
     }
   };
+
 
   useEffect(() => {
     fetchEventos();
@@ -89,55 +108,55 @@ const BoxInfo = () => {
         </Container>
       </Grid>
       <Container sx={{ pb: 10 }}>
-       <Grid container spacing={3}>
-      {top2Eventos.map((event) => (
-        <Grid size={{xs: 12, sm: 12, md: 6}} key={event.id_evento}>
-          <Card  onClick={() => navigate("/view-event", { state: { id: event.id_evento } })} sx={{ fontFamily: 'var(--notosans)',p: 3, cursor: "pointer",  "&:hover": { boxShadow: "0px 8px 20px #ff84384e" } }}>
-            <Box display="flex" gap={2}>
-              <Box
-                sx={{
-                  width: 80,
-                  height: 80,
-                  background: "linear-gradient(35deg, #ff7038ff, #FF8e38)",
-                  borderRadius: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "black",
-                  fontWeight: "bold",
-                }}
-              >
-                <Typography variant="caption">
-                  {new Date(event.data_inicio).toLocaleString("pt-BR", {
-                    month: "short",
-                  }).toUpperCase()}
-                </Typography>
-                <Typography variant="h5">
-                  {new Date(event.data_inicio).getDate()}
-                </Typography>
-              </Box>
+        <Grid container spacing={3}>
+          {top2Eventos.map((event) => (
+            <Grid size={{ xs: 12, sm: 12, md: 6 }} key={event.id_evento}>
+              <Card onClick={() => navigate("/view-event", { state: { id: event.id_evento } })} sx={{ fontFamily: 'var(--notosans)', p: 3, cursor: "pointer", "&:hover": { boxShadow: "0px 8px 20px #ff84384e" } }}>
+                <Box display="flex" gap={2}>
+                  <Box
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      background: "linear-gradient(35deg, #ff7038ff, #FF8e38)",
+                      borderRadius: 2,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <Typography variant="caption">
+                      {new Date(event.data_inicio).toLocaleString("pt-BR", {
+                        month: "short",
+                      }).toUpperCase()}
+                    </Typography>
+                    <Typography variant="h5">
+                      {new Date(event.data_inicio).getDate()}
+                    </Typography>
+                  </Box>
 
-              <Box flex={1}>
-                <Typography variant="h6" sx={{ mb: 1 }}>
-                  {event.nome_evento}
-                </Typography>
-                <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
-                  {event.descricao}
-                </Typography>
+                  <Box flex={1}>
+                    <Typography variant="h6" sx={{ mb: 1 }}>
+                      {event.nome_evento}
+                    </Typography>
+                    <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
+                      {event.descricao}
+                    </Typography>
 
-                <Box display="flex" gap={1} alignItems={"center"}>
-                  <LocationOnOutlined fontSize="small" sx={{color: 'text.secondary'}} />
-                  <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                    {event.Endereco.cidade}, {event.Endereco.estado}
-                  </Typography>
+                    <Box display="flex" gap={1} alignItems={"center"}>
+                      <LocationOnOutlined fontSize="small" sx={{ color: 'text.secondary' }} />
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        {event.Endereco.cidade}, {event.Endereco.estado}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Box>
-              </Box>
-            </Box>
-          </Card>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
 
       </Container>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} className="box-info">
@@ -161,12 +180,16 @@ const BoxInfo = () => {
 
 
         </Box>
-        <Grid container spacing={4} textAlign="center" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+        <Grid
+          container
+          spacing={4}
+          textAlign="center"
+          sx={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}
+        >
           {[
-            { number: "1000+", label: "Eventos cadastrados", color: '#6C15D5' },
-            { number: "100+", label: "Estabelecimentos parceiros", color: '#FF8e38' },
-            { number: "200+", label: "Cidades atendidas", color: '#6C15D5' },
-
+            { number: stats.eventos, label: "Eventos cadastrados", color: "#6C15D5" },
+            { number: stats.estabelecimentos, label: "Estabelecimentos parceiros", color: "#FF8e38" },
+            { number: stats.cidades, label: "Cidades atendidas", color: "#6C15D5" },
           ].map((stat, index) => (
             <Grid size={{ xs: 4, sm: 4, md: 3 }} key={index}>
               <Typography
@@ -178,7 +201,7 @@ const BoxInfo = () => {
                   mb: 1,
                 }}
               >
-                {stat.number}
+                {stat.number}+
               </Typography>
               <Typography color="text.secondary">{stat.label}</Typography>
             </Grid>
@@ -245,7 +268,7 @@ const BoxInfo = () => {
               {
                 icon: <SearchOutlined sx={{ fontSize: 32 }} />,
                 title: "Busca Inteligente",
-                description: "Encontre eventos por nome, categoria, data ou localização com nosso filtro inteligente.",
+                description: "Encontre eventos por nome, categoria, data ou localização.",
               },
               {
                 icon: <StarOutlined sx={{ fontSize: 32 }} />,
@@ -253,9 +276,9 @@ const BoxInfo = () => {
                 description: "Todos os eventos passam por verificação para garantir qualidade e confiabilidade.",
               },
               {
-                icon: <TrendingUpOutlined sx={{ fontSize: 32 }} />,
+                icon: <LocalActivityOutlined sx={{ fontSize: 32 }} />,
                 title: "Recomendações Personalizadas",
-                description: "Receba sugestões de eventos baseadas nos seus interesses e histórico de participação.",
+                description: "Receba sugestões de eventos baseadas nos seus interesses e localização",
               },
             ].map((feature, index) => (
               <Grid size={{ xs: 12, sm: 12, md: 4 }} key={index} sx={{ py: 5 }}>
