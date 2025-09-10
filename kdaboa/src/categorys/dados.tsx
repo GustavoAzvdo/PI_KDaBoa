@@ -20,7 +20,11 @@ import {
   PartyMode,
   SentimentVerySatisfied,
   Palette,
-  SportsSoccer
+  SportsSoccer,
+  SportsBar,
+  SmokeFree,
+  Speaker,
+  Agriculture
 } from '@mui/icons-material';
 
 
@@ -73,6 +77,12 @@ export const dados: Dados[] = [
   { id : 38,title: 'Stand-up Comedy', icon: <SentimentVerySatisfied /> },
   { id : 39,title: 'Tarde Cultural / Exposição de Arte', icon: <Palette /> },
   { id : 40,title: 'Evento Esportivo', icon: <SportsSoccer /> },
+  { id : 41,title: 'Futebol ao vivo', icon: <SportsSoccer /> },
+  { id : 42,title: 'Universitário', icon: <SportsBar /> },
+  { id : 43,title: 'Rap & Trap', icon: <SmokeFree /> },
+  { id : 44,title: 'Rock', icon: <Speaker /> },
+  { id : 45,title: 'Pop', icon: <DiscFull  /> },
+  { id : 46,title: 'Sertanejo', icon: <Agriculture  /> },
 
 ];
 
