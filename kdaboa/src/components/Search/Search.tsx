@@ -5,7 +5,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 
 import { dados } from '../../categorys/dados'
-import { SearchOutlined } from '@mui/icons-material';
+import {  SearchOutlined} from '@mui/icons-material';
 
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -35,21 +35,19 @@ interface SearchProps {
   showScreen?: boolean
 }
 
-const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = false }: SearchProps) => {
-  const { searchText, categories, idCategory, date, setSearchText, setCategories, setIdCategory, setDate } = useSearch();
+const Search = ({  onTextChange, onDateChange, showScreen = false }: SearchProps) => {
+  const { searchText, categories,  date, setSearchText, setCategories,  setDate } = useSearch();
   // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   // const [searchText, setSearchText] = useState<string>('')
   // const [selectedDate, setSelectedDate] = useState<any>(null);
   console.log(searchText, categories, date)
 
   const handleCategoryChange = (_event: any, value: any) => {
-    const newCategories = value.map((item: any) => item.title);
-    setIdCategory(value.map((item: any) => String(item.id)))
-    setCategories(newCategories);
-    if (onCategoryChange) {
-      onCategoryChange(newCategories);
-    }
+    const ids = value.map((item: any) => String(item.id));
+    setCategories(ids); // só ids
   };
+
+
 
   const handleSearchTextChange = (value: string) => {
     const selectedText = value.toLowerCase();
@@ -72,14 +70,21 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
     handleSearchTextChange(searchText)
   }, [])
 
-
+  useEffect(() => {
+  if (!showScreen) {
+    // se está na tela FilterEvent, já carrega os valores do context
+    setSearchText(searchText);
+    setCategories(categories);
+    setDate(date);
+  }
+}, []);
   return (
     <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={{ xs: 12, md: 12 }} >
         <Grid container spacing={2} className='grid-form' justifyContent={'center'} sx={{ paddingY: 2 }} >
 
           {/* Campo da esquerda */}
-          <Grid size={{ xs: 10, md: 6, lg: 5 }}>
+          <Grid size={{ xs: 12, md: 6, lg: 6}}>
             <Box className='form-left-search'>
               <TextField
 
@@ -94,12 +99,12 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
                   endAdornment: showScreen ? (
                     <InputAdornment position="end" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Link
-                    
+
                         component={RouterLink}
                         to="/search"
                         state={{
                           searchText: searchText,
-                          categories: idCategory,
+                          categories: categories,
                           date: date,
                         }}
                         sx={{ padding: 0, margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -125,7 +130,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
 
 
           {/* Campo da direita */}
-          <Grid size={{ xs: 10, md: 3, lg: 3 }}>
+          <Grid size={{ xs: 12, md: 3, lg: 3 }}>
             <Box component='form' className='form-right-search'>
               <Autocomplete
                 className='txtCategorys'
@@ -134,13 +139,13 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
                 options={dados}
                 disableCloseOnSelect
 
-                value={dados.filter(option => categories.includes(option.title))}
+                 value = { dados.filter(option => categories.includes(String(option.id))) }
 
                 onChange={handleCategoryChange}
                 noOptionsText="Nenhuma categoria encontrada"
 
 
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={(option: any) => option.title}
                 renderOption={(props, option, { selected }) => {
                   const { key, ...optionProps } = props
                   return (
@@ -186,7 +191,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
               />
             </Box>
           </Grid>
-          <Grid size={{ xs: 10, md: 3, lg: 3 }} sx={{ marginTop: '-8px' }}>
+          <Grid size={{ xs: 12, md: 3, lg: 3 }} sx={{ marginTop: '-8px' }}>
             <Box
               className="form-middle-search"
 
@@ -231,6 +236,7 @@ const Search = ({ onCategoryChange, onTextChange, onDateChange, showScreen = fal
               </LocalizationProvider>
             </Box>
           </Grid>
+       
         </Grid>
       </Grid>
     </Grid>

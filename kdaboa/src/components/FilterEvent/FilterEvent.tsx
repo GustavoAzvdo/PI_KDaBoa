@@ -14,11 +14,12 @@ import { useEffect } from "react";
 import api from "../../api/api";
 import EventoProps from "../CardEventHome/props/EventoProps";
 import sad from '../../assets/sad.png'
+import { dados } from '../../categorys/dados'
 const FilterEvent = () => {
     const {
         searchText,
         categories: contextCategories,
-        idCategory,
+        
         date: contextDate,
         setSearchText,
         setCategories,
@@ -33,22 +34,32 @@ const FilterEvent = () => {
         try {
             const params = {
                 name: searchText || undefined,
-                category: idCategory.length > 0 ? idCategory : undefined,
+                category: contextCategories.length > 0 ? contextCategories : undefined,
                 date: contextDate || undefined,
             };
+
             const queryParams = new URLSearchParams();
-            if (params.name) queryParams.append('name', params.name);
-            if (params.category) queryParams.append('category', params.category.toString());
-            if (params.date) queryParams.append('date', params.date);
+
+            if (params.name) queryParams.append("name", params.name);
+
+            // 👉 é aqui que você coloca
+            if (params.category && params.category.length > 0) {
+                params.category.forEach((id: string) => {
+                    queryParams.append("category", id);
+                });
+            }
+
+            if (params.date) queryParams.append("date", params.date);
 
             const queryString = queryParams.toString();
-            const url = `/event${queryString ? `?${queryString}` : ''}`;
+            const url = `/event${queryString ? `?${queryString}` : ""}`;
+
+            console.log("query string:", queryString); // debug
 
             const res: any = await api.get(url);
-            setFiltered(res.data); // <---
-
+            setFiltered(res.data);
         } catch (err) {
-            console.error('Erro ao buscar eventos:', err);
+            console.error("Erro ao buscar eventos:", err);
         }
     };
 
@@ -59,9 +70,15 @@ const FilterEvent = () => {
 
     useEffect(() => {
         fetchEventos();
-        setDisplayCategories(contextCategories);
+        // converte os ids salvos em nomes
+        const categoryNames = contextCategories.map(id => {
+            const match = dados.find(opt => String(opt.id) === id);
+            return match ? match.title : '';
+        });
+        setDisplayCategories(categoryNames);
         setVisibleCount(6);
     }, [searchText, contextCategories, contextDate]);
+
 
     const handleDateChange = (date: string) => {
         setDate(date)
@@ -94,7 +111,7 @@ const FilterEvent = () => {
 
                 </Container>
             </Box>
-            <Box className="title-container" sx={{ textAlign: 'center' , display: 'flex'}}>
+            <Box className="title-container" sx={{ textAlign: 'center', display: 'flex' }}>
                 <Box
                     sx={{
                         display: 'flex',
