@@ -7,7 +7,7 @@ import { red } from '@mui/material/colors';
 import { CelebrationOutlined, CalendarToday, LocalActivityOutlined } from '@mui/icons-material';
 import "./CardEventHome.css"
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Chip, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react'
 import { Star, StarBorder } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
@@ -27,7 +27,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
         year: 'numeric',
     });
 
-  
+
     return (
 
         <Card
@@ -35,13 +35,13 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             sx={{
                 borderRadius: 4,
                 cursor: "pointer",
-                width: { xs: '90%', sm: '80%', md: '100%' }, // ex: responsivo, maior no desktop
+                width: { xs: '89%', sm: '80%', md: '98%' }, // ex: responsivo, maior no desktop
                 maxWidth: 500, // limite máximo do card (ajuste como quiser)
                 margin: '0 auto', // centralizar horizontalmente
                 transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
                 boxShadow: 4,
                 '&:hover': {
-                     boxShadow: "0px 8px 20px #b789ef61",
+                    boxShadow: "0px 8px 20px #b789ef61",
                     transform: 'translateY(-8px)',
                 },
             }}
@@ -55,6 +55,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                     alt={card.nome_evento}
                     sx={{ width: "100%", height: "100%", borderRadius: "16px 16px 0 0" }}
                 />
+
 
                 <IconButton
                     onClick={(e) => {
@@ -79,6 +80,53 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                         <StarBorder sx={{ color: "#6C15D5" }} />
                     )}
                 </IconButton>
+                <Box
+                    sx={{
+                   
+                        bgcolor: "rgba(0, 0, 0, 0.5)",
+                        p: 1,
+                        width: '100%',
+                        position: "absolute",
+                        bottom: 0,
+
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 2,
+                    }}
+                >
+                    {card.Evento_Categoria?.slice(0, 3).map((item, index) => (
+                        <Chip
+                            key={index}
+                            label={item.Categoria.nome_categoria}
+                            size="small"
+                            sx={{
+                                fontFamily: 'var(--notosans)',
+                                bgcolor: '#6c15d5',
+                                color: 'white',
+                                fontWeight: 500,
+                            }}
+                        />
+                    ))}
+
+                    {card.Evento_Categoria?.length > 3 && (
+                        <Tooltip
+                            title={card.Evento_Categoria.map((c) => c.Categoria.nome_categoria).join(", ")}
+                        >
+                            <Chip
+                                label="..."
+                                size="small"
+                                sx={{
+                                    fontFamily: 'var(--notosans)',
+                                     backgroundColor: "rgba(255,255,255,0.7)",
+                                    color: 'black',
+                                    fontWeight: 500,
+                                    cursor: "pointer"
+                                }}
+                            />
+                        </Tooltip>
+                    )}
+
+                </Box>
             </Box>
             <CardHeader
                 avatar={
@@ -95,10 +143,11 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                             <CalendarToday fontSize='small' />
                             {dataFormatada}
                         </Box>
-                     
+
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
                             <LocalActivityOutlined fontSize='small' />
                             {card.Endereco.cidade} - {card.Endereco.estado}
+                            
                         </Box>
                     </Box>
                 }

@@ -16,9 +16,7 @@ const theme = createTheme({
         root: {
           "& .MuiOutlinedInput-root": {
             
-            "& fieldset": {
-              borderColor: "#333333",
-            },
+           
             "&:hover fieldset": {
               borderColor: "#6c15d5",
             },

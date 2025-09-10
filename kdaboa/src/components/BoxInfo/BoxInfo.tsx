@@ -177,8 +177,6 @@ const BoxInfo = () => {
           },
           alignItems: 'center',
         }}>
-
-
         </Box>
         <Grid
           container
