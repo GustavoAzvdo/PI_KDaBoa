@@ -35,7 +35,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             sx={{
                 borderRadius: 4,
                 cursor: "pointer",
-                width: { xs: '89%', sm: '80%', md: '98%' }, // ex: responsivo, maior no desktop
+                width: { xs: '89%', sm: '80%', md: '100%' }, // ex: responsivo, maior no desktop
                 maxWidth: 500, // limite máximo do card (ajuste como quiser)
                 margin: '0 auto', // centralizar horizontalmente
                 transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
