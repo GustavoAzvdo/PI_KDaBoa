@@ -61,7 +61,7 @@ const BoxInfo = () => {
       cidades: cidadesUnicas,
     })
   }
-  
+
   const fetchEventos = async () => {
     try {
       const res: any = await api.get("/event");
@@ -96,7 +96,10 @@ const BoxInfo = () => {
             px: { xs: 2 }
           }}>
             <Title>
-              Eventos próximos de você <img width="70" height="70" src={eventosproximos} alt="hang-ten" />
+              Eventos próximos de você <Box component='img' src={eventosproximos} sx={{
+                width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
+                height: "auto", // mantém a proporção
+              }} />
             </Title>
             <Box>
               <Typography variant="h6" color="text.secondary" sx={{ maxWidth: "600px", mx: "auto" }}>
@@ -160,14 +163,17 @@ const BoxInfo = () => {
 
       </Container>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} className="box-info">
-        <Box className="texts">
-          <Typography className="p1">
-            Ei, produtor! O KdAboa é a plataforma perfeita para divulgar seus eventos e atrair seu público.
-          </Typography>
-          <Typography className="p2">
-            Junte-se aos produtores que já estão transformando suas vendas com o KdAboa!
-          </Typography>
-        </Box>
+        <Container>
+
+          <Box className="texts">
+            <Typography className="p1">
+              Ei, produtor! O KdAboa é a plataforma perfeita para divulgar seus eventos e atrair seu público.
+            </Typography>
+            <Typography className="p2">
+              Junte-se aos produtores que já estão transformando suas vendas com o KdAboa!
+            </Typography>
+          </Box>
+        </Container>
         <Box className="btns" sx={{
           display: 'flex',
           justifyContent: {
@@ -257,7 +263,10 @@ const BoxInfo = () => {
             px: { xs: 1 }
           }}>
             <Title>
-              Por que escolher o KDABOA?  <img width="70" height="70" src={check} alt="hang-ten" />
+              Por que escolher o KDABOA?  <Box component='img' src={check} sx={{
+                width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
+                height: "auto", // mantém a proporção
+              }} />
             </Title>
 
           </Box>
@@ -304,10 +313,10 @@ const BoxInfo = () => {
                     {feature.icon}
                   </Box>
 
-                  <Typography variant="h6" sx={{ fontFamily: "var(--fredoka)", fontWeight: 500, mb: 2 }}>
+                  <Typography variant="h6" sx={{ fontFamily: "var(--fredoka)", fontWeight: 500, mb: 2, fontSize: '22px' }}>
                     {feature.title}
                   </Typography>
-                  <Typography color="text.secondary" fontFamily={'var(--notosans)'}>{feature.description}</Typography>
+                  <Typography color="text.secondary" fontFamily={'var(--notosans)'} sx={{fontSize: '20px'}}>{feature.description}</Typography>
                 </Box>
               </Grid>
             ))}

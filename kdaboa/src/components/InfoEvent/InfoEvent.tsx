@@ -212,7 +212,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                                         navigate("/profile", { state: { card } });
                                     }}
                                     sx={{
-                                        fontSize: { xs: "0.75rem", sm: "0.9rem", md: '1.1rem' },
+                                        fontSize: { xs: "1rem", sm: "1rem", md: '1.1rem' },
                                         fontFamily: 'var(--notosans)',
                                         px: { xs: 2, sm: 3 },
 

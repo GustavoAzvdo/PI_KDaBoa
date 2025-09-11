@@ -22,11 +22,17 @@ const Profile = () => {
     <Box>
       <NavbarEvent />
       <Title>
-        Perfil <img src={user} style={{ width: 80, height: 80, margin: 0 }} alt="" />
+        Perfil <Box component='img' src={user} sx={{
+            width: { xs: 60, sm: 60, md: 80 }, // muda conforme a tela
+            height: "auto", // mantém a proporção
+          }} />
       </Title>
       <InfoProfile />
       <Title>
-        Eventos <img src={ticket} style={{ width: 80, height: 80, margin: 0 }} alt="" />
+        Eventos <Box component='img' src={ticket} sx={{
+            width: { xs: 60, sm: 60, md: 80 }, // muda conforme a tela
+            height: "auto", // mantém a proporção
+          }} />
       </Title>
       <Container sx={{display:' flex', alignItems: 'center', justifyContent: 'center'}}>
 

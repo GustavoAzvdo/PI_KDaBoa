@@ -11,15 +11,11 @@
    
 }
 
-.search p {
-    font-family: var(--fredoka) !important;
-   font-size: 60px!important;
-    font-weight: 500 !important;
-}
+
 
 .search img {
     position: relative;
     top: -4px;
     vertical-align: middle;
-    margin-left: 20px;
+   
 }

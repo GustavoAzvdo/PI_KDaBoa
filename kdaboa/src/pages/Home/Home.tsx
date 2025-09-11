@@ -75,7 +75,10 @@ const Home = () => {
         px: { xs: 2 }
       }}>
         <Title>
-          Qual a boa de hoje? <img width="70" height="70" src={hangloose} alt="hang-ten" />
+          Qual a boa de hoje?  <Box component='img' src={hangloose} sx={{
+            width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
+            height: "auto", // mantém a proporção
+          }} />
         </Title>
 
       </Box>

@@ -18,9 +18,9 @@ const Title = ({ children }: any) => {
           <Typography
            
             sx={{
-              fontFamily: 'Fredoka',
-              fontSize: { xs: '1.5rem', md: '2rem' },
-              fontWeight: 600,
+              fontFamily: 'var(--fredoka)',
+              fontSize: { xs: '2.5rem', md: '3.7em' },
+              fontWeight: 500,
               textAlign: { xs: 'center', md: 'left' },
             }}
           >

@@ -19,7 +19,7 @@ const FilterEvent = () => {
     const {
         searchText,
         categories: contextCategories,
-        
+
         date: contextDate,
         setSearchText,
         setCategories,
@@ -102,7 +102,11 @@ const FilterEvent = () => {
             <Box sx={{ textAlign: { xs: 'center' } }}>
                 <Title className="title-search" sx={{ display: 'flex', flexDirection: 'column', textAlign: 'center', justifyContent: 'center', marginTop: 10, marginBottom: 5 }}>
                     Pesquisar Evento
-                    <img width="70" height="70" src={search} alt="hang-ten" />
+                    <Box component='img' src={search} sx={{
+                        pl: 2,
+                        width: { xs: 60, sm: 60, md: 80 }, // muda conforme a tela
+                        height: "auto", // mantém a proporção
+                    }} />
                 </Title>
             </Box>
             <Box className="search-container" sx={{ paddingBottom: 10, borderBottom: 1, borderColor: '#e0e0e0' }} >
