@@ -1,5 +1,11 @@
 import { Box, Grid, Typography, Button, Container, Card } from "@mui/material"
 import festa from "../../assets/festa.png"
+import aparecida from "../../assets/aparecida.png"
+import cristo from "../../assets/cristo.png"
+import praia from "../../assets/praia.png"
+import bahia from "../../assets/bahia.png"
+import jantar from "../../assets/jantar.png"
+import show from "../../assets/show.png"
 import './BoxInfo.css'
 import { LocalActivityOutlined, LocationOnOutlined, PersonAddAlt1Outlined, SearchOutlined, StarOutlined } from "@mui/icons-material"
 import Title from "../Title/Title"
@@ -10,9 +16,12 @@ import { useState, useEffect } from 'react'
 import api from '../../api/api'
 import { useNavigate } from "react-router-dom";
 
+
+const imagens = [festa, praia, aparecida, cristo, show, bahia, jantar];
 const BoxInfo = () => {
   const navigate = useNavigate()
   const [eventos, setEventos] = useState<any[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [cidadeUsuario, setCidadeUsuario] = useState<string | null>(null);
   const [estadoUsuario, setEstadoUsuario] = useState<string | null>(null);
   const [stats, setStats] = useState({
@@ -76,6 +85,13 @@ const BoxInfo = () => {
 
   useEffect(() => {
     fetchEventos();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % imagens.length);
+    }, 4000); // troca a cada 3 segundos
+    return () => clearInterval(interval);
   }, []);
   const top2Eventos =
     cidadeUsuario && estadoUsuario
@@ -214,49 +230,37 @@ const BoxInfo = () => {
 
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Box className="festa"
+    
 
-          sx={{
+        <Container sx={{width: '100vw', height: '50vh', display: 'flex'}} >
+          <Box sx={{ position: "relative", width: "100%", height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
+            {imagens.map((img, i) => (
+              <Box
+                key={i}
+                component="img"
+                src={img}
+                alt={`Imagem ${i}`}
+                sx={{
+                  pl: {xs: 0, sm: 0, md: 2},
+                  pt: {xs: 6, sm: 6, md: 0},
+                  width: { xs: "100%", md: "100%" },
+                  height: "100%",
+                 
+                  display: 'block',
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  opacity: i === activeIndex ? 1 : 0,
+                  transition: "opacity 1s ease", // fade suave
+                }}
+              />
+            ))}
+          </Box>
 
-            display: 'flex',
-            justifyContent: {
-              xs: 'center',
-              sm: 'center',
-              md: 'flex-end',
-            },
-
-            paddingTop: {
-              sm: 3
-            },
-            alignItems: 'center',
-            width: { xs: '100%', sm: '100%', md: '100%' },
-            heuight: { xs: '100%', sm: '100%', md: '100%' },
-          }}>
-
-
-        </Box>
-
-        <Box
-          component="img"
-          src={festa}
-          alt="Festa"
-          sx={{
-            width: {
-              xs: '100%',   // celulares (se visível)
-              md: '80%',    // desktops
-            },
-            height: 'auto',
-            display: {
-              xs: 'none',   // 👉 ESCONDE em celulares (até 600px)
-              sm: 'none',   // opcional, garante até ~960px
-              md: 'block',  // 👉 MOSTRA em desktops
-            },
-            maxWidth: '100%',
-          }}
-        />
-
+        </Container>
+    
       </Grid>
-      <Box sx={{ py: 8, backgroundColor: "white" }}>
+      <Box sx={{ pt: 4,pb: 8, backgroundColor: "white" }}>
         <Container maxWidth="lg">
           <Box sx={{
             textAlign: { xs: 'center' },
@@ -316,7 +320,7 @@ const BoxInfo = () => {
                   <Typography variant="h6" sx={{ fontFamily: "var(--fredoka)", fontWeight: 500, mb: 2, fontSize: '22px' }}>
                     {feature.title}
                   </Typography>
-                  <Typography color="text.secondary" fontFamily={'var(--notosans)'} sx={{fontSize: '20px'}}>{feature.description}</Typography>
+                  <Typography color="text.secondary" fontFamily={'var(--notosans)'} sx={{ fontSize: '20px' }}>{feature.description}</Typography>
                 </Box>
               </Grid>
             ))}
