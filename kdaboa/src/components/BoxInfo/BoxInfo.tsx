@@ -6,6 +6,8 @@ import praia from "../../assets/praia.png"
 import bahia from "../../assets/bahia.png"
 import jantar from "../../assets/jantar.png"
 import show from "../../assets/show.png"
+import restaurante from "../../assets/restaurante.png"
+import happy from "../../assets/happy.png"
 import './BoxInfo.css'
 import { LocalActivityOutlined, LocationOnOutlined, PersonAddAlt1Outlined, SearchOutlined, StarOutlined } from "@mui/icons-material"
 import Title from "../Title/Title"
@@ -17,7 +19,7 @@ import api from '../../api/api'
 import { useNavigate } from "react-router-dom";
 
 
-const imagens = [festa, praia, aparecida, cristo, show, bahia, jantar];
+const imagens = [festa, praia, aparecida, cristo, show, bahia, jantar, restaurante, happy];
 const BoxInfo = () => {
   const navigate = useNavigate()
   const [eventos, setEventos] = useState<any[]>([]);
@@ -108,10 +110,10 @@ const BoxInfo = () => {
       <Grid size={{ xs: 12, sm: 12, md: 12 }}>
         <Container>
           <Box sx={{
-            textAlign: { xs: 'center' },
+            textAlign: { xs: 'center', sm: 'center' , md: 'center'},
             px: { xs: 2 }
           }}>
-            <Title>
+            <Title >
               Eventos próximos de você <Box component='img' src={eventosproximos} sx={{
                 width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
                 height: "auto", // mantém a proporção

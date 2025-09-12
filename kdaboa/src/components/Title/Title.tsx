@@ -19,7 +19,7 @@ const Title = ({ children }: any) => {
            
             sx={{
               fontFamily: 'var(--fredoka)',
-              fontSize: { xs: '2.5rem', md: '3.7em' },
+              fontSize: { xs: '2.3rem', md: '3.38em' },
               fontWeight: 500,
               textAlign: { xs: 'center', md: 'left' },
             }}
