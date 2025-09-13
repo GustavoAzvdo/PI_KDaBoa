@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { dados } from "../../categorys/dados";
 import {  useNavigate } from "react-router-dom";
-import { useSearch } from "../../context/SearchContext";
+
 
 export default function Carrosel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(6);
   const [paused, setPaused] = useState(false);
-  const { setCategories } = useSearch();
+ 
   const navigate = useNavigate();
 
   // Responsividade
