@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Box,
@@ -18,15 +18,18 @@ import {
 } from "@mui/icons-material";
 import logo from "../../assets/logo.png";
 import './NavbarEvent.css'
-import { Link as RouterLink} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import api from '../../api/api'
 const pages = [
   { label: "Home", icon: <HomeOutlined />, href: "/home" },
   { label: "Pesquisar outros eventos", icon: <Search />, href: "/search" },
 ];
+type Props = { id: number };
 
-const NavbarEvent = () => {
+const NavbarEvent = ({ id }: Props) => {
+  const [evento, setEvento] = useState<any>(null);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-
+  console.log(evento?.nome_evento)
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -35,6 +38,38 @@ const NavbarEvent = () => {
     setAnchorElNav(null);
   };
 
+  useEffect(() => {
+    const fetchEvento = async () => {
+      try {
+        const res = await api.get(`/event/${id}`);
+        setEvento(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchEvento();
+  }, [id]);
+
+  const handleShare = () => {
+    if (!evento?.Endereco) return;
+    const enderecoCompleto = `${evento.Endereco.logradouro}, ${evento.Endereco.numero}, ${evento.Endereco.bairro} - ${evento.Endereco.cidade}/${evento.Endereco.estado}`;
+    const dataFormatada = new Date(evento.data_inicio).toLocaleDateString("pt-BR");
+    const horaFormatada = new Date(evento.data_inicio).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+    const telefone = evento.Estabelecimento.Contato?.tel_cel_1 || "Não informado";
+
+    const message = encodeURIComponent(
+      `🎉 Ei! Olha só este evento que eu achei no *KDABOA!* 🤙\n\n` +
+      `*${evento.nome_evento}*\n` +
+      `📅 Data: *${dataFormatada}*\n` +
+      `⏰ Horário: *${horaFormatada}*\n` +
+      `📍 Local: ${enderecoCompleto}\n` +
+      `🏢 Estabelecimento: ${evento.Estabelecimento.nome}\n` +
+      `📞 Contato: ${telefone}\n` +
+      `📝 Descrição: _${evento.descricao}_\n\n`
+    );
+
+    window.open(`https://api.whatsapp.com/send?text=${message}`, "_blank");
+  };
   return (
     <AppBar
       position="static"
@@ -146,10 +181,11 @@ const NavbarEvent = () => {
                     </Typography>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={handleCloseNavMenu}>
+                <MenuItem onClick={handleShare} sx={{cursor: 'pointer'}}>
                   <Typography
                     textAlign="center"
                     sx={{ fontFamily: "Fredoka", fontSize: "1.1rem" }}
+                    onClick={handleShare}
                   >
                     Compartilhar
                   </Typography>
@@ -216,6 +252,8 @@ const NavbarEvent = () => {
                 px: 3,
                 py: 1,
               }}
+              onClick={handleShare}
+             
             >
               Compartilhar
             </Button>

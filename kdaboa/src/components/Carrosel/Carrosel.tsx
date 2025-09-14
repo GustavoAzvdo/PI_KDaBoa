@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { dados } from "../../categorys/dados";
-import {  useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { useSearch } from "../../context/SearchContext";
 
 export default function Carrosel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(6);
   const [paused, setPaused] = useState(false);
- 
   const navigate = useNavigate();
+  const { setCategories, setSearchText, setDate } = useSearch();
 
   // Responsividade
   useEffect(() => {
@@ -42,17 +42,18 @@ export default function Carrosel() {
         maxWidth: "xl",
         margin: "0 auto",
         borderBottom: "1px solid #c9c9c990",
+        overflow: "hidden", // 🔥 impede scroll horizontal
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <Box sx={{ py: 1 }}>
+      <Box sx={{ py: 1, width: "100%", overflow: "hidden" }}>
         <Box
           sx={{
             display: "flex",
             transition: "transform 0.5s ease-in-out",
             gap: 2,
-            transform: `translateX(-${(currentIndex * 5) / itemsPerView}%)`,
+            transform: `translateX(-${currentIndex * (4.4 / itemsPerView)}%)`, // 🔥 fórmula ajustada
             width: `${(extendedCategories.length * 100) / itemsPerView}%`,
           }}
         >
@@ -78,8 +79,10 @@ export default function Carrosel() {
                   },
                 }}
                 onClick={() => {
-                  navigate("/search", {state: {categories: [String(category.id)]}}); // navega pra search
-             
+                  setCategories([category.id.toString()]);
+                  setSearchText("");
+                  setDate("");
+                  navigate("/search");
                 }}
               >
                 {category.title}

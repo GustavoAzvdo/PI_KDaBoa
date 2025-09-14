@@ -50,20 +50,28 @@ const Search = ({  onTextChange, onDateChange, showScreen = false }: SearchProps
 
 
   const handleSearchTextChange = (value: string) => {
-    const selectedText = value.toLowerCase();
-    setSearchText(selectedText);
-    if (onTextChange) {
-      onTextChange(selectedText);
-    }
-  };
+  const selectedText = value.toLowerCase();
+  setSearchText(selectedText);
 
-  const handleDateChange = (newValue: Dayjs | null) => {
-    const formattedDate = newValue && newValue.isValid() ? newValue.format('DD/MM/YYYY') : '';
-    setDate(formattedDate);
-    if (onDateChange) {
-      onDateChange(formattedDate);
-    }
-  };
+  // se o usuário está digitando algo, removemos a seleção de categoria anterior
+  if (selectedText.trim() !== '') {
+    setCategories([]); // <<< limpeza importante
+  }
+
+  if (onTextChange) onTextChange(selectedText);
+};
+
+const handleDateChange = (newValue: Dayjs | null) => {
+  const formattedDate = newValue && newValue.isValid() ? newValue.format('DD/MM/YYYY') : '';
+  setDate(formattedDate);
+
+  // se o usuário escolheu uma data, também limpamos categoria
+  if (formattedDate) {
+    setCategories([]); // <<< limpeza importante
+  }
+
+  if (onDateChange) onDateChange(formattedDate);
+};
   useEffect(() => {
     handleCategoryChange(null, categories)
     handleDateChange(date ? dayjs(date, 'DD/MM/YYYY') : null)
