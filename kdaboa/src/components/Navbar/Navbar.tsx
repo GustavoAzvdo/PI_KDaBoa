@@ -155,14 +155,24 @@ const Navbar = () => {
             <Button
               onClick={handleGoToSearch}
               startIcon={<Search />}
-              sx={{
-                color: 'black',
-                fontSize: '1.2rem',
-                fontWeight: 500,
-                fontFamily: 'Fredoka, sans-serif',
-                position: 'relative',
-                '&:hover': { bgcolor: 'transparent' },
-              }}
+               sx={{
+                  color: 'black',
+                  fontSize: '1.2rem',
+                  fontWeight: 500,
+                  fontFamily: 'Fredoka, sans-serif',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    width: '0%',
+                    height: '2px',
+                    left: 0,
+                    bottom: 0,
+                    bgcolor: '#6c15d5',
+                    transition: 'width 0.3s ease-in-out',
+                  },
+                  '&:hover::after': { width: '100%' },
+                }}
             >
               Encontrar eventos
             </Button>
