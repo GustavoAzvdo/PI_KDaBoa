@@ -9,7 +9,7 @@ import { Box } from "@mui/material";
 import api from '../../api/api'
 const ViewEvent = () => {
   const { id } = useLocation().state;
-  const [evento, setEvento] = useState<any>(null);
+  const [, setEvento] = useState<any>(null);
 
   useEffect(() => {
     document.title = "Evento";
