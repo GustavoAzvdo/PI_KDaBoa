@@ -5,6 +5,7 @@ import BoxInfo from '../../components/BoxInfo/BoxInfo'
 import Title from '../../components/Title/Title'
 import Footer from '../../components/Footer/Footer'
 import hangloose from '../../assets/hangloose.png'
+import search from '../../assets/search.png'
 import { Box, Container } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { Drawer, Typography, Button } from '@mui/material'
@@ -12,11 +13,29 @@ import cookies from '../../assets/cookies.png'
 import './Home.css'
 import { useSearch } from '../../context/SearchContext'
 import Carrosel from '../../components/Carrosel/Carrosel'
+import CarroselHome from '../../components/CarroselHome/CarroselHome'
+import api from '../../api/api'
+
+interface Evento {
+  id_evento: number;
+  nome_evento: string;
+  foto: string;
+  data_inicio: string;
+  Endereco: {
+    cidade: string;
+    estado: string;
+  };
+  Evento_Categoria: {
+    Categoria: {
+      nome_categoria: string;
+    };
+  }[];
+}
 const Home = () => {
   const { setSearchText, setCategories, setDate } = useSearch();
   const [open, setOpen] = useState<boolean>(false);
   const [accepted, setAccepted] = useState<boolean>(false);
-
+  const [eventos, setEventos] = useState<Evento[]>([]);
   useEffect(() => {
     // Aqui você pode verificar localStorage se quiser persistência
     setOpen(true);
@@ -47,8 +66,26 @@ const Home = () => {
 
   useEffect(() => {
     document.title = "Home"
-     window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
+
   })
+
+  useEffect(() => {
+    const loadEventos = async () => {
+      try {
+        const response = await api.get<Evento[]>("/event");
+
+        // ADICIONE ESTA LINHA PARA DEBUGAR
+        console.log("Eventos recebidos da API:", response.data);
+
+        setEventos(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar eventos:", error);
+      }
+    };
+
+    loadEventos();
+  }, []);
   return (
     <>
 
@@ -72,6 +109,7 @@ const Home = () => {
       </Drawer>
 
       <Navbar />
+
       <Carrosel />
       <Box sx={{
         textAlign: { xs: 'center' },
@@ -85,6 +123,8 @@ const Home = () => {
         </Title>
 
       </Box>
+
+      {/* search */}
       <Container>
 
         <Search
@@ -94,6 +134,21 @@ const Home = () => {
           onDateChange={setDate}
         />
       </Container>
+      <CarroselHome eventos={eventos} />
+
+      <Box sx={{
+        textAlign: { xs: 'center' },
+        px: { xs: 2 }
+      }}>
+        <Title>
+          Alguns eventos  <Box component='img' src={search} sx={{
+            width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
+            height: "auto", // mantém a proporção
+          }} />
+        </Title>
+
+      </Box>
+
       <Carrousel />
       <Container>
         <BoxInfo />
