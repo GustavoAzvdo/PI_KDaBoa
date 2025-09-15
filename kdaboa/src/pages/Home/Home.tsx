@@ -11,6 +11,7 @@ import { Drawer, Typography, Button } from '@mui/material'
 import cookies from '../../assets/cookies.png'
 import './Home.css'
 import { useSearch } from '../../context/SearchContext'
+import Carrosel from '../../components/Carrosel/Carrosel'
 const Home = () => {
   const { setSearchText, setCategories, setDate } = useSearch();
   const [open, setOpen] = useState<boolean>(false);
@@ -46,6 +47,7 @@ const Home = () => {
 
   useEffect(() => {
     document.title = "Home"
+     window.scrollTo(0, 0);
   })
   return (
     <>
@@ -70,6 +72,7 @@ const Home = () => {
       </Drawer>
 
       <Navbar />
+      <Carrosel />
       <Box sx={{
         textAlign: { xs: 'center' },
         px: { xs: 2 }

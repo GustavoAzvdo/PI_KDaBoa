@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Box,
@@ -18,15 +18,21 @@ import {
 } from "@mui/icons-material";
 import logo from "../../assets/logo.png";
 import './NavbarEvent.css'
-import { Link as RouterLink} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import api from '../../api/api'
+import ShareEvento from "../Share/ShareEvento";
 const pages = [
   { label: "Home", icon: <HomeOutlined />, href: "/home" },
   { label: "Pesquisar outros eventos", icon: <Search />, href: "/search" },
 ];
+type Props = { id: number };
 
-const NavbarEvent = () => {
+const NavbarEvent = ({ id }: Props) => {
+  const [shareOpen, setShareOpen] = useState(false)
+  const [evento, setEvento] = useState<any>(null);
+  const [whatsMessage, setWhatsMessage] = useState("")
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-
+  console.log(evento?.nome_evento)
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -35,6 +41,39 @@ const NavbarEvent = () => {
     setAnchorElNav(null);
   };
 
+  useEffect(() => {
+    const fetchEvento = async () => {
+      try {
+        const res = await api.get(`/event/${id}`);
+        setEvento(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchEvento();
+  }, [id]);
+
+  const handleShare = () => {
+    if (!evento?.Endereco) return;
+    const enderecoCompleto = `${evento.Endereco.logradouro}, ${evento.Endereco.numero}, ${evento.Endereco.bairro} - ${evento.Endereco.cidade}/${evento.Endereco.estado}`;
+    const dataFormatada = new Date(evento.data_inicio).toLocaleDateString("pt-BR");
+    const horaFormatada = new Date(evento.data_inicio).toLocaleTimeString("pt-BR", { hour: '2-digit', minute: '2-digit' });
+    const telefone = evento.Estabelecimento.Contato?.tel_cel_1 || "Não informado";
+
+    const message = (
+      `🎉 Ei! Olha só este evento que eu achei no *KDABOA!* 🤙\n\n` +
+      `*${evento.nome_evento}*\n\n` +
+      `📅 Data: *${dataFormatada}*\n\n` +
+      `⏰ Horário: *${horaFormatada}*\n\n` +
+      `📍 Local: ${enderecoCompleto}\n\n` +
+      `🏢 Estabelecimento: ${evento.Estabelecimento.nome}\n\n` +
+      `📞 Contato: ${telefone}\n\n` +
+      `📝 Descrição: _${evento.descricao}_\n`
+    );
+    setWhatsMessage(message)
+    setShareOpen(true)
+  
+  };
   return (
     <AppBar
       position="static"
@@ -146,10 +185,11 @@ const NavbarEvent = () => {
                     </Typography>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={handleCloseNavMenu}>
+                <MenuItem onClick={handleShare} sx={{ cursor: 'pointer' }}>
                   <Typography
                     textAlign="center"
                     sx={{ fontFamily: "Fredoka", fontSize: "1.1rem" }}
+                    onClick={handleShare}
                   >
                     Compartilhar
                   </Typography>
@@ -216,12 +256,21 @@ const NavbarEvent = () => {
                 px: 3,
                 py: 1,
               }}
+              onClick={handleShare}
+
             >
               Compartilhar
             </Button>
           </Box>
         </Toolbar>
       </Container>
+      <ShareEvento
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        eventUrl={`https://kdaboa.vercel.app/event/${id}`}
+        eventTitle={evento?.nome_evento || "Evento no KDABOA"}
+        whatsMessage={whatsMessage}
+      />
     </AppBar>
   );
 };

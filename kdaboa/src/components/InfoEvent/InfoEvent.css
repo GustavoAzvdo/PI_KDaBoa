@@ -14,7 +14,7 @@
 }
 .title-event h3 {
 
-    font-weight: 600;
+    font-weight: 500;
     font-family: var(--fredoka);
 }
 
@@ -91,7 +91,7 @@
 .title-description p {
     padding-left: 0;
     font-family: var(--notosans);
-    font-size: 25px;
+   
     font-weight: 500;
     
 }

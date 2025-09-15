@@ -105,8 +105,8 @@ const InfoEvent = ({ id }: { id: number }) => {
                 </Box>
 
                 <Typography variant="h6" fontFamily={'var(--fredoka)'} sx={{ color: 'text.secondary', fontSize: '22px' }}>Possíveis causas:</Typography>
-                <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <List sx={{ maxWidth: 400, fontFamily: 'var(--notosans)', color:'text.secondary', fontSize: '21px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <List sx={{ maxWidth: 400, fontFamily: 'var(--notosans)', color: 'text.secondary', fontSize: '21px' }}>
                         <ListItem>O evento ainda não foi publicado;</ListItem>
                         <ListItem>O evento foi cancelado ou removido;</ListItem>
                         <ListItem>Problemas de conexão ou filtragem por categoria.</ListItem>
@@ -122,8 +122,21 @@ const InfoEvent = ({ id }: { id: number }) => {
             <BannerEvent card={card} />
             <Grid container spacing={2} sx={{ padding: 2, paddingTop: 4 }} className="container">
                 <Grid size={{ xs: 12, md: 5 }} className="grid-left"  >
-                    <Box className='title-event' sx={{ display: 'flex', textAlign: { xs: 'center', sm: 'center', md: 'left' } }}>
-                        <Typography variant="h3" className="title-text">
+                    <Box className='title-event' sx={{ display: 'flex', textAlign: { xs: 'center', sm: 'center', md: 'left' }, justifyContent: { xs: 'center', sm: 'center', md: 'left' } }}>
+                        <Typography variant="h3" sx={{
+                            fontSize: {
+                                xs: '2.5rem',  // celulares
+                                sm: '2.5rem',    // tablets pequenos
+                                md: '3rem',    // desktops médios
+                                lg: '3.5rem',  // desktops grandes
+                            },
+                            textAlign: {
+                                xs: 'center',
+                                sm: 'center',
+                                md: 'left', // 'start' não funciona aqui, usa 'left' mesmo
+                                lg: 'left',
+                            },
+                        }}>
                             {card?.nome_evento}
                         </Typography>
                     </Box>
@@ -228,7 +241,14 @@ const InfoEvent = ({ id }: { id: number }) => {
                 <Grid size={{ xs: 12, md: 10 }} className="grid-description" sx={{ paddingTop: 4, margin: 0, textAlign: 'justify', px: { xs: 2, md: 0 } }}>
                     <Box className="title-description" >
                         <Box sx={{ textAlign: { xs: 'center', sm: 'center', md: 'left' } }}>
-                            <Typography variant="h4" className="description-title" sx={{ alignItems: { xs: 'center', md: 'flex-start' }, justifyContent: { xs: 'center', md: 'flex-start' } }}>DESCRIÇÃO DO EVENTO</Typography>
+                            <Typography variant="h4" className="description-title" sx={{
+                                alignItems: { xs: 'center', md: 'flex-start' }, justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: {
+                                    xs: '2.5rem',  // celulares
+                                    sm: '2.5rem',    // tablets pequenos
+                                    md: '3rem',    // desktops médios
+                                    lg: '3.5rem',  // desktops grandes
+                                }
+                            }}>DESCRIÇÃO DO EVENTO</Typography>
 
                         </Box>
                         <Typography className="description-text" sx={{ paddingY: 5 }}>{card.descricao}</Typography>
