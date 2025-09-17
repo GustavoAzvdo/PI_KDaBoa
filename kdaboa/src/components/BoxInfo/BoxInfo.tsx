@@ -120,7 +120,7 @@ const BoxInfo = () => {
               }} />
             </Title>
             <Box>
-              <Typography variant="h6" color="text.secondary" sx={{ maxWidth: "600px", mx: "auto" }}>
+              <Typography variant="h6" color="text.secondary" sx={{ maxWidth: "600px", mx: "auto", fontFamily: 'var(--notosans)' }}>
                 Baseado na sua localização, encontramos estes eventos incríveis acontecendo perto de você
               </Typography>
             </Box>
@@ -131,9 +131,9 @@ const BoxInfo = () => {
       <Container sx={{ pb: 10 }}>
         <Grid container spacing={3}>
           {top2Eventos.map((event) => (
-            <Grid size={{ xs: 12, sm: 12, md: 6 }} key={event.id_evento}>
+            <Grid size={{ xs: 12, sm: 12, md: 6 }} key={event.id_evento} sx={{pt: 4}}>
               <Card onClick={() => navigate("/view-event", { state: { id: event.id_evento } })} sx={{ fontFamily: 'var(--notosans)', p: 3, cursor: "pointer", "&:hover": { boxShadow: "0px 8px 20px #ff84384e" } }}>
-                <Box display="flex" gap={2}>
+                <Box display="flex" gap={2} >
                   <Box
                     sx={{
                       width: 80,
@@ -148,27 +148,27 @@ const BoxInfo = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    <Typography variant="caption">
+                    <Typography variant="caption" sx={{fontFamily: 'var(--notosans)'}}>
                       {new Date(event.data_inicio).toLocaleString("pt-BR", {
                         month: "short",
                       }).toUpperCase()}
                     </Typography>
-                    <Typography variant="h5">
+                    <Typography variant="h5" sx={{fontFamily: 'var(--notosans)'}}>
                       {new Date(event.data_inicio).getDate()}
                     </Typography>
                   </Box>
 
                   <Box flex={1}>
-                    <Typography variant="h6" sx={{ mb: 1 }}>
+                    <Typography variant="h6" sx={{ mb: 1 , fontFamily: 'var(--notosans)'}}>
                       {event.nome_evento}
                     </Typography>
-                    <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
+                    <Typography color="text.secondary" variant="body2" sx={{ mb: 2 , fontFamily: 'var(--notosans)'}}>
                       {event.descricao}
                     </Typography>
 
                     <Box display="flex" gap={1} alignItems={"center"}>
                       <LocationOnOutlined fontSize="small" sx={{ color: 'text.secondary' }} />
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                      <Typography variant="body2" sx={{ color: 'text.secondary', fontFamily: 'var(--notosans)' }}>
                         {event.Endereco.cidade}, {event.Endereco.estado}
                       </Typography>
                     </Box>

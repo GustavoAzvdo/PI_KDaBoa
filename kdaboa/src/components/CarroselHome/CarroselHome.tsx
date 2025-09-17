@@ -58,28 +58,26 @@ const CarroselHome = ({ eventos }: { eventos: EventoProps[] }) => {
                 style={{ padding: "40px 0" }}
 
                 breakpoints={{
-                    // Quando a tela tiver menos de 600px (mobile)
+                   
                     0: { // 0px e acima
-                        slidesPerView: 1.5, // Mostrar 1 slide completo e um pouco do próximo
-                        spaceBetween: -70,   // Espaçamento positivo para não sobrepor muito
-                        // No mobile, o effectCoverflow pode ser muito agressivo.
-                        // Poderíamos até desativá-lo ou ajustar seus parâmetros aqui.
+                        slidesPerView: 1.5, 
+                        spaceBetween: -70,  
                         coverflowEffect: {
                             rotate: 0,
                             stretch: 0,
-                            depth: 500, // Menos profundidade
+                            depth: 500, 
                             modifier: 1,
                             slideShadows: false, // Sem sombra para ser mais leve
                         }
                     },
                     // Quando a tela tiver 600px ou mais (tablet)
                     600: {
-                        slidesPerView: 2.5, // Mostrar 2 slides completos e um pouco do próximo
-                        spaceBetween: 50,    // Um pouco de sobreposição, mas ainda espaçado
+                        slidesPerView: 2.5, 
+                        spaceBetween: 50,   
                         coverflowEffect: {
                             rotate: 0,
                             stretch: 0,
-                            depth: 500, // Média profundidade
+                            depth: 500, 
                             modifier: 1,
                             slideShadows: true,
                         }
