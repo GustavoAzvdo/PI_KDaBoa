@@ -44,7 +44,7 @@ export default function CarroselEventHome() {
     const [estadoUsuario, setEstadoUsuario] = useState<string | null>(null);
 
     useEffect(() => {
-        // pega eventos
+        
         api.get<any>("/event").then((res) => {
             setCards(res.data);
         });
@@ -69,10 +69,7 @@ export default function CarroselEventHome() {
         ? cards.filter((c) => c.Endereco.estado === ufUsuario)
         : cards;
 
-    useEffect(() => {
-        // Para teste
-        setEstadoUsuario("Pará");
-    }, []);
+
     return (
         <Swiper
             modules={[Navigation, Pagination, A11y]}

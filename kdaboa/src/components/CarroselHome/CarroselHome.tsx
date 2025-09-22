@@ -108,9 +108,9 @@ const CarroselHome = ({ eventos }: { eventos: EventoProps[] }) => {
                                     src={evento.foto}
                                     alt={evento.nome_evento}
                                     sx={{
-                                        width: "100%",
+                                        width: {xs: '100%', md: '630px', sm: '100%'},
                                         height: "100%",
-                                        objectFit: "cover",
+                                        objectFit: "fill",
                                         borderRadius: 2,
                                     }}
                                 />
