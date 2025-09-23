@@ -9,8 +9,12 @@ import { CssBaseline } from '@mui/material'
 
 
 const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#6c15d5'
+    },
+  },
   components: {
-
     MuiTextField: {
       styleOverrides: {
         root: {
