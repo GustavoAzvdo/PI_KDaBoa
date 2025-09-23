@@ -102,11 +102,11 @@ const Footer = () => {
               <Stack sx={{ fontFamily: 'var(--notosans)', mt: 1 }} spacing={1}>
                 <Box sx={{ display: 'flex', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
                   <EmailOutlined sx={{color: 'text.secondary'}} />
-                  <Typography>contato@kdaboa.com</Typography>
+                  <Typography sx={{color: 'text.secondary', fontFamily: 'var(--notosans)'}}>contato@kdaboa.com</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
                   <PhoneOutlined sx={{color: 'text.secondary'}} />
-                  <Typography>(12) 4002-8922</Typography>
+                  <Typography sx={{color: 'text.secondary', fontFamily: 'var(--notosans)'}}>(99) 99999-9999</Typography>
                 </Box>
               </Stack>
             </Box>
