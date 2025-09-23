@@ -21,6 +21,7 @@ import { useEventos } from '../../../context/EventoContext';
 
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import api from '../../../api/api';
+import imageCompression from 'browser-image-compression';
 
 dayjs.locale('pt-br');
 dayjs.extend(utc);
@@ -117,18 +118,40 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
 
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setFileName(file.name);
-            setFotoFile(file); // <- ESSENCIAL
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFotoUrl(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
+ const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+        return;
+    }
+
+    console.log(`Original file size: ${file.size / 1024 / 1024} MB`);
+
+    const options = {
+        maxSizeMB: 1,          // Tamanho máximo do arquivo em MB
+        maxWidthOrHeight: 1920, // Dimensão máxima (largura ou altura)
+        useWebWorker: true,    // Usa Web Worker para não travar a interface
     };
+
+    try {
+        const compressedFile = await imageCompression(file, options);
+        console.log(`Compressed file size: ${compressedFile.size / 1024 / 1024} MB`);
+
+        setFileName(compressedFile.name);
+        setFotoFile(compressedFile); 
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setFotoUrl(reader.result as string);
+        };
+        reader.readAsDataURL(compressedFile);
+
+    } catch (error) {
+        console.error('Erro ao comprimir a imagem:', error);
+        setFileName(file.name);
+        setFotoFile(file);
+    }
+};
 
 
     const VisuallyHiddenInput = styled('input')({
@@ -168,8 +191,6 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setSelectedEndereco(enderecos[favorito]);
         }
     }, [enderecoModo, favorito, enderecos]);
-
-    
 
 
     const handleEditEvento = async () => {

@@ -250,7 +250,7 @@ export default function DashboardLayoutBasic(props: any) {
       session={session}
       authentication={authentication}
       branding={{
-        logo: <img src={logo} alt="Logo" />,
+        logo: <img src={logo} alt="Logo" style={{pointerEvents: 'none', cursor: 'none'}} />,
         title: 'Area do Gerente',
 
       }}

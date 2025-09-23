@@ -25,7 +25,7 @@ const pages = [
   { label: "Home", icon: <HomeOutlined />, href: "/home" },
   { label: "Pesquisar outros eventos", icon: <Search />, href: "/search" },
 ];
-type Props = { id: number };
+type Props = { id?: number };
 
 const NavbarEvent = ({ id }: Props) => {
   const [shareOpen, setShareOpen] = useState(false)
