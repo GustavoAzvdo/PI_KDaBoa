@@ -169,34 +169,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     }, [enderecoModo, favorito, enderecos]);
 
-    // useEffect(() => {
-    //     if (eventoEdicao) {
-    //         setNome(eventoEdicao.nome_evento || '');
-    //         setDescricao(eventoEdicao.descricao || '');
-    //         const categoryIds = eventoEdicao.categorias
-    //             .map(name => dados.find(c => c.title === name)?.id)
-    //             .filter(id => id !== undefined) as number[];
-
-    //         setCtg(categoryIds);
-    //         setDataInicio(eventoEdicao.data_inicio ? dayjs(eventoEdicao.data_inicio) : null);
-    //         setDataFim(eventoEdicao.data_fim ? dayjs(eventoEdicao.data_fim) : null);
-    //         setFotoUrl(eventoEdicao.foto || '');
-    //         setSelectedEndereco(eventoEdicao.endereco || null); // <-- importante!
-
-    //         setIsEdit(true);
-    //     }
-    //         else {
-    //         setNome('');
-    //         setDescricao('');
-    //         setCtg([]);
-    //         setDataInicio(dayjs().startOf('day'));
-    //         setDataFim(dayjs().startOf('day'));
-    //         setFotoUrl('');
-    //         setSelectedEndereco(null);
-    //         setIsEdit(false);
-    //     }
-    // }, [eventoEdicao]);
-
+    
 
 
     const handleEditEvento = async () => {
