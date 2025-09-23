@@ -147,7 +147,7 @@ export default function ShareEvento({
                 fontFamily: 'var(--notosans)'
               }}
             >
-              Compartilhar (Nativo)
+              Compartilhar
             </Button>
           </Box>
 
