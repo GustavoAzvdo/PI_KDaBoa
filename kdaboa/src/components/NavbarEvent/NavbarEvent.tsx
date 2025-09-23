@@ -267,7 +267,7 @@ const NavbarEvent = ({ id }: Props) => {
       <ShareEvento
         open={shareOpen}
         onClose={() => setShareOpen(false)}
-        eventUrl={`https://kdaboa.vercel.app/event/${id}`}
+        eventUrl={`https://kdaboa.vercel.app/view-event/${id}`}
         eventTitle={evento?.nome_evento || "Evento no KDABOA"}
         whatsMessage={whatsMessage}
       />
