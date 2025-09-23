@@ -1,4 +1,4 @@
-import { Star, StarBorder, Fence, Flag, LocationCity, MapsHomeWork, Numbers, Place, Signpost } from '@mui/icons-material';
+import { Star, StarBorder, Fence, Flag, LocationCity, MapsHomeWork, Numbers, Place, Signpost, Edit } from '@mui/icons-material';
 import { Box, Button, Grid, IconButton, InputAdornment, Paper, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
@@ -556,7 +556,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1, gap: 2 }}>
                                         <Button
                                             variant="outlined"
-
+                                            startIcon={<Edit/>}
                                             onClick={() => handleEdit(idx)}
                                             sx={{
                                                 color: 'var(--roxo)',
