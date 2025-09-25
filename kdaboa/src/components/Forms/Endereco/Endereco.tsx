@@ -59,7 +59,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
     //
     const [idEndereco, setIdEndereco] = useState<number>()
 
-  
+
 
     const handleOpenDeleteModal = (idx: number) => {
         const e = enderecos[idx];
@@ -249,7 +249,7 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                 complemento: complemento,
                 cidade: cidade,
                 estado: uf,
-            
+
             }, { withCredentials: true })
 
             const novoEndereco: EnderecoData = {
@@ -508,15 +508,46 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
             {
                 showButton && (
                     <Grid container spacing={2} sx={{ padding: 2 }}>
-
                         {enderecos.map((e: EnderecoData, idx: number) => (
-                            <Grid size={{ xs: 12, md: 4 }} key={idx}>
-                                <Paper elevation={2} sx={{ p: 2, mb: 2, position: 'relative' }} className='paper'>
-                                    <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
+                            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={idx}>
+                                <Paper
+                                    elevation={2}
+                                    sx={{
+                                        p: 3,
+                                        mb: 2,
+                                        position: 'relative',
+                                        borderRadius: 2,
+                                        transition: 'all 0.3s ease',
+                                        border: '1px solid #e0e0e0',
+                                        backgroundColor: '#ffffff',
+                                        '&:hover': {
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                        }
+                                    }}
+                                >
+                                    {/* CEP em destaque */}
+                                    <Box sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        mb: 2,
+                                        pb: 2,
+                                        borderBottom: '1px solid #f0f0f0'
+                                    }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <Place sx={{ color: 'var(--roxo)', mr: 1, fontSize: 20 }} />
+                                            <Typography variant="h6" sx={{
+                                                fontWeight: '600',
+                                                color: '#333',
+                                                fontSize: '1.1rem'
+                                            }}>
+                                                {e.cep}
+                                            </Typography>
+                                        </Box>
                                         <IconButton
+                                            size="small"
                                             onClick={async () => {
                                                 try {
-                                                    // Atualiza todos os endereços: só o clicado fica como favorito
                                                     await Promise.all(enderecos.map(async (end) => {
                                                         const isFavorito = end.id_endereco === e.id_endereco;
                                                         await api.put(`/gerente/address/${end.id_endereco}`, {
@@ -524,7 +555,6 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                                                         }, { withCredentials: true });
                                                     }));
 
-                                                    // Atualiza estado local: apenas um com favorito true
                                                     const atualizados = enderecos.map((end) => ({
                                                         ...end,
                                                         favorito: end.id_endereco === e.id_endereco,
@@ -541,47 +571,130 @@ const Endereco = ({ enderecoSelecionado, showButton = true, disabledComponents =
                                                     setSnackbarOpen(true);
                                                 }
                                             }}
-                                            sx={{ color: 'var(--roxo)' }}
-                                        >
-                                            {e.favorito === true ? <Star /> : <StarBorder />}
-                                        </IconButton>
-                                    </Box>
-                                    <Typography variant="subtitle1"><b>CEP:</b> {e.cep}</Typography>
-                                    <Typography variant="subtitle1"><b>Logradouro:</b> {e.logradouro}</Typography>
-                                    <Typography variant="subtitle1"><b>Bairro:</b> {e.bairro}</Typography>
-                                    <Typography variant="subtitle1"><b>Cidade:</b> {e.cidade}</Typography>
-                                    <Typography variant="subtitle1"><b>UF:</b> {e.estado}</Typography>
-                                    <Typography variant="subtitle1"><b>Complemento:</b> {e.complemento}</Typography>
-                                    <Typography variant="subtitle1"><b>Número:</b> {e.numero}</Typography>
-                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1, gap: 2 }}>
-                                        <Button
-                                            variant="outlined"
-                                            startIcon={<Edit/>}
-                                            onClick={() => handleEdit(idx)}
                                             sx={{
-                                                color: 'var(--roxo)',
-                                                borderColor: 'var(--roxo)',
+                                                color: e.favorito ? 'primary.main' : '#ccc',
+                                                '&:hover': { color: e.favorito ? 'primary.main' : 'var(--roxo)' }
                                             }}
                                         >
-                                            <Typography sx={{ fontSize: '16px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
-                                                Editar
+                                            {e.favorito ? <Star /> : <StarBorder />}
+                                        </IconButton>
+                                    </Box>
 
-                                            </Typography>
+                                    {/* Informações do endereço */}
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mb: 3 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                                            <Signpost sx={{ color: 'text.secondary', mr: 1.5, mt: 0.2, fontSize: 18 }} />
+                                            <Box>
+                                                <Typography variant="caption" sx={{
+                                                    color: 'text.secondary',
+                                                    textTransform: 'uppercase',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '0.7rem'
+                                                }}>
+                                                    Logradouro
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ fontWeight: '500', lineHeight: 1.3 }}>
+                                                    {e.logradouro}, {e.numero}
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+
+                                        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                                            <Fence sx={{ color: 'text.secondary', mr: 1.5, mt: 0.2, fontSize: 18 }} />
+                                            <Box>
+                                                <Typography variant="caption" sx={{
+                                                    color: 'text.secondary',
+                                                    textTransform: 'uppercase',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '0.7rem'
+                                                }}>
+                                                    Bairro
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ fontWeight: '500', lineHeight: 1.3 }}>
+                                                    {e.bairro}
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+
+                                        <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                                            <LocationCity sx={{ color: 'text.secondary', mr: 1.5, mt: 0.2, fontSize: 18 }} />
+                                            <Box>
+                                                <Typography variant="caption" sx={{
+                                                    color: 'text.secondary',
+                                                    textTransform: 'uppercase',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '0.7rem'
+                                                }}>
+                                                    Cidade/UF
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ fontWeight: '500', lineHeight: 1.3 }}>
+                                                    {e.cidade}/{e.estado}
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+
+                                        {e.complemento && (
+                                            <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                                                <MapsHomeWork sx={{ color: 'text.secondary', mr: 1.5, mt: 0.2, fontSize: 18 }} />
+                                                <Box>
+                                                    <Typography variant="caption" sx={{
+                                                        color: 'text.secondary',
+                                                        textTransform: 'uppercase',
+                                                        fontWeight: 'bold',
+                                                        fontSize: '0.7rem'
+                                                    }}>
+                                                        Complemento
+                                                    </Typography>
+                                                    <Typography variant="body2" sx={{ fontWeight: '500', lineHeight: 1.3 }}>
+                                                        {e.complemento}
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                        )}
+                                    </Box>
+
+                                    {/* Botões de Ação */}
+                                    <Box sx={{
+                                        display: 'flex',
+                                        gap: 1,
+                                        pt: 2,
+                                        borderTop: '1px solid #f0f0f0'
+                                    }}>
+                                        <Button
+                                            size="large"
+                                            variant="contained"
+                                            startIcon={<Edit />}
+                                            onClick={() => handleEdit(idx)}
+                                            sx={{
+                                                flex: 1,
+                                               
+                                             
+                                                py: 0.8,
+                                                fontSize: '15px',
+                                             
+                                            }}
+                                        >
+                                            Editar
                                         </Button>
                                         <Button
+                                            size="large"
                                             variant="outlined"
-                                            color="error"
                                             startIcon={<Delete />}
                                             onClick={() => handleOpenDeleteModal(idx)}
                                             sx={{
+                                                flex: 1,
+                                              
+                                                py: 0.8,
+                                                borderColor: '#f44336',
+                                                color: '#f44336',
+                                             
                                                 '&:hover': {
-                                                    backgroundColor: '#d32f2f !important',
+                                                    bgcolor: '#f44336',
+                                                    color: 'white'
                                                 }
                                             }}
                                         >
-                                            <Typography sx={{ fontSize: '16px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
-                                                Excluir
-                                            </Typography>
+                                            Excluir
                                         </Button>
                                     </Box>
                                 </Paper>

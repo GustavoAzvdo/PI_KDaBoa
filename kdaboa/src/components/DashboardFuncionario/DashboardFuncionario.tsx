@@ -1,0 +1,273 @@
+import * as React from 'react';
+import { useState , useEffect} from 'react';
+import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import { PageContainer } from '@toolpad/core/PageContainer';
+import logo from '../../assets/logo.png';
+import '../Dashboard/Dashboard.css'
+import { Celebration, Verified, NewReleases, Face, Map, Call, EditCalendar, Collections, Person, Home } from '@mui/icons-material';
+import Endereco from '../Forms/Endereco/Endereco';
+import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
+import CriarEvento from '../Forms/CriarEvento/CriarEvento';
+import Contatos from '../Forms/Contatos/Contatos';
+import Galeria from '../Forms/Galeria/Galeria';
+import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
+import EventosPostados from '../Forms/EventosPostados/EventosPostados';
+import ScreenError from '../ScreenError/ScreenError';
+import { User } from './User.props';
+import api from '../../api/api';
+import { Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
+import BoasVindasGerente from '../BoasVindas/BoasVindas';
+import { useTheme } from '@mui/material/styles';
+import CriarFuncionario from '../Forms/CriarFuncionario/CriarFuncionario';
+import Confirmacao from '../Confirmacao/Confirmacao';
+
+function useDemoRouter(initialPath: string): Router {
+  const [pathname, setPathname] = React.useState(initialPath);
+
+  const router = React.useMemo(() => {
+    return {
+      pathname,
+      searchParams: new URLSearchParams(),
+      navigate: (path: string | URL) => {
+        setPathname(String(path));
+      },
+    };
+  }, [pathname]);
+
+  return router;
+}
+
+
+export default function DashboardFuncionario(props: any) {
+  const theme = useTheme()
+  const [eventoTitle, setEventoTitle] = useState<string>('Criar evento');
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+  useEffect(() => {
+    document.title = 'Dashboard Funcionário'
+  })
+
+  const NAVIGATION: Navigation = [
+    {
+      kind: 'header',
+      title: 'Opções',
+    },
+    {
+      segment: 'dashboard',
+      title: 'Dados pessoais',
+      icon: <Face />,
+      children: [
+        {
+          segment: 'inicio',
+          title: 'Inicio',
+          icon: <Home/>,
+        },
+   
+        {
+          segment: 'endereco',
+          title: 'Endereço',
+          icon: <Map />,
+        },
+        {
+          segment: 'contato',
+          title: 'Contatos',
+          icon: <Call />,
+        },
+        {
+          segment: 'galeria',
+          title: 'Galeria',
+          icon: <Collections />,
+        },
+        {
+          segment: 'info',
+          title: 'Informações cadastrais',
+          icon: <Person />,
+        },
+      ],
+
+    },
+
+    {
+      kind: 'divider',
+    },
+    {
+      kind: 'header',
+      title: 'Informações',
+    },
+    {
+      segment: 'eventos',
+      title: 'Eventos',
+      icon: <Celebration />,
+      children: [
+        {
+          segment: 'criar_evento',
+          title: eventoTitle,
+          icon: <EditCalendar />,
+        },
+        {
+          segment: 'postados',
+          title: 'Eventos Postados',
+          icon: <Verified />,
+        },
+        {
+          segment: 'aguardando-confirmacao',
+          title: 'Aguardando Confirmacao',
+          icon: <NewReleases />,
+        },
+      ],
+    },
+
+  ];
+
+  const { window } = props;
+
+  const router = useDemoRouter('/dashboard_func');
+
+  // Remove this const when copying and pasting into your project.
+  const demoWindow = window ? window() : undefined;
+
+
+  const [user, setUser] = React.useState<User | null>(null)
+
+  const [session, setSession] = React.useState<Session | null>(null);
+
+
+  React.useEffect(() => {
+    api.get<User>('/auth/dados', { withCredentials: true })
+      .then(res => {
+        console.log(res.data)
+        setUser(res.data);
+        setSession({
+          user: {
+            email: res.data.email,
+
+          },
+        });
+      })
+      .catch(_err => {
+        console.error('Não autenticado');
+        window.location.href = '/';
+      });
+  }, [])
+
+
+
+  const authentication = React.useMemo(() => {
+    return {
+
+      signIn: () => {
+        const email = window?.prompt('Digite seu e-mail:') || 'user@example.com';
+        setSession({
+          user: {
+            email: user?.email,
+
+          },
+        });
+        localStorage.setItem('userEmail', email);
+        // salva para próximos reloads
+      },
+
+      signOut: () => {
+        setOpenDialog(true);
+      },
+    };
+  }, [router]);
+
+  function renderContent(pathname: string, router: Router) {
+    switch (pathname) {
+      case '/dashboard/inicio':
+        return (
+          <BoasVindasGerente nome={user?.nome} router={router}/>
+        );
+      case '/dashboard':
+        return (
+          <BoasVindasGerente nome={user?.nome} router={router}/>
+        );
+      case '/dashboard/info':
+        return (
+          <InfoPessoal />
+        );
+      case '/dashboard/estabelecimento':
+        return (
+          <Estabelecimento />
+        );
+      case '/dashboard/endereco':
+        return (
+          <Endereco disabledComponents={false} />
+        );
+      case '/dashboard/contato':
+        return (
+          <Contatos />
+        );
+      case '/dashboard/galeria':
+        return (
+          <Galeria />
+        );
+      case '/funcionarios':
+        return (
+          <CriarFuncionario/>
+        );
+      case '/eventos/criar_evento':
+        return (
+          <CriarEvento setEventoTitle={setEventoTitle} />
+        );
+      case '/eventos/postados':
+        return (
+          <EventosPostados router={router} />
+        );
+      case '/eventos/aguardando-confirmacao':
+        return (
+          <Confirmacao/>
+        );
+    
+      default:
+        return (
+          <ScreenError />
+        );
+    }
+
+  }
+
+
+  return (
+    <AppProvider
+      session={session}
+      authentication={authentication}
+      branding={{
+        logo: <img src={logo} alt="Logo" style={{pointerEvents: 'none', cursor: 'none'}} />,
+        title: 'Area do Funcionário',
+
+      }}
+
+      navigation={NAVIGATION}
+      router={router}
+      theme={theme}
+      window={demoWindow}
+    >
+
+      <DashboardLayout>
+        <PageContainer>
+          {renderContent(router.pathname, router)}
+        </PageContainer>
+      </DashboardLayout>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Deseja realmente sair?</DialogTitle>
+        <DialogActions>
+          <Button sx={{color: 'var(--roxoForteDashboard)'}} onClick={() => setOpenDialog(false)}>Cancelar</Button>
+          <Button color="primary"
+            variant='contained'
+            onClick={() => {
+              setSession(null);
+              router.navigate('/login');
+            }}
+            sx={{ backgroundColor: 'var(--roxoForteDashboard)',color: 'white', textDecoration: 'none', '&:hover': { backgroundColor: 'var(--roxoForteDashboard)' } }}
+            href="/login"
+          >
+            Sair
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </AppProvider>
+  );
+}

@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import NavbarEvent from "../../components/NavbarEvent/NavbarEvent";
-import Title from "../../components/Title/Title";
-import ticket from "../../assets/ticket.png";
 import InfoEvent from "../../components/InfoEvent/InfoEvent";
 import Footer from "../../components/Footer/Footer";
-import { Box } from "@mui/material";
+
 import api from '../../api/api'
 const ViewEvent = () => {
   const { id } = useLocation().state;
@@ -37,7 +35,8 @@ const ViewEvent = () => {
       {/* Passa o evento pro Navbar */}
      <NavbarEvent id={id} />
 
-      <Title>
+    {/* titulo removido por causa da imagem com o blur */}
+      {/* <Title>
         Evento{" "}
         <Box
           component="img"
@@ -47,7 +46,7 @@ const ViewEvent = () => {
             height: "auto",
           }}
         />
-      </Title>
+      </Title> */}
 
       {/* InfoEvent pode continuar recebendo só o ID */}
       <InfoEvent id={id} />

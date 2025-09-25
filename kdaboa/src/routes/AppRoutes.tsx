@@ -6,6 +6,7 @@ import RecuperarSenha from '../components/Forms/RecuperarSenha/RecuperarSenha'
 import AlterarSenha from '../components/Forms/AlterarSenha/AlterarSenha'
 import SendEmail from '../components/SendEmail/SendEmail'
 import Dashboard from '../components/Dashboard/Dashboard'
+import DashboardFuncionario from '../components/DashboardFuncionario/DashboardFuncionario'
 import Home from '../pages/Home/Home'
 import SearchEvent from '../pages/SearchEvent/SearchEvent'
 import Profile from '../pages/Profile/Profile'
@@ -24,6 +25,7 @@ const AppRoutes = () => (
       <Route path="/alterar-senha" element={<AlterarSenha />} />
       <Route path="/email-enviado" element={<SendEmail />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard_func" element={<DashboardFuncionario />} />
       <Route path="/" element={<Home />} />
       <Route path="/search" element={<SearchEvent />} />
       <Route path="/profile" element={<Profile />} />
