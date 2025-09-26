@@ -5,8 +5,7 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import logo from '../../assets/logo.png';
 import '../Dashboard/Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, Map, Call, EditCalendar, Collections, Person, Home } from '@mui/icons-material';
-import Endereco from '../Forms/Endereco/Endereco';
+import { Celebration, Verified, NewReleases, Face, Call, EditCalendar, Collections, Person, Home } from '@mui/icons-material';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 import Contatos from '../Forms/Contatos/Contatos';
@@ -64,11 +63,6 @@ export default function DashboardFuncionario(props: any) {
           icon: <Home/>,
         },
    
-        {
-          segment: 'endereco',
-          title: 'Endereço',
-          icon: <Map />,
-        },
         {
           segment: 'contato',
           title: 'Contatos',
@@ -192,10 +186,7 @@ export default function DashboardFuncionario(props: any) {
         return (
           <Estabelecimento />
         );
-      case '/dashboard/endereco':
-        return (
-          <Endereco disabledComponents={false} />
-        );
+     
       case '/dashboard/contato':
         return (
           <Contatos />

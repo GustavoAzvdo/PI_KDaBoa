@@ -1,5 +1,5 @@
 import { Box, Typography, Chip,  Grid, Card, CardContent, } from '@mui/material'
-import { CheckCircle, Cancel, Schedule, Event, LocationOn, Person } from '@mui/icons-material'
+import { CheckCircle, Cancel, Schedule, Event, LocationOn } from '@mui/icons-material'
 import  { useState } from 'react'
 import dayjs from 'dayjs'
 
@@ -13,7 +13,6 @@ interface EventoStatus {
   motivo_reprovacao?: string;
   estabelecimento: string;
   endereco: string;
-  funcionario: string;
   data_criacao: string;
 }
 
@@ -29,7 +28,7 @@ const Confirmacao = () => {
       status: "aprovado",
       estabelecimento: "Bar do João",
       endereco: "Rua das Flores, 123 - Centro",
-      funcionario: "Maria Silva",
+      
       data_criacao: "2024-12-01T10:30:00"
     },
     {
@@ -42,7 +41,7 @@ const Confirmacao = () => {
       motivo_reprovacao: "Documentação incompleta - falta alvará de funcionamento",
       estabelecimento: "Café Cultural",
       endereco: "Av. Paulista, 456 - Bela Vista",
-      funcionario: "João Santos",
+  
       data_criacao: "2024-12-02T14:20:00"
     },
     {
@@ -54,7 +53,7 @@ const Confirmacao = () => {
       status: "em_analise",
       estabelecimento: "Boteco da Esquina",
       endereco: "Rua do Samba, 789 - Vila Madalena",
-      funcionario: "Ana Costa",
+    
       data_criacao: "2024-12-03T09:15:00"
     },
     {
@@ -66,7 +65,7 @@ const Confirmacao = () => {
       status: "em_analise",
       estabelecimento: "Boteco da Esquina",
       endereco: "Rua do Samba, 789 - Vila Madalena",
-      funcionario: "Ana Costa",
+   
       data_criacao: "2024-12-03T09:15:00"
     }
   ]);
@@ -162,14 +161,6 @@ const Confirmacao = () => {
                     <LocationOn sx={{ mr: 1, color: '#6515d5', fontSize: 16, mt: 0.2 }} />
                     <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
                       {evento.endereco}
-                    </Typography>
-                  </Box>
-
-                  {/* Funcionário */}
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Person sx={{ mr: 1, color: '#6515d5', fontSize: 16 }} />
-                    <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
-                      {evento.funcionario}
                     </Typography>
                   </Box>
 

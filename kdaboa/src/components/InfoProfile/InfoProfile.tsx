@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Grid, Typography } from '@mui/material'
+import { Avatar, Box, Button, Container, Grid, Typography } from '@mui/material'
 import './InfoProfile.css'
 import Address from '../Details/Address'
 import Contacts from '../Details/Contacts'
@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import api from '../../api/api'
+import {  KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 
 
 
@@ -53,23 +54,22 @@ const InfoProfile = () => {
     }
 
     return (
-        <Box>
-            <Grid container spacing={2} className="infoProfile">
-                <Grid size={{xs: 12, sm: 12, md: 6}}
-                    className="info_left"
+        <Container>
+            <Grid container spacing={2} >
+                <Grid size={{ xs: 12, sm: 12, md: 6 }}
                     sx={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        padding: 2,
                     }}
                 >
                     <Box
                         sx={{
+                            py: 4,
                             display: 'flex',
                             flexDirection: { xs: 'column', md: 'row' },
                             alignItems: 'center',
-                            gap: 2, // espaçamento entre avatar e texto
+                            gap: 3, // espaçamento entre avatar e texto
                         }}
                     >
                         <Avatar
@@ -89,15 +89,46 @@ const InfoProfile = () => {
                             >
                                 {card?.Estabelecimento.nome}
                             </Typography>
-                            <Typography sx={{ fontSize: { xs: '1.3rem', md: '1.5rem' }, fontFamily: 'var(--notosans)' }}>
-                                {eventosPublicados} eventos publicados
-                            </Typography>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                alignItems: 'center',
+                                justifyContent: { xs: 'center', md: 'flex-start' },
+                                gap: 2,
+                                flexWrap: 'wrap'
+
+                            }}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1,
+                                    px: 2,
+                                    py: 1,
+                                    mt: 2,
+                                    backgroundColor: 'rgba(108, 21, 213, 0.1)',
+                                    borderRadius: 2,
+                                    border: '1px solid rgba(108, 21, 213, 0.2)'
+                                }}>
+                                    <Box sx={{
+                                        width: 8,
+                                        height: 8,
+                                        borderRadius: '50%',
+                                        backgroundColor: '#6C15D5'
+                                    }} />
+                                    <Typography sx={{
+                                        fontSize: '0.95rem',
+                                        fontFamily: 'var(--notosans)',
+                                        fontWeight: '600',
+                                        color: '#6C15D5'
+                                    }}>
+                                        {eventosPublicados} eventos publicados
+                                    </Typography>
+                                </Box>
+                            </Box>
                         </Box>
                     </Box>
                 </Grid>
-
-
-                <Grid size={{ xs: 12, md: 10 }} className="description" sx={{ paddingTop: 4, margin: 'auto', textAlign: 'justify' }}>
+                <Grid size={{ xs: 12, md: 12 }} className="description" sx={{ py: 4, margin: 'auto', textAlign: 'justify' }}>
                     <Box className="title-description" sx={{ paddingX: { xs: 5, md: 0 }, }}>
                         <Typography variant="h3" className="description-title" sx={{ paddingTop: 5, textAlign: { xs: 'center', md: 'left' } }}>DESCRIÇÃO DO ESTABELECIMENTO</Typography>
                         <Typography className="description-text" sx={{ paddingY: 5 }}>
@@ -110,6 +141,7 @@ const InfoProfile = () => {
                                 variant='outlined'
                                 className='btn-seemore'
                                 onClick={() => setShowFull((prev) => !prev)}
+                                endIcon={showFull ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                             >
                                 <Typography sx={{ paddingX: 1, paddingY: '3px' }}>
                                     {showFull ? 'Ver menos' : 'Ver mais '}
@@ -118,39 +150,54 @@ const InfoProfile = () => {
                         </Box>
                     )}
                 </Grid>
-
-
-                <Grid container size={{ xs: 12, md: 10 }} spacing={2} className="info_right"
-                    sx={{ display: 'flex', alignItems: { md: 'center' }, justifyContent: { xs: 'center', md: 'space-around' }, margin: 'auto', paddingTop: 4 }}>
-
-                    <Grid size={{ xs: 10, md: 5 }}>
+                <Grid size={{ xs: 12, md: 6 }} >
+                    <Box className="contacts" sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        mb: 4,
+                        p: 3,
+                        borderRadius: 2,
+                        borderLeft: '4px solid #6c15d5',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    }}>
                         <Address address={juntaEndereco} location={card?.Estabelecimento.nome} />
-                    </Grid>
-                    <Grid
-                        size={{ xs: 10, md: 5 }}
-                        sx={{
-                            display: 'flex',
-                            justifyContent: { xs: 'center', md: 'flex-end' }, // centraliza no xs, joga pra direita no md+
-                            pt: { xs: 5, md: 0 }
-                        }}
-                    >
-                        <Contacts email={card.Estabelecimento.Contato.email} telefone1={formatarCelular(card.Estabelecimento.Contato.tel_cel_1)} telefone2={formatarCelular(card.Estabelecimento.Contato.tel_cel_2)} />
-                    </Grid>
+                    </Box>
                 </Grid>
-
-
-                <Grid container size={{ xs: 12, md: 10 }} sx={{ margin: 'auto', paddingTop: 4, display: 'flex', justifyContent: 'start', width: '100%' }}>
-                    <Box className="title-photos" sx={{textAlign: {xs: 'center', sm: 'center', md: 'start'}}}>
-                        <Typography variant='h3' className='title-photos-text' sx={{ paddingTop: 1, px: { xs: 5, md: 0 }, pb: 3 }}>
+                <Grid size={{ xs: 12, md: 6 }} sx={{
+                    display: 'flex',
+                    justifyContent: { xs: 'center', md: 'flex-end' }, // centraliza no xs, joga pra direita no md+
+                    pt: { xs: 5, md: 0 }
+                }}
+                >
+                    <Box className="contacts" sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        mb: 4,
+                        p: 3,
+                        py: 5,
+                        borderRadius: 2,
+                        borderLeft: '4px solid #6c15d5',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    }}>
+                        <Contacts email={card.Estabelecimento.Contato.email} telefone1={formatarCelular(card.Estabelecimento.Contato.tel_cel_1)} telefone2={formatarCelular(card.Estabelecimento.Contato.tel_cel_2)} />
+                    </Box>
+                </Grid>
+                <Grid container size={{ xs: 12, md: 12 }} sx={{ margin: 'auto', paddingTop: 4, display: 'flex', justifyContent: 'start', width: '100%' }}>
+                    <Box className="title-photos" sx={{ textAlign: { xs: 'center', sm: 'center', md: 'start' } }}>
+                        <Typography variant='h3' className='title-photos-text' sx={{ paddingTop: 1, pb: 3 }}>
                             FOTOS DO ESTABELECIMENTO
                         </Typography>
                     </Box>
                 </Grid>
-                <Grid container size={{ xs: 12, md: 12 }} sx={{ margin: 'auto', paddingTop: 0, display: 'flex', justifyContent: 'center', width: '100%' }}>
-                    <Photos card={card} />
+                <Grid size={{ xs: 12, md: 12 }} sx={{ margin: 'auto', paddingTop: 0, display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <Container>
+                        <Photos card={card} />
+                    </Container>
                 </Grid>
             </Grid>
-        </Box>
+        </Container>
     )
 }
 

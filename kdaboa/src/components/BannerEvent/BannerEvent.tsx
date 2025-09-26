@@ -45,18 +45,18 @@ const BannerEvent = ({ card }: BannerEventProps) => {
         }}
       >
        
-        <Grid size={{xs: 12, sm: 12, md: 12}}> 
+        <Grid size={{xs: 12, sm: 12, md: 12}} sx={{width: '100%'}}> 
           <Box
             sx={{
-              width: '100%',
-              height: { xs: '250px', sm: '350px', md: '480px' }, 
+              width: {xs: '100%', sm: '100%', md: '100%'},
+              height: { xs: '100%', sm: '300px', md: '400px' }, 
               boxShadow: '0 10px 30px rgba(0, 0, 0, 0)',
               borderRadius: '20px',
               overflow: 'hidden', 
               display: 'flex', 
               justifyContent: 'center',
               alignItems: 'center',
-              
+               
             }}
           >
             <img
@@ -65,7 +65,7 @@ const BannerEvent = ({ card }: BannerEventProps) => {
               style={{
                 width: "100%",
                 height: "100%",
-                objectFit: 'contain', //ou cover, depende, vou ver ainda
+                objectFit: 'fill', //ou cover, depende, vou ver ainda
                 borderRadius: '20px',
                 display: 'block'
               }}
