@@ -130,7 +130,7 @@ const SendEmail = () => {
                             textAlign: 'center',
                             fontFamily: 'var(--notosans)'
                         }}>
-                            Um e-mail para alteração de senha foi enviado. Verifique sua caixa de entrada e siga as instruções.
+                            Um e-mail para alteração de senha foi enviado. Verifique sua caixa de entrada ou span e siga as instruções.
                         </Typography>
 
                         <Box className='btn'>
