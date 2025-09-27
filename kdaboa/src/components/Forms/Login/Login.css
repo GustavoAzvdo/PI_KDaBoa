@@ -10,9 +10,7 @@
 
 .body_login {
     border-radius: 10px;
-    box-shadow:
-        0px 10px 100px var(--roxoLogin),
-        0px -10px 100px var(--roxoLogin) !important; 
+    
     width: 400px;
     height: 500px;
     margin: 0;

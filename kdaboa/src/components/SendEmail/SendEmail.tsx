@@ -1,17 +1,19 @@
-import { Box, Button, Container, Typography } from "@mui/material"
+import { Box, Button, Container, Typography, Card, Stack } from "@mui/material"
+import { EmailOutlined, CheckCircleOutlined, ArrowBack, Home } from '@mui/icons-material'
 import logo from '../../assets/logo.png'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './SendEmail.css'
 import { useEffect } from "react"
-const SendEmail = () => {
+import { Link as RouterLink } from 'react-router-dom'
 
-    
+const SendEmail = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const email = location.state?.email || '';
 
     useEffect(() => {
         document.title = 'E-mail enviado';
-    })
+    }, [])
 
     function mascararEmail(email: string) {
         const [user, dominioCompleto] = email.split('@');
@@ -27,30 +29,170 @@ const SendEmail = () => {
     }
 
     return (
-        <Container className="container" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 5, width: '60%' }}>
-            <Box className="img-logo">
-                <img src={logo} style={{ width: 60, height: 60 }} alt="" />
-            </Box>
-            <Box className="text" sx={{ marginTop: 2, textAlign: 'center' }}>
-                <Box className="text-1">
-                    <Typography>
-                        Um e-mail para alteração de senha foi enviado para o endereço <Typography component="span" sx={{ fontWeight: 'bold', color: 'var(--roxoEmail)', fontSize: 20 }}>{mascararEmail(email)}</Typography>
-                    </Typography>
-                </Box>
-                <Box className="text-2" sx={{ marginTop: 2 }}>
-                    <Typography>
-                        Verifique sua caixa de entrada e siga as instruções para definir uma nova senha. Se não encontrar o e-mail, confira também a pasta de spam ou lixo eletrônico.
-                    </Typography>
-                </Box>
-                <Box sx={{ marginTop: 3 }}>
-                    <Button className="btn-voltar" size="large" variant="contained" href='/login'>
-                        <Typography>
-                            Voltar para o login
-                        </Typography>
+        <Box className='container_send_email' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            <Card
+                elevation={2}
+                sx={{
+                    width: '400px',
+                    height: 'auto',
+                    borderRadius: 2,
+                    border: '1px solid #e0e0e0',
+                    backgroundColor: 'white',
+                }}
+            >
+                {/* Botão Home */}
+                <Box>
+                    <Button
+                        component={RouterLink}
+                        to='/home'
+                        size='small'
+                        variant='text'
+                        startIcon={<Home fontSize='small' />}
+                        sx={{
+                            fontWeight: 400,
+                            fontFamily: 'var(--fredoka)',
+                            px: 1,
+                            py: 1,
+                            borderBottomRightRadius: 10
+                        }}
+                    >
+                        Voltar para tela inicial
                     </Button>
                 </Box>
-            </Box>
-        </Container>
+
+                <Container>
+                    <Stack direction={'column'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {/* Ícone de check simples */}
+                        <Box sx={{
+                            width: 70,
+                            height: 70,
+                            borderRadius: '50%',
+                            backgroundColor: '#4caf50',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mt: 3,
+                            mb: 2,
+                            boxShadow: '0 4px 12px rgba(76, 175, 80, 0.3)'
+                        }}>
+                            <CheckCircleOutlined sx={{ 
+                                fontSize: 40, 
+                                color: 'white'
+                            }} />
+                        </Box>
+                        <Box
+                            component={'img'}
+                            src={logo}
+                            sx={{
+                                mt: 2,
+                                width: '60px',
+                                height: '60px'
+                            }}
+                        />
+                        <Typography variant='h4' sx={{ pt: 1, fontFamily: 'var(--fredoka)', fontWeight: '500' }}>
+                            Email Enviado!
+                        </Typography>
+
+                        <Typography fontSize='15px' sx={{ pt: 1, pb: 3, color: 'text.secondary', fontFamily: 'var(--notosans)' }}>
+                            Verifique sua caixa de entrada!
+                        </Typography>
+                    </Stack>
+
+                    <Box>
+                        {/* Email mascarado */}
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 1,
+                            mb: 3,
+                            p: 2,
+                            backgroundColor: '#f5f5f5',
+                            borderRadius: 2,
+                            border: '1px solid #e0e0e0'
+                        }}>
+                            <EmailOutlined sx={{ color: '#666' }} />
+                            <Typography sx={{
+                                fontWeight: '500',
+                                color: '#333',
+                                fontSize: '1rem',
+                                fontFamily: 'monospace'
+                            }}>
+                                {mascararEmail(email)}
+                            </Typography>
+                        </Box>
+
+                        <Typography sx={{
+                            color: 'text.secondary',
+                            fontSize: '0.9rem',
+                            lineHeight: 1.6,
+                            mb: 3,
+                            textAlign: 'center',
+                            fontFamily: 'var(--notosans)'
+                        }}>
+                            Um e-mail para alteração de senha foi enviado. Verifique sua caixa de entrada e siga as instruções.
+                        </Typography>
+
+                        <Box className='btn'>
+                            <Button
+                                variant="contained"
+                                className='btn-login'
+                                startIcon={<ArrowBack />}
+                                onClick={() => navigate('/login')}
+                            >
+                                <Typography className='btn'>
+                                    Voltar para Login
+                                </Typography>
+                            </Button>
+
+                            <Box className='links'>
+                                <Box>
+                                    <Button
+                                        variant="text"
+                                        onClick={() => navigate('/recuperar-senha')}
+                                        sx={{
+                                            fontFamily: 'var(--fredoka)',
+                                            fontSize: 16,
+                                            fontWeight: 400,
+                                            textTransform: 'none',
+                                            color: 'var(--roxoLoginBtn)',
+                                            '&:hover': {
+                                                backgroundColor: 'transparent',
+                                                textDecoration: 'underline'
+                                            }
+                                        }}
+                                    >
+                                        Reenviar email
+                                    </Button>
+                                </Box>
+                            </Box>
+
+                            <Box className="links-account-login" sx={{ mb: 2 }}>
+                                <Typography>
+                                    Não tem uma conta? <Button
+                                        component={RouterLink}
+                                        to="/signin"
+                                        variant="text"
+                                        sx={{
+                                            textTransform: 'none',
+                                            p: 0,
+                                            minWidth: 'auto',
+                                            color: 'var(--roxoLoginBtn)',
+                                            '&:hover': {
+                                                backgroundColor: 'transparent',
+                                                textDecoration: 'underline'
+                                            }
+                                        }}
+                                    >
+                                        Crie Uma!
+                                    </Button>
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+                </Container>
+            </Card>
+        </Box>
     )
 }
 
