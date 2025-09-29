@@ -23,7 +23,7 @@ const Address = ({ address, location }: AddressProps) => {
                     <Typography className='t'>{location}</Typography>
                 </Box>
 
-                <Typography className="text-address-subtitle" sx={{ paddingTop: 2 }}>
+                <Typography className="text-address-subtitle" sx={{ paddingTop: 2 , color: 'text.secondary' }}>
                     {address}
                 </Typography>
                 <Button endIcon={<LocationOn />} variant="outlined" className="btn-maps" sx={{ ml: 2, mt: 2 }} onClick={() => setOpenMap(true)}>

@@ -1,10 +1,12 @@
-import { Box, Button, Typography, Snackbar, Alert, CircularProgress } from '@mui/material'
+import { Box, Button, Typography, Snackbar, Alert, CircularProgress, Card, Stack, Container, Link } from '@mui/material'
+import { Home } from '@mui/icons-material';
 import logo from '../../../assets/logo.png'
 import api from '../../../api/api'
 import Password from '../../Password/Password'
 import './AlterarSenha.css'
 import { useSearchParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 
 const AlterarSenha: React.FC = () => {
     const [] = useSearchParams();
@@ -21,25 +23,19 @@ const AlterarSenha: React.FC = () => {
         setIsSenhaValida(isValid);
     };
 
-    const handlePasswordChange = (senha: string, confirma: string) => {
+    const handlePasswordChange = (senha: string) => {
         setNovaSenha(senha);
-        setConfirmaSenha(confirma);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
-
         try {
             await api.put(
                 '/auth/change-password',
-                { senha: novaSenha }, // corpo da requisição
+                { senha: novaSenha },
                 {   
-                    // headers: {
-                    //     'Content-Type': 'application/json',
-                    //     'x-csrf-token': token
-                    // },
                     withCredentials: true,
                 }
             )
@@ -71,48 +67,102 @@ const AlterarSenha: React.FC = () => {
 
     useEffect(() => {
         document.title = 'Alterar senha';
-    },[])
+    }, [])
+
     return (
-        <Box className='container_alterar'>
-            <Box className='body_alterar'>
-                <Box className='header-alterar'>
-                    <img src={logo} alt="logo" className='logo-alterar' />
-                    <Typography >
-                        KDABOA
-                    </Typography>
+        <Box className='container_alterar' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            <Card
+                elevation={2}
+                sx={{
+                    width: '400px',
+                    height: 'auto',
+                    borderRadius: 2,
+                    border: '1px solid #e0e0e0',
+                    backgroundColor: 'white',
+                }}
+            >
+                {/* Botão Home */}
+                <Box>
+                    <Button
+                        component={RouterLink}
+                        to='/home'
+                        size='small'
+                        variant='text'
+                        startIcon={<Home fontSize='small' />}
+                        sx={{
+                            fontWeight: 400,
+                            fontFamily: 'var(--fredoka)',
+                            px: 1,
+                            py: 1,
+                            borderBottomRightRadius: 10
+                        }}
+                    >
+                        Voltar para tela inicial
+                    </Button>
                 </Box>
-                <Box className='title_alterar' sx={{ marginTop: 1 }}>
-                    <Typography variant='h5'>
-                        Alterar senha
-                    </Typography>
-                </Box>
-                <Box component='form' className='form' onSubmit={handleSubmit}>
-                    <Box className='inputs'>
-                        <Password pegarSenha={handlePasswordChange}
-                            onValidationChange={handleValidationChange}
-                            isLoading={isLoading}
-                            reset={resetPasswordFields}
+
+                <Container>
+                    <Stack direction={'column'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box
+                            component={'img'}
+                            src={logo}
+                            sx={{
+                                mt: 3,
+                                width: '60px',
+                                height: '60px'
+                            }}
                         />
-                    </Box>
-                    <Box className='btn'>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            disabled={!isSenhaValida || isLoading}
-                            className='btn-login'
-                            sx={{ marginTop: 1 }}
-                        >
-                            {isLoading ? (
-                                <CircularProgress size={24} color="inherit" />
-                            ) : (
+
+                        <Typography variant='h4' sx={{ pt: 1, fontFamily: 'var(--fredoka)', fontWeight: '500' }}>
+                            Alterar Senha
+                        </Typography>
+
+                        <Typography fontSize='15px' sx={{ pt: 1, pb: 3, color: 'text.secondary', fontFamily: 'var(--notosans)' }}>
+                            Digite sua nova senha abaixo!
+                        </Typography>
+                    </Stack>
+
+                    <Box component='form' onSubmit={handleSubmit}>
+                        <Box className='inputs'>
+                            <Password 
+                                onValidationChange={handleValidationChange}
+                                onPasswordChange={handlePasswordChange}
+                                isLoading={isLoading}
+                                reset={resetPasswordFields}
+                            />
+                        </Box>
+
+                        <Box className='btn'>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                className='btn-login'
+                                disabled={!isSenhaValida || isLoading}
+                                startIcon={isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                            >
                                 <Typography className='btn'>
-                                    Alterar
+                                    {isLoading ? 'Alterando...' : 'Alterar'}
                                 </Typography>
-                            )}
-                        </Button>
+                            </Button>
+
+                            <Box className='links'>
+                                <Box>
+                                    <Link component={RouterLink} to="/login">
+                                        Voltar para o Login
+                                    </Link>
+                                </Box>
+                            </Box>
+
+                            <Box className="links-account-login" sx={{ mb: 2 }}>
+                                <Typography>
+                                    Não tem uma conta? <Link component={RouterLink} to="/signin">Crie Uma!</Link>
+                                </Typography>
+                            </Box>
+                        </Box>
                     </Box>
-                </Box>
-            </Box>
+                </Container>
+            </Card>
+
             <Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{
                     display: 'flex',

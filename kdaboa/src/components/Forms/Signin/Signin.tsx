@@ -1,4 +1,4 @@
-import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert } from '@mui/material'
+import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, Card, Stack, Container } from '@mui/material'
 import { PersonOutlined, MailOutline } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import logo from '../../../assets/logo.png'
@@ -6,13 +6,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Signin.css'
 import Password from '../../Password/Password';
-import {Link as RouterLink} from 'react-router-dom'
-//API
+import { Link as RouterLink } from 'react-router-dom'
 import api from '../../../api/api'
 
 const Signin = () => {
-    const [nameFocused] = useState(false);
-
+   
     const [nameTouched, setNameTouched] = useState(false);
     const [emailTouched, setEmailTouched] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -21,12 +19,12 @@ const Signin = () => {
     const [senha, setSenha] = useState<string>('');
     const [isFormValid, setIsFormValid] = useState<boolean>(false);
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
-    const [bodyHeight, setBodyHeight] = useState<number>(760);
-    const [snackbarMessage, setSnackbarMessage] = useState<string>(''); // Mensagem da Snackbar
-    const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success'); // Tipo da Snackbar
-    const [resetPasswordFields, setResetPasswordFields] = useState<boolean>(false); // Estado para redefinir os campos de senha
+    const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
+    const [resetPasswordFields, setResetPasswordFields] = useState<boolean>(false);
 
     const navigate = useNavigate();
+
     const handleValidationChange = (isPasswordValid: boolean) => {
         const isNameValid = name.replace(/\s/g, '').length >= 3;
         const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -43,10 +41,11 @@ const Signin = () => {
             setName(value);
         }
     };
+
     const nameLengthWithoutSpaces = name.replace(/\s/g, '');
 
     const handleCreateAccount = async () => {
-        setIsLoading(true); // Ativa o estado de carregamento
+        setIsLoading(true);
         try {
             const response = await api.post('/auth/singin', {
                 nome: name,
@@ -55,7 +54,6 @@ const Signin = () => {
             });
 
             if (response.status === 201) {
-
                 navigate('/login', {
                     state: {
                         snackbars: [
@@ -70,24 +68,19 @@ const Signin = () => {
                 setSenha('');
                 setResetPasswordFields((prev) => !prev);
             }
-
-
         } catch (error: any) {
             const errorMessage = error.response?.data?.error;
-            console.log(error.response.data.message);
             if (error.response?.status === 400) {
                 setSnackbarMessage('Gerente já existe ou dominio de email não permitido!');
-
             } else if (error.response?.status === 500) {
                 setSnackbarMessage('Erro interno do servidor!');
-
             } else {
                 setSnackbarMessage(errorMessage || 'Erro ao criar conta!');
             }
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         } finally {
-            setIsLoading(false); // Desativa o estado de carregamento
+            setIsLoading(false);
         }
     };
 
@@ -97,124 +90,151 @@ const Signin = () => {
         }
         setSnackbarOpen(false);
     };
-    useEffect(() => {
-        if (isFormValid) {
-            setBodyHeight(735);
-        } else {
-            setBodyHeight(735);
-        }
-    }, [isFormValid]);
 
     useEffect(() => {
         document.title = 'Crie sua conta';
-    })
+    });
+
     return (
-        <Box className='container_signin'>
-            <Box className="body_signin" sx={{ height: `${bodyHeight}px` }}> {/* Altura dinâmica */}
-                <Box className='header_signin'>
-                    <img src={logo} alt="logo" className='logo-signin' />
-                    <Typography >
-                        KDABOA
-                    </Typography>
-                </Box>
-                <Box className='title_signin'>
-                    <Typography variant='h5'>
-                        Crie sua conta
-                    </Typography>
-                </Box>
-                <Box component='form' className='form_signin'>
-                    <Box className='inputs'>
-                        <Box>
-                            <TextField
-                                onFocus={() => setNameTouched(true)}
-                                onBlur={() => setNameTouched(false)}
-                                disabled={isLoading}
-                                fullWidth
-                                value={name}
-                                onChange={handleNameChange}
-                                sx={{ color: 'var(--roxoForm) !important' }}
-                                margin='normal'
-                                id={name.length > 3 ? 'outlined-basic' : 'outlined-error'}
-                                error={nameTouched && nameLengthWithoutSpaces.length < 3}
-                                helperText={nameTouched && nameLengthWithoutSpaces.length < 3 ? 'Nome deve ter no mínimo 3 caracteres válidos!' : ''} type="text" required
-                                label="Nome"
-                                variant="outlined"
-                                InputProps={{
-                                    endAdornment: (<InputAdornment position="end" >
-                                        <PersonOutlined
-                                            className='icons'
-                                        />
-                                    </InputAdornment>
-                                    ),
-                                    className: nameFocused && name.length >= 3 ? 'valid' : undefined
+        <Box className='container_signin' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' , py: 2}}>
+         <Card 
+            elevation={2}
+            sx={{
+                width: { xs: '90%', sm: '400px' }, // responsivo
+                maxWidth: '500px',
+                height: 'auto',
+                maxHeight: '100vh', // limita altura máxima
+                borderRadius: 2,
+                border: '1px solid #e0e0e0',
+                backgroundColor: 'white',
+                overflow: 'auto' // scroll interno se necessário
+            }}
+        >
+                
 
-                                }}
-                            />
-                        </Box>
-                        <Box>
-                            <TextField
-                                onFocus={() => setEmailTouched(true)}
-                                onBlur={() => setEmailTouched(false)}
-                                disabled={isLoading}
-                                value={email}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                                fullWidth
-                                required
-                                margin='normal'
-                                id="outlined-basic"
-                                type="email"
-                                label="Email"
-                                error={emailTouched && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)} // 
-                                helperText={emailTouched && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Digite um e-mail válido!' : ''}
-                                variant="outlined"
-                                InputProps={{
-                                    endAdornment: (<InputAdornment position="end" >
-                                        <MailOutline
-                                            className='icons'
-                                        />
-                                    </InputAdornment>
-                                    )
-                                }}
-                            />
-                        </Box>
-
-                        <Password
-                            key={resetPasswordFields.toString()}
-                            onValidationChange={handleValidationChange}
-                            onPasswordChange={handlePasswordChange}
-                            reset={resetPasswordFields}
-                            isLoading={isLoading}
+                <Container>
+                    <Stack direction={'column'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box
+                            component={'img'}
+                            src={logo}
+                            sx={{
+                                mt: 3,
+                                width: '60px',
+                                height: '60px'
+                            }}
                         />
-                    </Box>
-                    <Box className='btn'>
-                        <Button variant="contained" size="large" className='btn-login' disabled={!isFormValid || isLoading} sx={{ padding: '10px', minWidth: '150px', height: '40px' }} onClick={handleCreateAccount}>
-                            {isLoading ? (
-                                <CircularProgress size={24} color="inherit" /> // Exibe o spinner enquanto está carregando
-                            ) : (
-                                <Typography className="btn">Criar Conta</Typography>
-                            )}
-                        </Button>
+                        
+                        <Typography variant='h4' sx={{ pt: 1, fontFamily: 'var(--fredoka)', fontWeight: '500' }}>
+                            Criar Conta
+                        </Typography>
+                   
+                        <Typography fontSize='15px' sx={{ pt: 1, pb: 3, color: 'text.secondary', fontFamily: 'var(--notosans)' }}>
+                            Crie sua conta para continuar!
+                        </Typography>
+                    </Stack>
 
-                        <Box className="links-account-signin">
-                            <Typography>
-                                Já tem uma conta? <Link component={RouterLink} to="/login">Faça login!</Link>
-                            </Typography>
+                    <Box component='form'>
+                        <Box className='inputs'>
+                            <Box>
+                                <TextField
+                                    fullWidth
+                                    margin='normal'
+                                    type="text"
+                                    required
+                                    label="Nome"
+                                    variant="outlined"
+                                    value={name}
+                                    onChange={handleNameChange}
+                                    onFocus={() => setNameTouched(true)}
+                                    onBlur={() => setNameTouched(false)}
+                                    disabled={isLoading}
+                                    error={nameTouched && nameLengthWithoutSpaces.length < 3}
+                                    helperText={nameTouched && nameLengthWithoutSpaces.length < 3 ? 'Nome deve ter no mínimo 3 caracteres válidos!' : ''}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <PersonOutlined className='icons' />
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                />
+                            </Box>
+
+                            <Box>
+                                <TextField
+                                    fullWidth
+                                    margin='normal'
+                                    type="email"
+                                    required
+                                    label="Email"
+                                    variant="outlined"
+                                    value={email}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                                    onFocus={() => setEmailTouched(true)}
+                                    onBlur={() => setEmailTouched(false)}
+                                    disabled={isLoading}
+                                    error={emailTouched && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
+                                    helperText={emailTouched && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Digite um e-mail válido!' : ''}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <MailOutline className='icons' />
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                />
+                            </Box>
+
+                            <Password
+                                key={resetPasswordFields.toString()}
+                                onValidationChange={handleValidationChange}
+                                onPasswordChange={handlePasswordChange}
+                                reset={resetPasswordFields}
+                                isLoading={isLoading}
+                            />
                         </Box>
 
+                        <Box className='btn'>
+                            <Button
+                                variant="contained"
+                                className='btn-login'
+                                disabled={!isFormValid || isLoading}
+                                onClick={handleCreateAccount}
+                                startIcon={isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                            >
+                                <Typography className='btn'>
+                                    {isLoading ? 'Criando...' : 'Criar Conta'}
+                                </Typography>
+                            </Button>
+
+                            <Box className="links-account-signin" sx={{ mb: 2 }}>
+                                <Typography>
+                                    Já tem uma conta? <Link component={RouterLink} to="/login">Faça login!</Link>
+                                </Typography>
+                            </Box>
+                        </Box>
                     </Box>
-                </Box>
-            </Box>
+                </Container>
+            </Card>
+            
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={5000}
                 onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-                <Alert onClose={handleCloseSnackbar} className='alert' severity={snackbarSeverity} sx={{
-                    display: 'flex', alignItems: 'center', width: '100%', fontSize: '20px', '& .MuiAlert-icon': {
-                        fontSize: '30px',
-                    },
-                }}>
+                <Alert 
+                    onClose={handleCloseSnackbar} 
+                    severity={snackbarSeverity} 
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '100%',
+                        fontSize: '20px',
+                        fontFamily: "'Noto Sans', sans-serif",
+                        '& .MuiAlert-icon': { fontSize: '30px' }
+                    }}
+                >
                     {snackbarMessage}
                 </Alert>
             </Snackbar>

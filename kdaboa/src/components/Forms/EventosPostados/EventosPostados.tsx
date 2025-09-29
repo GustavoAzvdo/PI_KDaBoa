@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api';
 import dayjs from 'dayjs';
@@ -114,41 +114,214 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
 
     return (
         <Grid container spacing={3}>
-            {eventos.map((evento, index) => (
-                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-                    <Card>
-                        <Box sx={{width: '455px', height: '200px'}}>
-                            <CardMedia component="img" image={evento.foto} alt={evento.foto} sx={{width: '100%', height: '100%'}}/>
+            {eventos.map((evento) => (
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={evento.id_evento}>
+                    <Card
+                        elevation={4}
+                        sx={{
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            borderRadius: 2,
+                            overflow: 'hidden',
+                            transition: 'all 0.3s ease-in-out',
+                            '&:hover': {
+                                transform: 'translateY(-8px)',
+                                boxShadow: '0 12px 40px rgba(108, 21, 213, 0.2)',
+                            }
+                        }}
+                    >
+                        {/* Imagem do evento */}
+                        <Box sx={{
+                            position: 'relative',
+                            width: '100%',
+                            height: '220px',
+                            overflow: 'hidden'
+                        }}>
+                            <CardMedia
+                                component="img"
+                                image={evento.foto}
+                                alt={evento.nome_evento}
+                                sx={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+
+                                }}
+                            />
+                            {/* Overlay com gradiente */}
+                            <Box sx={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                height: '50%',
+                                background: 'linear-gradient(transparent, rgba(0,0,0,0.6))',
+                                zIndex: 1
+                            }} />
+                          
 
                         </Box>
-                        <CardContent className='card-evento' sx={{ fontFamily: 'Noto Sans, sans-serif !important' }}>
-                            <Typography variant='h5' sx={{ mt: 1, fontWeight: 'bold' }}>
+
+                        <CardContent
+                            sx={{
+                                flexGrow: 1,
+                                p: 3,
+                                fontFamily: 'Noto Sans, sans-serif !important',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 2
+                            }}
+                        >
+                            {/* Título do evento */}
+                            <Typography
+                                variant='h6'
+                                sx={{
+                                    fontWeight: 'bold',
+                                    color: '#2c2c2c',
+                                    lineHeight: 1.3,
+                                    fontSize: '1.3rem'
+                                }}
+                            >
                                 {evento.nome_evento}
                             </Typography>
 
-                            <Typography sx={{ mt: 1 }}>
-                                <b>Descrição:</b> {evento.descricao}
-                            </Typography>
-                            <Typography sx={{ mt: 1 }}>
-                                <b>Endereço:</b> {evento.id_endereco?.logradouro}, {evento.id_endereco?.numero} - {evento.id_endereco?.bairro}
-                            </Typography>
+                            {/* Descrição */}
+                            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                                <Typography
+                                    variant="body2"
+                                    sx={{
+                                        color: '#666',
+                                        lineHeight: 1.5,
+                                        display: '-webkit-box',
+                                        WebkitLineClamp: 2,
+                                        WebkitBoxOrient: 'vertical',
+                                        overflow: 'hidden'
+                                    }}
+                                >
+                                    {evento.descricao}
+                                </Typography>
+                            </Box>
 
-                            <Typography sx={{ mt: 1 }}>
-                                <b>Data inicial:</b> {dayjs(evento.data_inicio).format('DD/MM/YYYY HH:mm')}
-                            </Typography>
-                            <Typography sx={{ mt: 1 }}>
-                                <b>Data final:</b> {dayjs(evento.data_fim).format('DD/MM/YYYY HH:mm')}
-                            </Typography>
-                            <Typography sx={{ mt: 1 }}>
-                                <b>Categorias:</b> {evento.Evento_Categoria.join(', ')}
-                            </Typography>
+                            {/* Informações em grid */}
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                                {/* Data */}
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <Box sx={{
+                                        width: 8,
+                                        height: 8,
+                                        borderRadius: '50%',
+                                        bgcolor: '#6C15D5'
+                                    }} />
+                                    <Typography variant="body2" sx={{ fontWeight: '500', color: '#444' }}>
+                                        {dayjs(evento.data_inicio).format('DD/MM/YYYY HH:mm')} - {dayjs(evento.data_fim).format('HH:mm')}
+                                    </Typography>
+                                </Box>
+
+                                {/* Endereço */}
+                                {evento.id_endereco && (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <Box sx={{
+                                            width: 8,
+                                            height: 8,
+                                            borderRadius: '50%',
+                                            bgcolor: '#6C15D5'
+                                        }} />
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                color: '#666',
+                                                display: '-webkit-box',
+                                                WebkitLineClamp: 1,
+                                                WebkitBoxOrient: 'vertical',
+                                                overflow: 'hidden'
+                                            }}
+                                        >
+                                            {evento.id_endereco.logradouro}, {evento.id_endereco.numero} - {evento.id_endereco.bairro}
+                                        </Typography>
+                                    </Box>
+                                )}
+
+                                {/* Categorias */}
+                                {evento.Evento_Categoria.length > 0 && (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
+                                        {evento.Evento_Categoria.slice(0, 3).map((categoria, idx) => (
+                                            <Chip
+                                                key={idx}
+                                                label={categoria}
+                                                size="small"
+                                                sx={{
+                                                    bgcolor: 'rgba(108, 21, 213, 0.1)',
+                                                    color: '#6C15D5',
+                                                    
+                                                }}
+                                            />
+                                        ))}
+                                        {evento.Evento_Categoria.length > 3 && (
+                                            <Chip
+                                                label={`+${evento.Evento_Categoria.length - 3}`}
+                                                size="small"
+                                                sx={{
+                                                    bgcolor: '#f0f0f0',
+                                                    color: '#666',
+                                                    fontSize: '0.7rem',
+                                                    fontWeight: '600'
+                                                }}
+                                            />
+                                        )}
+                                    </Box>
+                                )}
+                            </Box>
                         </CardContent>
-                        <CardActions sx={{ position: 'relative', minHeight: 40, gap: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                            <Button variant='contained' sx={{ color: 'white', bgcolor: '#6C15D5 ' }} onClick={() => handleEdit(evento)}  endIcon={<Edit/>}>Editar</Button>
-                            <Button variant='contained' color="error" onClick={() => handleDelete(evento.id_evento)} endIcon={<Delete/>} >Excluir</Button>
 
+                        {/* Botões de ação */}
+                        <CardActions
+                            sx={{
+                                p: 3,
+                                pt: 0,
+                                gap: 1.5,
+                                display: 'flex',
+                                justifyContent: 'space-between'
+                            }}
+                        >
+                            <Button
+                                variant='contained'
+                                startIcon={<Edit />}
+                                onClick={() => handleEdit(evento)}
+                                sx={{
+                                    flex: 1,
+                                    bgcolor: '#6C15D5',
+                                    color: 'white',
+                                    textTransform: 'none',
+                                    py: 1,
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        bgcolor: '#5a12b8',
+                                     
+                                    }
+                                }}
+                            >
+                                Editar
+                            </Button>
+                            <Button
+                                variant='outlined'
+                                color="error"
+                                startIcon={<Delete />}
+                                onClick={() => handleDelete(evento.id_evento)}
+                                sx={{
+                                    flex: 1,
+                                    textTransform: 'none',   
+                                    py: 1,
+                                   
+                                    '&:hover': {
+                                        bgcolor: '#d32f2f',
+                                        color: 'white',
+                                    }
+                                }}
+                            >
+                                Excluir
+                            </Button>
                         </CardActions>
-
                     </Card>
                 </Grid>
             ))}

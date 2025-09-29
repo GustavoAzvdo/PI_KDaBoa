@@ -4,16 +4,14 @@ import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvi
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import logo from '../../assets/logo.png';
-import './Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings, EditCalendar, Collections, Person, Home } from '@mui/icons-material';
-import Endereco from '../Forms/Endereco/Endereco';
+import '../Dashboard/Dashboard.css'
+import { Celebration, Verified, NewReleases, Face, Call, EditCalendar, Collections, Person, Home } from '@mui/icons-material';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 import Contatos from '../Forms/Contatos/Contatos';
 import Galeria from '../Forms/Galeria/Galeria';
 import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
 import EventosPostados from '../Forms/EventosPostados/EventosPostados';
-import ScreenDash from '../ScreenDash/ScreenDash';
 import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
@@ -21,7 +19,8 @@ import { Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import BoasVindasGerente from '../BoasVindas/BoasVindas';
 import { useTheme } from '@mui/material/styles';
 import CriarFuncionario from '../Forms/CriarFuncionario/CriarFuncionario';
-import { useAuth } from '../../context/AuthContext';
+import Confirmacao from '../Confirmacao/Confirmacao';
+
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -39,13 +38,13 @@ function useDemoRouter(initialPath: string): Router {
 }
 
 
-export default function DashboardLayoutBasic(props: any) {
+export default function DashboardFuncionario(props: any) {
   const theme = useTheme()
   const [eventoTitle, setEventoTitle] = useState<string>('Criar evento');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   useEffect(() => {
-    document.title = 'Dashboard'
+    document.title = 'Dashboard Funcionário'
   })
 
   const NAVIGATION: Navigation = [
@@ -63,16 +62,7 @@ export default function DashboardLayoutBasic(props: any) {
           title: 'Inicio',
           icon: <Home/>,
         },
-        {
-          segment: 'estabelecimento',
-          title: 'Estabelecimento',
-          icon: <House />,
-        },
-        {
-          segment: 'endereco',
-          title: 'Endereço',
-          icon: <Map />,
-        },
+   
         {
           segment: 'contato',
           title: 'Contatos',
@@ -91,11 +81,7 @@ export default function DashboardLayoutBasic(props: any) {
       ],
 
     },
-    {
-      segment: 'funcionarios',
-      title: 'Funcionários',
-      icon: <Group />,
-    },
+
     {
       kind: 'divider',
     },
@@ -115,33 +101,29 @@ export default function DashboardLayoutBasic(props: any) {
         },
         {
           segment: 'postados',
-          title: 'Postados',
+          title: 'Eventos Postados',
           icon: <Verified />,
         },
         {
-          segment: 'em_analise',
-          title: 'Em análise',
+          segment: 'aguardando-confirmacao',
+          title: 'Aguardando Confirmacao',
           icon: <NewReleases />,
         },
       ],
     },
-    {
-      segment: 'configuracoes',
-      title: 'Configurações',
-      icon: <Settings />,
-    },
+
   ];
 
   const { window } = props;
 
-  const router = useDemoRouter('/dashboard');
+  const router = useDemoRouter('/dashboard_func');
 
   // Remove this const when copying and pasting into your project.
   const demoWindow = window ? window() : undefined;
 
 
   const [user, setUser] = React.useState<User | null>(null)
-  const {logout} = useAuth()
+
   const [session, setSession] = React.useState<Session | null>(null);
 
 
@@ -182,7 +164,6 @@ export default function DashboardLayoutBasic(props: any) {
 
       signOut: () => {
         setOpenDialog(true);
-       
       },
     };
   }, [router]);
@@ -205,10 +186,7 @@ export default function DashboardLayoutBasic(props: any) {
         return (
           <Estabelecimento />
         );
-      case '/dashboard/endereco':
-        return (
-          <Endereco disabledComponents={false} />
-        );
+     
       case '/dashboard/contato':
         return (
           <Contatos />
@@ -229,14 +207,11 @@ export default function DashboardLayoutBasic(props: any) {
         return (
           <EventosPostados router={router} />
         );
-      case '/eventos/em_analise':
+      case '/eventos/aguardando-confirmacao':
         return (
-          <ScreenDash/>
+          <Confirmacao/>
         );
-      case '/configuracoes':
-        return (
-          <ScreenDash/>
-        );
+    
       default:
         return (
           <ScreenError />
@@ -252,7 +227,7 @@ export default function DashboardLayoutBasic(props: any) {
       authentication={authentication}
       branding={{
         logo: <img src={logo} alt="Logo" style={{pointerEvents: 'none', cursor: 'none'}} />,
-        title: 'Area do Gerente',
+        title: 'Area do Funcionário',
 
       }}
 
@@ -274,8 +249,8 @@ export default function DashboardLayoutBasic(props: any) {
           <Button color="primary"
             variant='contained'
             onClick={() => {
-              logout()
               setSession(null);
+              router.navigate('/login');
             }}
             sx={{ backgroundColor: 'var(--roxoForteDashboard)',color: 'white', textDecoration: 'none', '&:hover': { backgroundColor: 'var(--roxoForteDashboard)' } }}
             href="/login"

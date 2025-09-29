@@ -110,7 +110,7 @@ const BoxInfo = () => {
       <Grid size={{ xs: 12, sm: 12, md: 12 }}>
         <Container>
           <Box sx={{
-            textAlign: { xs: 'center', sm: 'center' , md: 'center'},
+            textAlign: { xs: 'center', sm: 'center', md: 'center' },
             px: { xs: 2 }
           }}>
             <Title >
@@ -131,7 +131,7 @@ const BoxInfo = () => {
       <Container sx={{ pb: 10 }}>
         <Grid container spacing={3}>
           {top2Eventos.map((event) => (
-            <Grid size={{ xs: 12, sm: 12, md: 6 }} key={event.id_evento} sx={{pt: 4}}>
+            <Grid size={{ xs: 12, sm: 12, md: 6 }} key={event.id_evento} sx={{ pt: 4 }}>
               <Card onClick={() => navigate("/view-event", { state: { id: event.id_evento } })} sx={{ fontFamily: 'var(--notosans)', p: 3, cursor: "pointer", "&:hover": { boxShadow: "0px 8px 20px #ff84384e" } }}>
                 <Box display="flex" gap={2} >
                   <Box
@@ -148,21 +148,33 @@ const BoxInfo = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    <Typography variant="caption" sx={{fontFamily: 'var(--notosans)'}}>
+                    <Typography variant="caption" sx={{ fontFamily: 'var(--notosans)' }}>
                       {new Date(event.data_inicio).toLocaleString("pt-BR", {
                         month: "short",
                       }).toUpperCase()}
                     </Typography>
-                    <Typography variant="h5" sx={{fontFamily: 'var(--notosans)'}}>
+                    <Typography variant="h5" sx={{ fontFamily: 'var(--notosans)' }}>
                       {new Date(event.data_inicio).getDate()}
                     </Typography>
                   </Box>
 
                   <Box flex={1}>
-                    <Typography variant="h6" sx={{ mb: 1 , fontFamily: 'var(--notosans)'}}>
+                    <Typography variant="h6" sx={{ mb: 1, fontFamily: 'var(--notosans)' }}>
                       {event.nome_evento}
                     </Typography>
-                    <Typography color="text.secondary" variant="body2" sx={{ mb: 2 , fontFamily: 'var(--notosans)'}}>
+                    <Typography
+                      color="text.secondary"
+                      variant="body2"
+                      sx={{
+                        mb: 2,
+                        fontFamily: 'var(--notosans)',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2, 
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
                       {event.descricao}
                     </Typography>
 
@@ -232,10 +244,10 @@ const BoxInfo = () => {
 
       </Grid>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    
 
-        <Container sx={{width: '100vw', height: '50vh', display: 'flex'}} >
-          <Box sx={{ position: "relative", width: "100%", height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
+
+        <Container sx={{ width: '100vw', height: '50vh', display: 'flex' }} >
+          <Box sx={{ position: "relative", width: "100%", height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {imagens.map((img, i) => (
               <Box
                 key={i}
@@ -243,11 +255,11 @@ const BoxInfo = () => {
                 src={img}
                 alt={`Imagem ${i}`}
                 sx={{
-                  pl: {xs: 0, sm: 0, md: 2},
-                  pt: {xs: 6, sm: 6, md: 0},
+                  pl: { xs: 0, sm: 0, md: 2 },
+                  pt: { xs: 6, sm: 6, md: 0 },
                   width: { xs: "100%", md: "100%" },
                   height: "100%",
-                 
+
                   display: 'block',
                   position: "absolute",
                   top: 0,
@@ -260,9 +272,9 @@ const BoxInfo = () => {
           </Box>
 
         </Container>
-    
+
       </Grid>
-      <Box sx={{ pt: 4,pb: 8, backgroundColor: "white" }}>
+      <Box sx={{ pt: 4, pb: 8, backgroundColor: "white" }}>
         <Container maxWidth="lg">
           <Box sx={{
             textAlign: { xs: 'center' },

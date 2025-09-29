@@ -120,72 +120,135 @@ const InfoEvent = ({ id }: { id: number }) => {
     return (
         <>
             <BannerEvent card={card} />
-            <Grid container spacing={2} sx={{ padding: 2, paddingTop: 4 }} className="container">
-                <Grid size={{ xs: 12, md: 5 }} className="grid-left"  >
-                    <Box className='title-event' sx={{ display: 'flex', textAlign: { xs: 'center', sm: 'center', md: 'left' }, justifyContent: { xs: 'center', sm: 'center', md: 'left' } }}>
+
+
+            <Grid container spacing={2} sx={{ paddingTop: 4, justifyContent: 'center', px: { xs: 2, md: 4 } }} className="container">
+                <Grid size={{ xs: 12, md: 5 }} className="grid-left">
+                    {/* Título do Evento */}
+                    <Box className='title-event' sx={{
+                        display: 'flex',
+                        textAlign: { xs: 'center', md: 'left' },
+                        justifyContent: { xs: 'center', md: 'flex-start' },
+                        mb: 4
+                    }}>
                         <Typography variant="h3" sx={{
                             fontSize: {
-                                xs: '2.5rem',  // celulares
-                                sm: '2.5rem',    // tablets pequenos
-                                md: '3rem',    // desktops médios
-                                lg: '3.5rem',  // desktops grandes
+                                xs: '1.8rem',
+                                sm: '2.2rem',
+                                md: '2.5rem',
+                                lg: '3rem',
                             },
                             textAlign: {
                                 xs: 'center',
-                                sm: 'center',
-                                md: 'left', // 'start' não funciona aqui, usa 'left' mesmo
-                                lg: 'left',
+                                md: 'left',
                             },
+                            fontWeight: 'bold',
+                            color: '#333',
+                            lineHeight: 1.2
                         }}>
                             {card?.nome_evento}
                         </Typography>
                     </Box>
-                    <Box className="data" sx={{ display: "flex", alignItems: "center", width: "100%", paddingTop: 3 }}>
-                        <Box className="img-calendar">
-                            <img src={calendar} style={{ width: '60px', height: '60px' }} alt="" />
-                        </Box>
-                        <Box className="text-calendar" sx={{ paddingLeft: 2 }}>
-                            <Typography className="text-calendar-title">{dataFormatada}</Typography>
-                            <br />
-                            <Typography className="text-calendar-subtitle">Inicio: {dataFormatadaInicio}</Typography>
-                            <Typography className="text-calendar-subtitle" sx={{ paddingTop: 2 }}>Termino: {dataFormatadaTermino}</Typography>
 
+                    {/* Seção de Data */}
+                    <Box className="data" sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        width: "100%",
+                        mb: 4,
+                        p: 3,
+                       
+                        borderRadius: 2,
+                        borderLeft: '4px solid #6C15D5',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                      
+                    }}>
+                        <Box className="img-calendar" sx={{ mr: 2, mt: 0.5 }}>
+                            <img src={calendar} style={{ width: '48px', height: '48px' }} alt="calendar" />
+                        </Box>
+                        <Box className="text-calendar" sx={{ flex: 1 }}>
+                            <Typography className="text-calendar-title" sx={{
+                                fontSize: '1.2rem',
+                                fontWeight: 'bold',
+                                color: '#333',
+                                mb: 2
+                            }}>
+                                {dataFormatada}
+                            </Typography>
+                            <Typography className="text-calendar-subtitle" sx={{
+                                color: 'text.secondary',
+                                mb: 1,
+                                fontSize: '0.95rem'
+                            }}>
+                                <strong>Início:</strong> {dataFormatadaInicio}
+                            </Typography>
+                            <Typography className="text-calendar-subtitle" sx={{
+                                color: 'text.secondary',
+                                fontSize: '0.95rem'
+                            }}>
+                                <strong>Término:</strong> {dataFormatadaTermino}
+                            </Typography>
                         </Box>
                     </Box>
-                    <Box className="address" sx={{ display: "flex", alignItems: "center", width: "100%", paddingTop: 8 }}>
-                        <Box>
-                            <Address address={juntaEndereco}
-                                location={card?.Estabelecimento.nome} />
-                        </Box>
+
+                    {/* Seção de Endereço */}
+                    <Box className="address" sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        mb: 4,
+                        p: 3,
+                        borderRadius: 2,
+                        borderLeft: '4px solid #FF8e38',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    
+                    }}>
+                        <Address address={juntaEndereco} location={card?.Estabelecimento.nome} />
                     </Box>
-                    <Box className="contacts" sx={{ display: "flex", alignItems: "center", width: "100%", paddingTop: 8 }}>
-                        <Box sx={{ margin: 'auto' }}>
-                            <Contacts email={card.Estabelecimento.Contato.email} telefone1={formatarCelular(card.Estabelecimento.Contato.tel_cel_1)} telefone2={formatarCelular(card.Estabelecimento.Contato.tel_cel_2)} />
-                        </Box>
+
+                    {/* Seção de Contatos */}
+                    <Box className="contacts" sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        mb: 4,
+                        p: 3,
+                       
+                        borderRadius: 2,
+                        borderLeft: '4px solid #6c15d5',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                
+                    }}>
+                        <Contacts
+                            email={card.Estabelecimento.Contato.email}
+                            telefone1={formatarCelular(card.Estabelecimento.Contato.tel_cel_1)}
+                            telefone2={formatarCelular(card.Estabelecimento.Contato.tel_cel_2)}
+                        />
                     </Box>
                 </Grid>
 
-                <Grid size={{ xs: 11, md: 5 }}
+                {/* Card do Perfil */}
+                <Grid size={{ xs: 12, md: 5 }}
                     sx={{
                         display: "flex",
                         justifyContent: { xs: "center", md: "flex-end" },
-                        my: { xs: 4, md: 0 },
+                        my: { xs: 2, md: 0 },
                     }}
                     className="grid-right"
                 >
                     <Card
-                        elevation={3}
+                        elevation={6}
                         sx={{
-                            height: '250px',
+                           
+                            height: '330px',
                             width: "100%",
-                            maxWidth: 360,
-                            borderRadius: 3,
-                            transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
-                            boxShadow: 4,
-                            '&:hover': {
-                                boxShadow: "0px 8px 20px #b789ef61",
-
-                            },
+                            maxWidth: 380,
+                            borderRadius: 4,
+                            background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
+                            border: '1px solid rgba(108, 21, 213, 0.1)',
+                          
+                            boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+                       
                         }}
                     >
                         <CardContent
@@ -194,29 +257,51 @@ const InfoEvent = ({ id }: { id: number }) => {
                                 flexDirection: 'column',
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: { xs: 2, sm: 3 },
+                                gap: 3,
                                 textAlign: 'center',
+                                p: 4,
+                                height: '100%'
                             }}
                         >
-                            <Avatar
-                                sx={{
-                                    width: { xs: 56, sm: 64 },
-                                    height: { xs: 56, sm: 64 },
-                                }}
-                            />
+                            <Box sx={{ position: 'relative' }}>
+                                <Avatar
+                                    sx={{
+                                        width: 80,
+                                        height: 80,
+                                        border: '3px solid #6C15D5',
+                                        boxShadow: '0 4px 15px rgba(108, 21, 213, 0.3)',
+                                    }}
+                                />
+                                <Box sx={{
+                                    position: 'absolute',
+                                    bottom: -4,
+                                    right: -4,
+                                    width: 24,
+                                    height: 24,
+                                    borderRadius: '50%',
+                                    backgroundColor: '#4CAF50',
+                                    border: '3px solid white',
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                                }} />
+                            </Box>
 
-                            <Box className="text-profile">
+                            <Box className="text-profile" sx={{ width: '100%' }}>
                                 <Typography
                                     sx={{
-                                        fontSize: { xs: "0.95rem", md: "1rem" },
-                                        fontWeight: 500,
-                                        mb: { xs: 1, sm: 0.5 },
+                                        fontSize: '1.1rem',
+                                        fontWeight: 600,
+                                        mb: 3,
+                                        color: '#333',
+                                        lineHeight: 1.3
                                     }}
                                 >
-                                    Produzido por {card?.Estabelecimento.nome}
+                                    Produzido por <br />
+                                    <span style={{ color: '#6C15D5', fontSize: '1.2rem' }}>
+                                        {card?.Estabelecimento.nome}
+                                    </span>
                                 </Typography>
 
-                                <Button
+                                 <Button
                                     endIcon={<Person />}
                                     variant="outlined"
                                     className="btn-profile"
@@ -238,23 +323,55 @@ const InfoEvent = ({ id }: { id: number }) => {
                     </Card>
                 </Grid>
 
-                <Grid size={{ xs: 12, md: 10 }} className="grid-description" sx={{ paddingTop: 4, margin: 0, textAlign: 'justify', px: { xs: 2, md: 0 } }}>
-                    <Box className="title-description" >
-                        <Box sx={{ textAlign: { xs: 'center', sm: 'center', md: 'left' } }}>
+                {/* Seção de Descrição */}
+                <Grid size={{ xs: 12, md: 10 }} className="grid-description" sx={{
+                    paddingTop: 4,
+                    margin: 0,
+                    mb: 10,
+                    textAlign: 'justify'
+                }}>
+                    <Box className="title-description">
+                        <Box sx={{
+                            textAlign: { xs: 'center', md: 'left' },
+                            mb: 4,
+                           
+                            pb: 2,
+                            display: 'inline-block'
+                        }}>
                             <Typography variant="h4" className="description-title" sx={{
-                                alignItems: { xs: 'center', md: 'flex-start' }, justifyContent: { xs: 'center', md: 'flex-start' }, fontSize: {
-                                    xs: '2.5rem',  // celulares
-                                    sm: '2.5rem',    // tablets pequenos
-                                    md: '3rem',    // desktops médios
-                                    lg: '3.5rem',  // desktops grandes
-                                }
-                            }}>DESCRIÇÃO DO EVENTO</Typography>
-
+                                fontSize: {
+                                    xs: '1.8rem',
+                                    sm: '2.2rem',
+                                    md: '2.5rem',
+                                    lg: '3rem',
+                                },
+                                fontWeight: 'bold',
+                                color: '#333',
+                                letterSpacing: '1px'
+                            }}>
+                                DESCRIÇÃO DO EVENTO
+                            </Typography>
                         </Box>
-                        <Typography className="description-text" sx={{ paddingY: 5 }}>{card.descricao}</Typography>
+                        <Box sx={{
+                           
+                            borderRadius: 2,
+                            p: 4,
+                            borderLeft: '4px solid #6C15D5',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                        }}>
+                            <Typography className="description-text" sx={{
+                                fontSize: '1.1rem',
+                                lineHeight: 1.7,
+                                color: 'text.secondary',
+                                textAlign: 'justify'
+                            }}>
+                                {card.descricao}
+                            </Typography>
+                        </Box>
                     </Box>
                 </Grid>
             </Grid>
+
 
         </>
 

@@ -19,10 +19,7 @@
 }
 
 
-.info_left, .info_right {
-    width: 500px;
-    
-}
+
 .text-contacts p,
 .text-calendar p,
 .text-address p {
@@ -68,13 +65,7 @@
    
 }
 
-.container-right{
-    height: 140px;
-    width: 80%;
-    box-shadow:
-    0px 10px 100px var(--roxoFundo), 
-    0px -10px 100px var(--roxoFundo); 
-}
+
 
 .text-profile p{
     font-size: 21px;
