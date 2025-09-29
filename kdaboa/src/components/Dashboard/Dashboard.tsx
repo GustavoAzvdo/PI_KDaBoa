@@ -21,7 +21,7 @@ import { Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import BoasVindasGerente from '../BoasVindas/BoasVindas';
 import { useTheme } from '@mui/material/styles';
 import CriarFuncionario from '../Forms/CriarFuncionario/CriarFuncionario';
-
+import { useAuth } from '../../context/AuthContext';
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -141,7 +141,7 @@ export default function DashboardLayoutBasic(props: any) {
 
 
   const [user, setUser] = React.useState<User | null>(null)
-
+  const {logout} = useAuth()
   const [session, setSession] = React.useState<Session | null>(null);
 
 
@@ -182,6 +182,7 @@ export default function DashboardLayoutBasic(props: any) {
 
       signOut: () => {
         setOpenDialog(true);
+       
       },
     };
   }, [router]);
@@ -273,8 +274,8 @@ export default function DashboardLayoutBasic(props: any) {
           <Button color="primary"
             variant='contained'
             onClick={() => {
+              logout()
               setSession(null);
-              router.navigate('/login');
             }}
             sx={{ backgroundColor: 'var(--roxoForteDashboard)',color: 'white', textDecoration: 'none', '&:hover': { backgroundColor: 'var(--roxoForteDashboard)' } }}
             href="/login"

@@ -7,9 +7,10 @@ import api from '../../../api/api'
 import logo from '../../../assets/logo.png'
 import './Login.css'
 import {Link as RouterLink} from 'react-router-dom'
-
+import { useAuth } from '../../../context/AuthContext';
 const Login = () => {
     const location = useLocation();
+      const { login } = useAuth();
     const navigate = useNavigate();
     const [snackbarQueue, setSnackbarQueue] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -63,6 +64,7 @@ const Login = () => {
 
             if (response.status === 201) {
                 localStorage.setItem('userEmail', email);
+                login()
                 navigate('/dashboard');
             } else {
                 console.log('Email ainda nao verificado');

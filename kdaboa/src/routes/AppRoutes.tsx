@@ -1,5 +1,6 @@
-// src/routes/AppRoutes.tsx
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from '../context/AuthContext';
+import { ProtectedRoute } from './ProtectedRoute';
 import Login from '../components/Forms/Login/Login'
 import Signin from '../components/Forms/Signin/Signin'
 import RecuperarSenha from '../components/Forms/RecuperarSenha/RecuperarSenha'
@@ -14,26 +15,46 @@ import ViewEvent from '../pages/ViewEvent/ViewEvent'
 import { LoadingProvider } from '../context/LoadingContext';
 import { GlobalLoading } from '../components/GlobalLoading/GlobalLoading';
 import { RouteListener } from '../components/GlobalLoading/RouterListener'
-const AppRoutes = () => (
-  <LoadingProvider>
-    <GlobalLoading/>
-    <RouteListener />
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signin" element={<Signin />} />
-      <Route path="/recuperar-senha" element={<RecuperarSenha />} />
-      <Route path="/alterar-senha" element={<AlterarSenha />} />
-      <Route path="/email-enviado" element={<SendEmail />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/dashboard_func" element={<DashboardFuncionario />} />
-      <Route path="/" element={<Home />} />
-      <Route path="/search" element={<SearchEvent />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/view-event" element={<ViewEvent />} />
 
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
-  </LoadingProvider>
+const AppRoutes = () => (
+  
+  <AuthProvider>
+    <LoadingProvider>
+      <GlobalLoading />
+      <RouteListener />
+      <Routes>
+        {/* Rotas Públicas */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+        <Route path="/alterar-senha" element={<AlterarSenha />} />
+        <Route path="/email-enviado" element={<SendEmail />} />
+        <Route path="/search" element={<SearchEvent />} />
+        <Route path="/view-event" element={<ViewEvent />} />
+        <Route path="/profile" element={<Profile />}/>
+        {/* rotas protegidas - não entra se não fizer login  */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard_func"
+          element={
+            <ProtectedRoute>
+              <DashboardFuncionario />
+            </ProtectedRoute>
+          }
+        />
+      
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </LoadingProvider>
+  </AuthProvider>
 )
 
-export default AppRoutes
+export default AppRoutes;
