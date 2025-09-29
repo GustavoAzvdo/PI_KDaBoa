@@ -1,6 +1,6 @@
 import './RecuperarSenha.css'
 import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, CircularProgress, Card, Stack, Container } from '@mui/material'
-import { EmailOutlined, Home } from '@mui/icons-material';
+import { EmailOutlined,  HomeOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 import logo from '../../../assets/logo.png'
@@ -61,7 +61,7 @@ const RecuperarSenha = () => {
                         to='/home'
                         size='small'
                         variant='text'
-                        startIcon={<Home fontSize='small' />}
+                        startIcon={<HomeOutlined fontSize='small' />}
                         sx={{
                             fontWeight: 400,
                             fontFamily: 'var(--fredoka)',

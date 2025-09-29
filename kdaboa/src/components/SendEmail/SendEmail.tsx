@@ -1,5 +1,5 @@
 import { Box, Button, Container, Typography, Card, Stack } from "@mui/material"
-import { EmailOutlined, CheckCircleOutlined, ArrowBack, Home } from '@mui/icons-material'
+import { EmailOutlined, CheckCircleOutlined, ArrowBack, HomeOutlined } from '@mui/icons-material'
 import logo from '../../assets/logo.png'
 import { useLocation, useNavigate } from 'react-router-dom'
 import './SendEmail.css'
@@ -47,7 +47,7 @@ const SendEmail = () => {
                         to='/home'
                         size='small'
                         variant='text'
-                        startIcon={<Home fontSize='small' />}
+                        startIcon={<HomeOutlined fontSize='small' />}
                         sx={{
                             fontWeight: 400,
                             fontFamily: 'var(--fredoka)',

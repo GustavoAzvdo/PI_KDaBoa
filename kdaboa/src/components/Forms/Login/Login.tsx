@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, Card, Stack, Container } from '@mui/material'
-import { HttpsOutlined, EmailOutlined,  Home } from '@mui/icons-material';
+import { HttpsOutlined, EmailOutlined,  HomeOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material'
@@ -127,7 +127,7 @@ const Login = () => {
                         to='/home'
                         size='small' 
                         variant='text'
-                        startIcon={<Home fontSize='small'/>}
+                        startIcon={<HomeOutlined fontSize='small'/>}
                         sx={{
                             fontWeight: 400,
                             fontFamily: 'var(--fredoka)',
