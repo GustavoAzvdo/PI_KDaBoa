@@ -6,7 +6,7 @@ interface BannerEventProps {
 }
 
 const BannerEvent = ({ card }: BannerEventProps) => {
-  const imageUrl = `http://localhost:3000/event/image/${card.foto}`;
+  const imageUrl = `${import.meta.env.VITE_API_URL}/event/image/${card.foto}`;
 
   return (
     <Box

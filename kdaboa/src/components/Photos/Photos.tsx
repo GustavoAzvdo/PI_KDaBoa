@@ -31,7 +31,7 @@ const Photos = ({ card }: { card: EventoProps  }) => {
         {card?.Estabelecimento?.Galeria?.map((gal: any) => (
           <ImageListItem key={gal.foto}>
             <img
-              src={`http://localhost:3000/gallery/${gal.foto}`}
+              src={`${import.meta.env.VITE_API_URL}/gallery/${gal.foto}`}
               alt={gal.foto}
               loading="lazy"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}

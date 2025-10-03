@@ -115,7 +115,7 @@ const Galeria = () => {
             console.log(nomes)
             const photos = nomes.map((nome: string) => ({
                 name: nome,
-                url: `http://localhost:3000/gallery/${encodeURIComponent(nome)}`
+                url: `${import.meta.env.VITE_API_URL}/gallery/${encodeURIComponent(nome)}`
             }));
             console.log(photos)
             setPhotos(photos);
