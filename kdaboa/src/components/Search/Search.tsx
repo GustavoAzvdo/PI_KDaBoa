@@ -33,10 +33,11 @@ interface SearchProps {
   onTextChange?: (text: string) => void; // Callback para enviar as categorias selecionadas
   onDateChange?: (date: string) => void; // Callback opcional para enviar a data selecionada
   showScreen?: boolean
+  onCityChange?: (cityName: string) => void;
 }
 
-const Search = ({ onTextChange, onDateChange, showScreen = false }: SearchProps) => {
-  const { searchText, categories, date, setSearchText, setCategories, setDate } = useSearch();
+const Search = ({ onTextChange,onCityChange ,onDateChange, showScreen = false }: SearchProps) => {
+  const { searchText, categories, date,city, setSearchText, setCategories, setDate, setCity } = useSearch();
   // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   // const [searchText, setSearchText] = useState<string>('')
   // const [selectedDate, setSelectedDate] = useState<any>(null);
@@ -48,7 +49,14 @@ const Search = ({ onTextChange, onDateChange, showScreen = false }: SearchProps)
     setCategories(ids); // só ids
   };
 
-
+    const handleCityChange = (cityName: string) => {
+    // Se a prop foi passada, chame-a. Senão, use o setCity do contexto local.
+    if (onCityChange) {
+      onCityChange(cityName);
+    } else {
+      setCity(cityName);
+    }
+  };
 
   const handleSearchTextChange = (value: string) => {
     const selectedText = value.toLowerCase();
@@ -85,6 +93,7 @@ const Search = ({ onTextChange, onDateChange, showScreen = false }: SearchProps)
       setSearchText(searchText);
       setCategories(categories);
       setDate(date);
+      setCity(city);
     }
   }, []);
 
@@ -118,6 +127,7 @@ const Search = ({ onTextChange, onDateChange, showScreen = false }: SearchProps)
                       searchText: searchText,
                       categories: categories,
                       date: date,
+                      city: city
                     }}
                     sx={{ padding: 0, margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                   >
@@ -293,7 +303,7 @@ const Search = ({ onTextChange, onDateChange, showScreen = false }: SearchProps)
       {/* cidade */}
       <Grid size={{ xs: 12, md: 6, lg: 3 }}>
         <Box component='form' className='form-right-search'>
-          <GoogleMaps />
+          <GoogleMaps onCityChange={handleCityChange} value={city}/>
         </Box>
       </Grid>
 

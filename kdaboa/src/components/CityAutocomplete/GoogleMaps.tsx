@@ -119,12 +119,34 @@ const fetch = debounce(
 const emptyOptions = [] as any;
 let sessionToken: any;
 
-export default function GoogleMaps() {
+interface GoogleMapsProps {
+  onCityChange?: (cityName: string) => void | undefined;
+  value?: string | null;
+}
+
+export default function GoogleMaps({ onCityChange, value: initialValue}: GoogleMapsProps) {
   const [value, setValue] = React.useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState<readonly PlaceType[]>(emptyOptions);
   const callbackId = React.useId().replace(/[^\w]/g, '');
   const [loaded, setLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    // Se recebermos um valor inicial e o campo estiver vazio ou diferente...
+    if (initialValue && (!value || initialValue !== value.structured_formatting.main_text)) {
+      // Criamos um objeto "fake" do tipo PlaceType apenas para exibição
+      const initialPlace: PlaceType = {
+        description: initialValue,
+        structured_formatting: {
+          main_text: initialValue,
+          main_text_matched_substrings: [],
+        },
+      };
+      setValue(initialPlace);
+      setInputValue(initialValue);
+    }
+  }, [initialValue]); // Este efeito roda sempre que o valor inicial mudar
+
 
   if (typeof window !== 'undefined') {
     if (!document.querySelector('#google-maps')) {
@@ -196,7 +218,7 @@ export default function GoogleMaps() {
     <Autocomplete
       fullWidth
       getOptionLabel={(option) =>
-        typeof option === 'string' ? option : option.description
+        typeof option === 'string' ? option : option.structured_formatting.main_text
       }
       filterOptions={(x) => x}
       slots={{
@@ -211,6 +233,10 @@ export default function GoogleMaps() {
       onChange={(_event: any, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+         const cityName = newValue ? newValue.structured_formatting.main_text : '';
+        if (onCityChange) {
+          onCityChange(cityName);
+        }
       }}
       onInputChange={(_event, newInputValue) => {
         setInputValue(newInputValue);

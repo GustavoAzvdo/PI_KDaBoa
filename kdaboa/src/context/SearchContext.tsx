@@ -6,10 +6,12 @@ interface SearchContextType {
   categories: string[];
   idCategory: string[];
   date: string;
+  city: string;
   setSearchText: (text: string) => void;
   setCategories: (categories: string[]) => void;
   setIdCategory: (idCategory: string[]) => void;
   setDate: (date: string) => void;
+  setCity: (city: string) => void;
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
@@ -19,9 +21,10 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const [categories, setCategories] = useState<string[]>([]);
   const [idCategory, setIdCategory] = useState<string[]>([]);
   const [date, setDate] = useState('');
+  const [city, setCity] = useState('');
 
   return (
-    <SearchContext.Provider value={{ searchText, categories, idCategory, date, setSearchText, setCategories, setIdCategory, setDate }}>
+    <SearchContext.Provider value={{ searchText, categories, idCategory, date,city,setCity, setSearchText, setCategories, setIdCategory, setDate }}>
       {children}
     </SearchContext.Provider>
   );

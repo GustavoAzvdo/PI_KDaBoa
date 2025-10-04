@@ -19,7 +19,7 @@ const FilterEvent = () => {
     const {
         searchText,
         categories: contextCategories,
-
+        city: contextCity,
         date: contextDate,
         setSearchText,
         setCategories,
@@ -36,6 +36,7 @@ const FilterEvent = () => {
                 name: searchText || undefined,
                 category: contextCategories.length > 0 ? contextCategories : undefined,
                 date: contextDate || undefined,
+                city: contextCity || undefined,
             };
 
             const queryParams = new URLSearchParams();
@@ -50,7 +51,7 @@ const FilterEvent = () => {
             }
 
             if (params.date) queryParams.append("date", params.date);
-
+            if (params.city) queryParams.append("city", params.city);
             const queryString = queryParams.toString();
             const url = `/event${queryString ? `?${queryString}` : ""}`;
 
@@ -77,7 +78,7 @@ const FilterEvent = () => {
         });
         setDisplayCategories(categoryNames);
         setVisibleCount(6);
-    }, [searchText, contextCategories, contextDate]);
+    }, [searchText, contextCategories, contextDate, contextCity]);
 
 
     const handleDateChange = (date: string) => {
@@ -91,6 +92,31 @@ const FilterEvent = () => {
 
     const handleTextChange = (selectedText: string) => {
         setSearchText(selectedText);
+    };
+
+     const generateTitle = () => {
+        if (filtered.length === 0) {
+            return 'Nenhum evento encontrado';
+        }
+
+        const categoryText = displayCategories.join(', ');
+
+        if (contextCity) {
+            // Se tem cidade E categorias, combina os dois.
+            if (categoryText) {
+                return `${categoryText} em ${contextCity}`;
+            }
+            // Se tem apenas cidade.
+            return `Eventos em ${contextCity}`;
+        }
+
+        // Se não tem cidade, mas tem categorias.
+        if (categoryText) {
+            return categoryText;
+        }
+
+        // Se não tem nenhum filtro.
+        return 'Todos os eventos';
     };
 
 
@@ -126,11 +152,7 @@ const FilterEvent = () => {
                     }}
                 >
                     <Title>
-                        {filtered.length > 0
-                            ? displayCategories.length > 0
-                                ? displayCategories.join(', ')
-                                : 'Todos os eventos'
-                            : 'Nenhum evento encontrado'}
+                        {generateTitle()}
                     </Title>
 
                     {filtered.length === 0 && (

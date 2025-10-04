@@ -32,7 +32,7 @@ interface Evento {
   }[];
 }
 const Home = () => {
-  const { setSearchText, setCategories, setDate } = useSearch();
+  const { setSearchText, setCategories, setDate, setCity } = useSearch();
   const [open, setOpen] = useState<boolean>(false);
   const [accepted, setAccepted] = useState<boolean>(false);
   const [eventos, setEventos] = useState<Evento[]>([]);
@@ -132,6 +132,7 @@ const Home = () => {
           onTextChange={setSearchText}
           onCategoryChange={setCategories}
           onDateChange={setDate}
+          onCityChange={setCity}
         />
       </Container>
       <CarroselHome eventos={eventos} />
