@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import api from '../../api/api'
-import {  KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 
 
 
@@ -56,10 +56,10 @@ const InfoProfile = () => {
     return (
         <Container>
             <Grid container spacing={2} >
-                <Grid size={{ xs: 12, sm: 12, md: 6 }}
+                <Grid size={{ xs: 12, sm: 12, md:12 }}
                     sx={{
                         display: 'flex',
-                        justifyContent: 'center',
+                        justifyContent: { xs: 'center', md: 'flex-start' },
                         alignItems: 'center',
                     }}
                 >
@@ -69,10 +69,12 @@ const InfoProfile = () => {
                             display: 'flex',
                             flexDirection: { xs: 'column', md: 'row' },
                             alignItems: 'center',
+                       
                             gap: 3, // espaçamento entre avatar e texto
                         }}
                     >
                         <Avatar
+                            src={`http://localhost:3000/establisment/image/${card.Estabelecimento.imagem?.split('/').pop()}`}
                             sx={{
                                 width: { xs: 80, md: 130 },
                                 height: { xs: 80, md: 130 },

@@ -24,10 +24,12 @@ interface Dados {
 }
 
 interface getEstabelecimento {
+
   id_estabelecimento: number;
   nome: string;
   cnpj: string;
   descricao: string;
+  imagem: string;
   status: number;
   id_contato: number;
   Usuario: Array<object>;
@@ -63,7 +65,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [modalButtonEnabled, setModalButtonEnabled] = useState<boolean>(false);
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<Dados[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [nomeImagem, setNomeImagem] = useState('');
   // Estados para foto de perfil do estabelecimento
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
@@ -90,12 +93,14 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0]
-      
+
       // Validação de tamanho (5MB)
       if (file.size > 5 * 1024 * 1024) {
         setSnackbar({ open: true, message: 'Arquivo muito grande! Máximo 5MB', severity: 'error', autoHideDuration: 4000 });
         return;
       }
+
+      setImageFile(file);
 
       const reader = new FileReader()
       reader.onload = () => {
@@ -103,6 +108,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         setImageUrl(imageDataUrl)
       }
       reader.readAsDataURL(file)
+      console.log(imageUrl)
       setSnackbar({ open: true, message: 'Foto adicionada com sucesso!', severity: 'success', autoHideDuration: 4000 });
     }
   }
@@ -117,6 +123,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
 
   const handleRemovePhoto = () => {
     setImageUrl(null)
+    setNomeImagem('')
     setPhotoModalOpen(false)
     setSnackbar({ open: true, message: 'Foto removida com sucesso!', severity: 'success', autoHideDuration: 4000 });
     if (inputRef.current) {
@@ -158,31 +165,52 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
 
   const allFieldsFilled = nome.trim() !== '' && viewCNPJ.trim().length === 18 && descricao.trim() !== '' && selectedCategories.length > 0;
 
-  const handleGetEstablishment = async () => {
+  
+
+  // Função para buscar os dados do estabelecimento
+const handleGetEstablishment = async () => {
     try {
-      const response = await api.get<getEstabelecimento>('gerente/establishment', { withCredentials: true })
+        const response = await api.get<getEstabelecimento>('/gerente/establishment', { withCredentials: true });
+       const urlCompleta = response.data.imagem;
 
-      setEstabelecimentoId(response.data.id_estabelecimento)
-      setNome(response.data.nome)
-      setDescricao(response.data.descricao)
-      setCNPJ(response.data.cnpj)
-      setViewCNPJ(formatCNPJ(response.data.cnpj))
+        if (urlCompleta) {
+            // 1. Extrai o nome do arquivo da URL completa
+            const nomeArquivoExtraido = urlCompleta.split('/').pop() || '';
+            
+            // 2. ATUALIZA O ESTADO, o que força o componente a redesenhar
+            setNomeImagem(nomeArquivoExtraido);
 
-      const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
-      const categoriasSelecionadas = dados.filter((categoria) => categoriasIds.includes(categoria.id));
-      setCategoriasSelecionadas(categoriasSelecionadas);
+            // Define a URL completa para o resto da lógica do componente (se necessário)
+            setImageUrl(urlCompleta); 
+        } else {
+            setImageUrl(null);
+            setNomeImagem('');
+        }
 
-      setFirstRegister(false)
-      setEditMode(false)
+        // 3. Define o resto dos estados com segurança
+        setEstabelecimentoId(response.data.id_estabelecimento ?? null);
+        setNome(response.data.nome ?? '');
+        setDescricao(response.data.descricao ?? '');
+        setCNPJ(response.data.cnpj ?? '');
+        setViewCNPJ(formatCNPJ(response.data.cnpj ?? ''));
+
+        const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
+        const categoriasSelecionadas = dados.filter((categoria) => categoriasIds.includes(categoria.id));
+        setCategoriasSelecionadas(categoriasSelecionadas);
+        setSelectedCategories(categoriasIds);
+
+        setFirstRegister(false);
+        setEditMode(false);
+
     } catch (error: any) {
-      if (error.response?.status === 404) {
-        setFirstRegister(true)
-        setEditMode(true)
-      }
+        if (error.response?.status === 404) {
+            setFirstRegister(true);
+            setEditMode(true);
+        }
     } finally {
-      setDisabled(false)
+        setDisabled(false);
     }
-  }
+}
 
   const handleCreateEstablishment = async () => {
     setLoading(true)
@@ -210,20 +238,30 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     }
   }
 
+
   const handleEditOrSave = async () => {
     if (editMode) {
-      // Salvar alterações (exceto CNPJ)
       setDisabled(true);
+
+      const formData = new FormData();
+
+      formData.append('id', String(estabelecimentoId)); 
+      formData.append('nome', nome);
+      formData.append('descricao', descricao);
+      formData.append('categoria', String(selectedCategories));
+      if (imageFile) {
+        formData.append('image', imageFile); 
+      }
+
       try {
-        await api.put('/gerente/establishment/', {
-          id: estabelecimentoId,
-          nome: nome,
-          descricao: descricao,
-          categoria: selectedCategories,
-        }, { withCredentials: true });
+       
+        await api.put('/gerente/establishment/', formData, {
+          withCredentials: true,
+        });
 
         setSnackbar({ autoHideDuration: 4000, open: true, message: 'Informações salvas com sucesso!', severity: 'success' });
         setEditMode(false);
+        setImageFile(null); 
       } catch (error) {
         console.log(error);
         setSnackbar({ autoHideDuration: 4000, open: true, message: 'Erro ao salvar informações.', severity: 'warning' });
@@ -275,8 +313,8 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       </Modal>
 
       {/* Modal de Foto */}
-      <Dialog 
-        open={photoModalOpen} 
+      <Dialog
+        open={photoModalOpen}
         onClose={() => setPhotoModalOpen(false)}
         TransitionComponent={Fade}
         PaperProps={{
@@ -286,7 +324,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         }}
       >
         <DialogTitle sx={{
-          fontFamily: 'var(--notosans)', 
+          fontFamily: 'var(--notosans)',
           fontSize: '20px',
           fontWeight: '500',
           color: '#333',
@@ -296,21 +334,21 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText sx={{
-            fontFamily: 'var(--notosans)', 
+            fontFamily: 'var(--notosans)',
             fontSize: '16px',
             color: 'text.secondary',
             lineHeight: 1.6
           }}>
-            Tem certeza que deseja remover a foto do estabelecimento? 
+            Tem certeza que deseja remover a foto do estabelecimento?
             Esta ação não pode ser desfeita.
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ p: 2, gap: 1 }}>
-          <Button  
-            onClick={() => setPhotoModalOpen(false)}  
+          <Button
+            onClick={() => setPhotoModalOpen(false)}
             sx={{
-              fontFamily: 'var(--notosans)', 
-              fontSize: '14px', 
+              fontFamily: 'var(--notosans)',
+              fontSize: '14px',
               color: 'text.secondary',
               textTransform: 'none',
               px: 3,
@@ -321,12 +359,12 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
           >
             Cancelar
           </Button>
-          <Button 
+          <Button
             onClick={handleRemovePhoto}
             variant="contained"
             color="error"
             sx={{
-              fontFamily: 'var(--notosans)', 
+              fontFamily: 'var(--notosans)',
               fontSize: '14px',
               textTransform: 'none',
               px: 3,
@@ -340,13 +378,13 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
       <Grid container spacing={3} sx={{ padding: 2 }}>
         {/* Card da Foto de Perfil do Estabelecimento */}
         <Grid size={{ xs: 12 }}>
-          <Card elevation={2} sx={{ 
-            p: 3, 
+          <Card elevation={2} sx={{
+            p: 3,
             mb: 3,
             border: '1px solid #f0f0f0',
           }}>
-            <Typography variant="h6" sx={{ 
-              fontFamily: 'var(--notosans)', 
+            <Typography variant="h6" sx={{
+              fontFamily: 'var(--notosans)',
               fontWeight: '500',
               color: 'text.secondary',
               mb: 3,
@@ -358,10 +396,10 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
               Foto do Estabelecimento
             </Typography>
 
-            <Box sx={{ 
-              display: 'flex', 
+            <Box sx={{
+              display: 'flex',
               flexDirection: { xs: 'column', sm: 'row' },
-              alignItems: 'center', 
+              alignItems: 'center',
               gap: 3
             }}>
               {/* Avatar Container */}
@@ -384,7 +422,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
                   />
-                  
+
                   <Avatar
                     sx={{
                       width: 120,
@@ -393,11 +431,11 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                       bgcolor: imageUrl ? 'transparent' : '#f8f9fa',
                       boxShadow: imageUrl ? '0 8px 25px rgba(103, 58, 183, 0.2)' : '0 4px 12px rgba(0,0,0,0.1)',
                     }}
-                    src={imageUrl || undefined}
+                    src={ `http://localhost:3000/establisment/image/${nomeImagem}` || imageUrl || undefined}
                   >
                     {!imageUrl && (
-                      <InsertPhoto sx={{ 
-                        fontSize: 40, 
+                      <InsertPhoto sx={{
+                        fontSize: 40,
                         color: '#999',
                         transition: 'color 0.2s',
                       }} />
@@ -425,12 +463,12 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
               </Box>
 
               {/* Informações e Botões */}
-              <Box sx={{ 
-                flex: 1, 
+              <Box sx={{
+                flex: 1,
                 textAlign: { xs: 'center', sm: 'left' },
-                minWidth: 0 
+                minWidth: 0
               }}>
-                <Typography variant="h6" sx={{ 
+                <Typography variant="h6" sx={{
                   fontFamily: 'var(--notosans)',
                   fontWeight: '600',
                   color: 'text.secondary',
@@ -438,14 +476,14 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
                 }}>
                   {imageUrl ? 'Foto do estabelecimento' : 'Adicionar foto do estabelecimento'}
                 </Typography>
-                
-                <Typography variant="body2" sx={{ 
+
+                <Typography variant="body2" sx={{
                   color: 'text.secondary',
                   mb: 2,
                   lineHeight: 1.6
                 }}>
-                  {imageUrl 
-                    ? 'Sua foto está ativa e visível para clientes.' 
+                  {imageUrl
+                    ? 'Sua foto está ativa e visível para clientes.'
                     : 'Adicione uma foto para representar seu estabelecimento. Formatos aceitos: JPG, PNG (máx. 5MB)'
                   }
                 </Typography>
@@ -495,10 +533,10 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
             type='text'
             fullWidth
             variant="outlined"
-            label="Nome do Estabelecimento" 
+            label="Nome do Estabelecimento"
           />
         </Grid>
-        
+
         <Grid size={{ xs: 12, md: 4 }}>
           <TextField
             required
@@ -512,7 +550,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
             disabled={!firstRegister || disabled}
           />
         </Grid>
-        
+
         <Grid size={{ xs: 12, sm: 12, md: 6 }}>
           <TextField
             required
@@ -534,7 +572,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
             disabled={!editMode || disabled}
           />
         </Grid>
-        
+
         <Grid size={{ xs: 12, sm: 12, md: 6 }} >
           <Autocomplete
             multiple
@@ -604,7 +642,7 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
             disabled={!editMode || disabled}
           />
         </Grid>
-        
+
         <Grid size={{ xs: 12, sm: 12, md: 12 }}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>
             {firstRegister ? (

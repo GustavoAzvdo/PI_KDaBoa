@@ -157,11 +157,11 @@ const InfoEvent = ({ id }: { id: number }) => {
                         width: "100%",
                         mb: 4,
                         p: 3,
-                       
+
                         borderRadius: 2,
                         borderLeft: '4px solid #6C15D5',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                      
+
                     }}>
                         <Box className="img-calendar" sx={{ mr: 2, mt: 0.5 }}>
                             <img src={calendar} style={{ width: '48px', height: '48px' }} alt="calendar" />
@@ -201,7 +201,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                         borderRadius: 2,
                         borderLeft: '4px solid #FF8e38',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                    
+
                     }}>
                         <Address address={juntaEndereco} location={card?.Estabelecimento.nome} />
                     </Box>
@@ -213,11 +213,11 @@ const InfoEvent = ({ id }: { id: number }) => {
                         width: "100%",
                         mb: 4,
                         p: 3,
-                       
+
                         borderRadius: 2,
                         borderLeft: '4px solid #6c15d5',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                
+
                     }}>
                         <Contacts
                             email={card.Estabelecimento.Contato.email}
@@ -239,16 +239,16 @@ const InfoEvent = ({ id }: { id: number }) => {
                     <Card
                         elevation={6}
                         sx={{
-                           
+
                             height: '330px',
                             width: "100%",
                             maxWidth: 380,
                             borderRadius: 4,
                             background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
                             border: '1px solid rgba(108, 21, 213, 0.1)',
-                          
+
                             boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-                       
+
                         }}
                     >
                         <CardContent
@@ -265,6 +265,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                         >
                             <Box sx={{ position: 'relative' }}>
                                 <Avatar
+                                    src={`http://localhost:3000/establisment/image/${card.Estabelecimento.imagem?.split('/').pop()}`}
                                     sx={{
                                         width: 80,
                                         height: 80,
@@ -301,7 +302,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                                     </span>
                                 </Typography>
 
-                                 <Button
+                                <Button
                                     endIcon={<Person />}
                                     variant="outlined"
                                     className="btn-profile"
@@ -334,7 +335,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                         <Box sx={{
                             textAlign: { xs: 'center', md: 'left' },
                             mb: 4,
-                           
+
                             pb: 2,
                             display: 'inline-block'
                         }}>
@@ -353,7 +354,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                             </Typography>
                         </Box>
                         <Box sx={{
-                           
+
                             borderRadius: 2,
                             p: 4,
                             borderLeft: '4px solid #6C15D5',

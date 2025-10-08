@@ -19,6 +19,7 @@ interface CardEventHomeProps {
 
 export default function RecipeReviewCard({ card }: CardEventHomeProps) {
     const [favorito, setFavorito] = useState(false);
+
     const navigate = useNavigate();
 
     const dataFormatada = new Date(card.data_inicio).toLocaleDateString('pt-BR', {
@@ -27,7 +28,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
         year: 'numeric',
     });
 
-
+   const nomeImagemDoAvatar = card.Estabelecimento?.imagem?.split('/').pop() || '';
     return (
 
         <Card
@@ -130,8 +131,8 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             </Box>
             <CardHeader
                 avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-
+                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe"  src={nomeImagemDoAvatar ? `http://localhost:3000/establisment/image/${nomeImagemDoAvatar}` : undefined}>
+                         {card.Estabelecimento?.nome?.charAt(0)}
                     </Avatar>
                 }
 
