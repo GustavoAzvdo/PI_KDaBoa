@@ -7,6 +7,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
+import CircularProgress from '@mui/material/CircularProgress';
 // For the sake of this demo, we have to use debounce to reduce Google Maps Places API quote use
 // But prefer to use throttle in practice
 // import throttle from 'lodash/throttle';
@@ -110,7 +111,13 @@ const fetch = debounce(
         }),
       );
     } catch (err: any) {
-      console.log(err)
+      console.log(err);
+      // Ensure the caller knows the request finished so loading can be cleared
+      try {
+        callback();
+      } catch (e) {
+        // ignore
+      }
     }
   },
   400,
@@ -124,10 +131,11 @@ interface GoogleMapsProps {
   value?: string | null;
 }
 
-export default function GoogleMaps({ onCityChange, value: initialValue}: GoogleMapsProps) {
+export default function GoogleMaps({ onCityChange, value: initialValue }: GoogleMapsProps) {
   const [value, setValue] = React.useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState<readonly PlaceType[]>(emptyOptions);
+  const [loading, setLoading] = React.useState(false);
   const callbackId = React.useId().replace(/[^\w]/g, '');
   const [loaded, setLoaded] = React.useState(false);
 
@@ -175,6 +183,7 @@ export default function GoogleMaps({ onCityChange, value: initialValue}: GoogleM
 
     if (inputValue === '') {
       setOptions(value ? [value] : emptyOptions);
+      setLoading(false);
       return undefined;
     }
 
@@ -187,6 +196,7 @@ export default function GoogleMaps({ onCityChange, value: initialValue}: GoogleM
       ).google.maps.places.AutocompleteSessionToken();
     }
 
+    setLoading(true);
     fetch({ input: inputValue, sessionToken }, (results?: readonly PlaceType[]) => {
       if (!active) {
         return;
@@ -207,6 +217,7 @@ export default function GoogleMaps({ onCityChange, value: initialValue}: GoogleM
         newOptions = [value];
       }
       setOptions(newOptions);
+      setLoading(false);
     });
 
     return () => {
@@ -229,11 +240,13 @@ export default function GoogleMaps({ onCityChange, value: initialValue}: GoogleM
       includeInputInList
       filterSelectedOptions
       value={value}
+      loading={loading}
+      loadingText="Carregando..."
       noOptionsText="Nenhuma cidade encontrada"
       onChange={(_event: any, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
-         const cityName = newValue ? newValue.structured_formatting.main_text : '';
+        const cityName = newValue ? newValue.structured_formatting.main_text : '';
         if (onCityChange) {
           onCityChange(cityName);
         }
@@ -242,7 +255,22 @@ export default function GoogleMaps({ onCityChange, value: initialValue}: GoogleM
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Cidade" fullWidth />
+        <TextField
+          {...params}
+          label="Cidade"
+          fullWidth
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }}
+        />
       )}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
