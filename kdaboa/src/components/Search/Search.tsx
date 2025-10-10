@@ -184,9 +184,6 @@ const Search = ({ onTextChange,onCityChange ,onDateChange, showScreen = false }:
                     color: 'white',
                     fontWeight: '500',
                     cursor: 'pointer',
-                    '&:hover': {
-                      backgroundColor: '#5a11b8',
-                    }
                   }}
                 />
               </Tooltip>
