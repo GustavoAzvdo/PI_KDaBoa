@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Button, Container } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
-import { HomeOutlined, Search } from '@mui/icons-material';
+import { BadgeOutlined, HomeOutlined, Search } from '@mui/icons-material';
 import logo from '../../assets/logo.png';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSearch } from '../../context/SearchContext';
@@ -118,6 +118,12 @@ const Navbar = () => {
                     Entrar
                   </Typography>
                 </MenuItem>
+                {/* novo botao para a area do produtor */}
+                <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/produtor">
+                  <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                    Area do Produtor
+                  </Typography>
+                </MenuItem>
               </Menu>
             </Box>
           </Box>
@@ -175,6 +181,32 @@ const Navbar = () => {
                 }}
             >
               Encontrar eventos
+            </Button>
+            <Button
+              component={RouterLink}
+              //rota ficticiama, ajustar quando a area do produtor estiver pronta
+              to="/produtor"
+              startIcon={<BadgeOutlined />}
+               sx={{
+                  color: 'black',
+                  fontSize: '1.2rem',
+                  fontWeight: 500,
+                  fontFamily: 'Fredoka, sans-serif',
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    width: '0%',
+                    height: '2px',
+                    left: 0,
+                    bottom: 0,
+                    bgcolor: '#6c15d5',
+                    transition: 'width 0.3s ease-in-out',
+                  },
+                  '&:hover::after': { width: '100%' },
+                }}
+            >
+              Area do Produtor
             </Button>
           </Box>
 
