@@ -32,11 +32,11 @@ const AppRoutes = () => (
         <Route path="/email-enviado" element={<SendEmail />} />
         <Route path="/search" element={<SearchEvent />} />
         <Route path="/view-event/:eventId" element={<ViewEvent />} />
-        {/* <Route path="/profile" element={<Profile />} /> */}
+
+
+        {/* facilitando a busca de eventos pela rota, apenas pelo id do evento */}
         <Route path="/view-event/:eventId/profile" element={<Profile />} />
         <Route path="/profile/:establishmentId" element={<Profile />} />
-
-        {/* Rota 2: Acesso a partir de um evento */}
         <Route path="/view-event/:eventId/profile" element={<Profile />} />
         <Route
           path="/dashboard"

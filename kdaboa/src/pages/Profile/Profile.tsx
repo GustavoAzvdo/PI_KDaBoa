@@ -11,15 +11,18 @@ import ticket from "../../assets/ticket.png";
 import api from "../../api/api";
 import EventoProps from '../../components/CardEventHome/props/EventoProps'; 
 
+type EstablishmentResponse = EventoProps['Estabelecimento'] & {
+  Endereco: EventoProps['Endereco'];
+};
+
 
 type ProfilePageData = {
   estabelecimento: EventoProps['Estabelecimento'];
   endereco: EventoProps['Endereco'];
 }
-
 const Profile = () => {
 
-  const { eventId } = useParams();
+  const { establishmentId, eventId } = useParams();
 
   const [profileData, setProfileData] = useState<ProfilePageData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,37 +33,40 @@ const Profile = () => {
     window.scrollTo(0, 0);
 
     const fetchProfileData = async () => {
- 
-      if (!eventId) {
-        setLoading(false);
-        setError("ID do evento não encontrado na URL.");
-        return;
-      }
-
       setLoading(true);
       setError(null);
       try {
-      
-        console.log(`Buscando dados do evento com ID: ${eventId}`);
-        const eventResponse = await api.get<EventoProps>(`/event/${eventId}`);
+        let estabData: EventoProps['Estabelecimento'];
+        let enderData: EventoProps['Endereco'];
 
-  
-        const estabData = eventResponse.data.Estabelecimento;
-        const enderData = eventResponse.data.Endereco;
+        if (establishmentId) {
+    
+          const response = await api.get<EstablishmentResponse>(`/estableshiment/${establishmentId}`);
+          estabData = response.data;
+          enderData = response.data.Endereco; 
 
+        } else if (eventId) {
+         
+          const eventResponse = await api.get<EventoProps>(`/event/${eventId}`);
+          estabData = eventResponse.data.Estabelecimento;
+          enderData = eventResponse.data.Endereco;
+        } else {
+          throw new Error("Nenhum ID válido encontrado na URL.");
+        }
+        
         setProfileData({ estabelecimento: estabData, endereco: enderData });
 
       } catch (err) {
-        setError("Não foi possível carregar o perfil a partir do evento.");
+        setError("Não foi possível carregar o perfil.");
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfileData();
-  }, [eventId]); 
+  }, [establishmentId, eventId]); 
 
-  
   if (loading) {
     return (
       <Box>
@@ -68,7 +74,6 @@ const Profile = () => {
         <Title>
           Perfil <Box component='img' src={user} sx={{ width: { xs: 60, md: 80 }, height: "auto" }} />
         </Title>
-
         <Container>
           <Box sx={{ width: '100%', maxWidth: 1200, mx: 'auto', mt: 2 }}>
             <Box sx={{ mb: 1 }}>
@@ -76,8 +81,6 @@ const Profile = () => {
               <Box component="div" sx={{ color: 'text.secondary', fontFamily: 'var(--notosans)' }}>Por favor, aguarde...</Box>
             </Box>
             <LinearProgress sx={{ height: 6, borderRadius: 3, mb: 3 }} />
-
-            {/* Skeletons posicionados onde InfoProfile renderiza */}
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, md: 12 }}>
                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'center', py: 3 }}>
@@ -88,21 +91,12 @@ const Profile = () => {
                   </Box>
                 </Box>
               </Grid>
-
-              <Grid size={{ xs: 12, md: 12 }}>
-                <Skeleton variant="rectangular" height={220} sx={{ borderRadius: 2 }} />
-              </Grid>
-
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Skeleton variant="rectangular" height={140} sx={{ borderRadius: 2 }} />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Skeleton variant="rectangular" height={140} sx={{ borderRadius: 2 }} />
-              </Grid>
+              <Grid size={{ xs: 12, md: 12 }}><Skeleton variant="rectangular" height={220} sx={{ borderRadius: 2 }} /></Grid>
+              <Grid size={{ xs: 12, md: 6 }}><Skeleton variant="rectangular" height={140} sx={{ borderRadius: 2 }} /></Grid>
+              <Grid size={{ xs: 12, md: 6 }}><Skeleton variant="rectangular" height={140} sx={{ borderRadius: 2 }} /></Grid>
             </Grid>
           </Box>
         </Container>
-
         <Footer />
       </Box>
     );
@@ -118,14 +112,10 @@ const Profile = () => {
       <Title>
         Perfil <Box component='img' src={user} sx={{ width: { xs: 60, md: 80 }, height: "auto" }} />
       </Title>
-
-      {/* Passamos os dados que buscamos para o InfoProfile */}
       <InfoProfile profileData={profileData} />
-
       <Title>
         Eventos <Box component='img' src={ticket} sx={{ width: { xs: 60, md: 80 }, height: "auto" }} />
       </Title>
-
       <Container>
         <Box>
           <ViewCards idEstabelecimento={profileData.estabelecimento.id_estabelecimento} />

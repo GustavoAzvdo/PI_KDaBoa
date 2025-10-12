@@ -9,6 +9,8 @@ interface PhotosProps {
 }
 
 const Photos = ({ card }: PhotosProps) => {
+    console.log('DADOS RECEBIDOS PELO PHOTOS.JS:', card); 
+
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -42,16 +44,25 @@ const Photos = ({ card }: PhotosProps) => {
         cols={isSmallScreen ? 1 : 2}
         rowHeight={300}
       >
-        {galeria.map((gal) => (
-          <ImageListItem key={gal.foto}>
-            <img
-              src={`http://localhost:3000/gallery/${gal.foto}`}
-              alt={`Foto da galeria`}
-              loading="lazy"
-               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </ImageListItem>
-        ))}
+        {galeria.map((gal: any) => {
+     
+          let imageUrl = gal.foto;
+
+          if (gal.foto && !gal.foto.startsWith('http')) {
+            imageUrl = `http://localhost:3000/gallery/${gal.foto}`;
+          }
+
+          return (
+            <ImageListItem key={gal.id_gal || gal.foto}>
+              <img
+                src={imageUrl} 
+                alt={gal.foto}
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </ImageListItem>
+          );
+        })}
       </ImageList>
     </Container>
   );
