@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardContent, Grid, Typography, List, ListItem } from "@mui/material"
+import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material"
 import "./InfoEvent.css"
 import calendar from "../../assets/calendar.png"
 import Contacts from "../Details/Contacts"
@@ -10,7 +10,6 @@ import api from "../../api/api"
 import EventoProps from "../CardEventHome/props/EventoProps";
 import { useEffect } from "react";
 
-import erro from '../../assets/404.png'
 const InfoEvent = ({ evento }: { evento: EventoProps }) => {
     const navigate = useNavigate();
 
@@ -65,43 +64,7 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
         catchEvent();
     }, [evento.id_evento]);
 
-    if (!evento) {
-        return (
-            <Box
-                sx={{
-                    height: '60vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 2,
-                    textAlign: 'center',
-                    px: 2,
-                }}
-            >
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-
-                    <Typography variant="h3" fontFamily={'var(--fredoka)'} fontWeight="500">
-                        Evento não disponível
-                    </Typography>
-
-                    <Box sx={{ height: 70, width: 70 }}>
-                        <img src={erro} alt="sad" style={{ width: '100%', height: '100%' }} />
-                    </Box>
-                </Box>
-
-                <Typography variant="h6" fontFamily={'var(--fredoka)'} sx={{ color: 'text.secondary', fontSize: '22px' }}>Possíveis causas:</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <List sx={{ maxWidth: 400, fontFamily: 'var(--notosans)', color: 'text.secondary', fontSize: '21px' }}>
-                        <ListItem>O evento ainda não foi publicado;</ListItem>
-                        <ListItem>O evento foi cancelado ou removido;</ListItem>
-                        <ListItem>Problemas de conexão ou filtragem por categoria.</ListItem>
-                    </List>
-
-                </Box>
-            </Box>
-        );
-    }
+   
 
     return (
         <>

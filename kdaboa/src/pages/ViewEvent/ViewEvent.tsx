@@ -2,36 +2,43 @@ import { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import Skeleton from '@mui/material/Skeleton';
-import { useParams } from "react-router-dom"; 
+import { useParams } from "react-router-dom";
 import NavbarEvent from "../../components/NavbarEvent/NavbarEvent";
 import InfoEvent from "../../components/InfoEvent/InfoEvent";
 import Footer from "../../components/Footer/Footer";
 import api from '../../api/api';
+import ScreenErrorX from "../../components/ScreenError/ScreenErrorX";
 
 const ViewEvent = () => {
-  const { eventId } = useParams(); 
+  const { eventId } = useParams();
   const [evento, setEvento] = useState<any>(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.title = "Evento";
     window.scrollTo(0, 0);
 
-    if (!eventId) return; 
+    if (!eventId) return;
 
     const pegaEvento = async () => {
       try {
         const response = await api.get(`/event/${eventId}`);
-        setEvento(response.data); 
+        setEvento(response.data);
       } catch (error) {
         console.log('nao deu certo', error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
     pegaEvento();
-  }, [eventId]); 
+  }, [eventId]);
+
+  if (!evento && !loading) {
+    return (
+      <ScreenErrorX variant="event"/>
+    )
+  }
 
   if (loading) {
     return (

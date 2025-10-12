@@ -10,6 +10,7 @@ import user from "../../assets/user.png";
 import ticket from "../../assets/ticket.png";
 import api from "../../api/api";
 import EventoProps from '../../components/CardEventHome/props/EventoProps'; 
+import ScreenErrorX from "../../components/ScreenError/ScreenErrorX";
 
 type EstablishmentResponse = EventoProps['Estabelecimento'] & {
   Endereco: EventoProps['Endereco'];
@@ -103,7 +104,9 @@ const Profile = () => {
   }
 
   if (error || !profileData) {
-    return <div>{error || "Perfil não encontrado."}</div>;
+    return (
+      <ScreenErrorX variant="profile" />
+    )
   }
 
   return (

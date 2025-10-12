@@ -15,6 +15,7 @@ import ViewEvent from '../pages/ViewEvent/ViewEvent'
 import { LoadingProvider } from '../context/LoadingContext';
 import { GlobalLoading } from '../components/GlobalLoading/GlobalLoading';
 import { RouteListener } from '../components/GlobalLoading/RouterListener'
+import ScreenErrorX from '../components/ScreenError/ScreenErrorX';
 
 const AppRoutes = () => (
 
@@ -55,7 +56,7 @@ const AppRoutes = () => (
           }
         />
 
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<ScreenErrorX/>} />
       </Routes>
     </LoadingProvider>
   </AuthProvider>
