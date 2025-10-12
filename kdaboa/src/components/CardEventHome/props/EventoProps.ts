@@ -37,6 +37,7 @@ interface EventoProps {
         tel_cel_2: string;
       };
       Galeria: {
+        length: number;
         map(arg0: (gal: any) => JSX.Element): NonNullable<import("react").ReactNode>;
         id_gal: number,
         foto: string,

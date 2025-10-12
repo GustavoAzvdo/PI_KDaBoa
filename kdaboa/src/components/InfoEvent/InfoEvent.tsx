@@ -14,9 +14,6 @@ import erro from '../../assets/404.png'
 const InfoEvent = ({ evento }: { evento: EventoProps }) => {
     const navigate = useNavigate();
 
-
-
-
     const dataFormatadaX = new Date(evento?.data_inicio || '').toLocaleDateString('pt-BR', {
         weekday: 'long',
         day: '2-digit',
@@ -295,7 +292,6 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
                                     endIcon={<Person />}
                                     variant="outlined"
                                     className="btn-profile"
-
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         navigate(`/view-event/${evento.id_evento}/profile`);

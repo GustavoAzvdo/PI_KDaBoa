@@ -32,9 +32,12 @@ const AppRoutes = () => (
         <Route path="/email-enviado" element={<SendEmail />} />
         <Route path="/search" element={<SearchEvent />} />
         <Route path="/view-event/:eventId" element={<ViewEvent />} />
-        <Route path="/profile/:establishmentId" element={<Profile />} />
+        {/* <Route path="/profile" element={<Profile />} /> */}
         <Route path="/view-event/:eventId/profile" element={<Profile />} />
-        {/* rotas protegidas - não entra se não fizer login  */}
+        <Route path="/profile/:establishmentId" element={<Profile />} />
+
+        {/* Rota 2: Acesso a partir de um evento */}
+        <Route path="/view-event/:eventId/profile" element={<Profile />} />
         <Route
           path="/dashboard"
           element={
