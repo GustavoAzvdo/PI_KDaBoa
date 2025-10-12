@@ -2,11 +2,11 @@ import { Box, Grid } from "@mui/material";
 import EventoProps from "../CardEventHome/props/EventoProps";
 
 interface BannerEventProps {
-  card: EventoProps;
+  evento: EventoProps;
 }
 
-const BannerEvent = ({ card }: BannerEventProps) => {
-  const imageUrl = `http://localhost:3000/event/image/${card.foto.split('/').pop()}`;
+const BannerEvent = ({ evento }: BannerEventProps) => {
+  const imageUrl = `http://localhost:3000/event/image/${evento.foto.split('/').pop()}`;
 
   return (
     <Box
@@ -61,7 +61,7 @@ const BannerEvent = ({ card }: BannerEventProps) => {
           >
             <img
               src={imageUrl}
-              alt={card.nome_evento}
+              alt={evento.nome_evento}
               style={{
                 width: "100%",
                 height: "100%",

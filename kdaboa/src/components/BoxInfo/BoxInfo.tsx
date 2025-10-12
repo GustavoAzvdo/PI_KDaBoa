@@ -132,7 +132,13 @@ const BoxInfo = () => {
         <Grid container spacing={3}>
           {top2Eventos.map((event) => (
             <Grid size={{ xs: 12, sm: 12, md: 6 }} key={event.id_evento} sx={{ pt: 4 }}>
-              <Card onClick={() => navigate("/view-event", { state: { id: event.id_evento } })} sx={{ fontFamily: 'var(--notosans)', p: 3, cursor: "pointer", "&:hover": { boxShadow: "0px 8px 20px #ff84384e" } }}>
+              <Card
+                onClick={(e: any) => {
+                  e.stopPropagation(); // Evita que o clique do card seja disparado junto
+                  navigate(`/view-event/${event.id_evento}`);
+
+                }}
+                sx={{ fontFamily: 'var(--notosans)', p: 3, cursor: "pointer", "&:hover": { boxShadow: "0px 8px 20px #ff84384e" } }}>
                 <Box display="flex" gap={2} >
                   <Box
                     sx={{
@@ -169,7 +175,7 @@ const BoxInfo = () => {
                         mb: 2,
                         fontFamily: 'var(--notosans)',
                         display: '-webkit-box',
-                        WebkitLineClamp: 2, 
+                        WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis'

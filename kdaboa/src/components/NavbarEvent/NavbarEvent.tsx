@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   AppBar,
   Box,
@@ -17,22 +17,26 @@ import {
   ShareOutlined,
 } from "@mui/icons-material";
 import logo from "../../assets/logo.png";
-import './NavbarEvent.css'
-import { Link as RouterLink } from "react-router-dom";
-import api from '../../api/api'
+import './NavbarEvent.css';
+import { Link as RouterLink, useNavigate } from "react-router-dom"; 
 import ShareEvento from "../Share/ShareEvento";
-const pages = [
-  { label: "Home", icon: <HomeOutlined />, href: "/home" },
-  { label: "Pesquisar outros eventos", icon: <Search />, href: "/search" },
-];
-type Props = { id?: number };
+import EventoProps from '../CardEventHome/props/EventoProps'; 
 
-const NavbarEvent = ({ id }: Props) => {
-  const [shareOpen, setShareOpen] = useState(false)
-  const [evento, setEvento] = useState<any>(null);
-  const [whatsMessage, setWhatsMessage] = useState("")
+
+interface NavbarEventProps {
+  evento?: EventoProps;
+}
+
+const NavbarEvent = ({ evento }: NavbarEventProps) => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  console.log(evento?.nome_evento)
+  const [shareOpen, setShareOpen] = useState(false);
+  const [whatsMessage, setWhatsMessage] = useState("");
+  const navigate = useNavigate(); // Hook de navegação
+
+  if (!evento) {
+    return null;
+  }
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -41,19 +45,8 @@ const NavbarEvent = ({ id }: Props) => {
     setAnchorElNav(null);
   };
 
-  useEffect(() => {
-    const fetchEvento = async () => {
-      try {
-        const res = await api.get(`/event/${id}`);
-        setEvento(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchEvento();
-  }, [id]);
-
   const handleShare = () => {
+  
     if (!evento?.Endereco) return;
     const enderecoCompleto = `${evento.Endereco.logradouro}, ${evento.Endereco.numero}, ${evento.Endereco.bairro} - ${evento.Endereco.cidade}/${evento.Endereco.estado}`;
     const dataFormatada = new Date(evento.data_inicio).toLocaleDateString("pt-BR");
@@ -70,17 +63,23 @@ const NavbarEvent = ({ id }: Props) => {
       `📞 Contato: ${telefone}\n\n` +
       `📝 Descrição: _${evento.descricao}_\n`
     );
-    setWhatsMessage(message)
-    setShareOpen(true)
-  
+    setWhatsMessage(message);
+    setShareOpen(true);
   };
+
+
+  const pages = [
+    { label: "Home", icon: <HomeOutlined />, action: () => navigate("/") },
+    { label: "Pesquisar outros eventos", icon: <Search />, action: () => navigate("/search") },
+  ];
+
   return (
     <AppBar
-      position="static"
+      position="sticky" 
       elevation={3}
       sx={{
         py: 1,
-        bgcolor: "white",
+        bgcolor: "rgba(255, 255, 255, 0.9)",
         color: "black",
         fontFamily: "Fredoka, sans-serif",
       }}
@@ -90,7 +89,7 @@ const NavbarEvent = ({ id }: Props) => {
           {/* Logo Desktop */}
           <Box
             component={RouterLink}
-            to="/home"
+            to="/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -101,7 +100,7 @@ const NavbarEvent = ({ id }: Props) => {
             <img src={logo} alt="Logo" style={{ height: 50 }} />
             <Typography
               sx={{
-                fontFamily: "Fredoka, sans-serif",
+                fontFamily: "var(--fredoka)",
                 fontWeight: "600",
                 fontSize: "25px",
                 pl: 1,
@@ -112,7 +111,7 @@ const NavbarEvent = ({ id }: Props) => {
             </Typography>
           </Box>
 
-          {/* Logo + menu mobile */}
+          {/* Container Mobile (Logo + Menu) */}
           <Box
             sx={{
               display: { xs: "flex", md: "none" },
@@ -123,74 +122,35 @@ const NavbarEvent = ({ id }: Props) => {
           >
             <Box
               component={RouterLink}
-              to="/home"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                textDecoration: "none",
-              }}
+              to="/"
+              sx={{ display: "flex", alignItems: "center", textDecoration: "none" }}
             >
               <img src={logo} alt="Logo" style={{ height: 45 }} />
-              <Typography
-                sx={{
-                  fontFamily: "Fredoka, sans-serif",
-                  fontWeight: "600",
-                  fontSize: "22px",
-                  pl: 1,
-                  color: "black",
-                }}
-              >
+              <Typography sx={{ fontFamily: "var(--fredoka)", fontWeight: "600", fontSize: "22px", pl: 1, color: "black" }}>
                 KDABOA &reg;
               </Typography>
             </Box>
 
-            {/* Menu mobile */}
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="menu"
-                onClick={handleOpenNavMenu}
-                sx={{ color: "#6c15d5" }}
-              >
+            {/* Menu Mobile */}
+            <Box>
+              <IconButton size="large" onClick={handleOpenNavMenu} sx={{ color: "#6c15d5" }}>
                 <MenuIcon fontSize="large" />
               </IconButton>
               <Menu
-                id="menu-appbar"
                 anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: "block", md: "none" } }}
               >
                 {pages.map((page) => (
-                  <MenuItem
-                    key={page.label}
-                    onClick={handleCloseNavMenu}
-                    component={RouterLink}
-                    to={page.href}
-                  >
-                    <Typography
-                      textAlign="center"
-                      sx={{ fontFamily: "Fredoka", fontSize: "1.1rem" }}
-                    >
+                  <MenuItem key={page.label} onClick={() => { page.action(); handleCloseNavMenu(); }}>
+                    <Typography textAlign="center" sx={{ fontFamily: "Fredoka", fontSize: "1.1rem" }}>
                       {page.label}
                     </Typography>
                   </MenuItem>
                 ))}
-                <MenuItem onClick={handleShare} sx={{ cursor: 'pointer' }}>
-                  <Typography
-                    textAlign="center"
-                    sx={{ fontFamily: "Fredoka", fontSize: "1.1rem" }}
-                    onClick={handleShare}
-                  >
+                <MenuItem onClick={() => { handleShare(); handleCloseNavMenu(); }}>
+                  <Typography textAlign="center" sx={{ fontFamily: "Fredoka", fontSize: "1.1rem" }}>
                     Compartilhar
                   </Typography>
                 </MenuItem>
@@ -199,19 +159,11 @@ const NavbarEvent = ({ id }: Props) => {
           </Box>
 
           {/* Links Desktop */}
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: { xs: "none", md: "flex" },
-              gap: 3,
-              ml: 4,
-            }}
-          >
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, gap: 3, ml: 4 }}>
             {pages.map((page) => (
               <Button
-                component={RouterLink}
                 key={page.label}
-                to={page.href}
+                onClick={page.action}
                 startIcon={page.icon}
                 sx={{
                   color: "black",
@@ -229,9 +181,7 @@ const NavbarEvent = ({ id }: Props) => {
                     bgcolor: "#6c15d5",
                     transition: "width 0.3s ease-in-out",
                   },
-                  "&:hover::after": {
-                    width: "100%",
-                  },
+                  "&:hover::after": { width: "100%" },
                 }}
               >
                 {page.label}
@@ -240,15 +190,11 @@ const NavbarEvent = ({ id }: Props) => {
           </Box>
 
           {/* Botão Compartilhar Desktop */}
-          <Box
-            sx={{
-              flexGrow: 0,
-              display: { xs: "none", sm: "none", md: "flex" },
-            }}
-          >
+          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
             <Button
               variant="contained"
               endIcon={<ShareOutlined />}
+              onClick={handleShare}
               sx={{
                 backgroundColor: "#6c15d5",
                 fontFamily: "Fredoka, sans-serif",
@@ -256,19 +202,19 @@ const NavbarEvent = ({ id }: Props) => {
                 px: 3,
                 py: 1,
               }}
-              onClick={handleShare}
-
             >
               Compartilhar
             </Button>
           </Box>
         </Toolbar>
       </Container>
+
+      {/* Modal de Compartilhamento */}
       <ShareEvento
         open={shareOpen}
         onClose={() => setShareOpen(false)}
-        eventUrl={`https://kdaboa.vercel.app/view-event/${id}`}
-        eventTitle={evento?.nome_evento || "Evento no KDABOA"}
+        eventUrl={`https://kdaboa.vercel.app/view-event/${evento.id_evento}`} // Use o ID do evento aqui
+        eventTitle={evento.nome_evento}
         whatsMessage={whatsMessage}
       />
     </AppBar>

@@ -17,7 +17,7 @@ import { GlobalLoading } from '../components/GlobalLoading/GlobalLoading';
 import { RouteListener } from '../components/GlobalLoading/RouterListener'
 
 const AppRoutes = () => (
-  
+
   <AuthProvider>
     <LoadingProvider>
       <GlobalLoading />
@@ -31,8 +31,9 @@ const AppRoutes = () => (
         <Route path="/alterar-senha" element={<AlterarSenha />} />
         <Route path="/email-enviado" element={<SendEmail />} />
         <Route path="/search" element={<SearchEvent />} />
-        <Route path="/view-event" element={<ViewEvent />} />
-        <Route path="/profile" element={<Profile />}/>
+        <Route path="/view-event/:eventId" element={<ViewEvent />} />
+        <Route path="/profile/:establishmentId" element={<Profile />} />
+        <Route path="/view-event/:eventId/profile" element={<Profile />} />
         {/* rotas protegidas - não entra se não fizer login  */}
         <Route
           path="/dashboard"
@@ -50,7 +51,7 @@ const AppRoutes = () => (
             </ProtectedRoute>
           }
         />
-      
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </LoadingProvider>
