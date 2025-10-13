@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardContent, Grid, Typography, List, ListItem } from "@mui/material"
+import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material"
 import "./InfoEvent.css"
 import calendar from "../../assets/calendar.png"
 import Contacts from "../Details/Contacts"
@@ -7,18 +7,13 @@ import { useNavigate } from "react-router-dom"
 import BannerEvent from "../BannerEvent/BannerEvent"
 import { Person } from "@mui/icons-material"
 import api from "../../api/api"
-import { useState } from "react";
 import EventoProps from "../CardEventHome/props/EventoProps";
 import { useEffect } from "react";
 
-import erro from '../../assets/404.png'
-const InfoEvent = ({ id }: { id: number }) => {
+const InfoEvent = ({ evento }: { evento: EventoProps }) => {
     const navigate = useNavigate();
 
-
-    const [card, setCard] = useState<EventoProps | null>(null);
-
-    const dataFormatadaX = new Date(card?.data_inicio || '').toLocaleDateString('pt-BR', {
+    const dataFormatadaX = new Date(evento?.data_inicio || '').toLocaleDateString('pt-BR', {
         weekday: 'long',
         day: '2-digit',
         month: 'long',
@@ -26,19 +21,9 @@ const InfoEvent = ({ id }: { id: number }) => {
     });
     const dataFormatada = dataFormatadaX.charAt(0).toUpperCase() + dataFormatadaX.slice(1);
 
-    // const horaFormatadaInicio = new Date(card?.data_inicio || '').toLocaleTimeString('pt-BR', {
-    //     hour: '2-digit',
-    //     minute: '2-digit',
-    // });
+    const juntaEndereco = `${evento?.Endereco.logradouro}, ${evento?.Endereco.numero} - ${evento?.Endereco.bairro}, ${evento?.Endereco.cidade}/${evento?.Endereco.estado}`
 
-    // const horaFormatadaTermino = new Date(card?.data_fim || '').toLocaleTimeString('pt-BR', {
-    //     hour: '2-digit',
-    //     minute: '2-digit',
-    // });
-
-    const juntaEndereco = `${card?.Endereco.logradouro}, ${card?.Endereco.numero} - ${card?.Endereco.bairro}, ${card?.Endereco.cidade}/${card?.Endereco.estado}`
-
-    const data = new Date(card?.data_inicio || '');
+    const data = new Date(evento?.data_inicio || '');
 
     const dia = data.getDate().toString().padStart(2, '0');
     const mes = (data.getMonth() + 1).toString().padStart(2, '0');
@@ -49,7 +34,7 @@ const InfoEvent = ({ id }: { id: number }) => {
 
     const dataFormatadaInicio = `${dia}/${mes}/${ano} - ${hora}h${minuto}m`;
 
-    const data2 = new Date(card?.data_fim || '');
+    const data2 = new Date(evento?.data_fim || '');
 
     const dia2 = data2.getDate().toString().padStart(2, '0');
     const mes2 = (data2.getMonth() + 1).toString().padStart(2, '0');
@@ -69,57 +54,21 @@ const InfoEvent = ({ id }: { id: number }) => {
     }
     const catchEvent = async () => {
         try {
-            const response: any = await api.get(`/event/${id}`)
-            setCard(response.data)
+            const response: any = await api.get(`/event/${evento.id_evento}`);
+            console.log(response)
         } catch (error) {
             console.log()
         }
     }
     useEffect(() => {
         catchEvent();
-    }, [id]);
+    }, [evento.id_evento]);
 
-    if (!card) {
-        return (
-            <Box
-                sx={{
-                    height: '60vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 2,
-                    textAlign: 'center',
-                    px: 2,
-                }}
-            >
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-
-                    <Typography variant="h3" fontFamily={'var(--fredoka)'} fontWeight="500">
-                        Evento não disponível
-                    </Typography>
-
-                    <Box sx={{ height: 70, width: 70 }}>
-                        <img src={erro} alt="sad" style={{ width: '100%', height: '100%' }} />
-                    </Box>
-                </Box>
-
-                <Typography variant="h6" fontFamily={'var(--fredoka)'} sx={{ color: 'text.secondary', fontSize: '22px' }}>Possíveis causas:</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <List sx={{ maxWidth: 400, fontFamily: 'var(--notosans)', color: 'text.secondary', fontSize: '21px' }}>
-                        <ListItem>O evento ainda não foi publicado;</ListItem>
-                        <ListItem>O evento foi cancelado ou removido;</ListItem>
-                        <ListItem>Problemas de conexão ou filtragem por categoria.</ListItem>
-                    </List>
-
-                </Box>
-            </Box>
-        );
-    }
+   
 
     return (
         <>
-            <BannerEvent card={card} />
+            <BannerEvent evento={evento} />
 
 
             <Grid container spacing={2} sx={{ paddingTop: 4, justifyContent: 'center', px: { xs: 2, md: 4 } }} className="container">
@@ -146,7 +95,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                             color: '#333',
                             lineHeight: 1.2
                         }}>
-                            {card?.nome_evento}
+                            {evento?.nome_evento}
                         </Typography>
                     </Box>
 
@@ -203,7 +152,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
 
                     }}>
-                        <Address address={juntaEndereco} location={card?.Estabelecimento.nome} />
+                        <Address address={juntaEndereco} location={evento?.Estabelecimento.nome} />
                     </Box>
 
                     {/* Seção de Contatos */}
@@ -220,9 +169,9 @@ const InfoEvent = ({ id }: { id: number }) => {
 
                     }}>
                         <Contacts
-                            email={card.Estabelecimento.Contato.email}
-                            telefone1={formatarCelular(card.Estabelecimento.Contato.tel_cel_1)}
-                            telefone2={formatarCelular(card.Estabelecimento.Contato.tel_cel_2)}
+                            email={evento.Estabelecimento.Contato.email}
+                            telefone1={formatarCelular(evento.Estabelecimento.Contato.tel_cel_1)}
+                            telefone2={formatarCelular(evento.Estabelecimento.Contato.tel_cel_2)}
                         />
                     </Box>
                 </Grid>
@@ -265,7 +214,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                         >
                             <Box sx={{ position: 'relative' }}>
                                 <Avatar
-                                    src={`http://localhost:3000/establisment/image/${card.Estabelecimento.imagem?.split('/').pop()}`}
+                                    src={`http://localhost:3000/establisment/image/${evento.Estabelecimento.imagem?.split('/').pop()}`}
                                     sx={{
                                         width: 80,
                                         height: 80,
@@ -298,7 +247,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                                 >
                                     Produzido por <br />
                                     <span style={{ color: '#6C15D5', fontSize: '1.2rem' }}>
-                                        {card?.Estabelecimento.nome}
+                                        {evento?.Estabelecimento.nome}
                                     </span>
                                 </Typography>
 
@@ -306,9 +255,9 @@ const InfoEvent = ({ id }: { id: number }) => {
                                     endIcon={<Person />}
                                     variant="outlined"
                                     className="btn-profile"
-                                    href="/profile"
-                                    onClick={() => {
-                                        navigate("/profile", { state: { card } });
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/view-event/${evento.id_evento}/profile`);
                                     }}
                                     sx={{
                                         fontSize: { xs: "1rem", sm: "1rem", md: '1.1rem' },
@@ -366,7 +315,7 @@ const InfoEvent = ({ id }: { id: number }) => {
                                 color: 'text.secondary',
                                 textAlign: 'justify'
                             }}>
-                                {card.descricao}
+                                {evento.descricao}
                             </Typography>
                         </Box>
                     </Box>

@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
 import { BadgeOutlined, HomeOutlined, Search } from '@mui/icons-material';
 import logo from '../../assets/logo.png';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import { useSearch } from '../../context/SearchContext';
 
 const pages = [
@@ -14,7 +14,8 @@ const pages = [
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
-  const { setSearchText, setCategories, setDate } = useSearch();
+  const { pathname } = useLocation();
+  const { setSearchText, setCategories, setDate, setCity } = useSearch();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -26,6 +27,7 @@ const Navbar = () => {
 
   const handleGoToSearch = () => {
     // Reseta ou define filtros padrão
+    setCity('');
     setSearchText('');
     setCategories([]);
     setDate('');
@@ -130,55 +132,62 @@ const Navbar = () => {
 
           {/* Links Desktop */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 3, ml: 4 }}>
-            {pages.map((page) => (
-              <Button
-                component={RouterLink}
-                key={page.label}
-                to={page.href}
-                startIcon={page.icon}
-                sx={{
-                  color: 'black',
-                  fontSize: '1.2rem',
-                  fontWeight: 500,
-                  fontFamily: 'Fredoka, sans-serif',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    width: '0%',
-                    height: '2px',
-                    left: 0,
-                    bottom: 0,
-                    bgcolor: '#6c15d5',
-                    transition: 'width 0.3s ease-in-out',
-                  },
-                  '&:hover::after': { width: '100%' },
-                }}
-              >
-                {page.label}
-              </Button>
-            ))}
+            {pages.map((page) => {
+
+              const isActive = pathname === page.href;
+
+              return (
+                <Button
+                  component={RouterLink}
+                  key={page.label}
+                  to={page.href}
+                  startIcon={page.icon}
+                  sx={{
+                    color: isActive ? '#6c15d5' : 'black', 
+                    fontSize: '1.2rem',
+                    fontWeight: 500,
+                    fontFamily: 'Fredoka, sans-serif',
+                    position: 'relative',
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      width: isActive ? '100%' : '0%',
+                      height: '2px',
+                      left: 0,
+                      bottom: 0,
+                      bgcolor: '#6c15d5',
+                      transition: 'width 0.3s ease-in-out',
+                    },
+                  
+                    ...(!isActive && { '&:hover::after': { width: '100%' } }),
+                  }}
+                >
+                  {page.label}
+                </Button>
+
+              )
+            })}
             <Button
               onClick={handleGoToSearch}
               startIcon={<Search />}
-               sx={{
-                  color: 'black',
-                  fontSize: '1.2rem',
-                  fontWeight: 500,
-                  fontFamily: 'Fredoka, sans-serif',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    width: '0%',
-                    height: '2px',
-                    left: 0,
-                    bottom: 0,
-                    bgcolor: '#6c15d5',
-                    transition: 'width 0.3s ease-in-out',
-                  },
-                  '&:hover::after': { width: '100%' },
-                }}
+              sx={{
+                color: pathname === '/search' ? '#6c15d5' : 'black',
+                fontSize: '1.2rem',
+                fontWeight: 500,
+                fontFamily: 'Fredoka, sans-serif',
+                position: 'relative',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  width: pathname === '/search' ? '100%' : '0%', 
+                  height: '2px',
+                  left: 0,
+                  bottom: 0,
+                  bgcolor: '#6c15d5',
+                  transition: 'width 0.3s ease-in-out',
+                },
+                ...(pathname !== '/search' && { '&:hover::after': { width: '100%' } }),
+              }}
             >
               Encontrar eventos
             </Button>
@@ -187,24 +196,24 @@ const Navbar = () => {
               //rota ficticiama, ajustar quando a area do produtor estiver pronta
               to="/produtor"
               startIcon={<BadgeOutlined />}
-               sx={{
-                  color: 'black',
-                  fontSize: '1.2rem',
-                  fontWeight: 500,
-                  fontFamily: 'Fredoka, sans-serif',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    width: '0%',
-                    height: '2px',
-                    left: 0,
-                    bottom: 0,
-                    bgcolor: '#6c15d5',
-                    transition: 'width 0.3s ease-in-out',
-                  },
-                  '&:hover::after': { width: '100%' },
-                }}
+              sx={{
+                color: 'black',
+                fontSize: '1.2rem',
+                fontWeight: 500,
+                fontFamily: 'Fredoka, sans-serif',
+                position: 'relative',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  width: '0%',
+                  height: '2px',
+                  left: 0,
+                  bottom: 0,
+                  bgcolor: '#6c15d5',
+                  transition: 'width 0.3s ease-in-out',
+                },
+                '&:hover::after': { width: '100%' },
+              }}
             >
               Area do Produtor
             </Button>

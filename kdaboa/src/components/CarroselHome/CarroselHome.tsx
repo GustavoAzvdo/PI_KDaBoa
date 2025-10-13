@@ -99,7 +99,7 @@ const CarroselHome = ({ eventos }: { eventos: EventoProps[] }) => {
             
                 {eventos?.map((evento) => (
                     <SwiperSlide key={evento.id_evento} style={{ width: '50%', maxWidth: '700px' }}>
-                        <Link to={`/view-event`} state={{ id: evento.id_evento }} style={{ textDecoration: 'none' }}>
+                        <Link  to={`/view-event/${evento.id_evento}`} style={{ textDecoration: 'none' }}>
                             <Box sx={{ fontFamily: 'var(--notosans)', position: 'relative', borderRadius: 2, overflow: 'hidden', height: '420px' }}>
 
                                 {/* IMAGE */}

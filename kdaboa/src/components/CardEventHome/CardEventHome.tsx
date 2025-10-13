@@ -28,11 +28,11 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
         year: 'numeric',
     });
 
-   const nomeImagemDoAvatar = card.Estabelecimento?.imagem?.split('/').pop() || '';
+    const nomeImagemDoAvatar = card.Estabelecimento?.imagem?.split('/').pop() || '';
     return (
 
         <Card
-            onClick={() => navigate('/view-event', { state: { id: card.id_evento } })}
+            onClick={() => navigate(`/view-event/${card.id_evento}`)}
             sx={{
                 borderRadius: 4,
                 cursor: "pointer",
@@ -83,7 +83,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                 </IconButton>
                 <Box
                     sx={{
-                   
+
                         bgcolor: "rgba(0, 0, 0, 0.5)",
                         p: 1,
                         width: '100%',
@@ -118,7 +118,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                                 size="small"
                                 sx={{
                                     fontFamily: 'var(--notosans)',
-                                     backgroundColor: "rgba(255,255,255,0.7)",
+                                    backgroundColor: "rgba(255,255,255,0.7)",
                                     color: 'black',
                                     fontWeight: 500,
                                     cursor: "pointer"
@@ -131,8 +131,8 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             </Box>
             <CardHeader
                 avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe"  src={nomeImagemDoAvatar ? `http://localhost:3000/establisment/image/${nomeImagemDoAvatar}` : undefined}>
-                         {card.Estabelecimento?.nome?.charAt(0)}
+                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src={nomeImagemDoAvatar ? `http://localhost:3000/establisment/image/${nomeImagemDoAvatar}` : undefined}>
+                        {card.Estabelecimento?.nome?.charAt(0)}
                     </Avatar>
                 }
 
@@ -148,19 +148,20 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
                             <LocalActivityOutlined fontSize='small' />
                             {card.Endereco.cidade} - {card.Endereco.estado}
-                            
+
                         </Box>
                     </Box>
                 }
                 className='header-cardHomeEvent'
             />
-            <CardActions sx={{ alignItems: "flex-end", display: "flex", justifyContent: "flex-end",mb: 1 }} disableSpacing>
+            <CardActions sx={{ alignItems: "flex-end", display: "flex", justifyContent: "flex-end", mb: 1 }} disableSpacing>
 
-                <Button className='btn-cardHomeEvent' sx={{px: 2}} endIcon={<CelebrationOutlined sx={{ color: "#6C15D5" }} />} onClick={() => {
+                <Button className='btn-cardHomeEvent' sx={{ px: 2 }} endIcon={<CelebrationOutlined sx={{ color: "#6C15D5" }} />}
+                    onClick={(e: any) => {
+                        e.stopPropagation(); // Evita que o clique do card seja disparado junto
+                        navigate(`/view-event/${card.id_evento}`);
 
-                    navigate('/view-event', { state: { id: card.id_evento } });
-
-                }}>
+                    }}>
 
                     <Typography className='txt-cardHomeEvent' >
                         Ver evento

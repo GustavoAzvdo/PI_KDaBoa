@@ -1,25 +1,41 @@
-import { Container, useMediaQuery, useTheme } from '@mui/material';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-
-import EventoProps from '../CardEventHome/props/EventoProps';
+import { Container, ImageList, ImageListItem, Typography, useMediaQuery, useTheme } from '@mui/material';
 import './Photos.css';
-const Photos = ({ card }: { card: EventoProps  }) => {
-  console.log(card.Estabelecimento.Galeria)
+import EventoProps from '../CardEventHome/props/EventoProps';
+type EstablishmentData = EventoProps['Estabelecimento'];
+interface PhotosProps {
+  card: {
+    Estabelecimento?: EstablishmentData;
+  };
+}
+
+const Photos = ({ card }: PhotosProps) => {
+    console.log('DADOS RECEBIDOS PELO PHOTOS.JS:', card); 
+
   const theme = useTheme();
-  // Se a tela for menor que 900px, use 2 colunas, senão 3
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
-  
+
+  const galeria = card?.Estabelecimento?.Galeria;
+
+  if (!galeria || galeria.length === 0) {
+    return (
+      <Container sx={{ textAlign: 'center', py: 5 }}>
+        <Typography variant="h6" color="text.secondary">
+          Nenhuma foto disponível para este estabelecimento.
+        </Typography>
+      </Container>
+    );
+  }
+
   return (
     <Container
       sx={{
-        height: '80vh',
+       height: '80vh',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         margin: 0,
-        flexDirection: 'column', // Para alinhar o botão abaixo das imagens
+        flexDirection: 'column', 
       }}
     >
       <ImageList
@@ -28,21 +44,28 @@ const Photos = ({ card }: { card: EventoProps  }) => {
         cols={isSmallScreen ? 1 : 2}
         rowHeight={300}
       >
-        {card?.Estabelecimento?.Galeria?.map((gal: any) => (
-          <ImageListItem key={gal.foto}>
-            <img
-              src={`http://localhost:3000/gallery/${gal.foto}`}
-              alt={gal.foto}
-              loading="lazy"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </ImageListItem>
-        ))} 
-    
-      </ImageList>
+        {galeria.map((gal: any) => {
+     
+          let imageUrl = gal.foto;
 
+          if (gal.foto && !gal.foto.startsWith('http')) {
+            imageUrl = `http://localhost:3000/gallery/${gal.foto}`;
+          }
+
+          return (
+            <ImageListItem key={gal.id_gal || gal.foto}>
+              <img
+                src={imageUrl} 
+                alt={gal.foto}
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </ImageListItem>
+          );
+        })}
+      </ImageList>
     </Container>
-  )
+  );
 }
 
-export default Photos
+export default Photos;

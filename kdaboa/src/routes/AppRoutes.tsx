@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext';
 import { ProtectedRoute } from './ProtectedRoute';
 import Login from '../components/Forms/Login/Login'
@@ -15,9 +15,10 @@ import ViewEvent from '../pages/ViewEvent/ViewEvent'
 import { LoadingProvider } from '../context/LoadingContext';
 import { GlobalLoading } from '../components/GlobalLoading/GlobalLoading';
 import { RouteListener } from '../components/GlobalLoading/RouterListener'
+import ScreenErrorX from '../components/ScreenError/ScreenErrorX';
 
 const AppRoutes = () => (
-  
+
   <AuthProvider>
     <LoadingProvider>
       <GlobalLoading />
@@ -31,9 +32,13 @@ const AppRoutes = () => (
         <Route path="/alterar-senha" element={<AlterarSenha />} />
         <Route path="/email-enviado" element={<SendEmail />} />
         <Route path="/search" element={<SearchEvent />} />
-        <Route path="/view-event" element={<ViewEvent />} />
-        <Route path="/profile" element={<Profile />}/>
-        {/* rotas protegidas - não entra se não fizer login  */}
+        <Route path="/view-event/:eventId" element={<ViewEvent />} />
+
+
+        {/* facilitando a busca de eventos pela rota, apenas pelo id do evento */}
+        <Route path="/view-event/:eventId/profile" element={<Profile />} />
+        <Route path="/profile/:establishmentId" element={<Profile />} />
+        <Route path="/view-event/:eventId/profile" element={<Profile />} />
         <Route
           path="/dashboard"
           element={
@@ -50,8 +55,8 @@ const AppRoutes = () => (
             </ProtectedRoute>
           }
         />
-      
-        <Route path="*" element={<Navigate to="/" />} />
+
+        <Route path="*" element={<ScreenErrorX/>} />
       </Routes>
     </LoadingProvider>
   </AuthProvider>

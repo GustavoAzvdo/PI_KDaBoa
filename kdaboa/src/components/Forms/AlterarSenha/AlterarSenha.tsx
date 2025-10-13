@@ -85,7 +85,7 @@ const AlterarSenha: React.FC = () => {
                 <Box>
                     <Button
                         component={RouterLink}
-                        to='/home'
+                        to='/h'
                         size='small'
                         variant='text'
                         startIcon={<Home fontSize='small' />}
