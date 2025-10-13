@@ -58,7 +58,7 @@ const RecuperarSenha = () => {
                 <Box>
                     <Button
                         component={RouterLink}
-                        to='/home'
+                        to='/'
                         size='small'
                         variant='text'
                         startIcon={<HomeOutlined fontSize='small' />}

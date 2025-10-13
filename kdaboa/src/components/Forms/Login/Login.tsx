@@ -100,33 +100,12 @@ const Login = () => {
                     
                 }}
             >
-                {/* <Box className='header_login' >
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                        <img src={logo} alt="logo" className='logo-login' />
-                        <Typography className='title_navbar_login'>
-                            KDABOA
-                        </Typography>
-                    </Box>
-                    <Box className='home-login' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '50%' }}>
-                        <Link component={RouterLink} sx={{ display: 'flex', alignItems: 'center', gap: 1, textDecoration: 'none', '&:hover': { textDecoration: 'underline', textDecorationColor: 'var(--roxoLoginBtn)' } }} to='/home'>
-                            <Typography className='title_home_login'>
-                                Home
-                            </Typography>
-                            <HomeOutlined sx={{ color: 'var(--roxoLoginBtn)' }} />
-                        </Link>
-                    </Box>
-                </Box> */}
-                
-                {/* <Box className='title_login' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                    <Typography variant='h5'>
-                        Login
-                    </Typography>
-                </Box> */}
+               
                 <Box>
                     <Button
 
                         component={RouterLink}
-                        to='/home'
+                        to='/'
                         size='small' 
                         variant='text'
                         startIcon={<HomeOutlined fontSize='small'/>}
