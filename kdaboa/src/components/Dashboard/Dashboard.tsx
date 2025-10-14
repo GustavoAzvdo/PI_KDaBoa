@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useState , useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { AppProvider, Navigation, Router, Session } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import logo from '../../assets/logo.png';
 import './Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings, EditCalendar, Collections, Person, Home } from '@mui/icons-material';
+import { Celebration, Verified, NewReleases, Face, House, Map, Call, Group, Settings, EditCalendar, Collections, Person, Home, ExitToApp } from '@mui/icons-material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import CriarEvento from '../Forms/CriarEvento/CriarEvento';
@@ -22,6 +22,7 @@ import BoasVindasGerente from '../BoasVindas/BoasVindas';
 import { useTheme } from '@mui/material/styles';
 import CriarFuncionario from '../Forms/CriarFuncionario/CriarFuncionario';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate} from 'react-router-dom';
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -40,6 +41,7 @@ function useDemoRouter(initialPath: string): Router {
 
 
 export default function DashboardLayoutBasic(props: any) {
+  const n = useNavigate()
   const theme = useTheme()
   const [eventoTitle, setEventoTitle] = useState<string>('Criar evento');
   const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -61,7 +63,7 @@ export default function DashboardLayoutBasic(props: any) {
         {
           segment: 'inicio',
           title: 'Inicio',
-          icon: <Home/>,
+          icon: <Home />,
         },
         {
           segment: 'estabelecimento',
@@ -130,6 +132,14 @@ export default function DashboardLayoutBasic(props: any) {
       title: 'Configurações',
       icon: <Settings />,
     },
+    {
+      kind: 'divider',
+    },
+    {
+      segment: 'home',
+      title: 'Voltar à Home',
+      icon: <ExitToApp />,
+    },
   ];
 
   const { window } = props;
@@ -141,7 +151,7 @@ export default function DashboardLayoutBasic(props: any) {
 
 
   const [user, setUser] = React.useState<User | null>(null)
-  const {logout} = useAuth()
+  const { logout } = useAuth()
   const [session, setSession] = React.useState<Session | null>(null);
 
 
@@ -182,20 +192,21 @@ export default function DashboardLayoutBasic(props: any) {
 
       signOut: () => {
         setOpenDialog(true);
-       
+
       },
     };
   }, [router]);
 
+  
   function renderContent(pathname: string, router: Router) {
     switch (pathname) {
       case '/dashboard/inicio':
         return (
-          <BoasVindasGerente nome={user?.nome} router={router}/>
+          <BoasVindasGerente nome={user?.nome} router={router} />
         );
       case '/dashboard':
         return (
-          <BoasVindasGerente nome={user?.nome} router={router}/>
+          <BoasVindasGerente nome={user?.nome} router={router} />
         );
       case '/dashboard/info':
         return (
@@ -219,7 +230,7 @@ export default function DashboardLayoutBasic(props: any) {
         );
       case '/funcionarios':
         return (
-          <CriarFuncionario/>
+          <CriarFuncionario />
         );
       case '/eventos/criar_evento':
         return (
@@ -231,12 +242,15 @@ export default function DashboardLayoutBasic(props: any) {
         );
       case '/eventos/em_analise':
         return (
-          <ScreenDash/>
+          <ScreenDash />
         );
       case '/configuracoes':
         return (
-          <ScreenDash/>
+          <ScreenDash />
         );
+      case '/home':
+        n('/');
+        return null;
       default:
         return (
           <ScreenError />
@@ -251,7 +265,7 @@ export default function DashboardLayoutBasic(props: any) {
       session={session}
       authentication={authentication}
       branding={{
-        logo: <img src={logo} alt="Logo" style={{pointerEvents: 'none', cursor: 'none'}} />,
+        logo: <img src={logo} alt="Logo" style={{ pointerEvents: 'none', cursor: 'none' }} />,
         title: 'Area do Gerente',
 
       }}
@@ -262,7 +276,9 @@ export default function DashboardLayoutBasic(props: any) {
       window={demoWindow}
     >
 
-      <DashboardLayout>
+      <DashboardLayout
+       
+      >
         <PageContainer>
           {renderContent(router.pathname, router)}
         </PageContainer>
@@ -270,14 +286,14 @@ export default function DashboardLayoutBasic(props: any) {
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Deseja realmente sair?</DialogTitle>
         <DialogActions>
-          <Button sx={{color: 'var(--roxoForteDashboard)'}} onClick={() => setOpenDialog(false)}>Cancelar</Button>
+          <Button sx={{ color: 'var(--roxoForteDashboard)' }} onClick={() => setOpenDialog(false)}>Cancelar</Button>
           <Button color="primary"
             variant='contained'
             onClick={() => {
               logout()
               setSession(null);
             }}
-            sx={{ backgroundColor: 'var(--roxoForteDashboard)',color: 'white', textDecoration: 'none', '&:hover': { backgroundColor: 'var(--roxoForteDashboard)' } }}
+            sx={{ backgroundColor: 'var(--roxoForteDashboard)', color: 'white', textDecoration: 'none', '&:hover': { backgroundColor: 'var(--roxoForteDashboard)' } }}
             href="/login"
           >
             Sair

@@ -215,7 +215,7 @@ const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar
                 src={user?.foto ? `http://localhost:3000/uploads/${user.foto}` : ''}
-                alt={user?.nome || 'Usuário'}
+                alt={user?.nome_usuario || 'Usuário'}
               />
             </IconButton>
             <Menu
