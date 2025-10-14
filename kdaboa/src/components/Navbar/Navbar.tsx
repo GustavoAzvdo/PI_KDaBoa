@@ -63,7 +63,7 @@ const Navbar = () => {
       state: {
         snackbars: [
           {
-            message: 'Você foi deslogado com sucesso!',
+            message: 'Sessão encerrada!',
             severity: 'success'
           }
         ]
@@ -175,16 +175,32 @@ const Navbar = () => {
                     </>
                   ) : (
                     <>
-                      <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/login">
-                        <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                          Entrar
-                        </Typography>
-                      </MenuItem>
+                      
                       <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/produtor">
                         <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
                           Área do Produtor
                         </Typography>
                       </MenuItem>
+                      {isAuthenticated ? (
+                        <>
+                          <MenuItem onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}>
+                            <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                              Dashboard
+                            </Typography>
+                          </MenuItem>
+                          <MenuItem onClick={() => { handleCloseNavMenu(); setLogoutModalOpen(true); }}>
+                            <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                              Sair
+                            </Typography>
+                          </MenuItem>
+                        </>
+                      ) : (
+                        <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/login">
+                          <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                            Entrar
+                          </Typography>
+                        </MenuItem>
+                      )}
                     </>
                   )}
                 </Menu>
@@ -250,7 +266,7 @@ const Navbar = () => {
                 Encontrar eventos
               </Button>
 
-                {/* Area do produtor */}
+              {/* Area do produtor */}
               <Button
                 component={RouterLink}
                 to="/produtor"
@@ -289,6 +305,7 @@ const Navbar = () => {
                       onClick={handleOpenUserMenu}
                       endIcon={<KeyboardArrowDownIcon />}
                       sx={{
+                        pl: 2,
                         color: 'black',
                         fontFamily: 'Fredoka, sans-serif',
                         fontSize: '1.1rem',
@@ -297,7 +314,7 @@ const Navbar = () => {
                           backgroundColor: 'rgba(108, 21, 213, 0.1)',
                         }
                       }}
-                      startIcon={<Face/>}
+                      startIcon={<Face />}
                     >
                       Olá, {user && user.nome_usuario
                         ? user.nome_usuario.charAt(0).toUpperCase() + user.nome_usuario.slice(1).toLowerCase()
@@ -329,7 +346,7 @@ const Navbar = () => {
                   </Menu>
                 </>
               ) : (
-                /* Botão Entrar - só mostra se não estiver logado */
+                //  só mostra se tiver logado
                 <Button
                   variant="contained"
                   component={RouterLink}
@@ -351,7 +368,7 @@ const Navbar = () => {
         </Container>
       </AppBar>
 
-      {/* Modal de confirmação de logout */}
+      {/* vai sair memo? ent toma modal */}
       <Dialog
         open={logoutModalOpen}
         onClose={handleCloseLogoutModal}
