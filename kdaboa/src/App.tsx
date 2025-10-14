@@ -4,10 +4,14 @@ import { EventosProvider } from './context/EventoContext'
 import AppRoutes from './routes/AppRoutes'
 import './index.css'
 
+ 
+
 
 function App() {
 
+ 
 
+    
   return (
 
     <EventosProvider>
