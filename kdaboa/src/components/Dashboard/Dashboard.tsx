@@ -135,6 +135,8 @@ export default function DashboardLayoutBasic(props: any) {
     {
       kind: 'divider',
     },
+
+    
     {
       segment: 'home',
       title: 'Voltar à Home',

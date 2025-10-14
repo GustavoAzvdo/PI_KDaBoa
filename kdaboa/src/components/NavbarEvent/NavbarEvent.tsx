@@ -270,6 +270,7 @@ const NavbarEvent = ({ evento }: NavbarEventProps) => {
                       onClick={handleOpenUserMenu}
                       endIcon={<KeyboardArrowDown />}
                       sx={{
+                        pl: 2,
                         color: 'black',
                         fontFamily: 'Fredoka, sans-serif',
                         fontSize: '1.1rem',
