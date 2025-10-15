@@ -92,10 +92,19 @@ const NavbarEvent = ({ evento }: NavbarEventProps) => {
     });
   };
 
-  const handleGoToDashboard = () => {
+const handleGoToDashboard = () => {
     handleCloseUserMenu();
-    navigate('/dashboard');
-  };
+    handleCloseNavMenu();
+
+    if (user?.tipo === 'Gerente') {
+        navigate('/dashboard');
+    } else if (user?.tipo === 'Funcionario') {
+        navigate('/dashboard_func');
+    } else {
+        console.warn("Usuário logado sem 'tipo' definido. Redirecionando para a home.");
+        navigate('/');
+    }
+};
 
   const handleShare = () => {
     if (!evento?.Endereco) return;

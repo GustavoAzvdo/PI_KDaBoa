@@ -141,7 +141,7 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
             <CardContent>
               <Verified sx={{ fontSize: 40 }} />
               <Typography variant="h6">Eventos Criados</Typography>
-              <Typography variant="h4">{totalEventos}</Typography>
+              <Typography variant="h5">{totalEventos}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -161,7 +161,7 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
             <CardContent>
               <NewReleases sx={{ fontSize: 40 }} />
               <Typography variant="h6">Em Análise</Typography>
-              <Typography variant="h4">0</Typography>
+              <Typography variant="h5">0</Typography>
             </CardContent>
           </Card>
         </Grid>
