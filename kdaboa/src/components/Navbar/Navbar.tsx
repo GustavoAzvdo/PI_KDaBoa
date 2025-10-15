@@ -73,7 +73,16 @@ const Navbar = () => {
 
   const handleGoToDashboard = () => {
     handleCloseUserMenu();
-    navigate('/dashboard');
+
+    if (user?.tipo === 'Gerente') {
+      navigate('/dashboard');
+    } else if (user?.tipo === 'Funcionario') {
+      navigate('/dashboard_func');
+    } else {
+      // Fallback para uma rota padrão caso 'tipo' não esteja definido
+      console.warn("Tipo de usuário não reconhecido, redirecionando para dashboard padrão.");
+      navigate('/dashboard');
+    }
   };
 
   return (

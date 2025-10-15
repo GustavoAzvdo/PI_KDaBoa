@@ -1,16 +1,16 @@
 import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, Card, Stack, Container } from '@mui/material'
-import { HttpsOutlined, EmailOutlined,  HomeOutlined } from '@mui/icons-material';
+import { HttpsOutlined, EmailOutlined, HomeOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material'
 import api from '../../../api/api'
 import logo from '../../../assets/logo.png'
 import './Login.css'
-import {Link as RouterLink} from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import { useAuth } from '../../../context/AuthContext';
 const Login = () => {
     const location = useLocation();
-      const { login } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
     const [snackbarQueue, setSnackbarQueue] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -20,7 +20,7 @@ const Login = () => {
     const [email, setEmail] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    
+
     useEffect(() => {
         if (location.state?.snackbars && location.state.snackbars.length > 0) {
             setSnackbarQueue(location.state.snackbars);
@@ -60,12 +60,21 @@ const Login = () => {
             },
                 {
                     withCredentials: true
-            })
+                })
 
-            if (response.status === 201) {
-                localStorage.setItem('userEmail', email);
-                login()
-                navigate('/dashboard');
+            if (response.status === 201 || response.status === 200) {
+                const userData = await login();
+
+                if (userData?.tipo === 'Funcionario') {
+                    navigate('/dashboard_func');
+                } else if (userData?.tipo === 'Gerente') {
+                    navigate('/dashboard');
+                } else {
+                  setSnackbarMessage('Tipo de usuário desconhecido. Contate o suporte.');
+                  setSnackbarSeverity('error');
+                  setSnackbarOpen(true); 
+                  
+                }
             } else {
                 console.log('Email ainda nao verificado');
                 setSnackbarMessage('Seu e-mail ainda não foi verificado! Verifique sua caixa de entrada e clique no link de confirmação.');
@@ -89,28 +98,28 @@ const Login = () => {
     };
 
     return (
-        <Box className='container_login' sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh'}}>
-            <Card 
+        <Box className='container_login' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            <Card
                 elevation={2}
                 sx={{
                     width: '400px',
                     height: 'auto',
                     borderRadius: 2,
                     border: '1px solid #e0e0e0',
-                   
+
                     backgroundColor: 'white',
-                    
+
                 }}
             >
-               
+
                 <Box>
                     <Button
 
                         component={RouterLink}
                         to='/'
-                        size='small' 
+                        size='small'
                         variant='text'
-                        startIcon={<HomeOutlined fontSize='small'/>}
+                        startIcon={<HomeOutlined fontSize='small' />}
                         sx={{
                             fontWeight: 400,
                             fontFamily: 'var(--fredoka)',
@@ -123,94 +132,94 @@ const Login = () => {
                     </Button>
                 </Box>
                 <Container>
-                <Stack direction={'column'} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <Box
-                        component={'img'}
-                        src={logo}
-                        sx={{
-                            mt: 3,
-                            width: '60px',
-                            height: '60px'
-                        }}
-                    />
-                    
-                        <Typography variant='h4' sx={{ pt: 1, fontFamily: 'var(--fredoka)', fontWeight: '500'}}>
+                    <Stack direction={'column'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box
+                            component={'img'}
+                            src={logo}
+                            sx={{
+                                mt: 3,
+                                width: '60px',
+                                height: '60px'
+                            }}
+                        />
+
+                        <Typography variant='h4' sx={{ pt: 1, fontFamily: 'var(--fredoka)', fontWeight: '500' }}>
                             Login
                         </Typography>
-                   
-                        <Typography fontSize='15px' sx={{pt: 1,pb: 3,color: 'text.secondary', fontFamily: 'var(--notosans)'}}>
+
+                        <Typography fontSize='15px' sx={{ pt: 1, pb: 3, color: 'text.secondary', fontFamily: 'var(--notosans)' }}>
                             Entre com o seu email e senha!
                         </Typography>
-                   
-                </Stack>
-                <Box component='form'  onSubmit={handleLogin}>
-                    <Box className='inputs'>
-                        <Box>
-                            <TextField
-                                fullWidth
-                                margin='normal'
-                                id="outlined-basic"
-                                type="email" required
-                                label="Email"
-                                variant="outlined"
-                                value={email}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                                InputProps={{
-                                    endAdornment: <InputAdornment position="end" >
-                                        <EmailOutlined
-                                            className='icons'
-                                        />
-                                    </InputAdornment>
-                                }}
-                            />
-                        </Box>
-                        <Box>
-                            <TextField
-                                fullWidth
-                                margin='normal'
-                                id="outlined-basic"
-                                type="password" required
-                                label="Senha"
-                                variant="outlined"
-                                value={senha}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSenha(e.target.value)}
-                                InputProps={{
-                                    endAdornment: <InputAdornment position="end" >
-                                        <HttpsOutlined
-                                            className='icons'
-                                        />
-                                    </InputAdornment>
-                                }}
-                            />
-                        </Box>
-                    </Box>
-                    <Box className='btn'>
-                        <Button
-                            variant="contained"
-                            className='btn-login'
-                            type='submit'
-                            disabled={isLoading}
-                            startIcon={isLoading ? <CircularProgress color="inherit" size={20} /> : null}
-                        >
-                            <Typography className='btn' >
-                                {isLoading ? 'Entrando...' : 'Entrar'}
-                            </Typography>
-                        </Button>
-                        <Box className='links'>
+
+                    </Stack>
+                    <Box component='form' onSubmit={handleLogin}>
+                        <Box className='inputs'>
                             <Box>
-                                <Link component={RouterLink} to="/recuperar-senha">Esqueceu a sua senha?</Link>
+                                <TextField
+                                    fullWidth
+                                    margin='normal'
+                                    id="outlined-basic"
+                                    type="email" required
+                                    label="Email"
+                                    variant="outlined"
+                                    value={email}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end" >
+                                            <EmailOutlined
+                                                className='icons'
+                                            />
+                                        </InputAdornment>
+                                    }}
+                                />
+                            </Box>
+                            <Box>
+                                <TextField
+                                    fullWidth
+                                    margin='normal'
+                                    id="outlined-basic"
+                                    type="password" required
+                                    label="Senha"
+                                    variant="outlined"
+                                    value={senha}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSenha(e.target.value)}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end" >
+                                            <HttpsOutlined
+                                                className='icons'
+                                            />
+                                        </InputAdornment>
+                                    }}
+                                />
                             </Box>
                         </Box>
-                        <Box className="links-account-login" sx={{mb: 2}}>
-                            <Typography>
-                                Não tem uma conta? <Link component={RouterLink} to='/signin'>Crie Uma! </Link>
-                            </Typography>
+                        <Box className='btn'>
+                            <Button
+                                variant="contained"
+                                className='btn-login'
+                                type='submit'
+                                disabled={isLoading}
+                                startIcon={isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                            >
+                                <Typography className='btn' >
+                                    {isLoading ? 'Entrando...' : 'Entrar'}
+                                </Typography>
+                            </Button>
+                            <Box className='links'>
+                                <Box>
+                                    <Link component={RouterLink} to="/recuperar-senha">Esqueceu a sua senha?</Link>
+                                </Box>
+                            </Box>
+                            <Box className="links-account-login" sx={{ mb: 2 }}>
+                                <Typography>
+                                    Não tem uma conta? <Link component={RouterLink} to='/signin'>Crie Uma! </Link>
+                                </Typography>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
                 </Container>
             </Card>
-            
+
             <Snackbar open={snackbarOpen} autoHideDuration={4000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{
                     display: 'flex',

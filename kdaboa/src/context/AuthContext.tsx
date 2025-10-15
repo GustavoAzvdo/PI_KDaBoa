@@ -1,17 +1,19 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import api from '../api/api'
+import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import api from '../api/api'; 
 
 interface User {
-  nome_usuario?: string; 
+  nome_usuario?: string;
   email?: string;
   foto?: string;
-  cargo?: string;
+  tipo?: string; 
+  sub?: number;
+  status?: number;
 }
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
-  login: (userData?: User) => void;
+  login: () => Promise<User | null>; 
   logout: () => void;
 }
 
@@ -24,35 +26,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
- 
-  useEffect(() => {
-    if (isAuthenticated) {
-      api.get<User>('/auth/dados', { withCredentials: true })
-        .then(res => {
-          setUser(res.data);
-          localStorage.setItem('user', JSON.stringify(res.data)); 
-        })
-        .catch(_err => {
-          console.error('Falha ao buscar dados, deslogando...');
-          logout();
-        });
-    }
-  }, [isAuthenticated]); 
-
-  const login = (userData?: User) => {
-    localStorage.setItem('is_logged_in', 'true');
-    if (userData) {
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
-    }
-    setIsAuthenticated(true);
-  };
-
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('is_logged_in');
     localStorage.removeItem('user');
     setUser(null);
     setIsAuthenticated(false);
+   
+  }, []);
+
+  const login = async (): Promise<User | null> => {
+    localStorage.setItem('is_logged_in', 'true');
+    setIsAuthenticated(true);
+
+    try {
+     
+      const response = await api.get<User>('/auth/dados', { withCredentials: true });
+      const userData = response.data;
+
+      if (userData) {
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        return userData;
+      }
+      
+      throw new Error("Dados do usuário não recebidos da API.");
+
+    } catch (error) {
+      console.error('Falha ao buscar dados do usuário. Deslogando...', error);
+
+      logout();
+      return null; 
+    }
   };
 
   return (
