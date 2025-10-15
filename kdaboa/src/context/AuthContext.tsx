@@ -1,10 +1,8 @@
-// src/context/AuthContext.jsx
-
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import api from '../api/api'
 
 interface User {
-  nome_usuario?: string; // Alterado de 'nome' para 'nome_usuario'
+  nome_usuario?: string; 
   email?: string;
   foto?: string;
   cargo?: string;
