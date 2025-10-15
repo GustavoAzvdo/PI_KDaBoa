@@ -39,24 +39,28 @@ const AppRoutes = () => (
         <Route path="/view-event/:eventId/profile" element={<Profile />} />
         <Route path="/profile/:establishmentId" element={<Profile />} />
         <Route path="/view-event/:eventId/profile" element={<Profile />} />
+        {/* gerente */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['Gerente']}>
               <Dashboard />
             </ProtectedRoute>
           }
         />
+
+        {/* funcionario */}
         <Route
           path="/dashboard_func"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['Funcionario']}>
               <DashboardFuncionario />
             </ProtectedRoute>
           }
         />
 
-        <Route path="*" element={<ScreenErrorX/>} />
+
+        <Route path="*" element={<ScreenErrorX />} />
       </Routes>
     </LoadingProvider>
   </AuthProvider>

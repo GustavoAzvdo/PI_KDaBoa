@@ -1,17 +1,17 @@
 import { Box, Typography, Grid, Card, CardContent, Button } from '@mui/material';
-import { Group, EditCalendar, Verified, NewReleases } from '@mui/icons-material';
-import gerente from './gerente.png'
+import { EditCalendar, Verified, NewReleases, AccountCircle } from '@mui/icons-material';
+import funcionario from './funcionario.png' // você precisará adicionar esta imagem
 import { useState, useEffect } from 'react';
 import api from '../../api/api'
 
-const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
+const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any }) => {
   const [totalEventos, setTotalEventos] = useState<number>(0);
-  const [nomeGerente, setNomeGerente] = useState<string>('');
+  const [nomeFuncionario, setNomeFuncionario] = useState<string>('');
 
   useEffect(() => {
     const fetchTotalEventos = async () => {
       try {
-        const response: any = await api.get('/gerente/event');
+        const response: any = await api.get('/funcionario/event'); // endpoint específico para funcionário
         setTotalEventos(response.data.length);
       } catch (error) {
         console.error('Erro ao buscar total de eventos:', error);
@@ -19,24 +19,25 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
     };
     fetchTotalEventos();
   }, [])
-  const capitalizar = (nome: string) =>
-    nome
+
+  const capitalizar = (nome_usuario: string) =>
+    nome_usuario
       .toLowerCase()
       .split(' ')
       .map(p => p.charAt(0).toUpperCase() + p.slice(1))
       .join(' ');
 
   useEffect(() => {
-    const fetchNomeUsuario = async () => {
+    const fetchNomeFuncionario = async () => {
       try {
-        const response: any = await api.get('/gerente/establishment', { withCredentials: true });
-        const nomeUsuario = response.data.Usuario?.[0]?.nome_usuario;
-        setNomeGerente(nomeUsuario || 'Gerente');
+        const response: any = await api.get('/auth/dados', { withCredentials: true }); // endpoint específico para funcionário
+        const nomeFuncionario = response.data.nome_usuario;
+        setNomeFuncionario(nomeFuncionario || 'Funcionário');
       } catch (err) {
-        console.error('Erro ao buscar nome do usuário:', err);
+        console.error('Erro ao buscar nome do funcionário:', err);
       }
     };
-    fetchNomeUsuario();
+    fetchNomeFuncionario();
   }, []);
 
   return (
@@ -46,10 +47,10 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: { xs: "center", md: "flex-start" },
-          flexDirection: { xs: "column", sm: "row" }, // empilha no mobile, lado a lado em telas maiores
-          gap: { xs: 2, sm: 4 }, // espaçamento entre logo e texto
+          flexDirection: { xs: "column", sm: "row" },
+          gap: { xs: 2, sm: 4 },
           textAlign: { xs: "center", sm: "left" },
-          px: { xs: 2, sm: 0 }, // padding lateral no mobile
+          px: { xs: 2, sm: 0 },
         }}
       >
         <Box
@@ -60,8 +61,8 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
           }}
         >
           <img
-            src={gerente}
-            alt="gerente"
+            src={funcionario}
+            alt="funcionario"
             style={{
               width: "200px",
               height: "200px",
@@ -76,11 +77,11 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
             gutterBottom
             sx={{
               fontFamily: 'var(--notosans)',
-              fontSize: { xs: "2.2rem", sm: "2.2rem" }, // menor no mobile
+              fontSize: { xs: "2.2rem", sm: "2.2rem" },
               fontWeight: 500,
             }}
           >
-            Bem-vindo(a), {capitalizar(nomeGerente) || "Gerente"}!
+            Bem-vindo(a), {capitalizar(nomeFuncionario) || "Funcionário"}!
           </Typography>
 
           <Typography
@@ -90,13 +91,12 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
               fontSize: { xs: "1.3rem", sm: "1.3rem" },
             }}
           >
-            Aqui estão seus atalhos e resumo de atividades recentes.
+            Gerencie eventos e mantenha tudo atualizado para o estabelecimento.
           </Typography>
         </Box>
       </Box>
 
-      {/* Atalhos */}
-
+      {/* Atalhos para Funcionário */}
       <Grid container spacing={2} sx={{ mt: 3 }}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{
@@ -113,34 +113,22 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
             <CardContent>
               <EditCalendar sx={{ fontSize: 40 }} />
               <Typography variant="h6">Criar Evento</Typography>
-              <Button variant="outlined" color="inherit" size="small" sx={{ mt: 1 }} onClick={() => router.navigate('/eventos/criar_evento')}>Acessar</Button>
+              <Button 
+                variant="outlined" 
+                color="inherit" 
+                size="small" 
+                sx={{ mt: 1 }} 
+                onClick={() => router.navigate('/eventos/criar_evento')}
+              >
+                Acessar
+              </Button>
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }}>
+
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{
-            bgcolor: '#BB8AFF',
-            color: 'white',
-            height: '100%',
-            transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
-            boxShadow: 4,
-            '&:hover': {
-              boxShadow: 8,
-              transform: 'translateY(-8px)',
-            },
-          }}>
-            <CardContent>
-              <Group sx={{ fontSize: 40 }} />
-              <Box>
-                <Typography variant="h6">Funcionários</Typography>
-              </Box>
-              <Button variant="outlined" color="inherit" size="small" sx={{ mt: 1 }} onClick={() => router.navigate('/funcionarios')} >Gerenciar</Button>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }}>
-          <Card sx={{
-            bgcolor: '#276321',
+            bgcolor: '#4CAF50',
             color: 'white',
             height: '100%',
             transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
@@ -152,12 +140,13 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
           }}>
             <CardContent>
               <Verified sx={{ fontSize: 40 }} />
-              <Typography variant="h6">Eventos postados</Typography>
-              <Typography>{totalEventos}</Typography>
+              <Typography variant="h6">Eventos Criados</Typography>
+              <Typography variant="h4">{totalEventos}</Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }}>
+
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{
             bgcolor: 'warning.main',
             color: 'white',
@@ -171,8 +160,36 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
           }}>
             <CardContent>
               <NewReleases sx={{ fontSize: 40 }} />
-              <Typography variant="h6">Em análise</Typography>
-              <Typography>0</Typography>
+              <Typography variant="h6">Em Análise</Typography>
+              <Typography variant="h4">0</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Card sx={{
+            bgcolor: '#2196F3',
+            color: 'white',
+            height: '100%',
+            transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
+            boxShadow: 4,
+            '&:hover': {
+              boxShadow: 8,
+              transform: 'translateY(-8px)',
+            },
+          }}>
+            <CardContent>
+              <AccountCircle sx={{ fontSize: 40 }} />
+              <Typography variant="h6">Meu Perfil</Typography>
+              <Button 
+                variant="outlined" 
+                color="inherit" 
+                size="small" 
+                sx={{ mt: 1 }} 
+                onClick={() => router.navigate('/dashboard/info')}
+              >
+                Ver Perfil
+              </Button>
             </CardContent>
           </Card>
         </Grid>
@@ -181,4 +198,4 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
   );
 };
 
-export default BoasVindasGerente;
+export default BoasVindasFuncionario;
