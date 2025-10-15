@@ -60,7 +60,7 @@ const Login = () => {
             },
                 {
                     withCredentials: true
-                })
+            })
 
             if (response.status === 201) {
                 localStorage.setItem('userEmail', email);
@@ -76,6 +76,8 @@ const Login = () => {
         } catch (error: any) {
             if (error.response && (error.response.status === 401 || error.response.status === 400)) {
                 setSnackbarMessage('Email ou senha incorretos!');
+            } else if (error.status === 302) {
+                navigate('/alterar-senha')
             } else {
                 setSnackbarMessage(error.response?.data?.message || 'Erro ao fazer login!');
             }
