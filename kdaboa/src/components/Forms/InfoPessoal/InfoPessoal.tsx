@@ -1,17 +1,95 @@
-import { Box, Button, Grid,  Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField,  Link, Card, Avatar, Fade, Chip } from '@mui/material'
+import { Box, Button, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Link, Card, Avatar, Fade, Chip, CircularProgress } from '@mui/material'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { InsertPhoto, PersonOutlined, EmailOutlined, LockOutlined, Save } from '@mui/icons-material'
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar'
-
+import api from '../../../api/api'
 const InfoPessoal = () => {
     const inputRef = useRef<HTMLInputElement | null>(null)
     const [imageUrl, setImageUrl] = useState<string | null>(null)
+    const [, setOriginalImageUrl] = useState<string | null>(null); // <-- ADICIONE ESTE ESTADO
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [photoRemoved, setPhotoRemoved] = useState<boolean>(false);
+    const [nome, setNome] = useState<string>('')
+    const [email, setEmail] = useState<string>('')
     const [modalOpen, setModalOpen] = useState(false)
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
+
+    //carregamento
+
+    const [isLoading, setIsLoading] = useState(false);
+
+
+
+const handleUpdate = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('nome', nome);
+
+    if (selectedFile) {
+      
+        formData.append('image', selectedFile);
+    } else if (photoRemoved) {
+       
+        formData.append('image', '');
+    }
+
+
+    console.log('Enviando FormData para a API...');
+
+    try {
+        await api.put('/auth/update-user', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        setSnackbarMessage('Perfil atualizado com sucesso!');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+        setSelectedFile(null);
+        setPhotoRemoved(false);        
+        handleDados();
+
+    } catch (error) {
+        console.error('Erro ao atualizar os dados:', error);
+        if ((error as any).response) {
+            console.error('Dados do erro:', (error as any).response.data);
+            setSnackbarMessage(`Erro: ${(error as any).response.data.message || 'Não foi possível salvar.'}`);
+        } else {
+            setSnackbarMessage('Ocorreu um erro ao salvar as alterações.');
+        }
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+    } finally {
+        setIsLoading(false);
+    }
+};
+
+    const handleDados = async () => {
+        try {
+            const response = await api.get('/auth/dados');
+            const userData = response.data as { nome_usuario: string; email: string; foto?: string | null };
+
+            console.log('Dados do usuário recebidos:', userData);
+            setNome(userData.nome_usuario);
+            setEmail(userData.email);
+            setImageUrl(userData.foto || null);
+            setOriginalImageUrl(userData.foto || null);
+
+        } catch (error) {
+            console.error('Erro ao buscar dados do usuário:', error);
+            setSnackbarMessage('Não foi possível carregar os dados do perfil.');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+        }
+    };
+    useEffect(() => {
+        handleDados()
+    }, [])
 
     const handleBoxClick = () => {
         if (!imageUrl) inputRef.current?.click()
@@ -20,7 +98,7 @@ const InfoPessoal = () => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0]
-            
+
             // Validação de tamanho (5MB)
             if (file.size > 5 * 1024 * 1024) {
                 setSnackbarOpen(true);
@@ -39,6 +117,10 @@ const InfoPessoal = () => {
             setSnackbarOpen(true);
             setSnackbarMessage('Foto adicionada com sucesso!');
             setSnackbarSeverity('success');
+
+            setSelectedFile(file);
+            setImageUrl(URL.createObjectURL(file)); // Gera URL local para pré-visualização
+            setPhotoRemoved(false);
         }
     }
 
@@ -51,8 +133,10 @@ const InfoPessoal = () => {
     }
 
     const handleRemovePhoto = () => {
-        setImageUrl(null)
-        setModalOpen(false)
+        setImageUrl(null);
+        setSelectedFile(null); // Limpa qualquer arquivo selecionado
+        setPhotoRemoved(true); // Marca que o usuário quer remover a foto
+        setModalOpen(false);
         setSnackbarOpen(true);
         setSnackbarMessage('Foto removida com sucesso!');
         setSnackbarSeverity('success');
@@ -68,19 +152,19 @@ const InfoPessoal = () => {
     return (
         <Box sx={{ p: 3 }}>
             {/* Header da seção */}
-           
+
 
             <Grid container spacing={3}>
                 {/* Card da Foto de Perfil */}
                 <Grid size={{ xs: 12 }}>
-                    <Card elevation={2} sx={{ 
-                        p: 3, 
-                        
+                    <Card elevation={2} sx={{
+                        p: 3,
+
                         border: '1px solid #f0f0f0',
-                       
+
                     }}>
-                        <Typography variant="h6" sx={{ 
-                            fontFamily: 'var(--notosans)', 
+                        <Typography variant="h6" sx={{
+                            fontFamily: 'var(--notosans)',
                             fontWeight: '500',
                             color: 'text.secondary',
                             mb: 3,
@@ -92,10 +176,10 @@ const InfoPessoal = () => {
                             Foto do Perfil
                         </Typography>
 
-                        <Box sx={{ 
-                            display: 'flex', 
+                        <Box sx={{
+                            display: 'flex',
                             flexDirection: { xs: 'column', sm: 'row' },
-                            alignItems: 'center', 
+                            alignItems: 'center',
                             gap: 3
                         }}>
                             {/* Avatar Container */}
@@ -118,7 +202,7 @@ const InfoPessoal = () => {
                                         style={{ display: 'none' }}
                                         onChange={handleFileChange}
                                     />
-                                    
+
                                     <Avatar
                                         sx={{
                                             width: 120,
@@ -130,8 +214,8 @@ const InfoPessoal = () => {
                                         src={imageUrl || undefined}
                                     >
                                         {!imageUrl && (
-                                            <InsertPhoto sx={{ 
-                                                fontSize: 40, 
+                                            <InsertPhoto sx={{
+                                                fontSize: 40,
                                                 color: '#999',
                                                 transition: 'color 0.2s',
                                             }} />
@@ -159,12 +243,12 @@ const InfoPessoal = () => {
                             </Box>
 
                             {/* Informações e Botões */}
-                            <Box sx={{ 
-                                flex: 1, 
+                            <Box sx={{
+                                flex: 1,
                                 textAlign: { xs: 'center', sm: 'left' },
-                                minWidth: 0 
+                                minWidth: 0
                             }}>
-                                <Typography variant="h6" sx={{ 
+                                <Typography variant="h6" sx={{
                                     fontFamily: 'var(--notosans)',
                                     fontWeight: '600',
                                     color: 'text.secondary',
@@ -172,14 +256,14 @@ const InfoPessoal = () => {
                                 }}>
                                     {imageUrl ? 'Foto do perfil' : 'Adicionar foto do perfil'}
                                 </Typography>
-                                
-                                <Typography variant="body2" sx={{ 
+
+                                <Typography variant="body2" sx={{
                                     color: 'text.secondary',
                                     mb: 2,
                                     lineHeight: 1.6
                                 }}>
-                                    {imageUrl 
-                                        ? 'Sua foto está ativa e visível para outros usuários.' 
+                                    {imageUrl
+                                        ? 'Sua foto está ativa e visível para outros usuários.'
                                         : 'Adicione uma foto para personalizar seu perfil. Formatos aceitos: JPG, PNG (máx. 5MB)'
                                     }
                                 </Typography>
@@ -190,7 +274,7 @@ const InfoPessoal = () => {
                                     startIcon={imageUrl ? <DeleteIcon /> : <AddAPhotoIcon />}
                                     onClick={handleButtonClick}
                                     sx={{
-                                       
+
                                         px: 3,
                                         py: 1,
                                         fontFamily: 'var(--notosans)',
@@ -221,14 +305,14 @@ const InfoPessoal = () => {
 
                 {/* Card das Informações */}
                 <Grid size={{ xs: 12 }}>
-                    <Card elevation={2} sx={{ 
-                        p: 3, 
-                    
+                    <Card elevation={2} sx={{
+                        p: 3,
+
                         border: '1px solid #f0f0f0',
-                     
+
                     }}>
-                        <Typography variant="h6" sx={{ 
-                            fontFamily: 'var(--notosans)', 
+                        <Typography variant="h6" sx={{
+                            fontFamily: 'var(--notosans)',
                             fontWeight: '500',
                             color: 'text.secondary',
                             mb: 3,
@@ -242,57 +326,59 @@ const InfoPessoal = () => {
 
                         <Grid container spacing={3}>
                             <Grid size={{ xs: 12, md: 6 }}>
-                                <TextField 
-                                    type='text' 
-                                    fullWidth 
-                                    label="Nome completo" 
+                                <TextField
+                                    disabled
+                                    type='text'
+                                    fullWidth
+                                    label="Nome completo"
                                     variant="outlined"
-                                  
+                                    value={nome}
+                                    onChange={(e) => setNome(e.target.value)}
                                 />
                             </Grid>
-                            
+
                             <Grid size={{ xs: 12, md: 6 }}>
-                                <TextField 
-                                    disabled 
-                                    type='email' 
-                                    fullWidth 
-                                    label="E-mail" 
+                                <TextField
+                                    disabled
+                                    type='email'
+                                    fullWidth
+                                    label="E-mail"
                                     variant="outlined"
                                     helperText="O e-mail não pode ser alterado"
-                                   
+                                    value={email}
                                 />
                             </Grid>
                         </Grid>
 
-                        <Box sx={{ 
-                            mt: 3, 
-                            p: 2, 
+                        <Box sx={{
+                            mt: 3,
+                            p: 2,
                             bgcolor: 'rgba(103, 58, 183, 0.05)',
                             borderRadius: 2,
                             border: '1px solid rgba(103, 58, 183, 0.1)'
                         }}>
-                            <Box sx={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
                                 justifyContent: 'space-between',
                                 flexDirection: { xs: 'column', sm: 'row' },
                                 gap: 2
                             }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                     <LockOutlined sx={{ color: 'var(--roxo)', fontSize: 20 }} />
-                                    <Typography sx={{ 
-                                        fontFamily: 'var(--notosans)', 
+                                    <Typography sx={{
+                                        fontFamily: 'var(--notosans)',
                                         fontWeight: '500',
                                         color: '#555'
                                     }}>
                                         Segurança da Conta
                                     </Typography>
                                 </Box>
-                                
-                                <Link 
-                                    href="/recuperar-senha" 
-                                    sx={{ 
-                                        textDecoration: 'none', 
+
+                                <Link
+                                    href="/recuperar-senha"
+                                    sx={{
+                                        textDecoration: 'none',
                                         fontFamily: 'var(--notosans)',
                                         fontWeight: '500',
                                         fontSize: '16px',
@@ -309,49 +395,51 @@ const InfoPessoal = () => {
 
                 {/* Botão Salvar */}
                 <Grid size={{ xs: 12 }}>
-                    <Box sx={{ 
-                        display: 'flex', 
+                    <Box sx={{
+                        display: 'flex',
                         justifyContent: 'flex-end',
                         pt: 2
                     }}>
-                        <Button 
+                        <Button
                             variant="contained"
                             size="large"
                             sx={{
                                 width: { xs: '100%', sm: 'auto' },
                                 minWidth: { sm: 200 },
                                 bgcolor: 'var(--roxoForteDashboard)',
-                              
-                                
+
+
                                 px: 4,
                                 fontFamily: 'var(--notosans)',
                                 fontWeight: '600',
                                 fontSize: '16px',
                                 textTransform: 'none',
-                                
+
                             }}
-                            endIcon={<Save/>}
+                            onClick={handleUpdate}
+                           endIcon={isLoading ? <CircularProgress size={24} color="inherit" /> : <Save />}
+                            disabled={isLoading? true : false}
                         >
-                            Salvar alterações
+                             {isLoading ? 'Salvando...' : 'Salvar alterações'}
                         </Button>
                     </Box>
                 </Grid>
             </Grid>
 
             {/* Modal de Confirmação */}
-            <Dialog 
-                open={modalOpen} 
+            <Dialog
+                open={modalOpen}
                 onClose={() => setModalOpen(false)}
                 TransitionComponent={Fade}
                 PaperProps={{
                     sx: {
-                       
+
                         boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
                     }
                 }}
             >
                 <DialogTitle sx={{
-                    fontFamily: 'var(--notosans)', 
+                    fontFamily: 'var(--notosans)',
                     fontSize: '20px',
                     fontWeight: '500',
                     color: '#333',
@@ -361,21 +449,21 @@ const InfoPessoal = () => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText sx={{
-                        fontFamily: 'var(--notosans)', 
+                        fontFamily: 'var(--notosans)',
                         fontSize: '16px',
                         color: 'text.secondary',
                         lineHeight: 1.6
                     }}>
-                        Tem certeza que deseja remover a foto do seu perfil? 
+                        Tem certeza que deseja remover a foto do seu perfil?
                         Esta ação não pode ser desfeita.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions sx={{ p: 2, gap: 1 }}>
-                    <Button  
-                        onClick={() => setModalOpen(false)}  
+                    <Button
+                        onClick={() => setModalOpen(false)}
                         sx={{
-                            fontFamily: 'var(--notosans)', 
-                            fontSize: '14px', 
+                            fontFamily: 'var(--notosans)',
+                            fontSize: '14px',
                             color: 'text.secondary',
                             textTransform: 'none',
                             px: 3,
@@ -386,16 +474,16 @@ const InfoPessoal = () => {
                     >
                         Cancelar
                     </Button>
-                    <Button 
+                    <Button
                         onClick={handleRemovePhoto}
                         variant="contained"
                         color="error"
                         sx={{
-                            fontFamily: 'var(--notosans)', 
+                            fontFamily: 'var(--notosans)',
                             fontSize: '14px',
                             textTransform: 'none',
                             px: 3,
-                            
+
                         }}
                     >
                         Remover

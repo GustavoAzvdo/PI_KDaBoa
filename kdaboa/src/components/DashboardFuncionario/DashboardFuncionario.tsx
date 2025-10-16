@@ -161,7 +161,7 @@ export default function DashboardFuncionario(props: any) {
         setSession({
           user: {
             email: res.data.email,
-
+            image: res.data.foto
           },
         });
       })

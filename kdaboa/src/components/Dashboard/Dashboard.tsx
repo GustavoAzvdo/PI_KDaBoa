@@ -163,8 +163,10 @@ export default function DashboardLayoutBasic(props: any) {
         console.log(res.data)
         setUser(res.data);
         setSession({
+
           user: {
             email: res.data.email,
+            image: res.data.foto
 
           },
         });
