@@ -12,7 +12,6 @@ import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 import Contatos from '../Forms/Contatos/Contatos';
 import Galeria from '../Forms/Galeria/Galeria';
 import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
-import EventosPostados from '../Forms/EventosPostados/EventosPostados';
 import ScreenDash from '../ScreenDash/ScreenDash';
 import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
@@ -24,6 +23,7 @@ import { useTheme } from '@mui/material/styles';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate} from 'react-router-dom';
 import BoasVindasFuncionario from '../BoasVindas/BoasVindasFuncionario';
+import EventosCriados from '../Forms/EventosCriados/EventosCriados';
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -112,8 +112,8 @@ export default function DashboardFuncionario(props: any) {
           icon: <EditCalendar />,
         },
         {
-          segment: 'postados',
-          title: 'Postados',
+          segment: 'eventos_criados',
+          title: 'Eventos criados',
           icon: <Verified />,
         },
         {
@@ -230,9 +230,9 @@ export default function DashboardFuncionario(props: any) {
         return (
           <CriarEvento setEventoTitle={setEventoTitle} />
         );
-      case '/eventos/postados':
+      case '/eventos/eventos_criados':
         return (
-          <EventosPostados router={router} />
+          <EventosCriados  />
         );
       case '/eventos/em_analise':
         return (
