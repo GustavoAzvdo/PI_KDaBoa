@@ -63,7 +63,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [, setEnd] = useState<EnderecoData[]>([]);
     const [selectedEndereco, setSelectedEndereco] = useState<EnderecoData | null>(null);
-    const { enderecos, favorito, enderecoFavorito } = useEnderecoContext();
+    const { enderecos, enderecoFavorito } = useEnderecoContext();
     const { eventoEditando, setEventoEditando } = useEventos();
     const [isEdit, setIsEdit] = useState(false);
 
@@ -90,10 +90,19 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setData_criacao(eventoEditando.data_criacao ? dayjs(eventoEditando.data_criacao) : null);
             setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
             setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
-            //setFotoFile(eventoEditando.foto || null);
             setSelectedEndereco(eventoEditando.endereco || null);
 
-            // converte categorias de string para ID
+            if (eventoEditando.endereco) {
+               
+                if (enderecoFavorito && eventoEditando.endereco.id_endereco === enderecoFavorito.id_endereco) {
+                    setEnderecoModo('manter');
+                } else {
+                    setEnderecoModo('alterar'); 
+                }
+            } else {
+                setEnderecoModo('manter');
+            }
+           
             const categoriaIds = eventoEditando.categorias
                 .map(cat => dados.find(d => d.title === cat)?.id)
                 .filter((id): id is number => id !== undefined);
@@ -101,6 +110,8 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setCtg(categoriaIds);
         } else {
             setIsEdit(false);
+            setSelectedEndereco(null);   // Limpa o endereço selecionado
+            setEnderecoModo('manter')
             setEventoTitle('Criar evento')
             setEventoEditando(null)
         }
@@ -118,40 +129,40 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
 
 
- const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
 
-    if (!file) {
-        return;
-    }
+        if (!file) {
+            return;
+        }
 
-    console.log(`Original file size: ${file.size / 1024 / 1024} MB`);
+        console.log(`Original file size: ${file.size / 1024 / 1024} MB`);
 
-    const options = {
-        maxSizeMB: 1,          // Tamanho máximo do arquivo em MB
-        maxWidthOrHeight: 1920, // Dimensão máxima (largura ou altura)
-        useWebWorker: true,    // Usa Web Worker para não travar a interface
-    };
-
-    try {
-        const compressedFile = await imageCompression(file, options);
-        console.log(`Compressed file size: ${compressedFile.size / 1024 / 1024} MB`);
-
-        setFileName(compressedFile.name);
-        setFotoFile(compressedFile); 
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setFotoUrl(reader.result as string);
+        const options = {
+            maxSizeMB: 1,          // Tamanho máximo do arquivo em MB
+            maxWidthOrHeight: 1920, // Dimensão máxima (largura ou altura)
+            useWebWorker: true,    // Usa Web Worker para não travar a interface
         };
-        reader.readAsDataURL(compressedFile);
 
-    } catch (error) {
-        console.error('Erro ao comprimir a imagem:', error);
-        setFileName(file.name);
-        setFotoFile(file);
-    }
-};
+        try {
+            const compressedFile = await imageCompression(file, options);
+            console.log(`Compressed file size: ${compressedFile.size / 1024 / 1024} MB`);
+
+            setFileName(compressedFile.name);
+            setFotoFile(compressedFile);
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFotoUrl(reader.result as string);
+            };
+            reader.readAsDataURL(compressedFile);
+
+        } catch (error) {
+            console.error('Erro ao comprimir a imagem:', error);
+            setFileName(file.name);
+            setFotoFile(file);
+        }
+    };
 
 
     const VisuallyHiddenInput = styled('input')({
@@ -187,10 +198,10 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
     useEffect(() => {
         // Quando mudar para 'manter', limpa a seleção do autocomplete
-        if (enderecoModo === 'manter' && favorito !== null) {
-            setSelectedEndereco(enderecos[favorito]);
+        if (enderecoModo === 'manter') {
+            setSelectedEndereco(enderecos.find(e => e.id_endereco === enderecoFavorito?.id_endereco) || null);
         }
-    }, [enderecoModo, favorito, enderecos]);
+    }, [enderecoModo, enderecos]);
 
 
     const handleEditEvento = async () => {
@@ -398,7 +409,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                     >
                         <Stack spacing={2}>
                             <DateTimePicker
-                                
+
                                 value={dataInicio}
                                 onChange={(e: any) => {
                                     setDataInicio(e);
@@ -408,7 +419,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     }
                                 }}
                                 label="Data/hora inicio"
-                                
+
                             />
                         </Stack>
                     </LocalizationProvider>
