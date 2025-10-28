@@ -11,38 +11,38 @@ export default function Carrosel() {
   const navigate = useNavigate();
   const { setCategories, setSearchText, setDate } = useSearch();
 
-  // Responsividade
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 600) setItemsPerView(2);
-      else if (window.innerWidth < 960) setItemsPerView(5);
-      else setItemsPerView(6);
+      const width = window.innerWidth;
+      if (width < 600) setItemsPerView(2); // Telas 'xs'
+      else if (width < 960) setItemsPerView(5); // Telas 'sm'
+      else if (width < 1200) setItemsPerView(6); // Telas 'md'
+      else if (width < 1536) setItemsPerView(8); // Telas 'lg'
+      else setItemsPerView(9); // Telas 'xl' e maiores
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Auto-play com pausa
   useEffect(() => {
     if (paused) return;
     const interval = setInterval(() => {
+     
       setCurrentIndex((prev) => (prev + 1) % dados.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [paused]);
+  }, [paused, dados.length]); 
 
-  const extendedCategories = [...dados, ...dados, ...dados];
 
   return (
     <Box
       sx={{
         bgcolor: "white",
         width: "100%",
-        maxWidth: "xl",
         margin: "0 auto",
         borderBottom: "1px solid #c9c9c990",
-        overflow: "hidden", // 🔥 impede scroll horizontal
+        overflow: "hidden", // Impede scroll horizontal
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -53,11 +53,12 @@ export default function Carrosel() {
             display: "flex",
             transition: "transform 0.5s ease-in-out",
             gap: 2,
-            transform: `translateX(-${currentIndex * (4.4 / itemsPerView)}%)`, // 🔥 fórmula ajustada
-            width: `${(extendedCategories.length * 100) / itemsPerView}%`,
+            width: `${(dados.length * 100) / itemsPerView}%`, 
+            transform: `translateX(-${(currentIndex * 100) / dados.length}%)`,
+         
           }}
         >
-          {extendedCategories.map((category, index) => (
+          {dados.map((category, index) => (
             <Box
               key={index}
               sx={{
@@ -65,6 +66,7 @@ export default function Carrosel() {
                 alignItems: "center",
                 justifyContent: "center",
                 fontFamily: "var(--notosans)",
+                flexShrink: 0, 
               }}
             >
               <Button
