@@ -46,7 +46,7 @@ export default function Carrosel() {
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-    >
+  >
       <Box sx={{ py: 1, width: "100%", overflow: "hidden" }}>
         <Box
           sx={{
