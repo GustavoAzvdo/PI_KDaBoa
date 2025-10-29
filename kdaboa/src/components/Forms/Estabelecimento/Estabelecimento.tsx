@@ -1,13 +1,24 @@
-import { Autocomplete, Box, Button, Checkbox, Chip, Grid, InputAdornment, Modal, TextField, Typography, Card, Avatar, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Fade } from '@mui/material'
+import { Autocomplete, Box, Button, Checkbox, Chip, Grid, Modal, TextField, Typography, Card, Avatar, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Fade } from '@mui/material'
 import React, { useEffect, useRef } from 'react'
-import { Warning, Description, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, InsertPhoto, AddAPhoto, Delete, BusinessOutlined } from '@mui/icons-material';
+import { Warning, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, InsertPhoto, AddAPhoto, Delete, BusinessOutlined } from '@mui/icons-material';
 import { useState } from 'react';
 import { dados } from '../../../categorys/dados';
 import api from '../../../api/api';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { CircularProgress } from '@mui/material'
 
-const MAX_CHARS = 1000;
+import StarterKit from "@tiptap/starter-kit";
+import {
+  MenuButtonBold,
+  MenuButtonItalic,
+  MenuButtonUnderline,
+  MenuControlsContainer,
+  MenuDivider,
+  MenuSelectHeading,
+  RichTextEditor,
+  type RichTextEditorRef,
+} from "mui-tiptap";
+
 interface CategoryProps {
   onCategoryChange?: (categories: string[]) => void;
 }
@@ -49,6 +60,7 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
 const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
+  const rteRef = useRef<RichTextEditorRef>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [estabelecimentoId, setEstabelecimentoId] = React.useState<number | null>(null)
   const [nome, setNome] = React.useState<string>('');
@@ -85,6 +97,23 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     return () => clearTimeout(timer);
   }, [showCnpjModal, modalCountdown]);
 
+  useEffect(() => {
+    const editor = rteRef.current?.editor;
+
+    // Verifica se o editor existe
+    if (!editor) {
+      return;
+    }
+
+    // Pega o HTML atual do editor
+    const currentHtml = editor.getHTML();
+
+    // Se o conteúdo do estado (vindo da API) for diferente do conteúdo do editor
+    // Atualiza o editor. Isso evita um loop infinito.
+    if (descricao !== currentHtml) {
+      editor.commands.setContent(descricao);
+    }
+  }, [descricao]);
   // Funções para gerenciar foto de perfil
   const handleBoxClick = () => {
     if (!imageUrl && editMode && !disabled) inputRef.current?.click()
@@ -149,11 +178,6 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     setCNPJ(event.target.value);
   };
 
-  const handleDescricaoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value.length <= MAX_CHARS) {
-      setDescricao(event.target.value);
-    }
-  };
 
   const handleCategoryChange = (_event: any, value: any) => {
     const categories = value.map((item: any) => item.id);
@@ -165,52 +189,52 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
 
   const allFieldsFilled = nome.trim() !== '' && viewCNPJ.trim().length === 18 && descricao.trim() !== '' && selectedCategories.length > 0;
 
-  
+
 
   // Função para buscar os dados do estabelecimento
-const handleGetEstablishment = async () => {
+  const handleGetEstablishment = async () => {
     try {
-        const response = await api.get<getEstabelecimento>('/gerente/establishment', { withCredentials: true });
-       const urlCompleta = response.data.imagem;
+      const response = await api.get<getEstabelecimento>('/gerente/establishment', { withCredentials: true });
+      const urlCompleta = response.data.imagem;
+      console.log('descricao', response.data.descricao)
+      if (urlCompleta) {
+        // 1. Extrai o nome do arquivo da URL completa
+        const nomeArquivoExtraido = urlCompleta.split('/').pop() || '';
 
-        if (urlCompleta) {
-            // 1. Extrai o nome do arquivo da URL completa
-            const nomeArquivoExtraido = urlCompleta.split('/').pop() || '';
-            
-            // 2. ATUALIZA O ESTADO, o que força o componente a redesenhar
-            setNomeImagem(nomeArquivoExtraido);
+        // 2. ATUALIZA O ESTADO, o que força o componente a redesenhar
+        setNomeImagem(nomeArquivoExtraido);
 
-            // Define a URL completa para o resto da lógica do componente (se necessário)
-            setImageUrl(urlCompleta); 
-        } else {
-            setImageUrl(null);
-            setNomeImagem('');
-        }
+        // Define a URL completa para o resto da lógica do componente (se necessário)
+        setImageUrl(urlCompleta);
+      } else {
+        setImageUrl(null);
+        setNomeImagem('');
+      }
 
-        // 3. Define o resto dos estados com segurança
-        setEstabelecimentoId(response.data.id_estabelecimento ?? null);
-        setNome(response.data.nome ?? '');
-        setDescricao(response.data.descricao ?? '');
-        setCNPJ(response.data.cnpj ?? '');
-        setViewCNPJ(formatCNPJ(response.data.cnpj ?? ''));
+      // 3. Define o resto dos estados com segurança
+      setEstabelecimentoId(response.data.id_estabelecimento ?? null);
+      setNome(response.data.nome ?? '');
+      setDescricao(response.data.descricao ?? '');
+      setCNPJ(response.data.cnpj ?? '');
+      setViewCNPJ(formatCNPJ(response.data.cnpj ?? ''));
 
-        const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
-        const categoriasSelecionadas = dados.filter((categoria) => categoriasIds.includes(categoria.id));
-        setCategoriasSelecionadas(categoriasSelecionadas);
-        setSelectedCategories(categoriasIds);
+      const categoriasIds = response.data.Estabelecimento_Categoria.map((item) => item.id_categoria);
+      const categoriasSelecionadas = dados.filter((categoria) => categoriasIds.includes(categoria.id));
+      setCategoriasSelecionadas(categoriasSelecionadas);
+      setSelectedCategories(categoriasIds);
 
-        setFirstRegister(false);
-        setEditMode(false);
+      setFirstRegister(false);
+      setEditMode(false);
 
     } catch (error: any) {
-        if (error.response?.status === 404) {
-            setFirstRegister(true);
-            setEditMode(true);
-        }
+      if (error.response?.status === 404) {
+        setFirstRegister(true);
+        setEditMode(true);
+      }
     } finally {
-        setDisabled(false);
+      setDisabled(false);
     }
-}
+  }
 
   const handleCreateEstablishment = async () => {
     setLoading(true)
@@ -245,23 +269,23 @@ const handleGetEstablishment = async () => {
 
       const formData = new FormData();
 
-      formData.append('id', String(estabelecimentoId)); 
+      formData.append('id', String(estabelecimentoId));
       formData.append('nome', nome);
       formData.append('descricao', descricao);
-      formData.append('categoria', String(selectedCategories));
+     formData.append('categoria', String(selectedCategories));
       if (imageFile) {
-        formData.append('image', imageFile); 
+        formData.append('image', imageFile);
       }
 
       try {
-       
+
         await api.put('/gerente/establishment/', formData, {
           withCredentials: true,
         });
 
         setSnackbar({ autoHideDuration: 4000, open: true, message: 'Informações salvas com sucesso!', severity: 'success' });
         setEditMode(false);
-        setImageFile(null); 
+        setImageFile(null);
       } catch (error) {
         console.log(error);
         setSnackbar({ autoHideDuration: 4000, open: true, message: 'Erro ao salvar informações.', severity: 'warning' });
@@ -431,7 +455,7 @@ const handleGetEstablishment = async () => {
                       bgcolor: imageUrl ? 'transparent' : '#f8f9fa',
                       boxShadow: imageUrl ? '0 8px 25px rgba(103, 58, 183, 0.2)' : '0 4px 12px rgba(0,0,0,0.1)',
                     }}
-                    src={ `http://localhost:3000/establishment/image/${nomeImagem}` || imageUrl || undefined}
+                    src={`http://localhost:3000/establishment/image/${nomeImagem}` || imageUrl || undefined}
                   >
                     {!imageUrl && (
                       <InsertPhoto sx={{
@@ -551,7 +575,7 @@ const handleGetEstablishment = async () => {
           />
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+        {/* <Grid size={{ xs: 12, sm: 12, md: 6 }}>
           <TextField
             required
             label="Descrição do estabelecimento"
@@ -566,13 +590,46 @@ const handleGetEstablishment = async () => {
             InputProps={{
               endAdornment:
                 <InputAdornment position='end'>
-                  <Description />
+                  <DescriptionOutlined />
                 </InputAdornment>
             }}
             disabled={!editMode || disabled}
           />
-        </Grid>
+        </Grid> */}
 
+        <Grid size={{ xs: 12, sm: 12, md: 12 }}>
+
+          <Box sx={{
+            border: '1px solid',
+            borderColor: 'rgba(0, 0, 0, 0.23)',
+            borderRadius: '4px',
+            '&:hover': {
+              borderColor: !(editMode && !disabled) ? 'rgba(0, 0, 0, 0.23)' : 'rgba(0, 0, 0, 0.87)',
+            },
+            backgroundColor: !(editMode && !disabled) ? '#f5f5f5' : 'transparent',
+
+          }}>
+            <RichTextEditor
+              ref={rteRef}
+              extensions={[StarterKit]}
+              content={descricao}
+              editable={editMode && !disabled}
+              onUpdate={({ editor }) => {
+                setDescricao(editor.getHTML());
+              }}
+              renderControls={() => (
+                <MenuControlsContainer>
+                  <MenuSelectHeading />
+                  <MenuDivider />
+                  <MenuButtonBold />
+                  <MenuButtonItalic />
+                  <MenuButtonUnderline />
+                </MenuControlsContainer>
+              )}
+            />
+          </Box>
+
+        </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 6 }} >
           <Autocomplete
             multiple
@@ -642,6 +699,9 @@ const handleGetEstablishment = async () => {
             disabled={!editMode || disabled}
           />
         </Grid>
+
+
+
 
         <Grid size={{ xs: 12, sm: 12, md: 12 }}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mt: 1 }}>

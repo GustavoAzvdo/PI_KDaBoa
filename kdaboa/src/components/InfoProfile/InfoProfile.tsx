@@ -6,7 +6,7 @@ import Photos from '../Photos/Photos';
 import { useState, useEffect } from 'react';
 import api from '../../api/api';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import EventoProps from '../CardEventHome/props/EventoProps'; 
+import EventoProps from '../CardEventHome/props/EventoProps';
 
 
 type ProfilePageData = {
@@ -25,7 +25,7 @@ const InfoProfile = ({ profileData }: InfoProfileProps) => {
     const [eventosPublicados, setEventosPublicados] = useState<number>(0);
 
     useEffect(() => {
-     
+
         const buscarContagemEventos = async () => {
             if (!profileData?.estabelecimento?.id_estabelecimento) return;
             try {
@@ -47,10 +47,35 @@ const InfoProfile = ({ profileData }: InfoProfileProps) => {
 
     const { estabelecimento, endereco } = profileData;
 
-    const fullDescription = estabelecimento.descricao || 'Descrição não disponível';
+
+
+    /**
+     * Função helper para "limpar" o HTML e transformar em texto puro
+     * @param html A string de HTML para limpar
+     * @returns A string de texto puro
+     */
+    function stripHtml(html: string): string {
+      if (!html) return '';
+      try {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+      } catch (e) {
+        return html.replace(/<[^>]+>/g, '');
+      }
+    }
+
+    const fullDescriptionHtml = estabelecimento.descricao || '<p>Descrição não disponível</p>';
+    
+    const plainTextDescription = stripHtml(fullDescriptionHtml);
+
     const [showFull, setShowFull] = useState<boolean>(false);
-    const isLong = fullDescription.length > 400;
-    const displayText = showFull ? fullDescription : fullDescription.substring(0, 400) + (isLong ? ' ...' : '');
+    
+    const isLong = plainTextDescription.length > 400;
+
+    const displayText = showFull 
+      ? fullDescriptionHtml 
+      : (isLong ? plainTextDescription.substring(0, 400) + ' ...' : plainTextDescription);
+    
 
     const juntaEndereco = `${endereco?.logradouro}, ${endereco?.numero} - ${endereco?.bairro}, ${endereco?.cidade}/${endereco?.estado}`;
 
@@ -87,16 +112,47 @@ const InfoProfile = ({ profileData }: InfoProfileProps) => {
                 <Grid size={{ xs: 12 }} sx={{ py: 4, margin: 'auto', textAlign: 'justify' }}>
                     <Box className="title-description" sx={{ paddingX: { xs: 5, md: 0 }, }}>
                         <Typography variant="h3" className="description-title" sx={{ paddingTop: 5, textAlign: { xs: 'center', md: 'left' } }}>DESCRIÇÃO DO ESTABELECIMENTO</Typography>
-                        <Typography className="description-text" sx={{ paddingY: 5 }}>
-                            {'\t' + displayText}
-                        </Typography>
+
+                        {showFull ? (
+
+                            <Box
+                                className="description-text"
+                                sx={{
+                                    paddingY: 5,
+                                  
+                                    '& p': { margin: 0, marginBottom: '1em' },
+                                    '& p:last-child': { marginBottom: 0 },
+                                    '& strong': { fontWeight: 600 },
+                                    '& em': { fontStyle: 'italic' },
+                                    '& u': { textDecoration: 'underline' },
+                                }}
+                              
+                                dangerouslySetInnerHTML={{ __html: displayText }}
+                            />
+                        ) : (
+                       
+                            <Typography 
+                                className="description-text" 
+                                sx={{ 
+                                  paddingY: 5, 
+                                  whiteSpace: 'pre-line' 
+                                }}
+                            >
+                                {'\t' + displayText}
+                            </Typography>
+                        )}
+                 
+
                     </Box>
                     {isLong && (
                         <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' } }}>
-                            <Button variant='outlined' className='btn-seemore' onClick={() => setShowFull((prev) => !prev)} endIcon={showFull ? <KeyboardArrowUp /> : <KeyboardArrowDown />}>
-                                <Typography sx={{ paddingX: 1, paddingY: '3px' }}>
-                                    {showFull ? 'Ver menos' : 'Ver mais '}
-                                </Typography>
+                            <Button 
+                            sx={{
+                                fontSize: '18px',
+                                fontFamily: 'var(--notosans)'
+                            }}
+                            variant='outlined' className='btn-seemore' onClick={() => setShowFull((prev) => !prev)} endIcon={showFull ? <KeyboardArrowUp /> : <KeyboardArrowDown />}>
+                               { showFull ? 'Ver Menos' : 'Ver Mais' }
                             </Button>
                         </Box>
                     )}
@@ -115,18 +171,16 @@ const InfoProfile = ({ profileData }: InfoProfileProps) => {
                 </Grid>
 
                 <Grid container size={{ xs: 12 }} sx={{ margin: 'auto', paddingTop: 4, display: 'flex', justifyContent: 'start', width: '100%' }}>
-                     <Box className="title-photos" sx={{ textAlign: { xs: 'center', sm: 'center', md: 'start' } }}>
-                        <Typography variant='h3' className='title-photos-text' sx={{ paddingTop: 1, pb: 3 }}>
-                            FOTOS DO ESTABELECIMENTO
-                        </Typography>
-                    </Box>
+                        <Box className="title-photos" sx={{ textAlign: { xs: 'center', sm: 'center', md: 'start' } }}>
+                            <Typography variant='h3' className='title-photos-text' sx={{ paddingTop: 1, pb: 3 }}>
+                                FOTOS DO ESTABELECIMENTO
+                            </Typography>
+                        </Box>
                 </Grid>
 
                 <Grid size={{ xs: 12 }} sx={{ margin: 'auto', paddingTop: 0, display: 'flex', justifyContent: 'center', width: '100%' }}>
                     <Container>
-                        {/* 5. TRUQUE PARA NÃO MEXER NO Photos.js:
-                Criamos um objeto 'card' no formato que o Photos espera, usando os dados do 'estabelecimento'.
-            */}
+                      
                         <Photos card={{ Estabelecimento: estabelecimento }} />
                     </Container>
                 </Grid>
