@@ -56,6 +56,13 @@ const CriarFuncionario = () => {
 
     const handleCriarFuncionario = async () => {
 
+        if(funcionarios.length >= 1){
+            setSnackbarMessage('Limite de funcionários atingido! Remova um funcionário para adicionar outro.');
+            setSnackbarSeverity('warning');
+            setSnackbarOpen(true);
+            return;
+        }
+
         if (!nomeFuncionario.trim()) {
             setSnackbarMessage('Nome do funcionário é obrigatório!');
             setSnackbarSeverity('error');
@@ -223,7 +230,7 @@ const CriarFuncionario = () => {
                 <Grid size={{ xs: 12, sm: 12, md: 4 }}>
                     <Button
                         onClick={handleCriarFuncionario}
-                        disabled={isLoading || !nomeFuncionario.trim() || !emailFuncionario.includes('@')}
+                        disabled={isLoading || !nomeFuncionario.trim() || !emailFuncionario.includes('@') || !emailFuncionario.trim() || funcionarios.length >=1}
                         fullWidth
                         sx={{
                             mt: 1,
