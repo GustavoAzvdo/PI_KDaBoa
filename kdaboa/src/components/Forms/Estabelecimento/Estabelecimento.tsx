@@ -78,11 +78,14 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<Dados[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [imageFile, setImageFile] = useState<File | null>(null);
+  
   const [nomeImagem, setNomeImagem] = useState('');
   // Estados para foto de perfil do estabelecimento
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
 
+
+  
   useEffect(() => {
     handleGetEstablishment();
   }, []);

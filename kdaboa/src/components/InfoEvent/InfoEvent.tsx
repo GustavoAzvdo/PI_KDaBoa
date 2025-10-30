@@ -45,6 +45,12 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
 
     const dataFormatadaTermino = `${dia2}/${mes2}/${ano2} - ${hora2}h${minuto2}m`;
 
+    const isHtml = (str: string | null | undefined): boolean => {
+        if (!str) return false;
+        // Procura por qualquer tag HTML (ex: <p>, <strong>, <h1>, etc.)
+        const htmlTagRegex = /<[a-z][\s\S]*>/i;
+        return htmlTagRegex.test(str);
+    };
 
     function formatarCelular(numero: string | null | undefined): string {
         if (!numero) return '';
@@ -64,7 +70,7 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
         catchEvent();
     }, [evento.id_evento]);
 
-   
+
 
     return (
         <>
@@ -309,14 +315,35 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
                             borderLeft: '4px solid #6C15D5',
                             boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                         }}>
-                            <Typography className="description-text" sx={{
-                                fontSize: '1.1rem',
-                                lineHeight: 1.7,
-                                color: 'text.secondary',
-                                textAlign: 'justify'
-                            }}>
-                                {evento.descricao}
-                            </Typography>
+                            {isHtml(evento.descricao) ? (
+                                <Box
+                                    className="description-text"
+                                    sx={{
+                                        fontSize: '1.1rem',
+                                        lineHeight: 1.7,
+                                        color: 'text.secondary',
+                                        textAlign: 'justify',
+                                        // Estilos para o HTML
+                                        '& p': { margin: 0, marginBottom: '1em' },
+                                        '& p:last-child': { marginBottom: 0 },
+                                        '& strong': { fontWeight: 600 },
+                                        '& em': { fontStyle: 'italic' },
+                                        '& u': { textDecoration: 'underline' },
+                                    }}
+                                    dangerouslySetInnerHTML={{ __html: evento.descricao || '' }}
+                                />
+                            ) : (
+                                
+                                <Typography className="description-text" sx={{
+                                    fontSize: '1.1rem',
+                                    lineHeight: 1.7,
+                                    color: 'text.secondary',
+                                    textAlign: 'justify',
+                                    whiteSpace: 'pre-line' // Para respeitar quebras de linha
+                                }}>
+                                    {evento.descricao}
+                                </Typography>
+                            )}
                         </Box>
                     </Box>
                 </Grid>
