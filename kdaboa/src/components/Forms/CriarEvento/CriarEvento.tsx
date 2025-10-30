@@ -41,9 +41,6 @@ import imageCompression from 'browser-image-compression';
 dayjs.locale('pt-br');
 dayjs.extend(utc);
 
-
-
-
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
 
