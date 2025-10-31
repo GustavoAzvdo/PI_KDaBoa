@@ -1,16 +1,25 @@
-import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material"
+import { Avatar, Box, Button, Card, CardContent, Grid, IconButton, Stack, Typography } from "@mui/material"
 import "./InfoEvent.css"
 import calendar from "../../assets/calendar.png"
 import Contacts from "../Details/Contacts"
 import Address from "../Details/Address"
 import { useNavigate } from "react-router-dom"
 import BannerEvent from "../BannerEvent/BannerEvent"
-import { Person } from "@mui/icons-material"
+import { Add, ConfirmationNumber, Person, Remove } from "@mui/icons-material"
 import api from "../../api/api"
 import EventoProps from "../CardEventHome/props/EventoProps";
-import { useEffect } from "react";
-
+import { useEffect, useState, useMemo } from "react";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import TicketPDF from "../TicketPDF/TicketPDF";
+import qrcode from "qrcode";
 const InfoEvent = ({ evento }: { evento: EventoProps }) => {
+    const [ticket, setTicket] = useState<number>(0);
+    const [price,] = useState<number>(20)
+
+
+    const [qrCodes, setQrCodes] = useState<string[]>([]);
+    const [isGeneratingTickets, setIsGeneratingTickets] = useState(false);
+
     const navigate = useNavigate();
 
     const dataFormatadaX = new Date(evento?.data_inicio || '').toLocaleDateString('pt-BR', {
@@ -71,6 +80,39 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
     }, [evento.id_evento]);
 
 
+    const ticketData = useMemo(() => {
+        // Cria um array com a quantidade 'ticket' de itens
+        return Array.from({ length: ticket }, () => ({
+            id: crypto.randomUUID(), // Gera um ID único para o QR Code
+            // Ex: nome: 'Gustavo' (se você tivesse um formulário para isso)
+        }));
+    }, [ticket])
+
+    useEffect(() => {
+        // Se não há tickets, limpa os QR codes e sai
+        if (ticketData.length === 0) {
+            setQrCodes([]);
+            setIsGeneratingTickets(false);
+            return;
+        }
+
+        const generateQRs = async () => {
+            setIsGeneratingTickets(true); // Inicia o loading
+            try {
+                const urls = await Promise.all(
+                    ticketData.map(ticket => qrcode.toDataURL(ticket.id, { width: 200 }))
+                );
+                setQrCodes(urls); // Armazena os QR codes prontos
+            } catch (err) {
+                console.error('Erro ao gerar QR Codes:', err);
+                setQrCodes([]); // Limpa em caso de erro
+            } finally {
+                setIsGeneratingTickets(false); // Termina o loading
+            }
+        };
+
+        generateQRs();
+    }, [ticketData]);
 
     return (
         <>
@@ -191,95 +233,221 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
                     }}
                     className="grid-right"
                 >
-                    <Card
-                        elevation={6}
-                        sx={{
-
-                            height: '330px',
-                            width: "100%",
-                            maxWidth: 380,
-                            borderRadius: 4,
-                            background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
-                            border: '1px solid rgba(108, 21, 213, 0.1)',
-
-                            boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-
-                        }}
-                    >
-                        <CardContent
+                    <Stack spacing={2} direction="column">
+                        {/* perfil do cabloco */}
+                        <Card
+                            elevation={6}
                             sx={{
-                                display: "flex",
-                                flexDirection: 'column',
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: 3,
-                                textAlign: 'center',
-                                p: 4,
-                                height: '100%'
+
+                                height: '330px',
+                                width: "380px",
+
+                                borderRadius: 4,
+                                background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
+                                border: '1px solid rgba(108, 21, 213, 0.1)',
+
+                                boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+
                             }}
                         >
-                            <Box sx={{ position: 'relative' }}>
-                                <Avatar
-                                    src={`http://localhost:3000/establishment/image/${evento.Estabelecimento.imagem?.split('/').pop()}`}
-                                    sx={{
-                                        width: 80,
-                                        height: 80,
-                                        border: '3px solid #6C15D5',
-                                        boxShadow: '0 4px 15px rgba(108, 21, 213, 0.3)',
-                                    }}
-                                />
-                                <Box sx={{
-                                    position: 'absolute',
-                                    bottom: -4,
-                                    right: -4,
-                                    width: 24,
-                                    height: 24,
-                                    borderRadius: '50%',
-                                    backgroundColor: '#4CAF50',
-                                    border: '3px solid white',
-                                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                                }} />
-                            </Box>
+                            <CardContent
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: 'column',
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: 3,
+                                    textAlign: 'center',
+                                    p: 4,
+                                    height: '100%'
+                                }}
+                            >
+                                <Box sx={{ position: 'relative' }}>
+                                    <Avatar
+                                        src={`http://localhost:3000/establishment/image/${evento.Estabelecimento.imagem?.split('/').pop()}`}
+                                        sx={{
+                                            width: 80,
+                                            height: 80,
+                                            border: '3px solid #6C15D5',
+                                            boxShadow: '0 4px 15px rgba(108, 21, 213, 0.3)',
+                                        }}
+                                    />
+                                    <Box sx={{
+                                        position: 'absolute',
+                                        bottom: -4,
+                                        right: -4,
+                                        width: 24,
+                                        height: 24,
+                                        borderRadius: '50%',
+                                        backgroundColor: '#4CAF50',
+                                        border: '3px solid white',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                                    }} />
+                                </Box>
 
-                            <Box className="text-profile" sx={{ width: '100%' }}>
-                                <Typography
-                                    sx={{
-                                        fontSize: '1.1rem',
-                                        fontWeight: 600,
-                                        mb: 3,
-                                        color: '#333',
-                                        lineHeight: 1.3
-                                    }}
-                                >
-                                    Produzido por <br />
-                                    <span style={{ color: '#6C15D5', fontSize: '1.2rem' }}>
-                                        {evento?.Estabelecimento.nome}
-                                    </span>
-                                </Typography>
+                                <Box className="text-profile" sx={{ width: '100%' }}>
+                                    <Typography
+                                        sx={{
+                                            fontSize: '1.1rem',
+                                            fontWeight: 600,
+                                            mb: 3,
+                                            color: '#333',
+                                            lineHeight: 1.3
+                                        }}
+                                    >
+                                        Produzido por <br />
+                                        <span style={{ color: '#6C15D5', fontSize: '1.2rem' }}>
+                                            {evento?.Estabelecimento.nome}
+                                        </span>
+                                    </Typography>
 
-                                <Button
-                                    endIcon={<Person />}
-                                    variant="outlined"
-                                    className="btn-profile"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate(`/view-event/${evento.id_evento}/profile`);
-                                    }}
-                                    sx={{
-                                        fontSize: { xs: "1rem", sm: "1rem", md: '1.1rem' },
-                                        fontFamily: 'var(--notosans)',
-                                        px: { xs: 2, sm: 3 },
+                                    <Button
+                                        endIcon={<Person />}
+                                        variant="outlined"
+                                        className="btn-profile"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(`/view-event/${evento.id_evento}/profile`);
+                                        }}
+                                        sx={{
+                                            fontSize: { xs: "1rem", sm: "1rem", md: '1.1rem' },
+                                            fontFamily: 'var(--notosans)',
+                                            px: { xs: 2, sm: 3 },
 
-                                    }}
-                                >
-                                    Ver perfil
-                                </Button>
-                            </Box>
-                        </CardContent>
-                    </Card>
+                                        }}
+                                    >
+                                        Ver perfil
+                                    </Button>
+                                </Box>
+                            </CardContent>
+
+                        </Card>
+                        {/* compra de ingresso */}
+                        <Card
+                            elevation={6}
+                            sx={{
+
+                                height: '330px',
+                                width: "100%",
+                                maxWidth: 380,
+                                borderRadius: 4,
+                                background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)',
+                                border: '1px solid rgba(108, 21, 213, 0.1)',
+
+                                boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+
+                            }}
+                        >
+
+                            <CardContent
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: 'column',
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: 3,
+                                    textAlign: 'center',
+                                    p: 4,
+                                    height: '100%'
+                                }}
+                            >
+                                <Box>
+                                    <ConfirmationNumber sx={{ color: 'primary.main' }} />
+                                    <Typography
+                                        sx={{
+                                            fontFamily: 'var(--notosans)',
+                                            fontSize: '1.1rem',
+                                            fontWeight: 600,
+                                            mb: 3,
+                                            color: '#333',
+                                            lineHeight: 1.3
+                                        }}
+                                    >
+                                        Adquira seu ingresso agora mesmo!*
+                                    </Typography>
+                                    <Typography variant="caption" sx={{
+                                        fontStyle: 'italic',
+                                        color: 'text.secondary',
+                                        mb: 2,
+                                        display: 'block'
+                                    }}>
+                                        *Taxa de compra não inclusa
+                                    </Typography>
+                                    <Box>
+                                        <Typography sx={{
+                                            fontFamily: 'var(--notosans)',
+                                            color: 'text.secundary'
+                                        }}>
+                                            Preço por ingresso: <strong>R$ {price.toFixed(2)}</strong>
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    <IconButton
+                                        disabled={ticket === 0}
+                                        sx={{
+                                            cursor: ticket === 0 ? '' : 'pointer',
+                                        }}
+                                        onClick={() => setTicket(prev => prev > 0 ? prev - 1 : 0)}>
+                                        <Remove sx={{ color: 'primary.main' }} />
+                                    </IconButton>
+                                    <Typography sx={{
+                                        fontSize: '1.2rem',
+                                        fontWeight: '600',
+                                        color: '#333'
+                                    }}>
+                                        {ticket} ingresso(s)
+                                    </Typography>
+                                    <IconButton onClick={() => setTicket(prev => prev + 1)}>
+                                        <Add sx={{ color: 'primary.main' }} />
+                                    </IconButton>
+
+                                </Stack>
+                                <Box sx={{ mt: 2 }}>
+                                    {isGeneratingTickets ? (
+                                        // 1. Mostra "Gerando..." enquanto os QR Codes são criados
+                                        <Button variant="contained" color="primary" disabled={true}>
+                                            Gerando Ingressos...
+                                        </Button>
+                                    ) : (ticket > 0 && qrCodes.length === ticketData.length) ? (
+                                        // 2. Mostra o link de Download quando tudo estiver pronto
+                                        <PDFDownloadLink
+                                            document={<TicketPDF evento={evento} ticketData={ticketData} qrCodes={qrCodes} />}
+                                            fileName={`ingressos-${evento.nome_evento}.pdf`}
+                                            style={{ textDecoration: 'none' }}
+                                        >
+                                            {({ loading }) => ( // 'loading' aqui é a compilação do PDF
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    disabled={loading}
+                                                >
+                                                    {loading ? 'Compilando PDF...' : `Comprar por R$ ${(ticket * price).toFixed(2)}`}
+                                                </Button>
+                                            )}
+                                        </PDFDownloadLink>
+                                    ) : (
+                                        // 3. Estado inicial (0 tickets) ou se algo falhar
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            disabled={true}
+                                        >
+                                            {/* Ajusta o texto se for 0 ingressos */}
+                                            {ticket === 0 ? `Comprar por R$ 0.00` : 'Aguarde...'}
+                                        </Button>
+                                    )}
+                                </Box>
+                            </CardContent>
+
+                        </Card>
+
+                    </Stack>
+
                 </Grid>
 
                 {/* Seção de Descrição */}
+
                 <Grid size={{ xs: 12, md: 10 }} className="grid-description" sx={{
                     paddingTop: 4,
                     margin: 0,
@@ -333,7 +501,7 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
                                     dangerouslySetInnerHTML={{ __html: evento.descricao || '' }}
                                 />
                             ) : (
-                                
+
                                 <Typography className="description-text" sx={{
                                     fontSize: '1.1rem',
                                     lineHeight: 1.7,
