@@ -6,7 +6,8 @@ import { SearchProvider } from './context/SearchContext.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material'
-
+import { Buffer } from 'buffer';
+window.Buffer = Buffer;
 
 const theme = createTheme({
   palette: {

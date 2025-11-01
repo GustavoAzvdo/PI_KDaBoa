@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, Description, AttachFile } from '@mui/icons-material';
+import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, AttachFile } from '@mui/icons-material';
 import { styled } from '@mui/material/styles'
 import { dados } from '../../../categorys/dados';
 import { useState, useEffect } from 'react';
@@ -19,15 +19,27 @@ import { EnderecoData } from '../Endereco/Endereco';
 import { useEnderecoContext } from '../../../context/EnderecoContext';
 import { useEventos } from '../../../context/EventoContext';
 
+//EDIT TEXT EDITOR
+import StarterKit from "@tiptap/starter-kit";
+import {
+    MenuButtonBold,
+    MenuButtonItalic,
+    MenuButtonUnderline,
+    MenuControlsContainer,
+    MenuDivider,
+    MenuSelectHeading,
+    RichTextEditor,
+    type RichTextEditorRef,
+} from "mui-tiptap";
+
+
+
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import api from '../../../api/api';
 import imageCompression from 'browser-image-compression';
 
 dayjs.locale('pt-br');
 dayjs.extend(utc);
-const MAX_CHARS = 1000;
-
-
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
@@ -66,12 +78,28 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const { enderecos, enderecoFavorito } = useEnderecoContext();
     const { eventoEditando, setEventoEditando } = useEventos();
     const [isEdit, setIsEdit] = useState(false);
-
+    const rteRef = React.useRef<RichTextEditorRef>(null);
     const enderecoParaExibir = enderecoModo === 'manter'
         ? enderecoFavorito
         : selectedEndereco;
 
+    useEffect(() => {
+        const editor = rteRef.current?.editor;
 
+        // Verifica se o editor existe
+        if (!editor) {
+            return;
+        }
+
+        // Pega o HTML atual do editor
+        const currentHtml = editor.getHTML();
+
+        // Se o conteúdo do estado (vindo da API) for diferente do conteúdo do editor
+        // Atualiza o editor. Isso evita um loop infinito.
+        if (descricao !== currentHtml) {
+            editor.commands.setContent(descricao);
+        }
+    }, [descricao]);
 
 
     useEffect(() => {
@@ -93,16 +121,16 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setSelectedEndereco(eventoEditando.endereco || null);
 
             if (eventoEditando.endereco) {
-               
+
                 if (enderecoFavorito && eventoEditando.endereco.id_endereco === enderecoFavorito.id_endereco) {
                     setEnderecoModo('manter');
                 } else {
-                    setEnderecoModo('alterar'); 
+                    setEnderecoModo('alterar');
                 }
             } else {
                 setEnderecoModo('manter');
             }
-           
+
             const categoriaIds = eventoEditando.categorias
                 .map(cat => dados.find(d => d.title === cat)?.id)
                 .filter((id): id is number => id !== undefined);
@@ -178,11 +206,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     });
 
 
-    const handleDescricaoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        if (event.target.value.length <= MAX_CHARS) {
-            setDescricao(event.target.value);
-        }
-    };
+  
 
 
 
@@ -378,23 +402,35 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                     />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 6 }}>
-                    <TextField
-                        label="Descrição do evento"
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                        maxRows={6}
-                        value={descricao}
-                        onChange={handleDescricaoChange}
-                        inputProps={{ maxLength: MAX_CHARS }}
-                        helperText={`Restam ${MAX_CHARS - descricao.length} caracteres`}
-                        InputProps={{
-                            endAdornment:
-                                <InputAdornment position='end'>
-                                    <Description />
-                                </InputAdornment>
-                        }}
-                    />
+                   <Box sx={{
+                        border: '1px solid',
+                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderRadius: '4px',
+                        '&:hover': {
+                            borderColor: 'rgba(0, 0, 0, 0.87)', // Sempre permite hover
+                        },
+                        backgroundColor: 'transparent', // Sempre editável
+
+                    }}>
+                        <RichTextEditor
+                            ref={rteRef}
+                            extensions={[StarterKit]}
+                            content={descricao}
+                            editable={true}
+                            onUpdate={({ editor }) => {
+                                setDescricao(editor.getHTML());
+                            }}
+                            renderControls={() => (
+                                <MenuControlsContainer>
+                                    <MenuSelectHeading />
+                                    <MenuDivider />
+                                    <MenuButtonBold />
+                                    <MenuButtonItalic />
+                                    <MenuButtonUnderline />
+                                </MenuControlsContainer>
+                            )}
+                        />
+                    </Box>
                 </Grid>
                 {/* datas */}
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>

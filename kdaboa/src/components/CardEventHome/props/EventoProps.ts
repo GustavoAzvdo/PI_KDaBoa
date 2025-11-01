@@ -1,6 +1,7 @@
 import { JSX } from "react/jsx-runtime";
 
 interface EventoProps {
+    imagem: any;
     id_evento: number;
     nome_evento: string;
     descricao: string;
