@@ -67,7 +67,7 @@ const Footer = () => {
               </Typography>
               <Stack direction="row" spacing={1} sx={{ mt: 1, justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <IconButton><WhatsApp /></IconButton>
-                <IconButton><Instagram /></IconButton>
+                <IconButton href='https://www.instagram.com/kdaboa/' target='_blank'  ><Instagram /></IconButton>
                 <IconButton><X /></IconButton>
               </Stack>
             </Box>
