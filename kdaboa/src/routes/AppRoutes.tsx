@@ -12,6 +12,7 @@ import Home from '../pages/Home/Home'
 import SearchEvent from '../pages/SearchEvent/SearchEvent'
 import Profile from '../pages/Profile/Profile'
 import ViewEvent from '../pages/ViewEvent/ViewEvent'
+import ProducerArea from '../pages/Produtor/Produtor'
 import { LoadingProvider } from '../context/LoadingContext';
 import { GlobalLoading } from '../components/GlobalLoading/GlobalLoading';
 import { RouteListener } from '../components/GlobalLoading/RouterListener'
@@ -33,7 +34,7 @@ const AppRoutes = () => (
         <Route path="/email-enviado" element={<SendEmail />} />
         <Route path="/search" element={<SearchEvent />} />
         <Route path="/view-event/:eventId" element={<ViewEvent />} />
-
+        <Route path='/produtor' element={<ProducerArea />} />
 
         {/* facilitando a busca de eventos pela rota, apenas pelo id do evento */}
         <Route path="/view-event/:eventId/profile" element={<Profile />} />

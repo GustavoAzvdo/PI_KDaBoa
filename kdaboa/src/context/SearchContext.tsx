@@ -12,6 +12,7 @@ interface SearchContextType {
   setIdCategory: (idCategory: string[]) => void;
   setDate: (date: string) => void;
   setCity: (city: string) => void;
+  
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
