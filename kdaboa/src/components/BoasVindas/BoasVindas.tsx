@@ -5,20 +5,37 @@ import { useState, useEffect } from 'react';
 import api from '../../api/api'
 
 const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
-  const [totalEventos, setTotalEventos] = useState<number>(0);
+  const [totalAprovados, setTotalAprovados] = useState<number>(0);
+  const [totalAnalise, setTotalAnalise] = useState<number>(0);
   const [nomeGerente, setNomeGerente] = useState<string>('');
 
   useEffect(() => {
-    const fetchTotalEventos = async () => {
+    const fetchTotalAprovados = async () => {
       try {
         const response: any = await api.get('/gerente/event');
-        setTotalEventos(response.data.length);
+        const aprovados = response.data.filter((evento: any) => 
+          Number(evento.estatus) === 1
+        );
+        setTotalAprovados(aprovados.length);
       } catch (error) {
         console.error('Erro ao buscar total de eventos:', error);
       }
     };
-    fetchTotalEventos();
+    fetchTotalAprovados();
   }, [])
+
+  useEffect(() => {
+    const fetchTotalAnalise = async () => {
+      try {
+        const response: any = await api.get('/gerente/event/waiting');
+        setTotalAnalise(response.data.length);
+      } catch (error) {
+        console.error('Erro ao buscar total de eventos:', error);
+      }
+    };
+    fetchTotalAnalise();
+  }, []);
+
   const capitalizar = (nome: string) =>
     nome
       .toLowerCase()
@@ -153,7 +170,7 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
             <CardContent>
               <Verified sx={{ fontSize: 40 }} />
               <Typography variant="h6">Eventos postados</Typography>
-              <Typography>{totalEventos}</Typography>
+              <Typography>{totalAprovados}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -172,7 +189,7 @@ const BoasVindasGerente = ({ router }: { nome?: string, router: any }) => {
             <CardContent>
               <NewReleases sx={{ fontSize: 40 }} />
               <Typography variant="h6">Em análise</Typography>
-              <Typography>0</Typography>
+              <Typography>{totalAnalise}</Typography>
             </CardContent>
           </Card>
         </Grid>

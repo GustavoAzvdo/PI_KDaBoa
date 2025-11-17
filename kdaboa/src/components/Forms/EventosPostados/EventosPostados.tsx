@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { useEventos } from '../../../context/EventoContext';
-import { Delete, Edit } from '@mui/icons-material';
+import { Category, Delete, Edit } from '@mui/icons-material';
 
 interface Evento {
     data_criacao: string;
@@ -19,6 +19,7 @@ interface Evento {
     id_endereco: EnderecoData | null;
     Evento_Categoria: any[];
     favorito: number;
+    estatus: number;
 }
 
 interface EventosPostadosProps {
@@ -33,14 +34,17 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
     const [autoHideDuration,] = useState(4000);
 
 
-
     const { setEventoEditando } = useEventos()
     const fetchEventos = async () => {
         try {
             const response: any = await api.get('/gerente/event', { withCredentials: true });
             console.log('Dados do evento:', response.data);
 
-            const eventosFormatados = response.data.map((evento: any) => {
+            const eventosAprovados = response.data.filter((evento: any) =>
+                Number(evento.estatus) === 1
+            );
+
+            const eventosFormatados = eventosAprovados.map((evento: any) => {
 
                 return {
                     id_evento: evento.id_evento,
@@ -49,7 +53,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                     data_inicio: evento.data_inicio,
                     data_fim: evento.data_fim,
                     foto: evento.foto,
-                    
+
                     id_endereco: evento.Endereco ? {
                         logradouro: evento.Endereco.logradouro,
                         numero: evento.Endereco.numero,
@@ -94,7 +98,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
 
     const handleEdit = (evento: Evento) => {
         setEventoEditando({
-            
+
             id_evento: evento.id_evento,
             nome_evento: evento.nome_evento,
             descricao: evento.descricao,
@@ -162,7 +166,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                 background: 'linear-gradient(transparent, rgba(0,0,0,0.6))',
                                 zIndex: 1
                             }} />
-                          
+
 
                         </Box>
 
@@ -246,8 +250,11 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                 )}
 
                                 {/* Categorias */}
+
                                 {evento.Evento_Categoria.length > 0 && (
+
                                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
+                                        <Category sx={{ fontSize: 18, color: '#6c15d5', mr: 1 }} />
                                         {evento.Evento_Categoria.slice(0, 3).map((categoria, idx) => (
                                             <Chip
                                                 key={idx}
@@ -256,7 +263,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                                 sx={{
                                                     bgcolor: 'rgba(108, 21, 213, 0.1)',
                                                     color: '#6C15D5',
-                                                    
+
                                                 }}
                                             />
                                         ))}
@@ -300,7 +307,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                     transition: 'all 0.3s ease',
                                     '&:hover': {
                                         bgcolor: '#5a12b8',
-                                     
+
                                     }
                                 }}
                             >
@@ -313,9 +320,9 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                 onClick={() => handleDelete(evento.id_evento)}
                                 sx={{
                                     flex: 1,
-                                    textTransform: 'none',   
+                                    textTransform: 'none',
                                     py: 1,
-                                   
+
                                     '&:hover': {
                                         bgcolor: '#d32f2f',
                                         color: 'white',

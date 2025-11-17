@@ -5,7 +5,7 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import logo from '../../assets/logo.png';
 import '../Dashboard/Dashboard.css'
-import { Celebration, Verified, NewReleases, Face, House, Map, Call, Settings, EditCalendar, Collections, Person, Home, ExitToApp } from '@mui/icons-material';
+import { Celebration, Verified, Face, House, Map, Call, Settings, EditCalendar, Collections, Person, Home, ExitToApp } from '@mui/icons-material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
 import Contatos from '../Forms/Contatos/Contatos';
@@ -15,15 +15,16 @@ import ScreenDash from '../ScreenDash/ScreenDash';
 import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
-import { Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
 import { useTheme } from '@mui/material/styles';
 
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import BoasVindasFuncionario from '../BoasVindas/BoasVindasFuncionario';
-import EventosCriados from '../Forms/EventosCriados/EventosCriados';
 import CriarEventoFuncionario from '../Forms/CriarEvento/CriarEventoFuncionario';
+import EventosCriadosFuncionario from '../Forms/EventosCriados/EventosCriadosFuncionario';
+import EventosPostados from '../Forms/EventosPostados/EventosPostados';
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -112,15 +113,16 @@ export default function DashboardFuncionario(props: any) {
           icon: <EditCalendar />,
         },
         {
+          segment: 'eventos_postados',
+          title: 'Eventos postados',
+          icon: <Verified />,
+        },
+        {
           segment: 'eventos_criados',
           title: 'Eventos criados',
           icon: <Verified />,
         },
-        {
-          segment: 'em_analise',
-          title: 'Em análise',
-          icon: <NewReleases />,
-        },
+
       ],
     },
     {
@@ -132,7 +134,7 @@ export default function DashboardFuncionario(props: any) {
       kind: 'divider',
     },
 
-    
+
     {
       segment: 'home',
       title: 'Voltar à Home',
@@ -195,7 +197,7 @@ export default function DashboardFuncionario(props: any) {
     };
   }, [router]);
 
-  
+
   function renderContent(pathname: string, router: Router) {
     switch (pathname) {
       case '/dashboard/inicio':
@@ -226,13 +228,17 @@ export default function DashboardFuncionario(props: any) {
         return (
           <Galeria />
         );
+      case '/eventos/eventos_postados':
+        return (
+          <EventosPostados router={router} />
+        );
       case '/eventos/criar_evento':
         return (
           <CriarEventoFuncionario setEventoTitle={setEventoTitle} />
         );
       case '/eventos/eventos_criados':
         return (
-          <EventosCriados  />
+          <EventosCriadosFuncionario />
         );
       case '/eventos/em_analise':
         return (
@@ -271,7 +277,7 @@ export default function DashboardFuncionario(props: any) {
     >
 
       <DashboardLayout
-       
+
       >
         <PageContainer>
           {renderContent(router.pathname, router)}

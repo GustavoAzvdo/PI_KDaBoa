@@ -22,7 +22,6 @@ import {
   Schedule,
 } from '@mui/icons-material';
 import api from '../../../api/api';
-import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 
 // Interface que o componente Card espera
 interface Evento {
@@ -60,22 +59,11 @@ interface ApiEvento {
   }[];
 }
 
-const EventosCriados = () => {
+const EventosCriadosFuncionario = () => {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMutating, setIsMutating] = useState(false);
-
-  // SNACKBARES
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'warning' | 'error' | 'info'>('success');
-
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
-  };
-
 
   const mapStatus = (dbStatus: number): 'aprovado' | 'reprovado' | 'pendente' => {
     switch (dbStatus) {
@@ -160,14 +148,9 @@ const EventosCriados = () => {
         withCredentials: true,
       });
 
-      setSnackbarMessage('Evento aprovado com sucesso!');
-      setSnackbarSeverity('success');
-      setSnackbarOpen(true);
+      // Recarrega a lista para remover o evento aprovado (melhor UX)
       await fetchEventos();
     } catch (err) {
-      setSnackbarMessage('Erro ao aprovar o evento. Verifique a conexão e tente novamente.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
       console.error(`Erro ao aprovar o evento ${id_evento}:`, err);
       setError('Erro ao aprovar o evento. Verifique a conexão e tente novamente.');
     } finally {
@@ -190,15 +173,10 @@ const EventosCriados = () => {
         withCredentials: true,
       });
 
-      setSnackbarMessage('Evento rejeitado com sucesso!');
-      setSnackbarSeverity('info');
-      setSnackbarOpen(true);
+      // Recarrega a lista para remover o evento rejeitado
       await fetchEventos();
     } catch (err) {
       console.error(`Erro ao rejeitar o evento ${id_evento}:`, err);
-      setSnackbarMessage('Erro ao rejeitar o evento. Verifique a conexão e tente novamente.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
       setError('Erro ao rejeitar o evento. Verifique a conexão e tente novamente.');
     } finally {
       setIsMutating(false); // Finaliza a mutação
@@ -291,7 +269,6 @@ const EventosCriados = () => {
   // Renderização da lista de eventos (Layout dos Cards mantido)
   return (
     <Box sx={{ p: 2 }}>
-
       <Grid container spacing={3}>
         {eventos.map((evento) => {
           const statusConfig = getStatusConfig(evento.estatus);
@@ -426,41 +403,24 @@ const EventosCriados = () => {
                       </Box>
                     </Box>
                   </Stack>
+                  <CardActions sx={{ mt: 2, justifyContent: 'flex-end' }}>
+                    <Button
+                      variant="contained"
+                      color="error"
+                       
+                    >
+                     Excluir
+                    </Button>
+                  </CardActions>
                 </CardContent>
-                <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', p: 2, mt: 1 }}>
-                  <Button
-                    variant='contained'
-                    color='success'
-                    startIcon={<CheckCircle />}
-                    onClick={() => handleApproveEvent(evento.id_evento)} // CHAMADA PARA APROVAR
-                    disabled={isMutating} // Desativa se já houver uma ação em andamento
-                  >
-                    {isMutating ? 'Aprovando...' : 'Aceitar'}
-                  </Button>
-                  <Button
-                    variant='contained'
-                    color='error'
-                    startIcon={<Cancel />}
-                    onClick={() => handleRejectEvent(evento.id_evento)} // CHAMADA PARA REJEITAR
-                    disabled={isMutating} // Desativa se já houver uma ação em andamento
-                  >
-                    Rejeitar
-                  </Button>
-                </CardActions>
+            
               </Card>
             </Grid>
           );
         })}
       </Grid>
-
-      <CustomSnackbar
-        open={snackbarOpen}
-        message={snackbarMessage}
-        severity={snackbarSeverity}
-        onClose={handleCloseSnackbar}
-      />
     </Box>
   );
 };
 
-export default EventosCriados;
+export default EventosCriadosFuncionario;

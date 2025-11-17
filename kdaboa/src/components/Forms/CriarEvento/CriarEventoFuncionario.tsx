@@ -258,7 +258,7 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
             }
 
 
-            await api.put(`/gerente/event/${eventoEditando?.id_evento}`, {
+            await api.put(`/funcionario/event/${eventoEditando?.id_evento}`, {
                 nome: nome,
                 descricao: descricao,
                 data_inicio: dataInicio?.toISOString() || '',

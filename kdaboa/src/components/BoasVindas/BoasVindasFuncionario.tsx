@@ -7,7 +7,7 @@ import api from '../../api/api'
 const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any }) => {
   const [totalEventos, setTotalEventos] = useState<number>(0);
   const [nomeFuncionario, setNomeFuncionario] = useState<string>('');
-
+  const [totalAnalise, setTotalAnalise] = useState<number>(0);
   useEffect(() => {
     const fetchTotalEventos = async () => {
       try {
@@ -19,6 +19,19 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
     };
     fetchTotalEventos();
   }, [])
+
+  useEffect(() => {
+    const fetchTotalAnalise = async () => {
+      try {
+        const response: any = await api.get('/gerente/event/waiting'); // endpoint específico para funcionário
+        setTotalAnalise(response.data.length);
+      } catch (error) {
+        console.error('Erro ao buscar total de eventos:', error);
+      }
+    };
+    fetchTotalAnalise();
+  },[totalAnalise])
+
 
   const capitalizar = (nome_usuario: string) =>
     nome_usuario
@@ -141,7 +154,7 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
             <CardContent>
               <Verified sx={{ fontSize: 40 }} />
               <Typography variant="h6">Eventos Criados</Typography>
-              <Typography variant="h5">{totalEventos}</Typography>
+              <Typography variant="h6">{totalEventos}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -161,7 +174,7 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
             <CardContent>
               <NewReleases sx={{ fontSize: 40 }} />
               <Typography variant="h6">Em Análise</Typography>
-              <Typography variant="h5">0</Typography>
+              <Typography variant="h6">{totalAnalise}</Typography>
             </CardContent>
           </Card>
         </Grid>
