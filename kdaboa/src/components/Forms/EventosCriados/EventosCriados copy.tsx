@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Card,
@@ -8,8 +8,6 @@ import {
   Chip,
   Stack,
   Grid,
-  CircularProgress,
-  Alert,
 } from '@mui/material';
 import {
   CalendarToday,
@@ -19,9 +17,7 @@ import {
   Cancel,
   Schedule,
 } from '@mui/icons-material';
-import api from '../../../api/api';
 
-// Interface que o componente Card espera
 interface Evento {
   id_evento: number;
   nome_evento: string;
@@ -31,118 +27,47 @@ interface Evento {
   foto: string;
   endereco: string;
   categorias: string[];
-  estatus: 'aprovado' | 'reprovado' | 'pendente';
-}
-
-// Interface da resposta da API
-interface ApiEvento {
-  id_evento: number;
-  nome_evento: string;
-  descricao: string;
-  data_inicio: string;
-  data_fim: string;
-  foto: string;
-  estatus: number; // Coluna do banco (ex: 4)
-  Endereco: {
-    logradouro: string;
-    numero: string;
-    bairro: string;
-    cidade: string;
-    uf: string;
-  } | null;
-  Evento_Categoria: {
-    Categoria: {
-      nome_categoria: string;
-    };
-  }[];
+  status: 'aprovado' | 'reprovado' | 'pendente';
 }
 
 const EventosCriados = () => {
-  const [eventos, setEventos] = useState<Evento[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// EVENTOS SIMULADOS PARA A VISUALIZAÇÃO DO CARD
+  const [eventos] = useState<Evento[]>([
+    {
+      id_evento: 1,
+      nome_evento: 'Show de Rock ao Vivo',
+      descricao: 'Grande show com bandas locais e nacionais. Venha curtir uma noite incrível de muito rock!',
+      data_inicio: '2025-11-15T20:00:00',
+      data_fim: '2025-11-15T23:59:00',
+      foto: 'https://via.placeholder.com/400x200',
+      endereco: 'Rua das Flores, 123 - Centro - São Paulo/SP',
+      categorias: ['Música', 'Show', 'Rock'],
+      status: 'aprovado',
+    },
+    {
+      id_evento: 2,
+      nome_evento: 'Festival de Gastronomia',
+      descricao: 'Evento com os melhores pratos da culinária regional e internacional. Não perca!',
+      data_inicio: '2025-12-01T18:00:00',
+      data_fim: '2025-12-01T22:00:00',
+      foto: 'https://via.placeholder.com/400x200',
+      endereco: 'Av. Principal, 456 - Jardim América - Rio de Janeiro/RJ',
+      categorias: ['Gastronomia', 'Festival', 'Cultura'],
+      status: 'pendente',
+    },
+    {
+      id_evento: 3,
+      nome_evento: 'Corrida Beneficente 5K',
+      descricao: 'Corrida em prol de instituições de caridade. Participe e ajude!',
+      data_inicio: '2025-10-20T07:00:00',
+      data_fim: '2025-10-20T11:00:00',
+      foto: 'https://via.placeholder.com/400x200',
+      endereco: 'Parque Municipal - Zona Sul - Belo Horizonte/MG',
+      categorias: ['Esporte', 'Beneficente', 'Saúde'],
+      status: 'reprovado',
+    },
+  ]);
 
-  /**
-   * Mapeia o status numérico do banco (ex: 4) para o status em string
-   * que o componente de Card espera (ex: 'pendente').
-   *
-   * **AJUSTE AQUI SE NECESSÁRIO:** Assumindo que '4' = 'pendente'.
-   */
-  const mapStatus = (dbStatus: number): 'aprovado' | 'reprovado' | 'pendente' => {
-    switch (dbStatus) {
-      case 4:
-        return 'pendente';
-      // Adicione outros casos se a rota puder trazer outros status
-      // que você queira mapear (embora este componente só vá mostrar o 4)
-      // case 1:
-      //   return 'aprovado';
-      // case 2:
-      //   return 'reprovado';
-      default:
-        return 'pendente'; // Fallback
-    }
-  };
-
-  // Função para buscar os dados da API
-  const fetchEventos = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      // 1. Faz o GET na rota principal (traz TODOS os eventos)
-      const response: unknown = await api.get('/gerente/event', {
-        withCredentials: true,
-      });
-      console.log('eventos response', response);
-      // 2. FILTRA a resposta para pegar apenas eventos com estatus === 4
-      const eventosFiltrados: ApiEvento[] = (response as any).data.filter(
-        (evento: ApiEvento) => Number(evento.estatus) === 4
-       
-      );
-
-      console.log(eventosFiltrados)
-      // 3. MAPPEIA os eventos filtrados para o formato do Card
-      const eventosFormatados: Evento[] = eventosFiltrados.map((evento: ApiEvento) => {
-        // Formata o endereço de objeto para string
-        const enderecoFormatado = evento.Endereco
-          ? `${evento.Endereco.logradouro}, ${evento.Endereco.numero} - ${evento.Endereco.bairro} - ${evento.Endereco.cidade}/${evento.Endereco.uf}`
-          : 'Endereço não informado';
-
-        // Formata as categorias de array de objetos para array de strings
-        const categoriasFormatadas = evento.Evento_Categoria
-          ? evento.Evento_Categoria.map(
-            (cat) => cat.Categoria.nome_categoria,
-          )
-          : [];
-
-        return {
-          id_evento: evento.id_evento,
-          nome_evento: evento.nome_evento,
-          descricao: evento.descricao,
-          data_inicio: evento.data_inicio,
-          data_fim: evento.data_fim,
-          foto: evento.foto,
-          endereco: enderecoFormatado,
-          categorias: categoriasFormatadas,
-          // Mapeia o status 4 para a string 'pendente'
-          estatus: mapStatus(evento.estatus),
-        };
-      });
-
-      setEventos(eventosFormatados);
-    } catch (err) {
-      console.error('Erro ao buscar eventos criados:', err);
-      setError('Não foi possível carregar os eventos. Tente novamente mais tarde.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Chama a função de busca quando o componente é montado
-  useEffect(() => {
-    fetchEventos();
-  }, []);
-
-  // Função para configurar o Chip de status (sem alterações)
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'aprovado':
@@ -172,7 +97,6 @@ const EventosCriados = () => {
     }
   };
 
-  // Funções de formatação de data e hora (sem alterações)
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR', {
@@ -190,44 +114,14 @@ const EventosCriados = () => {
     });
   };
 
-  // ---- RENDERIZAÇÃO ----
-
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 4, height: '300px' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Alert severity="error">{error}</Alert>
-      </Box>
-    );
-  }
-
-  // Feedback de Nenhum Evento Encontrado (agora mais preciso)
-  if (eventos.length === 0) {
-    return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography variant="h6" color="text.secondary" sx={{ fontFamily: 'var(--notosans)' }}>
-          Você não possui eventos pendentes de aprovação no momento.
-        </Typography>
-      </Box>
-    );
-  }
-
-  // Renderização da lista de eventos (Layout dos Cards mantido)
   return (
     <Box sx={{ p: 2 }}>
       <Grid container spacing={3}>
         {eventos.map((evento) => {
-          const statusConfig = getStatusConfig(evento.estatus);
+          const statusConfig = getStatusConfig(evento.status);
 
           return (
-            <Grid size={{ xs: 12, md: 6, sm: 4 }} key={evento.id_evento}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={evento.id_evento}>
               <Card
                 sx={{
                   height: '100%',
@@ -241,7 +135,7 @@ const EventosCriados = () => {
                   },
                 }}
               >
-                {/* Chip de Status */}
+                {/* Chip de Status no canto superior direito */}
                 <Box
                   sx={{
                     position: 'absolute',

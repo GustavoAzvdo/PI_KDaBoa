@@ -8,7 +8,6 @@ import '../Dashboard/Dashboard.css'
 import { Celebration, Verified, NewReleases, Face, House, Map, Call, Settings, EditCalendar, Collections, Person, Home, ExitToApp } from '@mui/icons-material';
 import Endereco from '../Forms/Endereco/Endereco';
 import Estabelecimento from '../Forms/Estabelecimento/Estabelecimento';
-import CriarEvento from '../Forms/CriarEvento/CriarEvento';
 import Contatos from '../Forms/Contatos/Contatos';
 import Galeria from '../Forms/Galeria/Galeria';
 import InfoPessoal from '../Forms/InfoPessoal/InfoPessoal';
@@ -24,6 +23,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate} from 'react-router-dom';
 import BoasVindasFuncionario from '../BoasVindas/BoasVindasFuncionario';
 import EventosCriados from '../Forms/EventosCriados/EventosCriados';
+import CriarEventoFuncionario from '../Forms/CriarEvento/CriarEventoFuncionario';
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -228,7 +228,7 @@ export default function DashboardFuncionario(props: any) {
         );
       case '/eventos/criar_evento':
         return (
-          <CriarEvento setEventoTitle={setEventoTitle} />
+          <CriarEventoFuncionario setEventoTitle={setEventoTitle} />
         );
       case '/eventos/eventos_criados':
         return (

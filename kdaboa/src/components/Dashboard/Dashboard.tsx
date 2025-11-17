@@ -23,6 +23,7 @@ import { useTheme } from '@mui/material/styles';
 import CriarFuncionario from '../Forms/CriarFuncionario/CriarFuncionario';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate} from 'react-router-dom';
+import EventosCriados from '../Forms/EventosCriados/EventosCriados';
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -246,7 +247,7 @@ export default function DashboardLayoutBasic(props: any) {
         );
       case '/eventos/em_analise':
         return (
-          <ScreenDash />
+          <EventosCriados />
         );
       case '/configuracoes':
         return (

@@ -49,6 +49,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                     data_inicio: evento.data_inicio,
                     data_fim: evento.data_fim,
                     foto: evento.foto,
+                    
                     id_endereco: evento.Endereco ? {
                         logradouro: evento.Endereco.logradouro,
                         numero: evento.Endereco.numero,
@@ -63,6 +64,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                 };
             });
             console.log(eventosFormatados);
+            console.log('foto', eventosFormatados.map((evento: unknown) => (evento as Evento).foto));
             setEventos(eventosFormatados);
         } catch (error) {
             console.error('Erro ao buscar eventos:', error);
@@ -92,6 +94,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
 
     const handleEdit = (evento: Evento) => {
         setEventoEditando({
+            
             id_evento: evento.id_evento,
             nome_evento: evento.nome_evento,
             descricao: evento.descricao,

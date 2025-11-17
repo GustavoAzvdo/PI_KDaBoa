@@ -190,8 +190,11 @@ const Estabelecimento = ({ onCategoryChange }: CategoryProps) => {
     }
   };
 
-  const allFieldsFilled = nome.trim() !== '' && viewCNPJ.trim().length === 18 && descricao.trim() !== '' && selectedCategories.length > 0;
-
+const allFieldsFilled = 
+  nome.trim() !== '' && 
+  (firstRegister ? viewCNPJ.trim().length === 18 : true) && // <-- Só valida CNPJ se for firstRegister
+descricao.replace(/<[^>]+>/g, '').trim() !== '' &&
+  selectedCategories.length > 0;
 
 
   // Função para buscar os dados do estabelecimento
