@@ -171,24 +171,20 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
             setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
 
-            // --- LÓGICA ROBUSTA DO ENDEREÇO ---
-            // Verifica se o evento tem um objeto de endereço anexado
+           
             if (eventoEditando.endereco && eventoEditando.endereco.id_endereco) {
-                // 1. Força o modo 'alterar' imediatamente
+             
                 setEnderecoModo('alterar');
 
-                // 2. Tenta encontrar esse endereço exato na lista de endereços do usuário (contexto)
-                // Isso ajuda o Autocomplete a "casar" as informações
+             
                 const enderecoEncontrado = enderecos.find(
                     (end) => end.id_endereco === eventoEditando.endereco!.id_endereco
                 );
-
-                // 3. Define o endereço selecionado (usa o da lista global se achar, senão usa o do evento)
                 setSelectedEndereco(enderecoEncontrado || eventoEditando.endereco);
             } else {
-                // Se não tiver endereço no evento, mantém o comportamento padrão (favorito)
+                
                 setEnderecoModo('manter');
-                // O outro useEffect cuidará de setar o favorito
+              
             }
 
             // Histórico
@@ -217,7 +213,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         } else {
             resetForm();
         }
-        // Adicionamos 'enderecos' nas dependências para garantir que a busca funcione
+       
     }, [eventoEditando, enderecos]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
