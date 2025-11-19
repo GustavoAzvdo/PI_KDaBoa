@@ -160,42 +160,47 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     // --- CARREGAMENTO DE DADOS (EDITAR) ---
     useEffect(() => {
         if (eventoEditando) {
-            console.log('id_evento:', eventoEditando.id_evento);
+            console.log('Editando evento:', eventoEditando);
             setEventoTitle('Editar evento');
             setIsEdit(true);
 
-            // Campos texto/data
+            // Campos simples
             setNome(eventoEditando.nome_evento || '');
             setDescricao(eventoEditando.descricao || '');
             setData_criacao(eventoEditando.data_criacao ? dayjs(eventoEditando.data_criacao) : null);
             setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
             setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
 
-            // Endereço
-            setSelectedEndereco(eventoEditando.endereco || null);
-            if (eventoEditando.endereco) {
-                if (enderecoFavorito && eventoEditando.endereco.id_endereco === enderecoFavorito.id_endereco) {
-                    setEnderecoModo('manter');
-                } else {
-                    setEnderecoModo('alterar');
-                }
+            // --- LÓGICA ROBUSTA DO ENDEREÇO ---
+            // Verifica se o evento tem um objeto de endereço anexado
+            if (eventoEditando.endereco && eventoEditando.endereco.id_endereco) {
+                // 1. Força o modo 'alterar' imediatamente
+                setEnderecoModo('alterar');
+
+                // 2. Tenta encontrar esse endereço exato na lista de endereços do usuário (contexto)
+                // Isso ajuda o Autocomplete a "casar" as informações
+                const enderecoEncontrado = enderecos.find(
+                    (end) => end.id_endereco === eventoEditando.endereco!.id_endereco
+                );
+
+                // 3. Define o endereço selecionado (usa o da lista global se achar, senão usa o do evento)
+                setSelectedEndereco(enderecoEncontrado || eventoEditando.endereco);
             } else {
+                // Se não tiver endereço no evento, mantém o comportamento padrão (favorito)
                 setEnderecoModo('manter');
+                // O outro useEffect cuidará de setar o favorito
             }
 
             // Histórico
             fetchAlteracoes(eventoEditando.id_evento);
 
-            // --- LÓGICA DA FOTO CORRIGIDA ---
-            // Não tentamos baixar o arquivo, apenas montamos a URL para o preview.
-            // Se o usuário não selecionar um novo arquivo, fotoFile continua null e o backend mantém a antiga.
+            // Foto
             if (eventoEditando.foto) {
                 const nomeArquivo = eventoEditando.foto.split('/').pop() || 'imagem.png';
-                // Adiciona timestamp para evitar cache de imagem antiga
                 const urlCompleta = `${API_URL}/event/image/${nomeArquivo}?t=${new Date().getTime()}`;
                 setPreviewUrl(urlCompleta);
                 setFileName(nomeArquivo);
-                setFotoFile(null); // Importante: Null indica "sem alteração de foto"
+                setFotoFile(null);
             } else {
                 setFotoUrl('');
                 setFileName('');
@@ -212,7 +217,8 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         } else {
             resetForm();
         }
-    }, [eventoEditando]);
+        // Adicionamos 'enderecos' nas dependências para garantir que a busca funcione
+    }, [eventoEditando, enderecos]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
         setEnd((prev) => [...prev, novoEndereco]);
@@ -674,12 +680,12 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 </Grid>
 
                 {/* FOTO: BOTÃO DE ESCOLHER */}
-                <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
                     <Button
                         sx={{
                             width: '100%',
-                         
+
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -780,6 +786,17 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                             </Typography>
                         </Box>
                         <Box sx={{ my: 2 }}>
+
+                            {/* <Button variant="contained" sx={{ width: '200px', backgroundColor: 'var(--roxo)' }}>
+                                <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                    Manter endereço
+                                </Typography>
+                            </Button>
+                            <Button variant="outlined" sx={{ width: '200px', borderColor: 'var(--roxo)', color: 'var(--roxo)', marginLeft: 3 }}>
+                                <Typography sx={{ fontSize: '18px', fontWeight: '500', fontFamily: 'var(--notosans) !important' }}>
+                                    Alterar endereço
+                                </Typography>
+                            </Button> */}
                             <FormControl sx={{ my: 2, display: { xs: 'flex', md: 'flex', sm: 'flex' }, justifyContent: { xs: 'center', md: 'center', sm: 'center' } }}>
                                 <RadioGroup
                                     row
@@ -787,45 +804,51 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     name="row-radio-buttons-group"
                                     value={enderecoModo}
                                     onChange={e => setEnderecoModo(e.target.value as 'manter' | 'alterar')}
+
                                 >
                                     <FormControlLabel value="manter" control={<Radio sx={{
                                         color: 'default',
-                                        '&.Mui-checked': { color: 'var(--roxoForteDashboard)' },
+                                        '&.Mui-checked': {
+                                            color: 'var(--roxoForteDashboard)',
+                                        },
                                     }} />} label="Endereço favorito" />
                                     <FormControlLabel value="alterar" control={<Radio
                                         sx={{
                                             color: 'default',
-                                            '&.Mui-checked': { color: 'var(--roxoForteDashboard)' },
+                                            '&.Mui-checked': {
+                                                color: 'var(--roxoForteDashboard)',
+                                            },
                                         }}
                                     />} label="Alterar endereço" />
                                     {enderecoModo === 'alterar' && (
-                                        <Box
-                                            onMouseEnter={(e) => handlePopoverOpen(e, 'id_endereco')}
-                                            onMouseLeave={handlePopoverClose}
-                                            sx={{ width: { xs: '100%', sm: '100%', md: '25%' }, ml: 2 }}
-                                        >
-                                            <Autocomplete
-                                                disablePortal
-                                                disabled={enderecoModo !== 'alterar'}
-                                                onChange={handleSelectEndereco}
-                                                value={selectedEndereco}
-                                                options={enderecos}
-                                                getOptionLabel={(option) => `${option.cep} | ${option.numero}`}
-                                                sx={{
-                                                    width: '100%',
-                                                    opacity: enderecoModo === 'alterar' ? 1 : 0.7,
-                                                    transition: 'opacity 0.3s ease'
-                                                }}
-                                                componentsProps={{
-                                                    paper: { sx: { display: enderecoModo === 'alterar' ? 'block' : 'none' } }
-                                                }}
-                                                renderInput={(params) => <TextField {...params} label="Endereços cadastrados" sx={getOrangeBorderSx('id_endereco')} />}
-                                                isOptionEqualToValue={(option, value) => option.cep === value.cep && option.numero === value.numero}
-                                            />
-                                        </Box>
+                                        <Autocomplete
+                                            disablePortal
+                                            disabled={enderecoModo !== 'alterar'}
+                                            onChange={handleSelectEndereco}
+                                            value={selectedEndereco}
+                                            options={enderecos}
+                                            getOptionLabel={(option) => `${option.cep} | ${option.numero}`}
+                                            sx={{
+                                                width: { xs: '100%', sm: '100%', md: '25%' },
+                                                ml: 2,
+                                                opacity: enderecoModo === 'alterar' ? 1 : 0.7,
+                                                transition: 'opacity 0.3s ease'
+                                            }}
+                                            componentsProps={{
+                                                paper: {
+                                                    sx: {
+                                                        display: enderecoModo === 'alterar' ? 'block' : 'none'
+                                                    }
+                                                }
+                                            }}
+                                            renderInput={(params) => <TextField {...params} label="Endereços cadastrados" />}
+                                            isOptionEqualToValue={(option, value) => option.cep === value.cep && option.numero === value.numero}
+                                        />
                                     )}
                                 </RadioGroup>
+
                             </FormControl>
+
                         </Box>
                     </Box>
                     <Box>
@@ -850,7 +873,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     }}
                                     variant='contained'
                                     onClick={() => handlePostEvento()}
-                                    startIcon={<Create />} 
+                                    startIcon={<Create />}
                                 >
                                     <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
                                         Criar evento

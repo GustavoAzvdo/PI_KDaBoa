@@ -100,18 +100,18 @@ const HistoryPopover = ({
         }
 
         // 6. ENDEREÇO (ID do endereço)
-        if (alteracao.campo === 'id_endereco') {
-            return (
-                <Box sx={{ p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-                     <Typography variant="body2">
-                        ID do Novo Endereço: <strong>{alteracao.valor_novo}</strong>
-                    </Typography>
-                    <Typography variant="caption" color="textSecondary">
-                        (O sistema selecionará este endereço automaticamente ao aceitar)
-                    </Typography>
-                </Box>
-            );
-        }
+        // if (alteracao.campo === 'id_endereco') {
+        //     return (
+        //         <Box sx={{ p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+        //              <Typography variant="body2">
+        //                 ID do Novo Endereço: <strong>{alteracao.valor_novo}</strong>
+        //             </Typography>
+        //             <Typography variant="caption" color="textSecondary">
+        //                 (O sistema selecionará este endereço automaticamente ao aceitar)
+        //             </Typography>
+        //         </Box>
+        //     );
+        // }
 
         // 7. Padrão
         return (

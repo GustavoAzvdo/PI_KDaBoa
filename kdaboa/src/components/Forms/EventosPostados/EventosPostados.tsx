@@ -30,7 +30,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
     const [eventos, setEventos] = useState<Evento[]>([]);
     // Estado para armazenar quais IDs têm pendência no histórico
     const [idsComAlteracao, setIdsComAlteracao] = useState<number[]>([]);
-    
+
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [message, setMessage] = useState('');
     const [severity, setSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('success');
@@ -46,7 +46,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
             try {
                 // O : any aqui previne o erro do typescript no .length
                 const response: any = await api.get(`/gerente/event/alteration/${evento.id_evento}`, { withCredentials: true });
-                
+
                 if (response.data && response.data.length > 0) {
                     idsEncontrados.push(evento.id_evento);
                 }
@@ -75,7 +75,9 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                     data_inicio: evento.data_inicio,
                     data_fim: evento.data_fim,
                     foto: evento.foto,
+                    // CORREÇÃO AQUI EMBAIXO:
                     id_endereco: evento.Endereco ? {
+                        id_endereco: evento.Endereco.id_endereco, // <--- ADICIONE ESTA LINHA
                         logradouro: evento.Endereco.logradouro,
                         numero: evento.Endereco.numero,
                         bairro: evento.Endereco.bairro,
@@ -89,7 +91,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                     estatus: evento.estatus
                 };
             });
-            
+
             setEventos(eventosFormatados);
             // Chama a verificação de alterações após carregar os eventos
             checarAlteracoes(eventosFormatados);
