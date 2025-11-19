@@ -74,37 +74,34 @@ const EventosCriadosFuncionario = () => {
       case 2:
         return 'reprovado';
       default:
-        return 'pendente'; // Fallback
+        return 'pendente'; 
     }
   };
 
-  // Função para buscar os dados da API
   const fetchEventos = async () => {
     setLoading(true);
     setError(null);
     try {
-      // 1. Faz o GET na **NOVA ROTA** (/gerente/event/waiting)
-      //    Esta rota já retorna apenas os eventos com estatus 4 (pendente)
+     
+     
       const response: unknown = await api.get('/gerente/event/waiting', {
         withCredentials: true,
       });
 
-      // O array de eventos já está filtrado, apenas o recuperamos da resposta.
-      // Presumimos que a nova rota retorna o array de eventos diretamente em `data`.
+     
       const eventosFiltrados: ApiEvento[] = (response as any).data;
 
       console.log('eventos response (waiting)', response);
       console.log(eventosFiltrados)
 
-      // 2. MAPPEIA os eventos filtrados para o formato do Card
-      //    O restante do código de mapeamento permanece o mesmo.
+ 
       const eventosFormatados: Evento[] = eventosFiltrados.map((evento: ApiEvento) => {
-        // Formata o endereço de objeto para string
+        
         const enderecoFormatado = evento.Endereco
           ? `${evento.Endereco.logradouro}, ${evento.Endereco.numero} - ${evento.Endereco.bairro} - ${evento.Endereco.cidade}/${evento.Endereco.estado}`
           : 'Endereço não informado';
 
-        // Formata as categorias de array de objetos para array de strings
+        
         const categoriasFormatadas = evento.Evento_Categoria
           ? evento.Evento_Categoria.map(
             (cat) => cat.Categoria.nome_categoria,
@@ -120,9 +117,7 @@ const EventosCriadosFuncionario = () => {
           foto: evento.foto,
           endereco: enderecoFormatado,
           categorias: categoriasFormatadas,
-          // Mapeia o status. Se a rota `waiting` só traz status 4,
-          // você pode mapear diretamente, ou manter a chamada `mapStatus`
-          // para consistência (desde que `mapStatus(4)` retorne 'pendente').
+        
           estatus: mapStatus(evento.estatus),
         };
       });
@@ -158,9 +153,7 @@ const EventosCriadosFuncionario = () => {
     }
   };
 
-  // ------------------------------------------------------------------
-  // FUNÇÃO PARA REJEITAR O EVENTO (Status 4 -> Status 2 - ou outro)
-  // ------------------------------------------------------------------
+ 
   const handleRejectEvent = async (id_evento: number) => {
     setIsMutating(true); // Começa a mutação (desativa botões)
     setError(null); // Limpa erros anteriores
@@ -184,7 +177,7 @@ const EventosCriadosFuncionario = () => {
   };
 
 
-  // Chama a função de busca quando o componente é montado
+  
   useEffect(() => {
     fetchEventos();
   }, []);

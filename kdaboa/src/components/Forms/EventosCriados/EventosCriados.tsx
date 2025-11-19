@@ -104,7 +104,7 @@ const EventosCriados = () => {
       console.log(eventosFiltrados)
 
       const eventosFormatados: Evento[] = eventosFiltrados.map((evento: ApiEvento) => {
-   
+
         const enderecoFormatado = evento.Endereco
           ? `${evento.Endereco.logradouro}, ${evento.Endereco.numero} - ${evento.Endereco.bairro} - ${evento.Endereco.cidade}/${evento.Endereco.estado}`
           : 'Endereço não informado';
@@ -160,7 +160,7 @@ const EventosCriados = () => {
       console.error(`Erro ao aprovar o evento ${id_evento}:`, err);
       setError('Erro ao aprovar o evento. Verifique a conexão e tente novamente.');
     } finally {
-      setIsMutating(false); 
+      setIsMutating(false);
     }
   };
 
@@ -178,7 +178,7 @@ const EventosCriados = () => {
       });
 
       setSnackbarMessage('Evento rejeitado com sucesso!');
-      setSnackbarSeverity('info');
+      setSnackbarSeverity('success');
       setSnackbarOpen(true);
       await fetchEventos();
     } catch (err) {
@@ -188,7 +188,7 @@ const EventosCriados = () => {
       setSnackbarOpen(true);
       setError('Erro ao rejeitar o evento. Verifique a conexão e tente novamente.');
     } finally {
-      setIsMutating(false); 
+      setIsMutating(false);
     }
   };
 
@@ -254,194 +254,212 @@ const EventosCriados = () => {
 
   if (error) {
     return (
-      <Box sx={{ p: 2 }}>
-        <Alert severity="error">{error}</Alert>
-      </Box>
+      <>
+        <Box sx={{ p: 2 }}>
+          <Alert severity="error">{error}</Alert>
+        </Box>
+        <CustomSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          severity={snackbarSeverity}
+          onClose={handleCloseSnackbar}
+        />
+      </>
     );
   }
 
- 
+
   if (eventos.length === 0) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography variant="h6" color="text.secondary" sx={{ fontFamily: 'var(--notosans)' }}>
-          Você não possui eventos pendentes de aprovação no momento.
-        </Typography>
-      </Box>
+      <>
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <Typography variant="h6" color="text.secondary" sx={{ fontFamily: 'var(--notosans)' }}>
+            Você não possui eventos pendentes de aprovação no momento.
+          </Typography>
+        </Box>
+        <CustomSnackbar
+          open={snackbarOpen}
+          message={snackbarMessage}
+          severity={snackbarSeverity}
+          onClose={handleCloseSnackbar}
+        />
+      </>
     );
   }
 
   return (
-    <Box sx={{ p: 2 }}>
+    <>
+      <Box sx={{ p: 2 }}>
 
-      <Grid container spacing={3}>
-        {eventos.map((evento) => {
-          const statusConfig = getStatusConfig(evento.estatus);
+        <Grid container spacing={3}>
+          {eventos.map((evento) => {
+            const statusConfig = getStatusConfig(evento.estatus);
 
-          return (
-            <Grid size={{ xs: 12, md: 4, sm: 4 }} key={evento.id_evento}>
-              <Card
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                {/* Chip de Status */}
-                <Box
+            return (
+              <Grid size={{ xs: 12, md: 4, sm: 4 }} key={evento.id_evento}>
+                <Card
                   sx={{
-                    position: 'absolute',
-                    top: 12,
-                    right: 12,
-                    zIndex: 1,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'relative',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: 6,
+                    },
                   }}
                 >
-                  <Chip
-                    icon={statusConfig.icon}
-                    label={statusConfig.label}
-                    color={statusConfig.color}
-                    size="medium"
+                  {/* Chip de Status */}
+                  <Box
                     sx={{
-                      fontFamily: 'var(--notosans)',
-                      fontWeight: 600,
-                      fontSize: '0.85rem',
-                      boxShadow: 2,
+                      position: 'absolute',
+                      top: 12,
+                      right: 12,
+                      zIndex: 1,
                     }}
+                  >
+                    <Chip
+                      icon={statusConfig.icon}
+                      label={statusConfig.label}
+                      color={statusConfig.color}
+                      size="medium"
+                      sx={{
+                        fontFamily: 'var(--notosans)',
+                        fontWeight: 600,
+                        fontSize: '0.85rem',
+                        boxShadow: 2,
+                      }}
+                    />
+                  </Box>
+
+                  <CardMedia
+                    component="img"
+                    height="200"
+                    image={evento.foto}
+                    alt={evento.nome_evento}
+                    sx={{ objectFit: 'cover' }}
                   />
-                </Box>
 
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={evento.foto}
-                  alt={evento.nome_evento}
-                  sx={{ objectFit: 'cover' }}
-                />
+                  <CardContent sx={{ flexGrow: 1, pt: 2 }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontFamily: 'var(--notosans)',
+                        fontWeight: 600,
+                        mb: 1,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                      }}
+                    >
+                      {evento.nome_evento}
+                    </Typography>
 
-                <CardContent sx={{ flexGrow: 1, pt: 2 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontFamily: 'var(--notosans)',
-                      fontWeight: 600,
-                      mb: 1,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                    }}
-                  >
-                    {evento.nome_evento}
-                  </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        fontFamily: 'var(--notosans)',
+                        mb: 2,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                      }}
+                    >
+                      {evento.descricao}
+                    </Typography>
 
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      fontFamily: 'var(--notosans)',
-                      mb: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                    }}
-                  >
-                    {evento.descricao}
-                  </Typography>
-
-                  <Stack spacing={1.5}>
-                    {/* Data e Hora */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <CalendarToday sx={{ fontSize: 18, color: '#6c15d5' }} />
-                      <Typography
-                        variant="body2"
-                        sx={{ fontFamily: 'var(--notosans)' }}
-                      >
-                        {formatDate(evento.data_inicio)} às{' '}
-                        {formatTime(evento.data_inicio)}
-                      </Typography>
-                    </Box>
-
-                    {/* Endereço */}
-                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                      <LocationOn sx={{ fontSize: 18, color: '#6c15d5', mt: 0.2 }} />
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontFamily: 'var(--notosans)',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                        }}
-                      >
-                        {evento.endereco}
-                      </Typography>
-                    </Box>
-
-                    {/* Categorias */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                      <Category sx={{ fontSize: 18, color: '#6c15d5' }} />
-                      <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                        {evento.categorias.map((categoria, index) => (
-                          <Chip
-                            key={index}
-                            label={categoria}
-                            size="small"
-                            sx={{
-                              fontFamily: 'var(--notosans)',
-                              fontSize: '0.75rem',
-                              bgcolor: 'rgba(108, 21, 213, 0.1)',
-                              color: '#6c15d5',
-                            }}
-                          />
-                        ))}
+                    <Stack spacing={1.5}>
+                      {/* Data e Hora */}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <CalendarToday sx={{ fontSize: 18, color: '#6c15d5' }} />
+                        <Typography
+                          variant="body2"
+                          sx={{ fontFamily: 'var(--notosans)' }}
+                        >
+                          {formatDate(evento.data_inicio)} às{' '}
+                          {formatTime(evento.data_inicio)}
+                        </Typography>
                       </Box>
-                    </Box>
-                  </Stack>
-                </CardContent>
-                <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', p: 2, mt: 1 }}>
-                  <Button
-                    variant='contained'
-                    color='success'
-                    startIcon={<CheckCircle />}
-                    onClick={() => handleApproveEvent(evento.id_evento)} // CHAMADA PARA APROVAR
-                    disabled={isMutating} // Desativa se já houver uma ação em andamento
-                  >
-                    {isMutating ? 'Aprovando...' : 'Aceitar'}
-                  </Button>
-                  <Button
-                    variant='contained'
-                    color='error'
-                    startIcon={<Cancel />}
-                    onClick={() => handleRejectEvent(evento.id_evento)} // CHAMADA PARA REJEITAR
-                    disabled={isMutating} // Desativa se já houver uma ação em andamento
-                  >
-                    Rejeitar
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          );
-        })}
-      </Grid>
 
-      <CustomSnackbar
+                      {/* Endereço */}
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+                        <LocationOn sx={{ fontSize: 18, color: '#6c15d5', mt: 0.2 }} />
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontFamily: 'var(--notosans)',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                          }}
+                        >
+                          {evento.endereco}
+                        </Typography>
+                      </Box>
+
+                      {/* Categorias */}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                        <Category sx={{ fontSize: 18, color: '#6c15d5' }} />
+                        <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                          {evento.categorias.map((categoria, index) => (
+                            <Chip
+                              key={index}
+                              label={categoria}
+                              size="small"
+                              sx={{
+                                fontFamily: 'var(--notosans)',
+                                fontSize: '0.75rem',
+                                bgcolor: 'rgba(108, 21, 213, 0.1)',
+                                color: '#6c15d5',
+                              }}
+                            />
+                          ))}
+                        </Box>
+                      </Box>
+                    </Stack>
+                  </CardContent>
+                  <CardActions sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', p: 2, mt: 1 }}>
+                    <Button
+                      variant='contained'
+                      color='success'
+                      startIcon={<CheckCircle />}
+                      onClick={() => handleApproveEvent(evento.id_evento)} // CHAMADA PARA APROVAR
+                      disabled={isMutating} // Desativa se já houver uma ação em andamento
+                    >
+                      {isMutating ? 'Aprovando...' : 'Aceitar'}
+                    </Button>
+                    <Button
+                      variant='contained'
+                      color='error'
+                      startIcon={<Cancel />}
+                      onClick={() => handleRejectEvent(evento.id_evento)} // CHAMADA PARA REJEITAR
+                      disabled={isMutating} // Desativa se já houver uma ação em andamento
+                    >
+                      Rejeitar
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
+
+      </Box>
+      {/* <CustomSnackbar
         open={snackbarOpen}
         message={snackbarMessage}
         severity={snackbarSeverity}
         onClose={handleCloseSnackbar}
-      />
-    </Box>
+      /> */}
+    </>
   );
 };
 
