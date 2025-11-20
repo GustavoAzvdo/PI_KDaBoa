@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, AttachFile } from '@mui/icons-material';
+import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, AttachFile, Edit, ArrowBack, Create } from '@mui/icons-material';
 import { styled } from '@mui/material/styles'
 import { dados } from '../../../categorys/dados';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import 'dayjs/locale/pt-br';
 import { ptBR } from '@mui/x-date-pickers/locales';
 import './CriarEvento.css'
@@ -18,6 +18,10 @@ import Endereco from '../Endereco/Endereco';
 import { EnderecoData } from '../Endereco/Endereco';
 import { useEnderecoContext } from '../../../context/EnderecoContext';
 import { useEventos } from '../../../context/EventoContext';
+import HistoryPopover from '../../History/History';
+
+import { Dialog, DialogContent, Tooltip } from '@mui/material';
+import { Visibility, } from '@mui/icons-material';
 
 //EDIT TEXT EDITOR
 import StarterKit from "@tiptap/starter-kit";
@@ -31,8 +35,6 @@ import {
     RichTextEditor,
     type RichTextEditorRef,
 } from "mui-tiptap";
-
-
 
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import api from '../../../api/api';
@@ -49,9 +51,24 @@ interface CategoryProps {
     setEventoTitle: (title: string) => void;
 }
 
+export interface Alteracao {
+    id_his: number;
+    id_usuario: number;
+    campo: string;
+    valor_antigo: string;
+    valor_novo: string;
+    Usuario: {
+        nome_usuario: string;
+    };
+}
+
 const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
-    // valores do form 
+    // --- ESTADOS ---
+    const [alteracoes, setAlteracoes] = useState<Alteracao[]>([]);
+    const [popoverAnchor, setPopoverAnchor] = useState<HTMLElement | null>(null);
+    const [activeAlteracao, setActiveAlteracao] = useState<Alteracao | null>(null);
+    const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     const [nome, setNome] = useState<string>('');
     const [descricao, setDescricao] = React.useState<string>('');
@@ -62,13 +79,12 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const [fotoFile, setFotoFile] = useState<File | null>(null);
     const [, setData_criacao] = useState<Dayjs | null>(null);
 
-    //pegar o id
+    const [modalOpen, setModalOpen] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState<string>('');
 
     const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
-
-    //
 
     const [enderecoModo, setEnderecoModo] = useState<'manter' | 'alterar'>('manter');
     const [fileName, setFileName] = React.useState<string>('');
@@ -79,112 +95,155 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const { eventoEditando, setEventoEditando } = useEventos();
     const [isEdit, setIsEdit] = useState(false);
     const rteRef = React.useRef<RichTextEditorRef>(null);
-    const enderecoParaExibir = enderecoModo === 'manter'
-        ? enderecoFavorito
-        : selectedEndereco;
 
-    useEffect(() => {
-        const editor = rteRef.current?.editor;
+    const enderecoParaExibir = enderecoModo === 'manter' ? enderecoFavorito : selectedEndereco;
+    const API_URL = 'http://localhost:3000';
 
-        // Verifica se o editor existe
-        if (!editor) {
-            return;
+    // --- FUNÇÃO DE RESETAR TUDO (VOLTAR PARA CRIAR) ---
+    const resetForm = () => {
+        setIsEdit(false);
+        setEventoEditando(null);
+        setEventoTitle('Criar evento');
+
+        // Limpa campos
+        setNome('');
+        setDescricao('');
+        setFotoUrl('');
+        setFileName('');
+        setFotoFile(null);
+        setPreviewUrl('');
+        setCtg([]);
+        setDataInicio(dayjs().startOf('day'));
+        setDataFim(dayjs().startOf('day'));
+
+        // Reseta endereço para o favorito se existir
+        if (enderecoFavorito) {
+            setEnderecoModo('manter');
+            setSelectedEndereco(enderecoFavorito);
+        } else {
+            setSelectedEndereco(null);
         }
 
-        // Pega o HTML atual do editor
-        const currentHtml = editor.getHTML();
+        // Limpa alterações
+        setAlteracoes([]);
+    };
 
-        // Se o conteúdo do estado (vindo da API) for diferente do conteúdo do editor
-        // Atualiza o editor. Isso evita um loop infinito.
+    // --- SYNC EDITOR ---
+    useEffect(() => {
+        const editor = rteRef.current?.editor;
+        if (!editor) return;
+        const currentHtml = editor.getHTML();
         if (descricao !== currentHtml) {
             editor.commands.setContent(descricao);
         }
     }, [descricao]);
 
+    // --- FETCH ALTERAÇÕES ---
+    const fetchAlteracoes = async (idEvento: number) => {
+        try {
+            const response: any = await api.get(`/gerente/event/alteration/${idEvento}`, {
+                withCredentials: true
+            });
+            setAlteracoes(response.data);
+        } catch (error) {
+            console.error("Erro ao buscar histórico:", error);
+        }
+    };
 
+    // --- ENDEREÇO PADRÃO ---
     useEffect(() => {
         if (!isEdit && enderecoModo === 'manter' && enderecoFavorito) {
             setSelectedEndereco(enderecoFavorito);
         }
     }, [isEdit, enderecoModo, enderecoFavorito]);
 
+    // --- CARREGAMENTO DE DADOS (EDITAR) ---
     useEffect(() => {
         if (eventoEditando) {
-            console.log('id_evento:', eventoEditando.id_evento);
-            setEventoTitle('Editar evento')
+            console.log('Editando evento:', eventoEditando);
+            setEventoTitle('Editar evento');
             setIsEdit(true);
+
+            // Campos simples
             setNome(eventoEditando.nome_evento || '');
             setDescricao(eventoEditando.descricao || '');
             setData_criacao(eventoEditando.data_criacao ? dayjs(eventoEditando.data_criacao) : null);
             setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
             setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
-            setSelectedEndereco(eventoEditando.endereco || null);
 
-            if (eventoEditando.endereco) {
 
-                if (enderecoFavorito && eventoEditando.endereco.id_endereco === enderecoFavorito.id_endereco) {
-                    setEnderecoModo('manter');
-                } else {
-                    setEnderecoModo('alterar');
-                }
+            if (eventoEditando.endereco && eventoEditando.endereco.id_endereco) {
+
+                setEnderecoModo('alterar');
+
+
+                const enderecoEncontrado = enderecos.find(
+                    (end) => end.id_endereco === eventoEditando.endereco!.id_endereco
+                );
+                setSelectedEndereco(enderecoEncontrado || eventoEditando.endereco);
             } else {
+
                 setEnderecoModo('manter');
+
             }
 
+            // Histórico
+            fetchAlteracoes(eventoEditando.id_evento);
+
+            // Foto
+            if (eventoEditando.foto) {
+                const nomeArquivo = eventoEditando.foto.split('/').pop() || 'imagem.png';
+                const urlCompleta = `${API_URL}/event/image/${nomeArquivo}?t=${new Date().getTime()}`;
+                setPreviewUrl(urlCompleta);
+                setFileName(nomeArquivo);
+                setFotoFile(null);
+            } else {
+                setFotoUrl('');
+                setFileName('');
+                setFotoFile(null);
+                setPreviewUrl('');
+            }
+
+            // Categorias
             const categoriaIds = eventoEditando.categorias
                 .map(cat => dados.find(d => d.title === cat)?.id)
                 .filter((id): id is number => id !== undefined);
-
             setCtg(categoriaIds);
+
         } else {
-            setIsEdit(false);
-            setSelectedEndereco(null);   // Limpa o endereço selecionado
-            setEnderecoModo('manter')
-            setEventoTitle('Criar evento')
-            setEventoEditando(null)
+            resetForm();
         }
 
-    }, [eventoEditando]);
+    }, [eventoEditando, enderecos]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
-        setEnd((prev) => [...prev, novoEndereco]); ''
+        setEnd((prev) => [...prev, novoEndereco]);
     }
 
     const handleSelectEndereco = (_event: any, value: EnderecoData | null) => {
         setSelectedEndereco(value);
-        console.log(value?.id_endereco);
     }
-
-
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
+        if (!file) return;
 
-        if (!file) {
-            return;
-        }
-
-        console.log(`Original file size: ${file.size / 1024 / 1024} MB`);
-
-        const options = {
-            maxSizeMB: 1,          // Tamanho máximo do arquivo em MB
-            maxWidthOrHeight: 1920, // Dimensão máxima (largura ou altura)
-            useWebWorker: true,    // Usa Web Worker para não travar a interface
-        };
+        const options = { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true };
 
         try {
             const compressedFile = await imageCompression(file, options);
-            console.log(`Compressed file size: ${compressedFile.size / 1024 / 1024} MB`);
-
             setFileName(compressedFile.name);
             setFotoFile(compressedFile);
 
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setFotoUrl(reader.result as string);
-            };
+            reader.onloadend = () => { setFotoUrl(reader.result as string); };
             reader.readAsDataURL(compressedFile);
 
+            // Preview
+            setFileName(file.name);
+            setFotoFile(file);
+            const localPreview = URL.createObjectURL(file);
+            setPreviewUrl(localPreview);
         } catch (error) {
             console.error('Erro ao comprimir a imagem:', error);
             setFileName(file.name);
@@ -192,49 +251,26 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     };
 
-
     const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
+        clip: 'rect(0 0 0 0)', clipPath: 'inset(50%)', height: 1, overflow: 'hidden', position: 'absolute', bottom: 0, left: 0, whiteSpace: 'nowrap', width: 1,
     });
-
-
-  
-
-
 
     const handleCategoryChange = (_event: any, value: any) => {
         const categories = value.map((item: any) => item.id);
         setCtg(categories);
-
-        if (onCategoryChange) {
-
-            onCategoryChange(categories);
-        }
+        if (onCategoryChange) onCategoryChange(categories);
     };
 
     useEffect(() => {
-        // Quando mudar para 'manter', limpa a seleção do autocomplete
         if (enderecoModo === 'manter') {
             setSelectedEndereco(enderecos.find(e => e.id_endereco === enderecoFavorito?.id_endereco) || null);
         }
     }, [enderecoModo, enderecos]);
 
-
     const handleEditEvento = async () => {
-        console.log('fotoFile:', fotoFile);
-        console.log('fileName:', fileName);
         try {
             const formData = new FormData();
-            // formData.append('id_evento', eventoEditando?.id_evento.toString() || '');
-            formData.append('nome', nome);
+            formData.append('nome_evento', nome);
             formData.append('descricao', descricao);
             formData.append('data_inicio', dataInicio?.toISOString() || '');
             formData.append('data_fim', dataFim?.toISOString() || '');
@@ -243,64 +279,36 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 formData.append('id_endereco', enderecoUsado.id_endereco.toString());
             }
 
-            ctg.forEach(id => {
-                formData.append('categoria', id.toString());
-            });
+            ctg.forEach(id => { formData.append('categoria', id.toString()); });
 
-            // ✅ Se tiver imagem, envia corretamente
+            // CORREÇÃO: Só envia o arquivo se ele existir (foi alterado).
             if (fotoFile) {
-                formData.append('images', fotoFile); // se só for uma
+                formData.append('images', fotoFile);
             }
 
-            // ✅ DEBUG: ver o que está sendo enviado
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}:`, value);
-            }
-
-
-            await api.put(`/gerente/event/${eventoEditando?.id_evento}`, {
-                nome: nome,
-                descricao: descricao,
-                data_inicio: dataInicio?.toISOString() || '',
-                data_fim: dataFim?.toISOString() || '',
-                images: fotoFile,
-                id_endereco: enderecoUsado?.id_endereco,
-                categoria: ctg,
-
-            }, {
+            await api.put(`/gerente/event/${eventoEditando?.id_evento}`, formData, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             setSnackbarMessage('Evento editado com sucesso!');
-
-
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
-            // Reset
-            setNome('');
-            setDescricao('');
-            setCtg([]);
-            setFileName('');
-            setFotoUrl('');
-            setFotoFile(null); // <- limpa também
-            allFieldsFilled()
-            setEventoTitle('Criar evento')
-            setIsEdit(false)
+
+            // APÓS EDITAR COM SUCESSO, RESETA O FORM
+            resetForm();
+
         } catch (error) {
             console.error('Erro ao editar evento:', error);
             setSnackbarMessage('Erro ao editar evento. Tente novamente.');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
-        setEventoEditando(null)
     };
 
     const handlePostEvento = async () => {
-        console.log('fotoFile:', fotoFile);
-        console.log('fileName:', fileName);
         try {
             const formData = new FormData();
-            formData.append('nome', nome);
+            formData.append('nome_evento', nome);
             formData.append('descricao', descricao);
             formData.append('data_inicio', dataInicio?.toISOString() || '');
             formData.append('data_fim', dataFim?.toISOString() || '');
@@ -309,49 +317,26 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 formData.append('id_endereco', enderecoUsado.id_endereco.toString());
             }
 
+            ctg.forEach(id => { formData.append('categoria', id.toString()); });
 
-            ctg.forEach(id => {
-                formData.append('categoria', id.toString());
-            });
-
-            // ✅ Se tiver imagem, envia corretamente
-            if (fotoFile) {
-                formData.append('images', fotoFile); // se só for uma
-            }
-
-            // ✅ DEBUG: ver o que está sendo enviado
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}:`, value);
-            }
-
-
+            if (fotoFile) { formData.append('images', fotoFile); }
 
             await api.post('/gerente/event', formData, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             setSnackbarMessage('Evento criado com sucesso!');
-
-
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
-            // Reset
-            setNome('');
-            setDescricao('');
-            setCtg([]);
-            setFileName('');
-            setFotoUrl('');
-            setFotoFile(null); // <- limpa também
-            allFieldsFilled()
+
+            resetForm();
         } catch (error) {
             console.error('Erro ao criar evento:', error);
             setSnackbarMessage('Erro ao criar evento. Tente novamente.');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
-        setEventoEditando(null)
     };
-
 
     const allFieldsFilled = () => {
         return (
@@ -364,35 +349,191 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         );
     };
 
-    useEffect(() => {
-        const fetchEventos = async () => {
-            try {
-                const response = await api.get('/gerente/event', {
-                    withCredentials: true
-                })
-                console.log(response.data)
-            } catch (error) {
-                console.log(error)
+    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement> | null, campo?: string) => {
+        if (closeTimerRef.current) {
+            clearTimeout(closeTimerRef.current);
+            closeTimerRef.current = null;
+        }
+        if (event && campo) {
+            const alteracaoEncontrada = alteracoes.find(a => a.campo === campo);
+            if (alteracaoEncontrada) {
+                setPopoverAnchor(event.currentTarget);
+                setActiveAlteracao(alteracaoEncontrada);
             }
         }
-        fetchEventos()
-    }, [selectedEndereco]);
+    };
 
+    const handlePopoverClose = () => {
+        closeTimerRef.current = setTimeout(() => {
+            setPopoverAnchor(null);
+            setActiveAlteracao(null);
+        }, 300);
+    };
+
+    const handleHistoryAction = async (id_his: number, action: 'accept' | 'reject', novoValor: string, campo: string) => {
+        if (!eventoEditando) return;
+
+        try {
+            const isAccept = action === 'accept';
+            await api.put(`/gerente/event/alteration/${eventoEditando.id_evento}/${id_his}`, {}, {
+                params: { accept: isAccept },
+                withCredentials: true
+            });
+
+            if (isAccept) {
+                switch (campo) {
+                    case 'nome_evento': setNome(novoValor); break;
+                    case 'descricao':
+                        setDescricao(novoValor);
+                        rteRef.current?.editor?.commands.setContent(novoValor);
+                        break;
+                    case 'data_inicio': setDataInicio(dayjs(novoValor)); break;
+                    case 'data_fim': setDataFim(dayjs(novoValor)); break;
+                    case 'foto':
+                        const urlNova = `${API_URL}/event/image/${novoValor}?t=${new Date().getTime()}`;
+                        setPreviewUrl(urlNova);
+                        setFileName(novoValor);
+                        setFotoFile(null); // Aceitou histórico: backend já tem a imagem. File é null.
+                        break;
+                    case 'categoria':
+                        let newIds: number[] = [];
+                        try {
+                            const parsed = JSON.parse(novoValor);
+                            // Se parsed for array, usa ele. Se for número, coloca dentro de um array [5].
+                            newIds = Array.isArray(parsed) ? parsed : [Number(parsed)];
+                        } catch {
+                            // Fallback para string separada por vírgula
+                            newIds = novoValor.split(',').map(v => Number(v.trim()));
+                        }
+
+                        // Filtro de segurança extra para garantir que é array de números válidos
+                        if (Array.isArray(newIds)) {
+                            setCtg(newIds.filter(n => !isNaN(n)));
+                        } else {
+                            setCtg([]);
+                        }
+                        break;
+                    case 'id_endereco':
+                        const newAddrId = Number(novoValor);
+                        const addrEncontrado = enderecos.find(e => e.id_endereco === newAddrId);
+                        if (addrEncontrado) {
+                            setSelectedEndereco(addrEncontrado);
+                            if (enderecoFavorito && addrEncontrado.id_endereco === enderecoFavorito.id_endereco) {
+                                setEnderecoModo('manter');
+                            } else {
+                                setEnderecoModo('alterar');
+                            }
+                        }
+                        break;
+                    default: console.warn(`Campo ${campo} não mapeado.`);
+                }
+                setSnackbarMessage('Alteração aceita e aplicada!');
+            } else {
+                setSnackbarMessage('Alteração rejeitada.');
+            }
+
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+
+            // Atualiza lista local e verifica se acabou
+            setAlteracoes(prev => {
+                const novas = prev.filter(a => a.id_his !== id_his);
+                if (novas.length === 0) {
+                    setTimeout(() => {
+                        resetForm();
+                        setSnackbarMessage('Todas alterações analisadas. Voltando para criação.');
+                        setSnackbarOpen(true);
+                    }, 1000);
+                }
+                return novas;
+            });
+
+            handlePopoverClose();
+
+        } catch (error) {
+            console.error('Erro ao processar alteração:', error);
+            setSnackbarMessage('Erro ao processar a solicitação.');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+        }
+    };
+
+   
+
+    const hasAlteration = (campo: string) => alteracoes.some(a => a.campo === campo);
+
+    const getOrangeBorderSx = (campo: string) => ({
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+                borderWidth: hasAlteration(campo) ? '2px !important' : undefined,
+            },
+            '&:hover fieldset': {
+                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+            },
+            '&.Mui-disabled fieldset': {
+                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+            }
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+            borderWidth: hasAlteration(campo) ? '2px !important' : undefined,
+        },
+    });
 
     return (
         <>
+            <HistoryPopover
+                open={Boolean(popoverAnchor)}
+                anchorEl={popoverAnchor}
+                onClose={handlePopoverClose}
+                alteracao={activeAlteracao}
+                onAction={handleHistoryAction}
+                onMouseEnter={() => handlePopoverOpen(null)}
+                onMouseLeave={handlePopoverClose}
+                enderecos={enderecos}
+            />
+
             <Grid container spacing={2} sx={{ padding: 2 }}>
+
+                {/* --- BOTÃO DE VOLTAR PARA O MODO CRIAÇÃO (NOVO) --- */}
+                {isEdit && (
+                    <Grid size={{ xs: 12 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, bgcolor: '#f5f5f5', p: 1, borderRadius: 1 }}>
+                            <Typography variant="subtitle2" color="textSecondary">
+                                Você está editando o evento: <strong>{nome}</strong>
+                            </Typography>
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                color="inherit"
+                                startIcon={<ArrowBack />}
+                                onClick={resetForm}
+                            >
+                                Voltar para Criação
+                            </Button>
+                        </Box>
+                    </Grid>
+                )}
+
+                {/* TÍTULO DO EVENTO */}
                 <Grid size={{ xs: 12, sm: 6, md: 6 }}>
                     <TextField
                         value={nome}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNome(e.target.value)}
-                        sx={{
-                            fontFamily: 'var(--notosans) !important',
-                            fontSize: 18,
-                        }}
+                        onChange={(e) => setNome(e.target.value)}
                         label="Título do evento"
                         variant="outlined"
                         fullWidth
+                        onMouseEnter={(e) => handlePopoverOpen(e, 'nome_evento')}
+                        onMouseLeave={handlePopoverClose}
+                        sx={{
+                            fontFamily: 'var(--notosans) !important',
+                            fontSize: 18,
+                            ...getOrangeBorderSx('nome_evento')
+                        }}
                         InputProps={{
                             endAdornment:
                                 <InputAdornment position='end'>
@@ -401,17 +542,21 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         }}
                     />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6, md: 6 }}>
-                   <Box sx={{
-                        border: '1px solid',
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
-                        borderRadius: '4px',
-                        '&:hover': {
-                            borderColor: 'rgba(0, 0, 0, 0.87)', // Sempre permite hover
-                        },
-                        backgroundColor: 'transparent', // Sempre editável
 
-                    }}>
+                {/* DESCRIÇÃO */}
+                <Grid size={{ xs: 12, sm: 6, md: 6 }}>
+                    <Box
+                        onMouseEnter={(e) => handlePopoverOpen(e, 'descricao')}
+                        onMouseLeave={handlePopoverClose}
+                        sx={{
+                            border: hasAlteration('descricao') ? '2px solid #ff9800' : '1px solid',
+                            borderColor: hasAlteration('descricao') ? '#ff9800' : 'rgba(0, 0, 0, 0.23)',
+                            borderRadius: '4px',
+                            '&:hover': {
+                                borderColor: hasAlteration('descricao') ? '#ff9800' : 'rgba(0, 0, 0, 0.87)',
+                            },
+                            backgroundColor: 'transparent',
+                        }}>
                         <RichTextEditor
                             ref={rteRef}
                             extensions={[StarterKit]}
@@ -432,137 +577,167 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         />
                     </Box>
                 </Grid>
-                {/* datas */}
+
+                {/* DATA INICIO */}
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <LocalizationProvider
-                        dateAdapter={AdapterDayjs}
-                        adapterLocale='pt-br'
-                        localeText={{
-                            ...ptBR.components.MuiLocalizationProvider.defaultProps.localeText,
-                            okButtonLabel: 'Confirmar',
-                            cancelButtonLabel: 'Cancelar'
-                        }}
+                    <Box
+                        onMouseEnter={(e) => handlePopoverOpen(e, 'data_inicio')}
+                        onMouseLeave={handlePopoverClose}
                     >
-                        <Stack spacing={2}>
-                            <DateTimePicker
-
-                                value={dataInicio}
-                                onChange={(e: any) => {
-                                    setDataInicio(e);
-                                    // Se a data final for anterior à nova data de início
-                                    if (dataFim && e && e.isAfter(dataFim)) {
-                                        setDataFim(e);
-                                    }
-                                }}
-                                label="Data/hora inicio"
-
-                            />
-                        </Stack>
-                    </LocalizationProvider>
+                        <LocalizationProvider
+                            dateAdapter={AdapterDayjs}
+                            adapterLocale='pt-br'
+                            localeText={{
+                                ...ptBR.components.MuiLocalizationProvider.defaultProps.localeText,
+                                okButtonLabel: 'Confirmar',
+                                cancelButtonLabel: 'Cancelar'
+                            }}
+                        >
+                            <Stack spacing={2}>
+                                <DateTimePicker
+                                    value={dataInicio}
+                                    onChange={(e: any) => {
+                                        setDataInicio(e);
+                                        if (dataFim && e && e.isAfter(dataFim)) {
+                                            setDataFim(e);
+                                        }
+                                    }}
+                                    label="Data/hora inicio"
+                                    slotProps={{
+                                        textField: {
+                                            sx: getOrangeBorderSx('data_inicio'),
+                                            fullWidth: true // Garante que ocupe o espaço todo
+                                        }
+                                    }}
+                                />
+                            </Stack>
+                        </LocalizationProvider>
+                    </Box>
                 </Grid>
 
+                {/* DATA FIM */}
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <LocalizationProvider
-                        dateAdapter={AdapterDayjs}
-                        adapterLocale='pt-br'
-                        localeText={{
-                            ...ptBR.components.MuiLocalizationProvider.defaultProps.localeText,
-                            okButtonLabel: 'Confirmar',
-                            cancelButtonLabel: 'Cancelar',
-                        }}
+                    <Box
+                        onMouseEnter={(e) => handlePopoverOpen(e, 'data_fim')}
+                        onMouseLeave={handlePopoverClose}
                     >
-                        <Stack spacing={2}>
-                            <DateTimePicker
-                                value={dataFim}
-                                onChange={(e: any) => {
-                                    // Bloqueia datas anteriores à data de início
-                                    if (dataInicio && e && e.isBefore(dataInicio)) {
-                                        setDataFim(dataInicio);
-                                    } else {
-                                        setDataFim(e);
-                                    }
-                                }}
-                                label="Data/hora fim"
-                                sx={{
-                                    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                        borderColor: 'var(--roxo) !important',
-                                    }
-                                }}
-                            />
-                        </Stack>
-                    </LocalizationProvider>
+                        <LocalizationProvider
+                            dateAdapter={AdapterDayjs}
+                            adapterLocale='pt-br'
+                            localeText={{
+                                ...ptBR.components.MuiLocalizationProvider.defaultProps.localeText,
+                                okButtonLabel: 'Confirmar',
+                                cancelButtonLabel: 'Cancelar',
+                            }}
+                        >
+                            <Stack spacing={2}>
+                                <DateTimePicker
+                                    value={dataFim}
+                                    onChange={(e: any) => {
+                                        if (dataInicio && e && e.isBefore(dataInicio)) {
+                                            setDataFim(dataInicio);
+                                        } else {
+                                            setDataFim(e);
+                                        }
+                                    }}
+                                    label="Data/hora fim"
+                                    slotProps={{
+                                        textField: {
+                                            sx: getOrangeBorderSx('data_fim'),
+                                            fullWidth: true // Garante que ocupe o espaço todo
+                                        }
+                                    }}
+                                />
+                            </Stack>
+                        </LocalizationProvider>
+                    </Box>
                 </Grid>
-                {/* datas */}
 
-
-
+                {/* FOTO: INPUT DE TEXTO */}
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <TextField
                         sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderStyle: 'dashed',
-                                    borderWidth: 2,
-                                },
-                            },
+                            ...getOrangeBorderSx('foto'),
+                            '& .MuiOutlinedInput-root fieldset': {
+                                borderStyle: 'dashed',
+                                borderWidth: hasAlteration('foto') ? '2px !important' : '2px',
+                                borderColor: hasAlteration('foto') ? '#ff9800 !important' : undefined,
+                            }
                         }}
+                        onMouseEnter={(e) => handlePopoverOpen(e, 'foto')}
+                        onMouseLeave={handlePopoverClose}
                         disabled
                         label="Arquivo selecionado"
                         value={fileName}
                         variant="outlined"
                         fullWidth
-                        inputProps={{ readOnly: true }}
                         InputProps={{
-                            endAdornment: fileName && (
-                                <>
-                                    <IconButton onClick={() => setFileName('')}>
-                                        <Close />
-                                    </IconButton>
-
-                                </>
-
-
+                            readOnly: true,
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <Tooltip title="Ver imagem">
+                                        <span>
+                                            <IconButton
+                                                onClick={() => setModalOpen(true)}
+                                                disabled={!previewUrl}
+                                                edge="end"
+                                                sx={{ mr: 1, color: 'var(--roxo)' }}
+                                            >
+                                                <Visibility />
+                                            </IconButton>
+                                        </span>
+                                    </Tooltip>
+                                    {fileName && (
+                                        <IconButton onClick={() => {
+                                            setFileName('');
+                                            setFotoFile(null);
+                                            setPreviewUrl('');
+                                        }}>
+                                            <Close />
+                                        </IconButton>
+                                    )}
+                                </InputAdornment>
                             ),
                         }}
                     />
                 </Grid>
 
-                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', pt: 1 }}>
-                        <Button
-                            sx={{
-                                width: '100%',
-                                height: '50%',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: 'var(--roxo)'
-                            }}
-                            fullWidth
-                            component="label"
-                            role={undefined}
-                            variant="contained"
-                            tabIndex={-1}
-                            startIcon={<AttachFile />}
+                {/* FOTO: BOTÃO DE ESCOLHER */}
+                <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-                        >
-                            <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important' }}>
-                                Escolher foto
-                            </Typography>
-                            <VisuallyHiddenInput
-                                type="file"
-                                ref={inputRef}
-                                onChange={handleFileChange}
-                                multiple
-                            />
-                        </Button>
-                    </Box>
+                    <Button
+                        sx={{
+                            width: '100%',
+
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: 'var(--roxo)'
+                        }}
+                        fullWidth
+                        component="label"
+                        variant="contained"
+                        startIcon={<AttachFile />}
+                    >
+                        <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important' }}>
+                            Escolher foto
+                        </Typography>
+                        <VisuallyHiddenInput
+                            type="file"
+                            ref={inputRef}
+                            onChange={handleFileChange}
+                        />
+                    </Button>
+
                 </Grid>
 
                 <Grid size={{ xs: 12, sm: 6, md: 6 }} sx={{ marginTop: 2 }}>
-                    <Box>
+                    <Box
+                        onMouseEnter={(e) => handlePopoverOpen(e, 'categoria')}
+                        onMouseLeave={handlePopoverClose}
+                    >
                         <Autocomplete
-                            value={dados.filter((option) => ctg.includes(option.id))}
+                            value={dados.filter((option) => Array.isArray(ctg) && ctg.includes(option.id))}
                             multiple
                             id="checkboxes-tags-demo"
                             options={dados}
@@ -576,12 +751,8 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                     <li
                                         key={key}
                                         {...optionProps}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.backgroundColor = '#f3e8ff'
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.backgroundColor = 'transparent'
-                                        }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f3e8ff' }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent' }}
                                     >
                                         <Checkbox
                                             icon={icon}
@@ -590,9 +761,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                             checked={selected}
                                             sx={{
                                                 color: '#9c9c9c',
-                                                '&.Mui-checked': {
-                                                    color: '#6C15D5',
-                                                },
+                                                '&.Mui-checked': { color: '#6C15D5' },
                                             }}
                                         />
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -609,35 +778,23 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                         key={option.id}
                                         label={option.title}
                                         sx={{
-                                            backgroundColor: '#f3e8ff', // roxo fraco
-                                            color: '#6C15D5', // texto roxo forte
+                                            backgroundColor: '#f3e8ff',
+                                            color: '#6C15D5',
                                             '& .MuiChip-deleteIcon': {
-                                                color: '#6C15D5', // X roxo forte
-                                                '&:hover': {
-                                                    color: '#4a0da5',
-                                                },
+                                                color: '#6C15D5',
+                                                '&:hover': { color: '#4a0da5' },
                                             },
                                         }}
                                     />
                                 ))
                             }
-                            renderInput={(params) => <TextField {...params} label="Categorias" />}
+                            renderInput={(params) => <TextField {...params} label="Categorias" sx={getOrangeBorderSx('categoria')} />}
                         />
-
                     </Box>
                 </Grid>
-
-                {/* Botao adicionar Categoria uma por uma no banco */}
-                {/* <Grid size={{ xs: 12, sm: 6, md: 3 }} sx={{ marginTop: 2 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pt: 1, width: '100%' }}>
-                    <Button startIcon={<LibraryAdd />} variant='contained' sx={{ p: 1, backgroundColor: 'var(--roxo)' }} fullWidth>
-                        <Typography sx={{ fontSize: 18, fontFamily: 'var(--notosans) !important', px: 1 }}>
-                            Adicionar Categorias
-                        </Typography>
-                    </Button>
-                </Box>
-            </Grid> */}
             </Grid>
+
+            {/* RESTO DO LAYOUT (ENDEREÇO E BOTÕES DE SALVAR) */}
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                     <Box>
@@ -687,29 +844,39 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                         }}
                                     />} label="Alterar endereço" />
                                     {enderecoModo === 'alterar' && (
-                                        <Autocomplete
-                                            disablePortal
-                                            disabled={enderecoModo !== 'alterar'}
-                                            onChange={handleSelectEndereco}
-                                            value={selectedEndereco}
-                                            options={enderecos}
-                                            getOptionLabel={(option) => `${option.cep} | ${option.numero}`}
+                                        <Box
+                                            // O Box envolve o Autocomplete para capturar o mouse mesmo se estiver desabilitado
+                                            onMouseEnter={(e) => handlePopoverOpen(e, 'id_endereco')}
+                                            onMouseLeave={handlePopoverClose}
                                             sx={{
                                                 width: { xs: '100%', sm: '100%', md: '25%' },
                                                 ml: 2,
-                                                opacity: enderecoModo === 'alterar' ? 1 : 0.7,
-                                                transition: 'opacity 0.3s ease'
                                             }}
-                                            componentsProps={{
-                                                paper: {
-                                                    sx: {
-                                                        display: enderecoModo === 'alterar' ? 'block' : 'none'
+                                        >
+                                            <Autocomplete
+                                                disablePortal
+                                                disabled={enderecoModo !== 'alterar'}
+                                                onChange={handleSelectEndereco}
+                                                value={selectedEndereco}
+                                                options={enderecos}
+                                                getOptionLabel={(option) => `${option.cep} | ${option.numero}`}
+                                                sx={{
+                                                    opacity: enderecoModo === 'alterar' ? 1 : 0.7,
+                                                    transition: 'opacity 0.3s ease',
+                                                    // Adiciona a borda laranja se houver alteração pendente neste campo
+                                                    ...getOrangeBorderSx('id_endereco')
+                                                }}
+                                                componentsProps={{
+                                                    paper: {
+                                                        sx: {
+                                                            display: enderecoModo === 'alterar' ? 'block' : 'none'
+                                                        }
                                                     }
-                                                }
-                                            }}
-                                            renderInput={(params) => <TextField {...params} label="Endereços cadastrados" />}
-                                            isOptionEqualToValue={(option, value) => option.cep === value.cep && option.numero === value.numero}
-                                        />
+                                                }}
+                                                renderInput={(params) => <TextField {...params} label="Endereços cadastrados" />}
+                                                isOptionEqualToValue={(option, value) => option.cep === value.cep && option.numero === value.numero}
+                                            />
+                                        </Box>
                                     )}
                                 </RadioGroup>
 
@@ -728,34 +895,46 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 <Grid size={{ xs: 12, sm: 12, md: 12 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', pt: 1 }}>
                         {!isEdit ? (
-                            <Button
-                                disabled={!allFieldsFilled()}
-                                sx={{
-                                    mb: 2,
-                                    backgroundColor: 'var(--roxo)',
-                                    width: { xs: '100%', sm: '100%', md: '25%' },
-                                }}
-                                variant='contained'
-                                onClick={() => handlePostEvento()}
-                            >
-                                <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
-                                    Criar evento
-                                </Typography>
-                            </Button>
+                            <span>
+
+                                <Button
+                                    disabled={!allFieldsFilled()}
+                                    sx={{
+                                        mb: 2,
+                                        backgroundColor: 'var(--roxo)',
+                                        width: '100%',
+                                    }}
+                                    variant='contained'
+                                    onClick={() => handlePostEvento()}
+                                    startIcon={<Create />}
+                                >
+                                    <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
+                                        Criar evento
+                                    </Typography>
+                                </Button>
+                            </span>
                         ) : (
-                            <Button
-                                disabled={!allFieldsFilled()}
-                                sx={{
-                                    mb: 2,
-                                    backgroundColor: 'var(--roxo)',
-                                    width: { xs: '100%', sm: '100%', md: '25%' },
-                                }}
-                                variant='contained'
-                                onClick={() => handleEditEvento()}>
-                                <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
-                                    Editar evento
-                                </Typography>
-                            </Button>
+                            <Tooltip title={alteracoes.length > 0 ? "Analise todas as alterações pendentes antes de salvar." : ""}>
+                                <span>
+                                    <Button
+                                        disabled={!allFieldsFilled() || alteracoes.length > 0}
+                                        startIcon={<Edit />}
+                                        sx={{
+                                            mb: 2,
+                                            backgroundColor: 'var(--roxo)',
+
+                                            '&.Mui-disabled': {
+                                                backgroundColor: alteracoes.length > 0 ? '#e0e0e0' : undefined
+                                            }
+                                        }}
+                                        variant='contained'
+                                        onClick={() => handleEditEvento()}>
+                                        <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
+                                            {alteracoes.length > 0 ? 'Analise alterações' : 'Editar evento'}
+                                        </Typography>
+                                    </Button>
+                                </span>
+                            </Tooltip>
                         )}
                     </Box>
                 </Grid>
@@ -767,6 +946,40 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                     autoHideDuration={4000}
                 />
             </Grid>
+
+            <Dialog
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                maxWidth="md"
+                fullWidth
+            >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, borderBottom: '1px solid #eee' }}>
+                    <Typography variant="h6" sx={{ fontFamily: 'var(--notosans)' }}>
+                        Visualização da Imagem
+                    </Typography>
+                    <IconButton onClick={() => setModalOpen(false)}>
+                        <Close />
+                    </IconButton>
+                </Box>
+
+                <DialogContent sx={{ display: 'flex', justifyContent: 'center', p: 3, bgcolor: '#f5f5f5' }}>
+                    {previewUrl ? (
+                        <img
+                            src={previewUrl}
+                            alt="Preview do Evento"
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: '70vh',
+                                objectFit: 'contain',
+                                borderRadius: 4,
+                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+                            }}
+                        />
+                    ) : (
+                        <Typography>Nenhuma imagem disponível para visualização.</Typography>
+                    )}
+                </DialogContent>
+            </Dialog>
         </>
     )
 }
