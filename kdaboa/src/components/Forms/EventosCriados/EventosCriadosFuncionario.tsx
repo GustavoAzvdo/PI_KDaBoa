@@ -63,7 +63,7 @@ const EventosCriadosFuncionario = () => {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isMutating, setIsMutating] = useState(false);
+  // const [isMutating, setIsMutating] = useState(false);
 
   const mapStatus = (dbStatus: number): 'aprovado' | 'reprovado' | 'pendente' => {
     switch (dbStatus) {
@@ -131,50 +131,51 @@ const EventosCriadosFuncionario = () => {
     }
   };
 
-  const handleApproveEvent = async (id_evento: number) => {
-    setIsMutating(true); // Começa a mutação (desativa botões)
-    setError(null); // Limpa erros anteriores
-    try {
-      // PUT /gerente/event/waiting/{id} com query param accept=true
-      await api.put(`/gerente/event/waiting/${id_evento}`, null, {
-        params: {
-          accept: true,
-        },
-        withCredentials: true,
-      });
+  // funções de aprovação/rejeição comentadas para futura implementação
+  // const handleApproveEvent = async (id_evento: number) => {
+  //   setIsMutating(true); // Começa a mutação (desativa botões)
+  //   setError(null); // Limpa erros anteriores
+  //   try {
+  //     // PUT /gerente/event/waiting/{id} com query param accept=true
+  //     await api.put(`/gerente/event/waiting/${id_evento}`, null, {
+  //       params: {
+  //         accept: true,
+  //       },
+  //       withCredentials: true,
+  //     });
 
-      // Recarrega a lista para remover o evento aprovado (melhor UX)
-      await fetchEventos();
-    } catch (err) {
-      console.error(`Erro ao aprovar o evento ${id_evento}:`, err);
-      setError('Erro ao aprovar o evento. Verifique a conexão e tente novamente.');
-    } finally {
-      setIsMutating(false); // Finaliza a mutação
-    }
-  };
+  //     // Recarrega a lista para remover o evento aprovado (melhor UX)
+  //     await fetchEventos();
+  //   } catch (err) {
+  //     console.error(`Erro ao aprovar o evento ${id_evento}:`, err);
+  //     setError('Erro ao aprovar o evento. Verifique a conexão e tente novamente.');
+  //   } finally {
+  //     setIsMutating(false); // Finaliza a mutação
+  //   }
+  // };
 
  
-  const handleRejectEvent = async (id_evento: number) => {
-    setIsMutating(true); // Começa a mutação (desativa botões)
-    setError(null); // Limpa erros anteriores
-    try {
-      // PUT /gerente/event/waiting/{id} com query param accept=false
-      await api.put(`/gerente/event/waiting/${id_evento}`, null, {
-        params: {
-          accept: false,
-        },
-        withCredentials: true,
-      });
+  // const handleRejectEvent = async (id_evento: number) => {
+  //   setIsMutating(true); // Começa a mutação (desativa botões)
+  //   setError(null); // Limpa erros anteriores
+  //   try {
+  //     // PUT /gerente/event/waiting/{id} com query param accept=false
+  //     await api.put(`/gerente/event/waiting/${id_evento}`, null, {
+  //       params: {
+  //         accept: false,
+  //       },
+  //       withCredentials: true,
+  //     });
 
-      // Recarrega a lista para remover o evento rejeitado
-      await fetchEventos();
-    } catch (err) {
-      console.error(`Erro ao rejeitar o evento ${id_evento}:`, err);
-      setError('Erro ao rejeitar o evento. Verifique a conexão e tente novamente.');
-    } finally {
-      setIsMutating(false); // Finaliza a mutação
-    }
-  };
+  //     // Recarrega a lista para remover o evento rejeitado
+  //     await fetchEventos();
+  //   } catch (err) {
+  //     console.error(`Erro ao rejeitar o evento ${id_evento}:`, err);
+  //     setError('Erro ao rejeitar o evento. Verifique a conexão e tente novamente.');
+  //   } finally {
+  //     setIsMutating(false); // Finaliza a mutação
+  //   }
+  // };
 
 
   
