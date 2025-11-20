@@ -234,7 +234,7 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
         try {
             const formData = new FormData();
             // formData.append('id_evento', eventoEditando?.id_evento.toString() || '');
-            formData.append('nome', nome);
+            formData.append('nome_evento', nome);
             formData.append('descricao', descricao);
             formData.append('data_inicio', dataInicio?.toISOString() || '');
             formData.append('data_fim', dataFim?.toISOString() || '');
@@ -259,7 +259,7 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
 
 
             await api.put(`/funcionario/event/${eventoEditando?.id_evento}`, {
-                nome: nome,
+                nome_evento: nome,
                 descricao: descricao,
                 data_inicio: dataInicio?.toISOString() || '',
                 data_fim: dataFim?.toISOString() || '',
@@ -300,7 +300,7 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
         console.log('fileName:', fileName);
         try {
             const formData = new FormData();
-            formData.append('nome', nome);
+            formData.append('nome_evento', nome);
             formData.append('descricao', descricao);
             formData.append('data_inicio', dataInicio?.toISOString() || '');
             formData.append('data_fim', dataFim?.toISOString() || '');

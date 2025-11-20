@@ -171,20 +171,20 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
             setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
 
-           
+
             if (eventoEditando.endereco && eventoEditando.endereco.id_endereco) {
-             
+
                 setEnderecoModo('alterar');
 
-             
+
                 const enderecoEncontrado = enderecos.find(
                     (end) => end.id_endereco === eventoEditando.endereco!.id_endereco
                 );
                 setSelectedEndereco(enderecoEncontrado || eventoEditando.endereco);
             } else {
-                
+
                 setEnderecoModo('manter');
-              
+
             }
 
             // Histórico
@@ -213,7 +213,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         } else {
             resetForm();
         }
-       
+
     }, [eventoEditando, enderecos]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
@@ -270,7 +270,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const handleEditEvento = async () => {
         try {
             const formData = new FormData();
-            formData.append('nome', nome);
+            formData.append('nome_evento', nome);
             formData.append('descricao', descricao);
             formData.append('data_inicio', dataInicio?.toISOString() || '');
             formData.append('data_fim', dataFim?.toISOString() || '');
@@ -308,7 +308,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const handlePostEvento = async () => {
         try {
             const formData = new FormData();
-            formData.append('nome', nome);
+            formData.append('nome_evento', nome);
             formData.append('descricao', descricao);
             formData.append('data_inicio', dataInicio?.toISOString() || '');
             formData.append('data_fim', dataFim?.toISOString() || '');
@@ -382,7 +382,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
             if (isAccept) {
                 switch (campo) {
-                    case 'nome': setNome(novoValor); break;
+                    case 'nome_evento': setNome(novoValor); break;
                     case 'descricao':
                         setDescricao(novoValor);
                         rteRef.current?.editor?.commands.setContent(novoValor);
@@ -396,11 +396,21 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         setFotoFile(null); // Aceitou histórico: backend já tem a imagem. File é null.
                         break;
                     case 'categoria':
+                        let newIds: number[] = [];
                         try {
-                            const newIds = JSON.parse(novoValor);
-                            setCtg(newIds);
+                            const parsed = JSON.parse(novoValor);
+                            // Se parsed for array, usa ele. Se for número, coloca dentro de um array [5].
+                            newIds = Array.isArray(parsed) ? parsed : [Number(parsed)];
                         } catch {
-                            setCtg(novoValor.split(',').map(Number));
+                            // Fallback para string separada por vírgula
+                            newIds = novoValor.split(',').map(v => Number(v.trim()));
+                        }
+
+                        // Filtro de segurança extra para garantir que é array de números válidos
+                        if (Array.isArray(newIds)) {
+                            setCtg(newIds.filter(n => !isNaN(n)));
+                        } else {
+                            setCtg([]);
                         }
                         break;
                     case 'id_endereco':
@@ -448,24 +458,30 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     };
 
+   
+
     const hasAlteration = (campo: string) => alteracoes.some(a => a.campo === campo);
 
     const getOrangeBorderSx = (campo: string) => ({
         '& .MuiOutlinedInput-root': {
             '& fieldset': {
-                borderColor: hasAlteration(campo) ? '#ff9800 !important' : undefined,
+                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
                 borderWidth: hasAlteration(campo) ? '2px !important' : undefined,
             },
             '&:hover fieldset': {
-                borderColor: hasAlteration(campo) ? '#ff9800 !important' : undefined,
+                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
             },
             '&.Mui-focused fieldset': {
-                borderColor: hasAlteration(campo) ? '#ff9800 !important' : undefined,
+                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
             },
             '&.Mui-disabled fieldset': {
-                borderColor: hasAlteration(campo) ? '#ff9800 !important' : undefined,
+                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
             }
-        }
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+            borderWidth: hasAlteration(campo) ? '2px !important' : undefined,
+        },
     });
 
     return (
@@ -478,6 +494,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 onAction={handleHistoryAction}
                 onMouseEnter={() => handlePopoverOpen(null)}
                 onMouseLeave={handlePopoverClose}
+                enderecos={enderecos}
             />
 
             <Grid container spacing={2} sx={{ padding: 2 }}>
@@ -510,12 +527,12 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         label="Título do evento"
                         variant="outlined"
                         fullWidth
-                        onMouseEnter={(e) => handlePopoverOpen(e, 'nome')}
+                        onMouseEnter={(e) => handlePopoverOpen(e, 'nome_evento')}
                         onMouseLeave={handlePopoverClose}
                         sx={{
                             fontFamily: 'var(--notosans) !important',
                             fontSize: 18,
-                            ...getOrangeBorderSx('nome')
+                            ...getOrangeBorderSx('nome_evento')
                         }}
                         InputProps={{
                             endAdornment:
@@ -586,7 +603,12 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                         }
                                     }}
                                     label="Data/hora inicio"
-                                    sx={getOrangeBorderSx('data_inicio')}
+                                    slotProps={{
+                                        textField: {
+                                            sx: getOrangeBorderSx('data_inicio'),
+                                            fullWidth: true // Garante que ocupe o espaço todo
+                                        }
+                                    }}
                                 />
                             </Stack>
                         </LocalizationProvider>
@@ -619,7 +641,12 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                         }
                                     }}
                                     label="Data/hora fim"
-                                    sx={getOrangeBorderSx('data_fim')}
+                                    slotProps={{
+                                        textField: {
+                                            sx: getOrangeBorderSx('data_fim'),
+                                            fullWidth: true // Garante que ocupe o espaço todo
+                                        }
+                                    }}
                                 />
                             </Stack>
                         </LocalizationProvider>
@@ -710,7 +737,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         onMouseLeave={handlePopoverClose}
                     >
                         <Autocomplete
-                            value={dados.filter((option) => ctg.includes(option.id))}
+                            value={dados.filter((option) => Array.isArray(ctg) && ctg.includes(option.id))}
                             multiple
                             id="checkboxes-tags-demo"
                             options={dados}
@@ -817,29 +844,39 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                                         }}
                                     />} label="Alterar endereço" />
                                     {enderecoModo === 'alterar' && (
-                                        <Autocomplete
-                                            disablePortal
-                                            disabled={enderecoModo !== 'alterar'}
-                                            onChange={handleSelectEndereco}
-                                            value={selectedEndereco}
-                                            options={enderecos}
-                                            getOptionLabel={(option) => `${option.cep} | ${option.numero}`}
+                                        <Box
+                                            // O Box envolve o Autocomplete para capturar o mouse mesmo se estiver desabilitado
+                                            onMouseEnter={(e) => handlePopoverOpen(e, 'id_endereco')}
+                                            onMouseLeave={handlePopoverClose}
                                             sx={{
                                                 width: { xs: '100%', sm: '100%', md: '25%' },
                                                 ml: 2,
-                                                opacity: enderecoModo === 'alterar' ? 1 : 0.7,
-                                                transition: 'opacity 0.3s ease'
                                             }}
-                                            componentsProps={{
-                                                paper: {
-                                                    sx: {
-                                                        display: enderecoModo === 'alterar' ? 'block' : 'none'
+                                        >
+                                            <Autocomplete
+                                                disablePortal
+                                                disabled={enderecoModo !== 'alterar'}
+                                                onChange={handleSelectEndereco}
+                                                value={selectedEndereco}
+                                                options={enderecos}
+                                                getOptionLabel={(option) => `${option.cep} | ${option.numero}`}
+                                                sx={{
+                                                    opacity: enderecoModo === 'alterar' ? 1 : 0.7,
+                                                    transition: 'opacity 0.3s ease',
+                                                    // Adiciona a borda laranja se houver alteração pendente neste campo
+                                                    ...getOrangeBorderSx('id_endereco')
+                                                }}
+                                                componentsProps={{
+                                                    paper: {
+                                                        sx: {
+                                                            display: enderecoModo === 'alterar' ? 'block' : 'none'
+                                                        }
                                                     }
-                                                }
-                                            }}
-                                            renderInput={(params) => <TextField {...params} label="Endereços cadastrados" />}
-                                            isOptionEqualToValue={(option, value) => option.cep === value.cep && option.numero === value.numero}
-                                        />
+                                                }}
+                                                renderInput={(params) => <TextField {...params} label="Endereços cadastrados" />}
+                                                isOptionEqualToValue={(option, value) => option.cep === value.cep && option.numero === value.numero}
+                                            />
+                                        </Box>
                                     )}
                                 </RadioGroup>
 
