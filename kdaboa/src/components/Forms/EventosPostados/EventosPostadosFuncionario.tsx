@@ -26,7 +26,7 @@ interface EventosPostadosProps {
     router: { navigate: (path: string) => void };
 }
 
-const EventosPostados = ({ router }: EventosPostadosProps) => {
+const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
     const [eventos, setEventos] = useState<Evento[]>([]);
     // Estado para armazenar quais IDs têm pendência no histórico
     const [idsComAlteracao, setIdsComAlteracao] = useState<number[]>([]);
@@ -352,7 +352,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                 >
                                     Editar
                                 </Button>
-                                <Button
+                                {/* <Button
                                     variant='outlined'
                                     color="error"
                                     startIcon={<Delete />}
@@ -368,7 +368,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                     }}
                                 >
                                     Excluir
-                                </Button>
+                                </Button> */}
                             </CardActions>
                         </Card>
                     </Grid>
@@ -385,4 +385,4 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
     );
 };
 
-export default EventosPostados;
+export default EventosPostadosFuncionario;
