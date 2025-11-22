@@ -33,7 +33,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.6.0",
-    "swiper": "^11.2.6",
+    "swiper": "^11.2.10",
     "uuid": "^11.1.0",
     "zustand": "^5.0.5"
   },
@@ -52,6 +52,6 @@
     "globals": "^15.15.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.0"
+    "vite": "^6.4.1"
   }
 }

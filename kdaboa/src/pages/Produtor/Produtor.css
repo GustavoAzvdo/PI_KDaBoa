@@ -1,0 +1,349 @@
+/* ================================
+   RESET BÁSICO DO COMPONENTE
+================================ */
+.produtor-hero,
+.produtor-beneficios,
+.produtor-como,
+.produtor-testimonials,
+.produtor-cta {
+  width: 100%;
+  display: block;
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* ================================
+   HERO (Swiper)
+================================ */
+.produtor-hero {
+  background: #ffffff;
+  padding: 20px 0 10px;
+  position: relative;
+}
+
+.produtor-hero-content {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.hero-swiper {
+  width: 100%;
+  height: 600px;
+}
+
+.hero-slide {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 450px;
+  padding: 20px;
+}
+
+.hero-left {
+  flex: 1;
+  max-width: 550px;
+}
+
+.hero-title {
+  font-size: 46px !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+  line-height: 1.2 !important;
+  margin-bottom: 15px !important;
+}
+
+.hero-desc {
+  font-size: 20px !important;
+  font-weight: 400 !important;
+  color: #333 !important;
+  margin-bottom: 30px !important;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+/* Primary Button */
+.hero-btn-primary {
+  background: #6A00F4 !important;
+  color: #fff !important;
+  padding: 10px 20px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  border-radius: 8px !important;
+}
+
+/* Secondary Button */
+.hero-btn-sec {
+  border: 2px solid #6A00F4 !important;
+  color: #6A00F4 !important;
+  padding: 10px 20px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  border-radius: 8px !important;
+}
+
+.hero-btn-sec:hover {
+  background: #6A00F4 !important;
+  color: #fff !important;
+}
+
+/* Imagem */
+.hero-image {
+  flex: 1;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 14px;
+}
+
+
+/* ================================
+   CARD "Hoje no Kdaboa"
+================================ */
+.produtor-hero-card {
+  position: absolute;
+  bottom: -50px;
+  right: 40px;
+  background: #6A00F4;
+  color: #fff;
+  padding: 20px 25px;
+  width: 320px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.card-line {
+  font-size: 15px;
+}
+
+
+/* ================================
+   BENEFÍCIOS
+================================ */
+.produtor-beneficios {
+  padding: 90px 0 90px;
+  background: #fafafa;
+}
+
+.section-title {
+  font-size: 34px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.beneficios-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.beneficio-card {
+  padding: 25px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.beneficio-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.beneficio-text {
+  font-size: 16px;
+  color: #444;
+}
+
+
+/* ================================
+   COMO FUNCIONA
+================================ */
+.produtor-como {
+  background: #6A00F4;
+  padding: 80px 0;
+  color: #fff;
+}
+
+.section-title.white {
+  color: #fff;
+}
+
+.steps {
+  margin-top: 35px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.step-card {
+  background: rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 25px;
+  text-align: center;
+}
+
+.step-number {
+  font-size: 40px;
+  font-weight: 700;
+  color: #6A00F4;
+}
+
+.step-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.step-text {
+  font-size: 16px;
+  margin-top: 8px;
+  opacity: 0.85;
+}
+
+
+/* ================================
+   DEPOIMENTOS
+================================ */
+.produtor-testimonials {
+  background: #fff;
+  padding: 100px 0;
+}
+
+.testimonials-grid {
+  margin-top: 35px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.testimonial-card {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.testimonial-text {
+  font-size: 18px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.testimonial-author {
+  font-size: 15px;
+  color: #666;
+}
+
+
+/* ================================
+   CTA FINAL
+================================ */
+.produtor-cta {
+  background: #6A00F4;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.cta-text {
+  font-size: 32px;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.cta-btn {
+  background: #6A00F4 !important;
+  color: #000 !important;
+  padding: 12px 26px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+  text-transform: none !important;
+}
+
+.cta-btn:hover {
+  background: #6A00F4 !important;
+}
+
+
+/* ================================
+   ANIMAÇÕES SUAVES
+================================ */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.2s;
+}
+.delay-2 {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ================================
+   RESPONSIVIDADE
+================================ */
+@media (max-width: 900px) {
+  .hero-slide {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image {
+    height: 250px;
+    margin-top: 20px;
+  }
+
+  .beneficios-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .produtor-hero-card {
+    position: relative;
+    margin-top: 25px;
+    right: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 32px !important;
+  }
+
+  .hero-desc {
+    font-size: 16px !important;
+  }
+
+  .beneficios-grid {
+    grid-template-columns: 1fr;
+  }
+}
