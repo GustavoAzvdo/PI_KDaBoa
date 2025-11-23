@@ -13,7 +13,7 @@ import face from '../../assets/face.png'
 const slides = [
   {
     id: 1,
-    title: "Faça seu estabelecimento bombar",
+    title: "Divulgue conosco agora!",
     subtitle: "Divulgue eventos e atraia público qualificado para suas noites.",
     img: "./assets/jantar.png",
     ctaPrimary: "Quero divulgar meu evento",
@@ -21,7 +21,7 @@ const slides = [
   },
   {
     id: 2,
-    title: "Atraia pessoas da sua região",
+    title: " Filtre seu evento!",
     subtitle: "Segmentação por categoria e visibilidade local para resultados reais.",
     img: "./assets/happy.png",
     ctaPrimary: "Começar agora",
@@ -29,7 +29,7 @@ const slides = [
   },
   {
     id: 3,
-    title: "Gestão simples e insights rápidos",
+    title: "Gestão simples e fácil!",
     subtitle: "Publique eventos, acompanhe performance e otimize promoções.",
     img: "./assets/ticket.png",
     ctaPrimary: "Criar evento",
@@ -108,7 +108,7 @@ const Produtor: React.FC = () => {
      
       <Box className="produtor-beneficios">
         <Container>
-           <Title>
+           < Title >
         Por que divulgar seus eventos com a gente?
          <Box component='img' src={face} sx={{
             width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
@@ -150,7 +150,13 @@ const Produtor: React.FC = () => {
       {/* COMO FUNCIONA */}
       <Box className="produtor-como">
         <Container>
-          <Typography className="section-title white">Como funciona</Typography>
+          < Title >
+            Como funciona?
+            <Box component='img' src={face} sx={{
+            width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
+            height: "auto", // mantém a proporção
+          }} />
+      </Title>
 
           <Box className="steps">
             <Box className="step-card">
@@ -183,8 +189,13 @@ const Produtor: React.FC = () => {
       {/* DEPOIMENTOS */}
       <Box className="produtor-testimonials">
         <Container>
-          <Typography className="section-title">O que dizem outros produtores</Typography>
-
+ < Title >
+        O que dizem sobre ? 
+         <Box component='img' src={face} sx={{
+            width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
+            height: "auto", // mantém a proporção
+          }} />
+      </Title>
           <Box className="testimonials-grid">
             <Box className="testimonial-card">
               <Typography className="testimonial-text">
@@ -206,9 +217,12 @@ const Produtor: React.FC = () => {
       {/* CTA */}
       <Box className="produtor-cta">
         <Container>
-          <Typography className="cta-text">
-            Pronto para lotar seu estabelecimento?
-          </Typography>
+          < Title >
+Cadastre agora seu estabelecimento!         <Box component='img' src={face} sx={{
+            width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
+            height: "auto", // mantém a proporção
+          }} />
+      </Title>
 
           <Button variant="contained" className="cta-btn">
             Começar agora

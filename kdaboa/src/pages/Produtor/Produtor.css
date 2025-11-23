@@ -51,6 +51,9 @@
   color: #000 !important;
   line-height: 1.2 !important;
   margin-bottom: 15px !important;
+  width: 100%; 
+  white-space: nowrap; /* impede quebra */
+  
 }
 
 .hero-desc {
@@ -107,8 +110,8 @@
   position: absolute;
   bottom: -50px;
   right: 40px;
-  background: #6A00F4;
-  color: #fff;
+  background: #BB8AFF;
+  color: #00161A;
   padding: 20px 25px;
   width: 320px;
   border-radius: 14px;
@@ -131,7 +134,7 @@
 ================================ */
 .produtor-beneficios {
   padding: 90px 0 90px;
-  background: #fafafa;
+  background: #e0e0e0;
 }
 
 .section-title {
@@ -152,6 +155,8 @@
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  border: 2px solid #BB8AFF !important;
+
 }
 
 .beneficio-title {
@@ -170,9 +175,9 @@
    COMO FUNCIONA
 ================================ */
 .produtor-como {
-  background: #6A00F4;
+  background: #fff;
   padding: 80px 0;
-  color: #fff;
+  
 }
 
 .section-title.white {
@@ -187,7 +192,7 @@
 }
 
 .step-card {
-  background: rgba(255,255,255,0.12);
+  background: #e0e0e0;
   border-radius: 14px;
   padding: 25px;
   text-align: center;
@@ -216,7 +221,7 @@
    DEPOIMENTOS
 ================================ */
 .produtor-testimonials {
-  background: #fff;
+  background: #e0e0e0;
   padding: 100px 0;
 }
 
@@ -250,7 +255,7 @@
    CTA FINAL
 ================================ */
 .produtor-cta {
-  background: #6A00F4;
+  background: #fff;
   padding: 80px 0;
   text-align: center;
 }
@@ -263,8 +268,9 @@
 }
 
 .cta-btn {
-  background: #6A00F4 !important;
-  color: #000 !important;
+  background: #fff !important;
+  border: 2px solid #6A00F4 !important;
+  color: #6A00F4 !important;
   padding: 12px 26px !important;
   font-size: 18px !important;
   font-weight: 700 !important;
@@ -274,6 +280,8 @@
 
 .cta-btn:hover {
   background: #6A00F4 !important;
+    color: #fff !important;
+
 }
 
 
