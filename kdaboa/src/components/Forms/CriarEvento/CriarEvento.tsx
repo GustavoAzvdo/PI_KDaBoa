@@ -157,6 +157,8 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     }, [isEdit, enderecoModo, enderecoFavorito]);
 
+
+
     // --- CARREGAMENTO DE DADOS (EDITAR) ---
     useEffect(() => {
         if (eventoEditando) {
@@ -527,9 +529,9 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             '& .MuiOutlinedInput-root': {
 
                 // 1. A Borda em estado Normal
-            
+
                 // Usamos a classe que você viu no F12 (geralmente é MuiOutlinedInput-notchedOutline)
-               '& .MuiOutlinedInput-notchedOutline': {
+                '& .MuiOutlinedInput-notchedOutline': {
                     borderColor: '#FF8e38 !important',
                     border: '1px solid #FF8e38 !important',
                 },
@@ -553,11 +555,11 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             '& .MuiInputLabel-root': {
                 color: '#FF8e38 !important',
             },
-            '& MuiPickersInputBase-root-MuiPickersOutlinedInput-root':{
+            '& MuiPickersInputBase-root-MuiPickersOutlinedInput-root': {
                 border: '1px solid #FF8e38',
             }
 
-           
+
         };
     };
 

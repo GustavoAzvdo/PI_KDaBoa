@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { useEventos } from '../../../context/EventoContext';
-import { Category, Delete, Edit } from '@mui/icons-material';
+import { Category, Edit } from '@mui/icons-material';
 
 interface Evento {
     data_criacao: string;
@@ -101,23 +101,23 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
         }
     }
 
-    const handleDelete = async (id_evento: number) => {
-        try {
-            await api.delete(`/gerente/event/${id_evento}`, {
-                withCredentials: true
-            });
-            // Atualiza a lista após exclusão
-            setEventos(eventos.filter(evento => evento.id_evento !== id_evento));
-            setOpenSnackbar(true);
-            setMessage('Evento excluído com sucesso!');
-            setSeverity('success');
-        } catch (error) {
-            console.error('Erro ao excluir evento:', error);
-            setOpenSnackbar(true);
-            setMessage('Erro ao excluir evento!');
-            setSeverity('error');
-        }
-    };
+    // const handleDelete = async (id_evento: number) => {
+    //     try {
+    //         await api.delete(`/gerente/event/${id_evento}`, {
+    //             withCredentials: true
+    //         });
+    //         // Atualiza a lista após exclusão
+    //         setEventos(eventos.filter(evento => evento.id_evento !== id_evento));
+    //         setOpenSnackbar(true);
+    //         setMessage('Evento excluído com sucesso!');
+    //         setSeverity('success');
+    //     } catch (error) {
+    //         console.error('Erro ao excluir evento:', error);
+    //         setOpenSnackbar(true);
+    //         setMessage('Erro ao excluir evento!');
+    //         setSeverity('error');
+    //     }
+    // };
 
     const handleEdit = (evento: Evento) => {
         setEventoEditando({

@@ -3,6 +3,7 @@ import { Alteracao } from '../Forms/CriarEvento/CriarEvento';
 import dayjs from 'dayjs';
 import { dados } from '../../categorys/dados'; // Importe seus dados de categoria aqui
 import { EnderecoData } from '../Forms/Endereco/Endereco';
+import { Check, Close } from '@mui/icons-material';
 interface HistoryPopoverProps {
     anchorEl: HTMLElement | null;
     open: boolean;
@@ -76,30 +77,27 @@ const HistoryPopover = ({
             );
         }
 
-        // 5. CATEGORIA (Array de IDs)
-        // Supondo que valor_novo venha como string "[1, 2, 3]" ou "1,2,3"
+
        if (alteracao.campo === 'categoria' || alteracao.campo === 'categorias') {
             let ids: number[] = [];
             
             try {
-                // Tenta fazer o parse
+               
                 const parsed = JSON.parse(alteracao.valor_novo);
                 
-                // Se for um array (ex: [1, 2]), usa ele.
-                // Se for um único valor (ex: 1), transforma em array (ex: [1]).
+              
                 ids = Array.isArray(parsed) ? parsed : [Number(parsed)];
             } catch {
-                // Se der erro no JSON ou for uma string separada por vírgulas
+               
                 if (typeof alteracao.valor_novo === 'string') {
                     ids = alteracao.valor_novo.split(',').map(v => Number(v.trim()));
                 }
             }
 
-            // SEGURANÇA FINAL: Se depois de tudo ids não for array ou tiver NaN, limpa ou filtra
+          
             if (!Array.isArray(ids)) {
                 ids = [];
             }
-            // Filtra para garantir que só temos números válidos
             ids = ids.filter(id => !isNaN(id) && id !== 0);
 
             return (
@@ -190,12 +188,14 @@ const HistoryPopover = ({
 
                 <Box sx={{ display: 'flex', gap: 1, justifyContent: 'space-between', mt: 2 }}>
                     <Button 
+                        startIcon={<Close />}
                         size="small" variant="contained" color="error"
                         onClick={() => onAction(alteracao.id_his, 'reject', alteracao.valor_novo, alteracao.campo)}
                     >
                         Rejeitar
                     </Button>
                     <Button 
+                        startIcon={<Check />}
                         size="small" variant="contained" color="success"
                         onClick={() => onAction(alteracao.id_his, 'accept', alteracao.valor_novo, alteracao.campo)}
                     >
