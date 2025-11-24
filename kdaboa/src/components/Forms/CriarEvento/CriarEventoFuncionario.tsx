@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
+import { Autocomplete, Box, Button, Checkbox, Chip, Dialog, DialogContent, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip } from '@mui/material'
 import * as React from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, AttachFile } from '@mui/icons-material';
+import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, AttachFile, ArrowBack, Visibility } from '@mui/icons-material';
 import { styled } from '@mui/material/styles'
 import { dados } from '../../../categorys/dados';
 import { useState, useEffect } from 'react';
@@ -52,7 +52,7 @@ interface CategoryProps {
 const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
     // valores do form 
-
+    const [modalOpen, setModalOpen] = useState(false);
     const [nome, setNome] = useState<string>('');
     const [descricao, setDescricao] = React.useState<string>('');
     const [ctg, setCtg] = useState<number[]>([]);
@@ -61,6 +61,8 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
     const [, setFotoUrl] = useState<string>('');
     const [fotoFile, setFotoFile] = useState<File | null>(null);
     const [, setData_criacao] = useState<Dayjs | null>(null);
+
+    const [previewUrl, setPreviewUrl] = useState<string>('');
 
     //pegar o id
 
@@ -108,43 +110,65 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
         }
     }, [isEdit, enderecoModo, enderecoFavorito]);
 
-    useEffect(() => {
-        if (eventoEditando) {
-            console.log('id_evento:', eventoEditando.id_evento);
-            setEventoTitle('Editar evento')
-            setIsEdit(true);
-            setNome(eventoEditando.nome_evento || '');
-            setDescricao(eventoEditando.descricao || '');
-            setData_criacao(eventoEditando.data_criacao ? dayjs(eventoEditando.data_criacao) : null);
-            setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
-            setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
-            setSelectedEndereco(eventoEditando.endereco || null);
 
-            if (eventoEditando.endereco) {
-
-                if (enderecoFavorito && eventoEditando.endereco.id_endereco === enderecoFavorito.id_endereco) {
-                    setEnderecoModo('manter');
-                } else {
+    const API_URL = 'http://localhost:3000';
+     useEffect(() => {
+            if (eventoEditando) {
+                console.log('Editando evento:', eventoEditando);
+                setEventoTitle('Editar evento');
+                setIsEdit(true);
+    
+                // Campos simples
+                setNome(eventoEditando.nome_evento || '');
+                setDescricao(eventoEditando.descricao || '');
+                setData_criacao(eventoEditando.data_criacao ? dayjs(eventoEditando.data_criacao) : null);
+                setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
+                setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
+    
+    
+                if (eventoEditando.endereco && eventoEditando.endereco.id_endereco) {
+    
                     setEnderecoModo('alterar');
+    
+    
+                    const enderecoEncontrado = enderecos.find(
+                        (end) => end.id_endereco === eventoEditando.endereco!.id_endereco
+                    );
+                    setSelectedEndereco(enderecoEncontrado || eventoEditando.endereco);
+                } else {
+    
+                    setEnderecoModo('manter');
+    
                 }
+    
+                // Histórico
+                
+    
+                // Foto
+                if (eventoEditando.foto) {
+                    const nomeArquivo = eventoEditando.foto.split('/').pop() || 'imagem.png';
+                    const urlCompleta = `${API_URL}/event/image/${nomeArquivo}?t=${new Date().getTime()}`;
+                    setPreviewUrl(urlCompleta);
+                    setFileName(nomeArquivo);
+                    setFotoFile(null);
+                } else {
+                    setFotoUrl('');
+                    setFileName('');
+                    setFotoFile(null);
+                    setPreviewUrl('');
+                }
+    
+                // Categorias
+                const categoriaIds = eventoEditando.categorias
+                    .map(cat => dados.find(d => d.title === cat)?.id)
+                    .filter((id): id is number => id !== undefined);
+                setCtg(categoriaIds);
+    
             } else {
-                setEnderecoModo('manter');
+                resetForm();
             }
-
-            const categoriaIds = eventoEditando.categorias
-                .map(cat => dados.find(d => d.title === cat)?.id)
-                .filter((id): id is number => id !== undefined);
-
-            setCtg(categoriaIds);
-        } else {
-            setIsEdit(false);
-            setSelectedEndereco(null);   // Limpa o endereço selecionado
-            setEnderecoModo('manter')
-            setEventoTitle('Criar evento')
-            setEventoEditando(null)
-        }
-
-    }, [eventoEditando]);
+    
+        }, [eventoEditando, enderecos]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
         setEnd((prev) => [...prev, novoEndereco]); ''
@@ -181,7 +205,9 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
 
             const reader = new FileReader();
             reader.onloadend = () => {
-                setFotoUrl(reader.result as string);
+                const result = reader.result as string;
+                setFotoUrl(result);
+                setPreviewUrl(result);
             };
             reader.readAsDataURL(compressedFile);
 
@@ -206,7 +232,7 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
     });
 
 
-  
+
 
 
 
@@ -378,10 +404,54 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
         fetchEventos()
     }, [selectedEndereco]);
 
+    const resetForm = () => {
+        setIsEdit(false);
+        setEventoEditando(null);
+        setEventoTitle('Criar evento');
+
+        // Limpa campos
+        setNome('');
+        setDescricao('');
+        setFotoUrl('');
+        setFileName('');
+        setFotoFile(null);
+        setPreviewUrl('');
+        setCtg([]);
+        setDataInicio(dayjs().startOf('day'));
+        setDataFim(dayjs().startOf('day'));
+
+        // Reseta endereço para o favorito se existir
+        if (enderecoFavorito) {
+            setEnderecoModo('manter');
+            setSelectedEndereco(enderecoFavorito);
+        } else {
+            setSelectedEndereco(null);
+        }
+
+
+    };
 
     return (
         <>
             <Grid container spacing={2} sx={{ padding: 2 }}>
+                {isEdit && (
+                    <Grid size={{ xs: 12 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, bgcolor: '#f5f5f5', p: 1, borderRadius: 1 }}>
+                            <Typography variant="subtitle2" color="textSecondary">
+                                Você está editando o evento: <strong>{nome}</strong>
+                            </Typography>
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                color="inherit"
+                                startIcon={<ArrowBack />}
+                                onClick={resetForm}
+                            >
+                                Voltar para Criação
+                            </Button>
+                        </Box>
+                    </Grid>
+                )}
                 <Grid size={{ xs: 12, sm: 6, md: 6 }}>
                     <TextField
                         value={nome}
@@ -402,16 +472,16 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
                     />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 6 }}>
-                   <Box sx={{
-                        border: '1px solid',
-                        borderColor: 'rgba(0, 0, 0, 0.23)',
-                        borderRadius: '4px',
-                        '&:hover': {
-                            borderColor: 'rgba(0, 0, 0, 0.87)', // Sempre permite hover
-                        },
-                        backgroundColor: 'transparent', // Sempre editável
+                    <Box sx={{
+                        border: '1px solid',
+                        borderColor: 'rgba(0, 0, 0, 0.23)',
+                        borderRadius: '4px',
+                        '&:hover': {
+                            borderColor: 'rgba(0, 0, 0, 0.87)', // Sempre permite hover
+                        },
+                        backgroundColor: 'transparent', // Sempre editável
 
-                    }}>
+                    }}>
                         <RichTextEditor
                             ref={rteRef}
                             extensions={[StarterKit]}
@@ -499,29 +569,43 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
                 <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <TextField
                         sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderStyle: 'dashed',
-                                    borderWidth: 2,
-                                },
-                            },
+                            '& .MuiOutlinedInput-root fieldset': {
+                                borderStyle: 'dashed',
+
+                            }
                         }}
+
                         disabled
                         label="Arquivo selecionado"
                         value={fileName}
                         variant="outlined"
                         fullWidth
-                        inputProps={{ readOnly: true }}
                         InputProps={{
-                            endAdornment: fileName && (
-                                <>
-                                    <IconButton onClick={() => setFileName('')}>
-                                        <Close />
-                                    </IconButton>
-
-                                </>
-
-
+                            readOnly: true,
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <Tooltip title="Ver imagem">
+                                        <span>
+                                            <IconButton
+                                                onClick={() => setModalOpen(true)}
+                                                disabled={!previewUrl}
+                                                edge="end"
+                                                sx={{ mr: 1, color: 'var(--roxo)' }}
+                                            >
+                                                <Visibility />
+                                            </IconButton>
+                                        </span>
+                                    </Tooltip>
+                                    {fileName && (
+                                        <IconButton onClick={() => {
+                                            setFileName('');
+                                            setFotoFile(null);
+                                            setPreviewUrl('');
+                                        }}>
+                                            <Close />
+                                        </IconButton>
+                                    )}
+                                </InputAdornment>
                             ),
                         }}
                     />
@@ -767,6 +851,40 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
                     autoHideDuration={4000}
                 />
             </Grid>
+
+            <Dialog
+                open={modalOpen}
+                onClose={() => setModalOpen(false)}
+                maxWidth="md"
+                fullWidth
+            >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, borderBottom: '1px solid #eee' }}>
+                    <Typography variant="h6" sx={{ fontFamily: 'var(--notosans)' }}>
+                        Visualização da Imagem
+                    </Typography>
+                    <IconButton onClick={() => setModalOpen(false)}>
+                        <Close />
+                    </IconButton>
+                </Box>
+
+                <DialogContent sx={{ display: 'flex', justifyContent: 'center', p: 3, bgcolor: '#f5f5f5' }}>
+                    {previewUrl ? (
+                        <img
+                            src={previewUrl}
+                            alt="Preview do Evento"
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: '70vh',
+                                objectFit: 'contain',
+                                borderRadius: 4,
+                                boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+                            }}
+                        />
+                    ) : (
+                        <Typography>Nenhuma imagem disponível para visualização.</Typography>
+                    )}
+                </DialogContent>
+            </Dialog>
         </>
     )
 }

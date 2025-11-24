@@ -10,8 +10,7 @@ import {
   Grid,
   CircularProgress,
   Alert,
-  CardActions,
-  Button,
+
 } from '@mui/material';
 import {
   CalendarToday,
@@ -397,15 +396,16 @@ const EventosCriadosFuncionario = () => {
                       </Box>
                     </Box>
                   </Stack>
-                  <CardActions sx={{ mt: 2, justifyContent: 'flex-end' }}>
+                  {/* caso algum dia vá excluir, ta aqui! */}
+                  {/* <CardActions sx={{ mt: 2, justifyContent: 'flex-end' }}>
                     <Button
                       variant="contained"
                       color="error"
-                       
+                      endIcon={<Delete />}
                     >
                      Excluir
                     </Button>
-                  </CardActions>
+                  </CardActions> */}
                 </CardContent>
             
               </Card>
