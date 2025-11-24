@@ -8,7 +8,9 @@ import { Autoplay, Navigation, Pagination, A11y } from "swiper/modules";
 
 import "./Produtor.css";
 import Title from "../../components/Title/Title";
-import face from '../../assets/face.png'
+import interrogacao from  '../../assets/interrogacao.png';
+import nuvem from  '../../assets/nuvem.png';
+import ideia from  '../../assets/ideia.png';
 
 const slides = [
   {
@@ -17,7 +19,7 @@ const slides = [
     subtitle: "Divulgue eventos e atraia público qualificado para suas noites.",
     img: "./assets/jantar.png",
     ctaPrimary: "Quero divulgar meu evento",
-    ctaSecondary: "Falar com um especialista",
+    ctaSecundary: "Texto"
   },
   {
     id: 2,
@@ -25,7 +27,7 @@ const slides = [
     subtitle: "Segmentação por categoria e visibilidade local para resultados reais.",
     img: "./assets/happy.png",
     ctaPrimary: "Começar agora",
-    ctaSecondary: "Ver planos",
+    ctaSecundary: "Texto"
   },
   {
     id: 3,
@@ -33,7 +35,7 @@ const slides = [
     subtitle: "Publique eventos, acompanhe performance e otimize promoções.",
     img: "./assets/ticket.png",
     ctaPrimary: "Criar evento",
-    ctaSecondary: "Solicitar demo",
+    ctaSecundary: "Texto"
   },
 ];
 
@@ -77,8 +79,8 @@ const Produtor: React.FC = () => {
                         {slide.ctaPrimary}
                       </Button>
 
-                      <Button variant="outlined" className="hero-btn-sec">
-                        {slide.ctaSecondary}
+                       <Button variant="outlined" className="hero-btn-sec">
+                        {slide.ctaSecundary}
                       </Button>
                     </Box>
                   </Box>
@@ -92,15 +94,8 @@ const Produtor: React.FC = () => {
             ))}
           </Swiper>
 
-          {/* CARD */}
-          <Box className="produtor-hero-card">
-            <Typography className="card-title">Hoje no Kdaboa</Typography>
-            <Typography className="card-line">🔸 No do Rock — Bar do João</Typography>
-            <Typography className="card-line">🔸 Entrada Grátis — 22:00</Typography>
-            <Typography className="card-line" >
-              🔸 Quer destaque? Clique em "Quero divulgar meu evento".
-            </Typography>
-          </Box>
+    
+         
         </Container>
       </Box>
 
@@ -109,8 +104,8 @@ const Produtor: React.FC = () => {
       <Box className="produtor-beneficios">
         <Container>
            < Title >
-        Por que divulgar seus eventos com a gente?
-         <Box component='img' src={face} sx={{
+        Por que divulgar seus eventos conosco
+         <Box component='img' src={interrogacao} sx={{
             width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
             height: "auto", // mantém a proporção
           }} />
@@ -151,8 +146,8 @@ const Produtor: React.FC = () => {
       <Box className="produtor-como">
         <Container>
           < Title >
-            Como funciona?
-            <Box component='img' src={face} sx={{
+            Como funciona
+            <Box component='img' src={ideia} sx={{
             width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
             height: "auto", // mantém a proporção
           }} />
@@ -190,8 +185,8 @@ const Produtor: React.FC = () => {
       <Box className="produtor-testimonials">
         <Container>
  < Title >
-        O que dizem sobre ? 
-         <Box component='img' src={face} sx={{
+        O que dizem sobre 
+         <Box component='img' src={nuvem} sx={{
             width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
             height: "auto", // mantém a proporção
           }} />
@@ -218,10 +213,8 @@ const Produtor: React.FC = () => {
       <Box className="produtor-cta">
         <Container>
           < Title >
-Cadastre agora seu estabelecimento!         <Box component='img' src={face} sx={{
-            width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
-            height: "auto", // mantém a proporção
-          }} />
+Cadastre agora seu estabelecimento!  
+      
       </Title>
 
           <Button variant="contained" className="cta-btn">
