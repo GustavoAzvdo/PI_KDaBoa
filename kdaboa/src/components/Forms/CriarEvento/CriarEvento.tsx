@@ -157,6 +157,8 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     }, [isEdit, enderecoModo, enderecoFavorito]);
 
+
+
     // --- CARREGAMENTO DE DADOS (EDITAR) ---
     useEffect(() => {
         if (eventoEditando) {
@@ -269,6 +271,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
     const handleEditEvento = async () => {
         try {
+            // 1. Prepara os dados para salvar (igual ao seu código atual)
             const formData = new FormData();
             formData.append('nome_evento', nome);
             formData.append('descricao', descricao);
@@ -281,20 +284,39 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
             ctg.forEach(id => { formData.append('categoria', id.toString()); });
 
-            // CORREÇÃO: Só envia o arquivo se ele existir (foi alterado).
             if (fotoFile) {
                 formData.append('images', fotoFile);
             }
 
+            // 2. Envia a atualização oficial do evento (O SAVE DO GERENTE)
             await api.put(`/gerente/event/${eventoEditando?.id_evento}`, formData, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-            setSnackbarMessage('Evento editado com sucesso!');
+
+            // 3. A MÁGICA: Limpa todas as pendências restantes (Categorias, Fotos, etc)
+            // Se o gerente salvou manualmente, consideramos que as sugestões antigas devem ser descartadas/rejeitadas.
+            if (alteracoes.length > 0) {
+                // Mapeia todas as alterações pendentes e manda rejeitar (accept: false)
+                const promessasLimpeza = alteracoes.map(alteracao =>
+                    api.put(`/gerente/event/alteration/${eventoEditando?.id_evento}/${alteracao.id_his}`, {}, {
+                        params: { accept: false },
+                        withCredentials: true
+                    }).catch(err => console.log(`Erro ao limpar id ${alteracao.id_his}`, err))
+                    // O catch aqui garante que se um falhar, não trava o resto
+                );
+
+                await Promise.all(promessasLimpeza);
+            }
+
+            setSnackbarMessage('Evento atualizado e pendências resolvidas!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
 
-            // APÓS EDITAR COM SUCESSO, RESETA O FORM
+            // 4. Limpa o estado local visual imediatamente para sumir as bordas laranjas
+            setAlteracoes([]);
+
+            // 5. Reseta o formulário
             resetForm();
 
         } catch (error) {
@@ -375,10 +397,32 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
         try {
             const isAccept = action === 'accept';
+
+
             await api.put(`/gerente/event/alteration/${eventoEditando.id_evento}/${id_his}`, {}, {
                 params: { accept: isAccept },
                 withCredentials: true
             });
+
+
+            const duplicatasParaLimpar = alteracoes.filter(a =>
+                a.id_his !== id_his && (
+                    a.campo === campo ||
+                    (campo === 'categoria' && a.campo === 'categorias') ||
+                    (campo === 'categorias' && a.campo === 'categoria')
+                )
+            );
+
+
+            if (duplicatasParaLimpar.length > 0) {
+                await Promise.all(duplicatasParaLimpar.map(dup =>
+                    api.put(`/gerente/event/alteration/${eventoEditando.id_evento}/${dup.id_his}`, {}, {
+                        params: { accept: isAccept },
+                        withCredentials: true
+                    })
+                ));
+            }
+
 
             if (isAccept) {
                 switch (campo) {
@@ -393,20 +437,18 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         const urlNova = `${API_URL}/event/image/${novoValor}?t=${new Date().getTime()}`;
                         setPreviewUrl(urlNova);
                         setFileName(novoValor);
-                        setFotoFile(null); // Aceitou histórico: backend já tem a imagem. File é null.
+                        setFotoFile(null);
                         break;
+                    case 'categorias':
                     case 'categoria':
                         let newIds: number[] = [];
                         try {
                             const parsed = JSON.parse(novoValor);
-                            // Se parsed for array, usa ele. Se for número, coloca dentro de um array [5].
                             newIds = Array.isArray(parsed) ? parsed : [Number(parsed)];
                         } catch {
-                            // Fallback para string separada por vírgula
                             newIds = novoValor.split(',').map(v => Number(v.trim()));
                         }
 
-                        // Filtro de segurança extra para garantir que é array de números válidos
                         if (Array.isArray(newIds)) {
                             setCtg(newIds.filter(n => !isNaN(n)));
                         } else {
@@ -427,7 +469,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                         break;
                     default: console.warn(`Campo ${campo} não mapeado.`);
                 }
-                setSnackbarMessage('Alteração aceita e aplicada!');
+                setSnackbarMessage('Alteração aceita com sucesso!');
             } else {
                 setSnackbarMessage('Alteração rejeitada.');
             }
@@ -435,15 +477,24 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
 
-            // Atualiza lista local e verifica se acabou
+
             setAlteracoes(prev => {
-                const novas = prev.filter(a => a.id_his !== id_his);
+                const novas = prev.filter(a => {
+                    const isDifferentId = a.id_his !== id_his;
+
+                    const isDuplicate = a.campo === campo ||
+                        (campo === 'categoria' && a.campo === 'categorias') ||
+                        (campo === 'categorias' && a.campo === 'categoria');
+
+                    return isDifferentId && !isDuplicate;
+                });
+
                 if (novas.length === 0) {
                     setTimeout(() => {
                         resetForm();
                         setSnackbarMessage('Todas alterações analisadas. Voltando para criação.');
                         setSnackbarOpen(true);
-                    }, 1000);
+                    }, 1500);
                 }
                 return novas;
             });
@@ -458,31 +509,59 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
         }
     };
 
-   
+
 
     const hasAlteration = (campo: string) => alteracoes.some(a => a.campo === campo);
 
-    const getOrangeBorderSx = (campo: string) => ({
-        '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
-                borderWidth: hasAlteration(campo) ? '2px !important' : undefined,
+    const getOrangeBorderSx = (campo: string) => {
+        const changed = hasAlteration(campo);
+
+        // Se não houver alteração, retornamos undefined para o componente seguir o padrão
+        if (!changed) return undefined;
+
+        return {
+            // Alvo: O Container do Input
+            '& .MuiPickersOutlinedInput-notchedOutline': {
+                borderColor: '#FF8e38 !important',
+                border: '1px solid #FF8e38 !important',
             },
-            '&:hover fieldset': {
-                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+
+            '& .MuiOutlinedInput-root': {
+
+                // 1. A Borda em estado Normal
+
+                // Usamos a classe que você viu no F12 (geralmente é MuiOutlinedInput-notchedOutline)
+                '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#FF8e38 !important',
+                    border: '1px solid #FF8e38 !important',
+                },
+
+                // 2. A Borda quando passa o mouse (Hover)
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#FF8e38 !important',
+                },
+
+                // 3. A Borda quando está Focado (Clicado)
+                // Aqui resolve o seu problema do "css-kl5dp3...Mui-focused"
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#FF8e38 !important',
+                }
             },
-            '&.Mui-focused fieldset': {
-                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+
+            // Opcional: Muda a cor do Label ("Data inicio") para laranja também quando focado
+            '& .MuiInputLabel-root.Mui-focused': {
+                color: '#FF8e38 !important',
             },
-            '&.Mui-disabled fieldset': {
-                borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
+            '& .MuiInputLabel-root': {
+                color: '#FF8e38 !important',
+            },
+            '& MuiPickersInputBase-root-MuiPickersOutlinedInput-root': {
+                border: '1px solid #FF8e38',
             }
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: hasAlteration(campo) ? '#FF8e38 !important' : undefined,
-            borderWidth: hasAlteration(campo) ? '2px !important' : undefined,
-        },
-    });
+
+
+        };
+    };
 
     return (
         <>
@@ -745,6 +824,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                             onChange={handleCategoryChange}
                             noOptionsText="Nenhuma categoria encontrada"
                             getOptionLabel={(option) => option.title}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
                             renderOption={(props, option, { selected }) => {
                                 const { key, ...optionProps } = props
                                 return (
