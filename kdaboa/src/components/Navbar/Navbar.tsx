@@ -184,32 +184,37 @@ const Navbar = () => {
                     </>
                   ) : (
                     <>
-                      
+
                       <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/produtor">
                         <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
                           Área do Produtor
                         </Typography>
                       </MenuItem>
-                      {isAuthenticated ? (
-                        <>
-                          <MenuItem onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}>
-                            <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                              Dashboard
-                            </Typography>
-                          </MenuItem>
-                          <MenuItem onClick={() => { handleCloseNavMenu(); setLogoutModalOpen(true); }}>
-                            <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                              Sair
-                            </Typography>
-                          </MenuItem>
-                        </>
-                      ) : (
-                        <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/login">
+                      {isAuthenticated ? [
+                        <MenuItem key="dashboard" onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}>
+                          <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                            Dashboard
+                          </Typography>
+                        </MenuItem>,
+
+                        <MenuItem key="logout" onClick={() => { handleCloseNavMenu(); setLogoutModalOpen(true); }}>
+                          <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                            Sair
+                          </Typography>
+                        </MenuItem>
+                      ] : [
+                        <MenuItem key="produtor" onClick={handleCloseNavMenu} component={RouterLink} to="/produtor">
+                          <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                            Área do Produtor
+                          </Typography>
+                        </MenuItem>,
+
+                        <MenuItem key="login" onClick={handleCloseNavMenu} component={RouterLink} to="/login">
                           <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
                             Entrar
                           </Typography>
                         </MenuItem>
-                      )}
+                      ]}
                     </>
                   )}
                 </Menu>
