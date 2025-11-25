@@ -16,11 +16,26 @@
    HERO (Swiper)
 ================================ */
 .produtor-hero {
-   width: 100%;
-  background: linear-gradient(to top, #ffe0b2 2%,#fff 25%,#fff 85%, #d1c4e9 100%) !important;
+  width: 100%;
   padding: 20px 0 10px;
   position: relative;
+  background: url('../../assets/produtor-banner.gif') !important; ;
+  background-size: cover !important;
+  background-position: center !important;
 }
+
+.swiper-pagination-bullet {
+  background: #ffffff !important;
+  border: 1px solid #6a00ff !important;
+  opacity: 0.8 !important;
+}
+
+
+.swiper-pagination-bullet-active {
+  background: #6a00ff !important;
+  transform: scale(1.2) !important;
+}
+
 
 .produtor-hero-content {
   display: flex;
@@ -53,8 +68,6 @@
   line-height: 1.2 !important;
   margin-bottom: 15px !important;
   width: 100%; 
-  white-space: nowrap; /* impede quebra */
-
 }
 
 .hero-desc {
@@ -79,6 +92,12 @@
   border-radius: 8px !important;
 }
 
+.hero-btn-primary:hover {
+  background: #fff !important;
+  color: #6A00F4 !important;
+  border: 2px solid #6A00F4 !important ;
+}
+
 /* Secondary Button */
 .hero-btn-sec {
   border: 2px solid #6A00F4 !important;
@@ -87,20 +106,6 @@
   font-weight: 600 !important;
   text-transform: none !important;
   border-radius: 8px !important;
-}
-
-.hero-btn-sec:hover {
-  background: #6A00F4 !important;
-  color: #fff !important;
-}
-
-/* Imagem */
-.hero-image {
-  flex: 1;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  border-radius: 5px;
 }
 
 
@@ -113,7 +118,7 @@
    width: 100%;
   padding: 100px 0;
   align-items: center;
-  background: linear-gradient(to top, #d1c4e9 1%, #fff 4%,#fff 96%,#ffe0b2 100%) !important;
+  background: linear-gradient(to top, #d1c4e9 1%, #fff 4%,#fff 85%,#d1c4e9 100%) !important;
 
 }
 
@@ -248,67 +253,46 @@
 }
 
 
-/* ===== depoimentos ===== */
-
+/* ======================= TESTIMONIALS - MARQUEE ======================= */
 .produtor-testimonials {
+padding: 100px 0;
+background: linear-gradient(to top, #ffe0b2 70%,#fff 90%,#fff 100%) !important;
+}
+
+.testimonials-marquee {
+  overflow: hidden;
   width: 100%;
-  padding: 80px 0;
-  background: linear-gradient(to top, #ffe0b2 70%,#fff 100%) !important;
-}
-
-
-.testimonials-grid {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: 40px;
-}
-
-.testimonial-card {
-  background: #ffffff;
-  width: 420px;
-  padding: 35px 40px;
-  border-radius: 20px;
-  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: transparent;
   position: relative;
+  white-space: nowrap;
 }
 
-/* Efeito profissional de hover */
-.testimonial-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.12);
+.marquee-track {
+  display: inline-flex;
+  padding: 35px;
+  animation: marquee 28s linear infinite;
 }
 
-/* Destaque total para a mensagem */
-.testimonial-text {
-  font-size: 1.25rem;
-  line-height: 1.6;
-  font-weight: 600;
-  color: #333;
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
-/* Linha decorativa para deixar mais premium */
-.testimonial-card::before {
-  content: "";
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, #6a11cb, #ff8c00);
-  border-radius: 6px;
-  position: absolute;
-  top: 15px;
-  left: 30px;
+
+.marquee-item .author {
+font-size: 0.9rem;
+color: #666;
+padding-left: 12px;
 }
 
-/* Autor mais sutil */
-.testimonial-author {
-  font-size: 0.95rem;
-  color: #777;
-  font-weight: 500;
+
+@keyframes marqueeScroll {
+0% { transform: translateX(0); }
+100% { transform: translateX(-100%); }
 }
 
 /* Responsivo */
@@ -322,6 +306,24 @@
     font-size: 1.15rem;
   }
 }
+
+/* CARD DO COMENTÁRIO */
+.card-comment {
+  background: #ffffff !important;
+  padding: 30px 30px 30px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08) !important;
+  display: inline-block !important;
+  font-size: 1.15rem !important;
+  white-space: nowrap !important;
+  font-weight: 700 !important;
+  color: #333 !important;
+  border: 3px solid #eee !important;
+  margin-right: 20px !important;
+}
+
+
+
 
 
 /* ================================

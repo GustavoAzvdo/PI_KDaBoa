@@ -12,30 +12,30 @@ import interrogacao from  '../../assets/interrogacao.png';
 import nuvem from  '../../assets/nuvem.png';
 import ideia from  '../../assets/ideia.png';
 
+const comments: any[] = [
+  ];
+
 const slides = [
   {
     id: 1,
     title: "Divulgue conosco agora!",
     subtitle: "Divulgue eventos e atraia público qualificado para suas noites.",
-    img: "./assets/jantar.png",
+    img: "../assets/interrogacao.png",
     ctaPrimary: "Quero divulgar meu evento",
-    ctaSecundary: "Texto"
   },
   {
     id: 2,
     title: " Filtre seu evento!",
     subtitle: "Segmentação por categoria e visibilidade local para resultados reais.",
-    img: "./assets/happy.png",
+    img: "../assets/nuvem.png",
     ctaPrimary: "Começar agora",
-    ctaSecundary: "Texto"
   },
   {
     id: 3,
     title: "Gestão simples e fácil!",
     subtitle: "Publique eventos, acompanhe performance e otimize promoções.",
-    img: "./assets/ticket.png",
-    ctaPrimary: "Criar evento",
-    ctaSecundary: "Texto"
+    img: "../assets/ideia.png",
+    ctaPrimary: "Minha dashboard",
   },
 ];
 
@@ -79,23 +79,14 @@ const Produtor: React.FC = () => {
                         {slide.ctaPrimary}
                       </Button>
 
-                       <Button variant="outlined" className="hero-btn-sec">
-                        {slide.ctaSecundary}
-                      </Button>
+                      
                     </Box>
                   </Box>
-
-                  <Box
-                    className="hero-image"
-                    style={{ backgroundImage: `url(${slide.img})` }}
-                  />
                 </Box>
               </SwiperSlide>
             ))}
           </Swiper>
 
-    
-         
         </Container>
       </Box>
 
@@ -181,34 +172,34 @@ const Produtor: React.FC = () => {
         </Container>
       </Box>
 
-      {/* DEPOIMENTOS */}
-      <Box className="produtor-testimonials">
-        <Container>
- < Title >
-        O que dizem sobre 
-         <Box component='img' src={nuvem} sx={{
+     <Box className="produtor-testimonials">
+
+       < Title >
+O que dizem nossos Parceiros         
+<Box component='img' src={nuvem} sx={{
             width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
             height: "auto", // mantém a proporção
           }} />
       </Title>
-          <Box className="testimonials-grid">
-            <Box className="testimonial-card">
-              <Typography className="testimonial-text">
-                “Desde que comecei a divulgar no Kdaboa, as noites ficaram muito mais cheias.”
-              </Typography>
-              <Typography className="testimonial-author">— Dono do Bar XYZ</Typography>
-            </Box>
 
-            <Box className="testimonial-card">
-              <Typography className="testimonial-text">
-                “Plataforma simples e com ótimo alcance regional.”
-              </Typography>
-              <Typography className="testimonial-author">— Casa Cultural ABC</Typography>
-            </Box>
-          </Box>
-        </Container>
-      </Box>
+<Box className="testimonials-marquee">
+  <Box className="marquee-track">
+   <Box className="marquee-item card-comment">“Desde que comecei a divulgar no Kdaboa, as noites ficaram muito mais cheias.” <span className="author">— Dono do Bar XYZ</span></Box>
+<Box className="marquee-item card-comment">“Plataforma simples e com ótimo alcance regional.” <span className="author">— Casa Cultural ABC</span></Box>
+<Box className="marquee-item card-comment">“Excelente para atrair novos clientes toda semana.” <span className="author">— Bistrô do Centro</span></Box>
+<Box className="marquee-item card-comment">“Nunca recebi tantas visitas após divulgar aqui.” <span className="author">— Espaço Lounge 77</span></Box>
+    {comments.map((c, index) => (
+      <Box key={`c1-${index}`} className="marquee-item card-comment">{c}</Box>
+    ))}
 
+   <Box className="marquee-item card-comment">“Desde que comecei a divulgar no Kdaboa, as noites ficaram muito mais cheias.” <span className="author">— Dono do Bar XYZ</span></Box>
+<Box className="marquee-item card-comment">“Plataforma simples e com ótimo alcance regional.” <span className="author">— Casa Cultural ABC</span></Box>
+    {comments.map((c, index) => (
+      <Box key={`c2-${index}`} className="marquee-item card-comment">{c}</Box>
+    ))}
+  </Box>
+</Box>
+</Box>
       {/* CTA */}
       <Box className="produtor-cta">
         <Container>
