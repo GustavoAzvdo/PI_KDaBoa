@@ -453,12 +453,12 @@ const EventosCriados = () => {
         </Grid>
 
       </Box>
-      {/* <CustomSnackbar
+      <CustomSnackbar
         open={snackbarOpen}
         message={snackbarMessage}
         severity={snackbarSeverity}
         onClose={handleCloseSnackbar}
-      /> */}
+      />
     </>
   );
 };

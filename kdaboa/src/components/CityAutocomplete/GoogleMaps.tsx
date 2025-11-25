@@ -16,7 +16,7 @@ import { debounce } from '@mui/material/utils';
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
 // For Vite projects, use import.meta.env; for Create React App, use process.env.REACT_APP_GOOGLE_MAPS_API_KEY
-const GOOGLE_MAPS_API_KEY: string = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyArqwHLEXErYfbUHnJHn4Q0mSL4AWvzRBM';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyArqwHLEXErYfbUHnJHn4Q0mSL4AWvzRBM';
 console.log(GOOGLE_MAPS_API_KEY)
 const useEnhancedEffect =
   typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;

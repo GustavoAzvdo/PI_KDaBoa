@@ -1,11 +1,11 @@
 import { Box, Typography, Grid, Card, CardContent, Button } from '@mui/material';
-import { EditCalendar, Verified, NewReleases, AccountCircle } from '@mui/icons-material';
+import { EditCalendar, NewReleases, AccountCircle } from '@mui/icons-material';
 import funcionario from './funcionario.png' // você precisará adicionar esta imagem
 import { useState, useEffect } from 'react';
 import api from '../../api/api'
 
 const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any }) => {
-  const [totalEventos, setTotalEventos] = useState<number>(0);
+  const [, setTotalEventos] = useState<number>(0);
   const [nomeFuncionario, setNomeFuncionario] = useState<string>('');
   const [totalAnalise, setTotalAnalise] = useState<number>(0);
   useEffect(() => {
@@ -111,7 +111,7 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
 
       {/* Atalhos para Funcionário */}
       <Grid container spacing={2} sx={{ mt: 3 }}>
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <Card sx={{
             bgcolor: 'var(--roxo)',
             color: 'white',
@@ -139,7 +139,7 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
           </Card>
         </Grid>
 
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+        {/* <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card sx={{
             bgcolor: '#4CAF50',
             color: 'white',
@@ -157,29 +157,9 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
               <Typography variant="h6">{totalEventos}</Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Grid> */}
 
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-          <Card sx={{
-            bgcolor: 'warning.main',
-            color: 'white',
-            height: '100%',
-            transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
-            boxShadow: 4,
-            '&:hover': {
-              boxShadow: 8,
-              transform: 'translateY(-8px)',
-            },
-          }}>
-            <CardContent>
-              <NewReleases sx={{ fontSize: 40 }} />
-              <Typography variant="h6">Em Análise</Typography>
-              <Typography variant="h6">{totalAnalise}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <Card sx={{
             bgcolor: '#2196F3',
             color: 'white',
@@ -206,6 +186,28 @@ const BoasVindasFuncionario = ({ router }: { nome_usuario?: string, router: any 
             </CardContent>
           </Card>
         </Grid>
+
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <Card sx={{
+            bgcolor: 'warning.main',
+            color: 'white',
+            height: '100%',
+            transition: "box-shadow 0.3s cubic-bezier(.25,.8,.25,1), transform 0.3s cubic-bezier(.25,.8,.25,1)",
+            boxShadow: 4,
+            '&:hover': {
+              boxShadow: 8,
+              transform: 'translateY(-8px)',
+            },
+          }}>
+            <CardContent>
+              <NewReleases sx={{ fontSize: 40 }} />
+              <Typography variant="h6">Em Análise</Typography>
+              <Typography variant="h6">{totalAnalise}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        
       </Grid>
     </Box>
   );

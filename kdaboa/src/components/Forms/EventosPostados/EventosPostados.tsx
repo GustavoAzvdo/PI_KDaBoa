@@ -1,4 +1,18 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Grid, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Chip,
+    Grid,
+    Stack,
+    TextField, // Importado
+    InputAdornment, // Importado
+    Typography,
+    Divider
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api';
 import dayjs from 'dayjs';
@@ -6,7 +20,7 @@ import dayjs from 'dayjs';
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { useEventos } from '../../../context/EventoContext';
-import { Category, Delete, Edit } from '@mui/icons-material';
+import { Adjust, Category, Delete, Edit, Search } from '@mui/icons-material'; // Importado Search
 
 interface Evento {
     data_criacao: string;
@@ -28,9 +42,10 @@ interface EventosPostadosProps {
 
 const EventosPostados = ({ router }: EventosPostadosProps) => {
     const [eventos, setEventos] = useState<Evento[]>([]);
-    // Estado para armazenar quais IDs têm pendência no histórico
+    // Estado para a pesquisa
+    const [searchTerm, setSearchTerm] = useState('');
+    
     const [idsComAlteracao, setIdsComAlteracao] = useState<number[]>([]);
-
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [message, setMessage] = useState('');
     const [severity, setSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('success');
@@ -38,20 +53,17 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
 
     const { setEventoEditando } = useEventos();
 
-    // Função que verifica no backend se existe histórico pendente para a lista de eventos
     const checarAlteracoes = async (listaEventos: Evento[]) => {
         const idsEncontrados: number[] = [];
 
         await Promise.all(listaEventos.map(async (evento) => {
             try {
-                // O : any aqui previne o erro do typescript no .length
                 const response: any = await api.get(`/gerente/event/alteration/${evento.id_evento}`, { withCredentials: true });
-
                 if (response.data && response.data.length > 0) {
                     idsEncontrados.push(evento.id_evento);
                 }
             } catch (error) {
-                // Ignora se der erro (ex: sem histórico)
+                // Ignora erro
             }
         }));
 
@@ -61,8 +73,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
     const fetchEventos = async () => {
         try {
             const response: any = await api.get('/gerente/event', { withCredentials: true });
-            console.log('Dados do evento:', response.data);
-
+            
             const eventosAprovados = response.data.filter((evento: any) =>
                 Number(evento.estatus) === 1
             );
@@ -75,9 +86,8 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                     data_inicio: evento.data_inicio,
                     data_fim: evento.data_fim,
                     foto: evento.foto,
-                    // CORREÇÃO AQUI EMBAIXO:
                     id_endereco: evento.Endereco ? {
-                        id_endereco: evento.Endereco.id_endereco, // <--- ADICIONE ESTA LINHA
+                        id_endereco: evento.Endereco.id_endereco,
                         logradouro: evento.Endereco.logradouro,
                         numero: evento.Endereco.numero,
                         bairro: evento.Endereco.bairro,
@@ -93,7 +103,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
             });
 
             setEventos(eventosFormatados);
-            // Chama a verificação de alterações após carregar os eventos
             checarAlteracoes(eventosFormatados);
 
         } catch (error) {
@@ -106,7 +115,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
             await api.delete(`/gerente/event/${id_evento}`, {
                 withCredentials: true
             });
-            // Atualiza a lista após exclusão
             setEventos(eventos.filter(evento => evento.id_evento !== id_evento));
             setOpenSnackbar(true);
             setMessage('Evento excluído com sucesso!');
@@ -139,13 +147,46 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
         fetchEventos();
     }, []);
 
+    const eventosFiltrados = eventos.filter((evento) => 
+        evento.nome_evento.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <Grid container spacing={3}>
-            {eventos.map((evento) => {
-                // Verifica se este evento específico tem alteração pendente
+            {/* --- BARRA DE PESQUISA --- */}
+            <Grid size={{xs: 12}} sx={{my: 2}}>
+                <TextField
+                    fullWidth
+                    variant="outlined"
+                    placeholder="Pesquisar evento pelo nome..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <Search sx={{ color: '#6C15D5' }} />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+                <Divider sx={{ mt: 3 }} />
+            </Grid>
+            {/* Mensagem se não encontrar nada */}
+            {eventosFiltrados.length === 0 && searchTerm !== '' && (
+                 <Grid size={{ xs: 12 }}>
+                    <Box sx={{ textAlign: 'center', py: 4, color: 'text.secondary' }}>
+                        <Typography variant="h6">Nenhum evento encontrado com esse nome.</Typography>
+                    </Box>
+                 </Grid>
+            )}
+
+          
+            {eventosFiltrados.map((evento) => {
                 const temAlteracao = idsComAlteracao.includes(evento.id_evento);
 
                 return (
+
                     <Grid size={{ xs: 12, sm: 6, md: 4 }} key={evento.id_evento}>
                         <Card
                             elevation={4}
@@ -156,7 +197,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                 borderRadius: 2,
                                 overflow: 'hidden',
                                 transition: 'all 0.3s ease-in-out',
-                                // Borda Laranja se tiver alteração
                                 border: temAlteracao ? '3px solid #FF8e38' : 'none',
                                 position: 'relative',
                                 '&:hover': {
@@ -165,26 +205,29 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                 }
                             }}
                         >
-                            {/* Badge de Aviso */}
                             {temAlteracao && (
-                                <Box sx={{
-                                    position: 'absolute',
-                                    top: 10,
-                                    right: 10,
-                                    zIndex: 2,
-                                    backgroundColor: '#ff9800',
-                                    color: 'white',
-                                    padding: '2px 8px',
-                                    borderRadius: '4px',
-                                    fontSize: '0.75rem',
-                                    fontWeight: 'bold',
-                                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                }}>
-                                    Alteração Pendente
-                                </Box>
+                                <>
+                                    <Box sx={{
+                                        position: 'absolute',
+                                        top: 10,
+                                        right: 10,
+                                        zIndex: 2,
+                                        backgroundColor: '#ff8e38',
+                                        color: 'white',
+                                        padding: '2px 8px',
+                                        borderRadius: '4px',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 'bold',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                    }}>
+                                        <Stack direction="row" alignItems="center" spacing={0.5}>
+                                            <Adjust sx={{ fontSize: 16 }} />
+                                            <Typography variant="caption">Alteração Pendente</Typography>
+                                        </Stack>
+                                    </Box>
+                                </>
                             )}
 
-                            {/* Imagem do evento */}
                             <Box sx={{
                                 position: 'relative',
                                 width: '100%',
@@ -201,7 +244,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                         objectFit: 'cover',
                                     }}
                                 />
-                                {/* Overlay com gradiente */}
                                 <Box sx={{
                                     position: 'absolute',
                                     bottom: 0,
@@ -223,7 +265,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                     gap: 2
                                 }}
                             >
-                                {/* Título do evento */}
                                 <Typography
                                     variant='h6'
                                     sx={{
@@ -236,7 +277,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                     {evento.nome_evento}
                                 </Typography>
 
-                                {/* Descrição */}
                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                                     <Typography
                                         variant="body2"
@@ -253,9 +293,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                     </Typography>
                                 </Box>
 
-                                {/* Informações em grid */}
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                                    {/* Data */}
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <Box sx={{
                                             width: 8,
@@ -268,7 +306,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                         </Typography>
                                     </Box>
 
-                                    {/* Endereço */}
                                     {evento.id_endereco && (
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <Box sx={{
@@ -292,7 +329,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                         </Box>
                                     )}
 
-                                    {/* Categorias */}
                                     {evento.Evento_Categoria.length > 0 && (
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
                                             <Category sx={{ fontSize: 18, color: '#6c15d5', mr: 1 }} />
@@ -324,7 +360,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                 </Box>
                             </CardContent>
 
-                            {/* Botões de ação */}
                             <CardActions
                                 sx={{
                                     p: 3,
