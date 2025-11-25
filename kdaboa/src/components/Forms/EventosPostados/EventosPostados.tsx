@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api';
 import dayjs from 'dayjs';
@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { useEventos } from '../../../context/EventoContext';
-import { Category, Delete, Edit } from '@mui/icons-material';
+import { Adjust, Category, Delete, Edit } from '@mui/icons-material';
 
 interface Evento {
     data_criacao: string;
@@ -167,21 +167,26 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                         >
                             {/* Badge de Aviso */}
                             {temAlteracao && (
-                                <Box sx={{
-                                    position: 'absolute',
-                                    top: 10,
-                                    right: 10,
-                                    zIndex: 2,
-                                    backgroundColor: '#ff9800',
-                                    color: 'white',
-                                    padding: '2px 8px',
-                                    borderRadius: '4px',
-                                    fontSize: '0.75rem',
-                                    fontWeight: 'bold',
-                                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                }}>
-                                    Alteração Pendente
-                                </Box>
+                                <>
+                                    <Box sx={{
+                                        position: 'absolute',
+                                        top: 10,
+                                        right: 10,
+                                        zIndex: 2,
+                                        backgroundColor: '#ff8e38',
+                                        color: 'white',
+                                        padding: '2px 8px',
+                                        borderRadius: '4px',
+                                        fontSize: '0.75rem',
+                                        fontWeight: 'bold',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                    }}>
+                                        <Stack direction="row" alignItems="center" spacing={0.5}>
+                                            <Adjust sx={{ fontSize: 16 }} />
+                                            <Typography variant="caption">Alteração Pendente</Typography>
+                                        </Stack>
+                                    </Box>
+                                </>
                             )}
 
                             {/* Imagem do evento */}

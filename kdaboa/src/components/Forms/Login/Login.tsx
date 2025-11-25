@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, Card, Stack, Container, LinearProgress } from '@mui/material'
-import { HttpsOutlined, EmailOutlined, HomeOutlined, Send } from '@mui/icons-material';
+import { HttpsOutlined, EmailOutlined, HomeOutlined,  LoginOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { CircularProgress } from '@mui/material'
@@ -297,7 +297,7 @@ const Login = () => {
                                 startIcon={isLoading ? <CircularProgress color="inherit" size={20} /> : null}
                             >
                                 <Typography className='btn' >
-                                    {isLoading ? 'Entrando...' : <Box><Typography  sx={{ display: 'flex', alignItems: 'center' }}>Entrar <Send sx={{ ml: 1 }} fontSize='small'/></Typography></Box>}
+                                    {isLoading ? 'Entrando...' : <Box><Typography  sx={{ display: 'flex', alignItems: 'center' }}>Entrar <LoginOutlined sx={{ ml: 1 }} fontSize='small'/></Typography></Box>}
                                 </Typography>
                             </Button>
 

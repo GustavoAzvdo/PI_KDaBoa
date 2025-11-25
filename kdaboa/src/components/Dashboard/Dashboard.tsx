@@ -118,7 +118,7 @@ export default function DashboardLayoutBasic(props: any) {
         },
         {
           segment: 'postados',
-          title: 'Postados',
+          title: 'Eventos postados',
           icon: <Verified />,
         },
         {
