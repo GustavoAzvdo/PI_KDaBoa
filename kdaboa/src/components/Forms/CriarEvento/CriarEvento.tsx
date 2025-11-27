@@ -754,7 +754,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                             readOnly: true,
                             endAdornment: (
                                 <InputAdornment position="end">
-                                    <Tooltip title="Ver imagem">
+                                    <Tooltip title="Ver imagem" arrow>
                                         <span>
                                             <IconButton
                                                 onClick={() => setModalOpen(true)}
