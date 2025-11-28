@@ -24,8 +24,9 @@ import { useNavigate } from 'react-router-dom';
 import BoasVindasFuncionario from '../BoasVindas/BoasVindasFuncionario';
 import CriarEventoFuncionario from '../Forms/CriarEvento/CriarEventoFuncionario';
 import EventosCriadosFuncionario from '../Forms/EventosCriados/EventosCriadosFuncionario';
-import EventosPostados from '../Forms/EventosPostados/EventosPostados';
+
 import EventosPostadosFuncionario from '../Forms/EventosPostados/EventosPostadosFuncionario';
+import { NotificacoesFuncionários } from './NotificacoesFuncionario';
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -278,7 +279,9 @@ export default function DashboardFuncionario(props: any) {
     >
 
       <DashboardLayout
-
+        slots={{
+          toolbarActions : NotificacoesFuncionários
+        }}
       >
         <PageContainer>
           {renderContent(router.pathname, router)}

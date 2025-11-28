@@ -10,12 +10,14 @@ import {
     Info,
     Campaign,
     Warning,
+    Error,
     Delete,
-    DeleteSweep 
+    DeleteSweep
 } from '@mui/icons-material';
 import { Account } from '@toolpad/core/Account';
 
-type NotificationType = 'postado' | 'alterado' | 'info';
+
+type NotificationType = 'aprovado' | 'rejeitado' | 'alterado';
 
 interface NotificationItem {
     id: number;
@@ -26,26 +28,35 @@ interface NotificationItem {
     read: boolean; 
 }
 
+
 const INITIAL_NOTIFICATIONS: NotificationItem[] = [
     {
         id: 1,
-        type: 'postado',
-        title: 'Evento "Festa Junina" criado',
-        desc: 'O evento foi criado, aguardando aprovação.',
+        type: 'aprovado',
+        title: 'Evento "L7 me espera!" ',
+        desc: 'O evento foi aprovado pelo gerente e está agora visível para os usuários.',
         time: '5 min atrás',
         read: false
     },
     {
         id: 2,
-        type: 'alterado',
-        title: 'Alteração no "Rock in Rio"',
-        desc: 'O horário do evento foi modificado pelo gerente.',
+        type: 'rejeitado',
+        title: 'O evento "Rock in Rio" foi rejeitado',
+        desc: 'O evento não atendeu aos requisitos necessários dados pelo gerente.',
         time: '2 horas atrás',
         read: false
     },
+    {
+        id: 3,
+        type: 'alterado',
+        title: 'Alteração no "Festa Junina"',
+        desc: 'O evento foi modificado pelo gerente.',
+        time: '1 dia atrás',
+        read: false
+    }
 ];
 
-export function Notificacoes() {
+export function NotificacoesFuncionários() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
 
@@ -59,27 +70,33 @@ export function Notificacoes() {
         setAnchorEl(null);
     };
 
+    
     const handleMarkAsRead = (id: number, e: React.MouseEvent) => {
         e.stopPropagation();
-        setNotifications((prev) => 
-            prev.map((item) => 
+        setNotifications((prev) =>
+            prev.map((item) =>
                 item.id === id ? { ...item, read: true } : item
             )
         );
     };
 
+    
     const handleDelete = (id: number, e: React.MouseEvent) => {
         e.stopPropagation();
         setNotifications((prev) => prev.filter((item) => item.id !== id));
     };
 
+   
     const handleClearAll = () => {
         setNotifications([]);
     };
 
+
     const getIconByType = (type: NotificationType) => {
         switch (type) {
-            case 'postado':
+            case 'rejeitado':
+                return <Error fontSize="small" color="error" />;
+            case 'aprovado':
                 return <CheckCircle fontSize="small" color="success" />;
             case 'alterado':
                 return <Warning fontSize="small" color="warning" />;
@@ -88,7 +105,7 @@ export function Notificacoes() {
         }
     };
 
-   
+    // marca as que nao foram lidas
     const unreadCount = notifications.filter(n => !n.read).length;
 
     return (
@@ -115,9 +132,9 @@ export function Notificacoes() {
                             overflow: 'visible',
                             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                             mt: 1.5,
-                            width: 440, 
+                            width: 420, 
                             height: 'auto',
-                            maxHeight: 500, 
+                            maxHeight: 500,
                             overflowY: 'auto',
                             '&:before': {
                                 content: '""',
@@ -143,15 +160,14 @@ export function Notificacoes() {
                         <Typography variant="h6">Notificações</Typography>
                         <Campaign fontSize='small' color='inherit' />
                     </Stack>
-                    
-                 
+
                     {notifications.length > 0 && (
                         <Tooltip title="Excluir todas">
-                            <Button 
-                                variant='outlined'
-                                size="small" 
-                                endIcon={<DeleteSweep />} 
-                                color="error" 
+                            <Button
+                            variant='outlined'
+                                size="small"
+                                endIcon={<DeleteSweep />}
+                                color="error"
                                 onClick={handleClearAll}
                                 sx={{ textTransform: 'none', fontSize: '0.75rem' }}
                             >
@@ -160,14 +176,11 @@ export function Notificacoes() {
                         </Tooltip>
                     )}
                 </Box>
-                
                 <Divider />
 
                 {notifications.length === 0 ? (
                     <Box sx={{ p: 4, textAlign: 'center' }}>
-                        <Typography variant="body2" color="text.secondary">
-                            Tudo limpo! Sem novas notificações.
-                        </Typography>
+                        <Typography variant="body2" color="text.secondary">Tudo limpo! Sem novas notificações.</Typography>
                     </Box>
                 ) : (
                     notifications.map((item) => (
@@ -180,27 +193,27 @@ export function Notificacoes() {
                                 alignItems: 'flex-start',
                                 borderBottom: '1px solid #f0f0f0',
                                 cursor: 'default',
-                               
+                              
                                 backgroundColor: item.read ? 'inherit' : 'var(--roxoMuitoFracoDashboard)',
                                 transition: 'background-color 0.3s',
-                                '&:hover': { 
-                                    backgroundColor: item.read ? '#f9f9f9' : 'var(--roxoFracoDashboard)' 
+                                '&:hover': {
+                                    backgroundColor: item.read ? '#f9f9f9' : 'var(--roxoFracoDashboard)'
                                 }
                             }}
                         >
-                            {/* icon */}
+                            {/* icone */}
                             <ListItemIcon sx={{ minWidth: 35, mx: 1, display: 'flex', alignSelf: 'center' }}>
                                 {getIconByType(item.type)}
                             </ListItemIcon>
 
-                            {/* textp */}
+                            {/* conteudinho */}
                             <ListItemText
                                 sx={{ mr: 1, flex: 1 }}
                                 primary={
-                                    <Typography 
-                                        variant="subtitle2" 
-                                        sx={{ 
-                                            fontWeight: 'bold', 
+                                    <Typography
+                                        variant="subtitle2"
+                                        sx={{
+                                            fontWeight: 'bold',
                                             lineHeight: 1.2,
                                             textDecoration: item.read ? 'line-through' : 'none', 
                                             color: item.read ? 'text.disabled' : 'text.primary',
@@ -221,15 +234,15 @@ export function Notificacoes() {
                                 }
                             />
 
-                           
-                            <Stack direction="row" spacing={0} alignItems="center" sx={{alignSelf: 'center'}}>
-                              
-                                <Tooltip title={item.read ? "Lida" : "Marcar como lida"}>
-                                    <span> 
+                            {/* Área de Ações */}
+                            <Stack direction="row" spacing={0} alignItems="center" sx={{ alignSelf: 'center' }}>
+                                {/* zoio - Marca como lida */}
+                                <Tooltip title={item.read ? "Visto" : "Marcar como vista"}>
+                                    <span>
                                         <IconButton
                                             size="small"
                                             onClick={(e) => handleMarkAsRead(item.id, e)}
-                                            disabled={item.read} 
+                                            disabled={item.read}
                                             color="inherit"
                                         >
                                             <Visibility fontSize="small" />
@@ -237,7 +250,7 @@ export function Notificacoes() {
                                     </span>
                                 </Tooltip>
 
-                               
+                                {/* lixeira - Deleta */}
                                 <Tooltip title="Excluir notificação">
                                     <IconButton
                                         size="small"
