@@ -24,11 +24,12 @@
   background-position: center !important;
 }
 
-.swiper-pagination-bullet {
+/* tive q comenta isso pq tava dando conflito com a pagina home :( */
+/* .swiper-pagination-bullet {
   background: #ffffff !important;
-  border: 1px solid #6a00ff !important;
+  border: 1px solid  !important;
   opacity: 0.8 !important;
-}
+} */
 
 
 .swiper-pagination-bullet-active {

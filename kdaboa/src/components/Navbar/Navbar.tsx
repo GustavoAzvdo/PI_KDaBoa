@@ -184,12 +184,6 @@ const Navbar = () => {
                     </>
                   ) : (
                     <>
-
-                      <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/produtor">
-                        <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                          Área do Produtor
-                        </Typography>
-                      </MenuItem>
                       {isAuthenticated ? [
                         <MenuItem key="dashboard" onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}>
                           <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
