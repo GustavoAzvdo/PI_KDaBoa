@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://vmlxc5dd-3000.brs.devtunnels.ms',
     withCredentials: true,
 });
 
