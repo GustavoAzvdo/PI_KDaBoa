@@ -17,13 +17,14 @@ import ScreenDash from '../ScreenDash/ScreenDash';
 import ScreenError from '../ScreenError/ScreenError';
 import { User } from './User.props';
 import api from '../../api/api';
-import { Button, Dialog, DialogActions, DialogTitle} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import BoasVindasGerente from '../BoasVindas/BoasVindas';
 import { useTheme } from '@mui/material/styles';
 import CriarFuncionario from '../Forms/CriarFuncionario/CriarFuncionario';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import EventosCriados from '../Forms/EventosCriados/EventosCriados';
+import {Notificacoes} from './Notificacoes'
 function useDemoRouter(initialPath: string): Router {
   const [pathname, setPathname] = React.useState(initialPath);
 
@@ -137,7 +138,7 @@ export default function DashboardLayoutBasic(props: any) {
       kind: 'divider',
     },
 
-    
+
     {
       segment: 'home',
       title: 'Voltar à Home',
@@ -202,7 +203,7 @@ export default function DashboardLayoutBasic(props: any) {
     };
   }, [router]);
 
-  
+
   function renderContent(pathname: string, router: Router) {
     switch (pathname) {
       case '/dashboard/inicio':
@@ -282,7 +283,9 @@ export default function DashboardLayoutBasic(props: any) {
     >
 
       <DashboardLayout
-       
+        slots={{
+          toolbarActions: Notificacoes ,
+        }}
       >
         <PageContainer>
           {renderContent(router.pathname, router)}
