@@ -97,7 +97,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     const rteRef = React.useRef<RichTextEditorRef>(null);
 
     const enderecoParaExibir = enderecoModo === 'manter' ? enderecoFavorito : selectedEndereco;
-    const API_URL = 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_BACKEND;
 
     // --- FUNÇÃO DE RESETAR TUDO (VOLTAR PARA CRIAR) ---
     const resetForm = () => {
