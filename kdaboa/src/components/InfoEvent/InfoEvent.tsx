@@ -1,17 +1,18 @@
-import { Avatar, Box, Button, Card, CardContent, Grid, IconButton, Stack, Typography } from "@mui/material"
+import { Avatar, Box, Button, Card, CardContent, Grid,  Stack, Typography } from "@mui/material"
 import "./InfoEvent.css"
 import calendar from "../../assets/calendar.png"
 import Contacts from "../Details/Contacts"
 import Address from "../Details/Address"
 import { useNavigate } from "react-router-dom"
 import BannerEvent from "../BannerEvent/BannerEvent"
-import { Add, ConfirmationNumber, Person, Remove } from "@mui/icons-material"
+import { ConfirmationNumber, Person } from "@mui/icons-material"
 import api from "../../api/api"
 import EventoProps from "../CardEventHome/props/EventoProps";
 import { useEffect, useState, useMemo } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import TicketPDF from "../TicketPDF/TicketPDF";
 import qrcode from "qrcode";
+import NumberSpinner from '../NumberSpinner';
 const InfoEvent = ({ evento }: { evento: EventoProps }) => {
     const [ticket, setTicket] = useState<number>(0);
     const [price,] = useState<number>(20)
@@ -368,7 +369,7 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
                                     <Typography variant="caption" sx={{
                                         fontStyle: 'italic',
                                         color: 'text.secondary',
-                                        mb: 2,
+                                        mb: 1,
                                         display: 'block'
                                     }}>
                                         *Taxa de compra não inclusa
@@ -382,27 +383,16 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
                                         </Typography>
                                     </Box>
                                 </Box>
-                                <Stack direction="row" spacing={2} alignItems="center">
-                                    <IconButton
-                                        disabled={ticket === 0}
-                                        sx={{
-                                            cursor: ticket === 0 ? '' : 'pointer',
-                                        }}
-                                        onClick={() => setTicket(prev => prev > 0 ? prev - 1 : 0)}>
-                                        <Remove sx={{ color: 'primary.main' }} />
-                                    </IconButton>
-                                    <Typography sx={{
-                                        fontSize: '1.2rem',
-                                        fontWeight: '600',
-                                        color: '#333'
-                                    }}>
-                                        {ticket} ingresso(s)
-                                    </Typography>
-                                    <IconButton onClick={() => setTicket(prev => prev + 1)}>
-                                        <Add sx={{ color: 'primary.main' }} />
-                                    </IconButton>
-
-                                </Stack>
+                                <Box sx={{ mt: -3 }}>
+                                    <NumberSpinner
+                                        value={ticket}
+                                        onValueChange={(newValue) => setTicket(newValue ?? 0)}
+                                        min={0}
+                                        max={30}
+                                        size='small'
+                                        defaultValue={0}
+                                    />
+                                </Box>
                                 <Box sx={{ mt: 2 }}>
                                     {isGeneratingTickets ? (
                                         // 1. Mostra "Gerando..." enquanto os QR Codes são criados
