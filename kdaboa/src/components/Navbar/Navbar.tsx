@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Button, Container, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
-import { BadgeOutlined, HomeOutlined, Search, DashboardOutlined, LogoutOutlined, Face } from '@mui/icons-material';
+import { BadgeOutlined, HomeOutlined, Search, DashboardOutlined, LogoutOutlined, Face, Login, Badge } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import logo from '../../assets/logo.png';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
@@ -153,7 +153,8 @@ const Navbar = () => {
                   transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                   open={Boolean(anchorElNav)}
                   onClose={handleCloseNavMenu}
-                  sx={{ display: { xs: 'block', md: 'none' } }}
+                  sx={{ display: { xs: 'block', md: 'none' }, width: 'auto' }}
+
                 >
                   {pages.map((page) => (
                     <MenuItem key={page.label} onClick={handleCloseNavMenu} component={RouterLink} to={page.href}>
@@ -169,48 +170,64 @@ const Navbar = () => {
                   </MenuItem>
 
                   {/* Menu mobile condicional */}
-                  {isAuthenticated ? (
-                    <>
-                      <MenuItem onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}>
-                        <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                          Dashboard
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem onClick={() => { handleCloseNavMenu(); setLogoutModalOpen(true); }}>
-                        <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                          Sair
-                        </Typography>
-                      </MenuItem>
-                    </>
-                  ) : (
-                    <>
-                      {isAuthenticated ? [
-                        <MenuItem key="dashboard" onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}>
-                          <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                            Dashboard
-                          </Typography>
-                        </MenuItem>,
+                  {isAuthenticated && [
+                    <MenuItem
+                      key="dashboard-auth"
+                      onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}
+                    >
+                      <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                        Dashboard
+                      </Typography>
+                    </MenuItem>,
 
-                        <MenuItem key="logout" onClick={() => { handleCloseNavMenu(); setLogoutModalOpen(true); }}>
-                          <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                            Sair
-                          </Typography>
-                        </MenuItem>
-                      ] : [
-                        <MenuItem key="produtor" onClick={handleCloseNavMenu} component={RouterLink} to="/produtor">
-                          <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                            Área do Produtor
-                          </Typography>
-                        </MenuItem>,
+                    <MenuItem
+                      key="logout-auth"
+                      onClick={() => { handleCloseNavMenu(); setLogoutModalOpen(true); }}
+                    >
+                      <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                        Sair
+                      </Typography>
+                    </MenuItem>
+                  ]}
 
-                        <MenuItem key="login" onClick={handleCloseNavMenu} component={RouterLink} to="/login">
-                          <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                            Entrar
-                          </Typography>
-                        </MenuItem>
-                      ]}
-                    </>
-                  )}
+                  {/* Se NÃO estiver logado (!Authenticated) */}
+                  {!isAuthenticated && [
+                    <MenuItem
+                      key="produtor-guest"
+                      onClick={handleCloseNavMenu}
+                      component={RouterLink}
+
+                      to="/produtor"
+                      sx={{
+                        display: 'flex',
+                        alignSelf: 'flex-end',
+                        justifyContent: 'space-between',
+
+                      }}
+                    >
+                      <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                        Área do Produtor
+                      </Typography>
+                      <Badge />
+                    </MenuItem>,
+
+                    <MenuItem
+                      key="login-guest"
+                      onClick={handleCloseNavMenu}
+                      component={RouterLink}
+                      to="/login"
+                      sx={{
+                        display: 'flex',
+                        alignSelf: 'flex-end',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                        Entrar
+                      </Typography>
+                      <Login />
+                    </MenuItem>
+                  ]}
                 </Menu>
               </Box>
             </Box>
@@ -342,14 +359,19 @@ const Navbar = () => {
                       vertical: 'top',
                       horizontal: 'right',
                     }}
+                    sx={{ width: '300px' }}
                   >
-                    <MenuItem onClick={handleGoToDashboard}>
-                      <DashboardOutlined sx={{ mr: 1 }} />
+                    <MenuItem onClick={handleGoToDashboard}
+                      sx={{ display: 'flex', alignSelf: 'flex-end', justifyContent: 'space-between', gap: 2 }}
+                    >
                       <Typography sx={{ fontFamily: 'Fredoka' }}>Dashboard</Typography>
+                      <DashboardOutlined sx={{ mr: 1 }} />
                     </MenuItem>
-                    <MenuItem onClick={handleOpenLogoutModal}>
-                      <LogoutOutlined sx={{ mr: 1 }} />
+                    <MenuItem onClick={handleOpenLogoutModal}
+                      sx={{ display: 'flex', alignSelf: 'flex-end', justifyContent: 'space-between', gap: 2 }}
+                    >
                       <Typography sx={{ fontFamily: 'Fredoka' }}>Sair</Typography>
+                      <LogoutOutlined sx={{ mr: 1 }} />
                     </MenuItem>
                   </Menu>
                 </>

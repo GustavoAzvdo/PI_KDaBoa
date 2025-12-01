@@ -29,9 +29,9 @@ import {
 } from "@mui/icons-material";
 import logo from "../../assets/logo.png";
 import './NavbarEvent.css';
-import { Link as RouterLink, useNavigate } from "react-router-dom"; 
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import ShareEvento from "../Share/ShareEvento";
-import EventoProps from '../CardEventHome/props/EventoProps'; 
+import EventoProps from '../CardEventHome/props/EventoProps';
 import { useAuth } from '../../context/AuthContext';
 
 interface NavbarEventProps {
@@ -44,7 +44,7 @@ const NavbarEvent = ({ evento }: NavbarEventProps) => {
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [whatsMessage, setWhatsMessage] = useState("");
-  
+
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
 
@@ -92,19 +92,19 @@ const NavbarEvent = ({ evento }: NavbarEventProps) => {
     });
   };
 
-const handleGoToDashboard = () => {
+  const handleGoToDashboard = () => {
     handleCloseUserMenu();
     handleCloseNavMenu();
 
     if (user?.tipo === 'Gerente') {
-        navigate('/dashboard');
+      navigate('/dashboard');
     } else if (user?.tipo === 'Funcionario') {
-        navigate('/dashboard_func');
+      navigate('/dashboard_func');
     } else {
-        console.warn("Usuário logado sem 'tipo' definido. Redirecionando para a home.");
-        navigate('/');
+      console.warn("Usuário logado sem 'tipo' definido. Redirecionando para a home.");
+      navigate('/');
     }
-};
+  };
 
   const handleShare = () => {
     if (!evento?.Endereco) return;
@@ -135,7 +135,7 @@ const handleGoToDashboard = () => {
   return (
     <>
       <AppBar
-        position="sticky" 
+        position="sticky"
         elevation={3}
         sx={{
           py: 1,
@@ -214,23 +214,33 @@ const handleGoToDashboard = () => {
                       Compartilhar
                     </Typography>
                   </MenuItem>
-                  
+
                   {/* Menu mobile condicional - usuário */}
-                  {isAuthenticated ? (
-                    <>
-                      <MenuItem onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}>
-                        <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                          Dashboard
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem onClick={() => { handleCloseNavMenu(); setLogoutModalOpen(true); }}>
-                        <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                          Sair
-                        </Typography>
-                      </MenuItem>
-                    </>
-                  ) : (
-                    <MenuItem onClick={handleCloseNavMenu} component={RouterLink} to="/login">
+                  {isAuthenticated ? [
+                    <MenuItem
+                      key="dashboard"
+                      onClick={() => { handleCloseNavMenu(); handleGoToDashboard(); }}
+                    >
+                      <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                        Dashboard
+                      </Typography>
+                    </MenuItem>,
+
+                    <MenuItem
+                      key="logout"
+                      onClick={() => { handleCloseNavMenu(); setLogoutModalOpen(true); }}
+                    >
+                      <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
+                        Sair
+                      </Typography>
+                    </MenuItem>
+                  ] : (
+                    <MenuItem
+                      key="login"
+                      onClick={handleCloseNavMenu}
+                      component={RouterLink}
+                      to="/login"
+                    >
                       <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
                         Entrar
                       </Typography>
@@ -309,13 +319,17 @@ const handleGoToDashboard = () => {
                       horizontal: 'right',
                     }}
                   >
-                    <MenuItem onClick={handleGoToDashboard}>
-                      <DashboardOutlined sx={{ mr: 1 }} />
+                    <MenuItem onClick={handleGoToDashboard}
+                      sx={{ display: 'flex', alignSelf: 'flex-end', justifyContent: 'space-between', gap: 2 }}
+                    >
                       <Typography sx={{ fontFamily: 'Fredoka' }}>Dashboard</Typography>
+                      <DashboardOutlined sx={{ mr: 1 }} />
                     </MenuItem>
-                    <MenuItem onClick={handleOpenLogoutModal}>
-                      <LogoutOutlined sx={{ mr: 1 }} />
+                    <MenuItem onClick={handleOpenLogoutModal}
+                      sx={{ display: 'flex', alignSelf: 'flex-end', justifyContent: 'space-between', gap: 2 }}
+                    >
                       <Typography sx={{ fontFamily: 'Fredoka' }}>Sair</Typography>
+                      <LogoutOutlined sx={{ mr: 1 }} />
                     </MenuItem>
                   </Menu>
                 </>

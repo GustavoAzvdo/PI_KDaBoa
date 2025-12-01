@@ -75,9 +75,7 @@ const Home = () => {
       try {
         const response = await api.get<Evento[]>("/event");
 
-        // ADICIONE ESTA LINHA PARA DEBUGAR
-        console.log("Eventos recebidos da API:", response.data);
-
+       
         setEventos(response.data);
       } catch (error) {
         console.error("Erro ao carregar eventos:", error);

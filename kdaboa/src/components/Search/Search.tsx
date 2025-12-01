@@ -41,8 +41,7 @@ const Search = ({ onTextChange,onCityChange ,onDateChange, showScreen = false }:
   // const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   // const [searchText, setSearchText] = useState<string>('')
   // const [selectedDate, setSelectedDate] = useState<any>(null);
-  console.log(searchText, categories, date)
-
+  console.log('se vc estiver vendo isso, é pq todo o clg foi limpado, esta bem melhor desse jeito')
 
   const handleCategoryChange = (_event: any, value: any) => {
     const ids = value.map((item: any) => String(item.id));
@@ -193,7 +192,7 @@ const Search = ({ onTextChange,onCityChange ,onDateChange, showScreen = false }:
             noOptionsText="Nenhuma categoria encontrada"
             getOptionLabel={(option: any) => option.title}
            renderTags={(tagValue, getTagProps) => {
-        console.log('TagValue length:', tagValue.length); // Debug
+       
         
         // Renderiza as tags normais (primeiras 3)
         const visibleTags = tagValue.slice(0, 2).map((option, index) => (
