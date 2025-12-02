@@ -174,9 +174,9 @@ const BrazilMap: React.FC = () => {
     {} as Record<string, number>,
   )
 
-  const handleMarkerClick = (establishment: Establishment) => {
-    setSelectedEstablishment(establishment)
-  }
+  // const handleMarkerClick = (establishment: Establishment) => {
+  //   setSelectedEstablishment(establishment)
+  // }
 
   const handleCloseDialog = () => {
     setSelectedEstablishment(null)
