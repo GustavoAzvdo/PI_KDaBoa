@@ -1,263 +1,290 @@
 /* ================================
    RESET BÁSICO DO COMPONENTE
+   (mantive tudo que havia + ajustes)
 ================================ */
 .produtor-hero,
 .produtor-beneficios,
 .produtor-como,
 .produtor-testimonials,
 .produtor-cta {
-  width: 100%;
-  display: block;
-  font-family: "Poppins", sans-serif;
+  width: 100% !important;
+  display: block !important;
+  font-family: "Poppins", sans-serif !important;
+  box-sizing: border-box !important;
 }
-
 
 /* ================================
-   HERO (Swiper)
+   HERO (Swiper) 
 ================================ */
 .produtor-hero {
-  width: 100%;
-  padding: 20px 0 10px;
-  position: relative;
-  background: url('../../assets/produtor-banner.gif') !important; ;
+  width: 100% !important;
+  padding: 20px 0 20px !important;
+  position: relative !important;
   background-size: cover !important;
   background-position: center !important;
+  background-repeat: no-repeat !important;
 }
 
-/* tive q comenta isso pq tava dando conflito com a pagina home :( */
-/* .swiper-pagination-bullet {
-  background: #ffffff !important;
-  border: 1px solid  !important;
-  opacity: 0.8 !important;
-} */
-
+.swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background: rgba(255,255,255,0.8) !important;
+  opacity: 0.80 !important;
+  border: 1.5px solid rgb(0, 0, 0) !important;
+  transition: transform 0.5s ease !important;
+}
 
 .swiper-pagination-bullet-active {
   background: #6a00ff !important;
-  transform: scale(1.2) !important;
+  transform: scale(1.1) !important;
 }
 
-
+/* container do swiper */
 .produtor-hero-content {
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  padding: 0 !important;
 }
 
 .hero-swiper {
-  width: 100%;
-  height: 500px;
+  width:100%!important;
+  height: auto !important;
+  min-height: 420px !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
+/* slide com alinhamento à esquerda + imagem à direita */
 .hero-slide {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 450px;
-  padding: 20px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 30px 82px 10px 120px!important;
+  gap: 24px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
+/* área de texto */
 .hero-left {
-  flex: 1;
-  max-width: 500px;
+  flex: 1 1 520px !important;
+  max-width: 600px !important;
+  color: #111 !important;
+  z-index: 2 !important;
 }
 
+/* ajuste responsivo com clamp */
 .hero-title {
-  font-size: 50px !important;
+  font-size: clamp(28px, 4.5vw, 48px) !important;
   font-weight: 700 !important;
   color: #000 !important;
-  line-height: 1.2 !important;
-  margin-bottom: 15px !important;
-  width: 100%; 
+  line-height: 1.15 !important;
+  margin-bottom: 12px !important;
+  width: 100% !important;
+  letter-spacing: -0.02em !important;
 }
 
 .hero-desc {
-  font-size: 20px !important;
-  font-weight: 400 !important;
+  font-size: clamp(14px, 1.6vw, 20px) !important;
+  font-weight: 500 !important;
   color: #333 !important;
-  margin-bottom: 30px !important;
+  margin-bottom: 20px !important;
 }
 
+/* botoes do hero */
 .hero-buttons {
-  display: flex;
-  gap: 15px;
+  display: flex !important;
+  gap: 12px !important;
+  align-items: center !important;
 }
 
 /* Primary Button */
 .hero-btn-primary {
   background: #6A00F4 !important;
   color: #fff !important;
-  padding: 10px 20px !important;
-  font-weight: 600 !important;
+  padding: 12px 22px !important;
+  font-weight: 700 !important;
   text-transform: none !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 26px rgba(106,0,244,0.12) !important;
+  transition: all 0.2s ease !important;
 }
 
+/* Hover do botão */
 .hero-btn-primary:hover {
   background: #fff !important;
   color: #6A00F4 !important;
-  border: 2px solid #6A00F4 !important ;
-}
-
-/* Secondary Button */
-.hero-btn-sec {
   border: 2px solid #6A00F4 !important;
-  color: #6A00F4 !important;
-  padding: 10px 20px !important;
-  font-weight: 600 !important;
-  text-transform: none !important;
-  border-radius: 8px !important;
 }
 
+/* área da imagem */
+.hero-right {
+  flex: 0 0 360px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px !important;
+  background: transparent !important;
+}
 
+.hero-image {
+  max-width: 360px !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.08)) !important;
+}
+
+/* fallback quando tela for pequena: esconder imagem e centralizar */
+@media (max-width: 900px) {
+  .hero-slide {
+    flex-direction: column-reverse !important;
+    text-align: center !important;
+    padding: 20px !important;
+  }
+
+  .hero-right {
+    display: none !important;
+  }
+
+  .hero-left {
+    max-width: 100% !important;
+    padding: 0 10px !important;
+  }
+}
 
 /* ====== Seção de Benefícios ====== */
-
-
-
 .produtor-beneficios {
-   width: 100%;
-  padding: 100px 0;
-  align-items: center;
-  background: linear-gradient(to top, #d1c4e9 1%, #fff 4%,#fff 85%,#d1c4e9 100%) !important;
-
+  width: 100% !important;
+  padding: 80px 0 !important;
+  align-items: center !important;
+  background: linear-gradient(to top, #f3edff 0%, #fff 12%) !important;
 }
 
+/* grid de beneficios */
 .beneficios-grid {
-  margin-top: 40px !important;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 28px;
+  margin-top: 28px !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+  gap: 24px !important;
 }
 
 /* ====== Card ====== */
 .beneficio-card {
-  background: #ffffff;
-  padding: 32px 26px;
-  border-radius: 10px;
-  border: 1px solid rgba(160, 99, 255, 0.25); /* leve Roxo */
-  position: relative;
-
-  /* Sombra suave profissional */
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.05),
-    0 8px 25px rgba(160, 99, 255, 0.08);
-  transition: all 0.3s ease;
+  background: #ffffff !important;
+  padding: 26px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(160, 99, 255, 0.12) !important;
+  position: relative !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-/* Hover animado */
+/* Hover animado (mantive) */
 .beneficio-card:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.07),
-    0 12px 28px rgba(160, 99, 255, 0.12);
-  border-color: rgba(255, 94, 58, 0.4); /* Laranja no hover */
+  transform: translateY(-6px) !important;
+  box-shadow: 0 12px 28px rgba(160, 99, 255, 0.12) !important;
+  border-color: rgba(255, 94, 58, 0.28) !important;
 }
 
 /* Linha de acento superior */
 .beneficio-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg,
-    #a063ff,
-    #ff7033
-  );
-  border-radius: 20px 20px 0 0;
-  opacity: 0.9;
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(90deg, #a063ff, #ff7033) !important;
+  border-radius: 20px 20px 0 0 !important;
+  opacity: 0.95 !important;
 }
 
-/* ====== Textos ====== */
+/* textos */
 .beneficio-title {
-  font-size: 1.3rem !important;
+  font-size: 1.15rem !important;
   line-height: 1.2 !important;
   font-weight: 700 !important;
-  color: #2b2b2b;
-  padding-bottom: 10px;
+  color: #222 !important;
+  padding-bottom: 8px !important;
 }
 
 .beneficio-text {
-  font-size: 1rem;
+  font-size: 0.98rem !important;
   line-height: 1.6 !important;
-  color: #4e4e4e;
+  color: #4e4e4e !important;
 }
 
 /* --- COMO FUNCIONA --- */
-
 .produtor-como {
-  width: 100%;
-  padding: 80px 0;
-  background: linear-gradient(to bottom, #d1c4e9 35%,#fff 100%) !important;
-
+  width: 100% !important;
+  padding: 80px 0 !important;
+  background: linear-gradient(to bottom, #f3edff 20%, #fff 100%) !important;
 }
 
 .steps {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: 50px;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+  gap: 28px !important;
+  flex-wrap: wrap !important;
+  margin-top: 36px !important;
 }
 
 /* Card */
 .step-card {
-  width: 330px;
-  background: #ffffff;
-  padding: 35px 30px;
-  border-radius: 18px;
-  text-align: center;
-  box-shadow: 0px 8px 20px rgba(0,0,0,0.06);
-  transition: 0.3s ease;
-  position: relative;
-  border-top: 4px solid transparent;
-  background-clip: padding-box;
+  width: 320px !important;
+  background: #ffffff !important;
+  padding: 28px 22px !important;
+  border-radius: 14px !important;
+  text-align: center !important;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.06) !important;
+  transition: 0.3s ease !important;
+  position: relative !important;
+  border-top: 4px solid transparent !important;
 }
 
-/* Animação de hover */
+/* hover */
 .step-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0px 12px 24px rgba(0,0,0,0.10);
+  transform: translateY(-6px) !important;
+  box-shadow: 0px 12px 24px rgba(0,0,0,0.10) !important;
 }
 
-/* Círculo numerado */
+/* circle number */
 .step-number {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 26px;
-  font-weight:700;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 15px !important;
-  background: linear-gradient(135deg, #a855f7, #fb923c);
-  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  font-size: 22px !important;
+  font-weight:700 !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 12px !important;
+  background: linear-gradient(135deg, #a855f7, #fb923c) !important;
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.24) !important;
 }
 
-/* Título */
+/* Títulos */
 .step-title {
-  font-size: 20px !important;
+  font-size: 18px !important;
   font-weight: 700 !important;
-  color: #111 ;
+  color: #111 !important;
 }
 
 /* Texto */
 .step-text {
-  font-size: 15px !important;
-  color: #555;
-  line-height: 1.5;
+  font-size: 14px !important;
+  color: #555 !important;
+  line-height: 1.5 !important;
 }
-
 
 /* ======================= TESTIMONIALS - MARQUEE ======================= */
 .produtor-testimonials {
 padding: 100px 0;
-background: linear-gradient(to top, #ffe0b2 70%,#fff 90%,#fff 100%) !important;
+background: linear-gradient(to top, #ffe0b2b4 70%,#fff 90%,#fff 100%) !important;
 }
 
 .testimonials-marquee {
@@ -326,21 +353,21 @@ padding-left: 12px;
 
 
 
-
 /* ================================
    CTA FINAL
 ================================ */
 .produtor-cta {
-  background: linear-gradient(to bottom, #ffe0b2 2%,#fff 15%,#fff 100%) !important;
-  padding: 150px 0;
-  text-align: center;
+  background: linear-gradient(to bottom, #fff 0%, #fff 100%) !important;
+  padding: 120px 0 !important;
+  text-align: center !important;
 }
 
+/* destacando texto e botão */
 .cta-text {
-  font-size: 32px;
-  color: #fff;
-  font-weight: 700;
-  margin-bottom: 25px;
+  font-size: clamp(20px, 2.4vw, 28px) !important;
+  color: #111 !important;
+  font-weight: 700 !important;
+  margin-bottom: 18px !important;
 }
 
 .cta-btn {
@@ -352,83 +379,72 @@ padding-left: 12px;
   font-weight: 700 !important;
   border-radius: 10px !important;
   text-transform: none !important;
+  transition: all 0.2s ease !important;
+}
+
+/* botão maior de CTA */
+.cta-btn-large {
+  padding: 14px 28px !important;
+  font-size: 18px !important;
+  box-shadow: 0 10px 26px rgba(106,0,244,0.12) !important;
 }
 
 .cta-btn:hover {
   background: #6A00F4 !important;
-    color: #fff !important;
-
+  color: #fff !important;
 }
-
 
 /* ================================
    ANIMAÇÕES SUAVES
 ================================ */
 .fade-up {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.8s ease forwards;
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+  animation: fadeUp 0.8s ease forwards !important;
 }
 
-.delay-1 {
-  animation-delay: 0.2s;
-}
-.delay-2 {
-  animation-delay: 0.4s;
-}
+.delay-1 { animation-delay: 0.2s !important; }
+.delay-2 { animation-delay: 0.4s !important; }
 
 @keyframes fadeUp {
   to {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1 !important;
+    transform: translateY(0) !important;
   }
 }
-
 
 /* ================================
    RESPONSIVIDADE
 ================================ */
 @media (max-width: 900px) {
   .hero-slide {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: column !important;
+    text-align: center !important;
   }
 
   .hero-image {
-    height: 250px;
-    margin-top: 20px;
+    max-height: 220px !important;
   }
 
   .beneficios-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr !important;
   }
 
   .steps {
-    grid-template-columns: 1fr;
-  }
-
-  .testimonials-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .produtor-hero-card {
-    position: relative;
-    margin-top: 25px;
-    right: 0;
+    gap: 18px !important;
   }
 }
 
 @media (max-width: 600px) {
   .hero-title {
-    font-size: 32px !important;
+    font-size: clamp(22px, 6.5vw, 32px) !important;
   }
 
   .hero-desc {
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
 
   .beneficios-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 }
-

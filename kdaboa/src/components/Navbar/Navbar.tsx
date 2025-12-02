@@ -206,7 +206,7 @@ const Navbar = () => {
                       }}
                     >
                       <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
-                        Área do Produtor
+                        Divulgue conosco
                       </Typography>
                       <Badge />
                     </MenuItem>,
@@ -315,8 +315,7 @@ const Navbar = () => {
                   '&:hover::after': { width: '100%' },
                 }}
               >
-                Área do Produtor
-              </Button>
+Divulgue conosco              </Button>
 
             </Box>
 

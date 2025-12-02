@@ -1,0 +1,296 @@
+/* Container principal */
+.brazil-map-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Paper do mapa */
+.map-paper {
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+  position: relative;
+}
+
+/* Header do mapa */
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.map-title {
+  font-weight: 600 !important;
+  color: white !important;
+  margin: 0 !important;
+}
+
+/* Controles de zoom */
+.map-controls {
+  position: absolute;
+  top: 100px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.control-button {
+  background: white !important;
+  border: 1px solid #e0e0e0 !important;
+  transition: all 0.2s ease !important;
+}
+
+.control-button:hover {
+  background: #f5f5f5 !important;
+  border-color: #667eea !important;
+  transform: scale(1.05);
+}
+
+/* Viewport do mapa */
+.map-viewport {
+  width: 100%;
+  height: 600px;
+  background: linear-gradient(180deg, #e3f2fd 0%, #f1f8ff 100%);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* SVG do Brasil */
+.brazil-svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.1s ease-out;
+}
+
+/* Contorno do Brasil */
+.brazil-outline {
+  fill: #81c784;
+  stroke: #4caf50;
+  stroke-width: 0.3;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Estilos para os estados clicáveis do Brasil */
+.state-path {
+  fill: #81c784;
+  stroke: #4caf50;
+  stroke-width: 0; /* Removendo stroke-width para eliminar espaçamentos entre estados */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.state-path:hover {
+  fill: #66bb6a;
+  stroke: #43a047;
+  stroke-width: 0.5; /* Stroke mínimo no hover para manter efeito visual */
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+}
+
+/* Labels dos estados - apenas números sem fundo */
+.state-label-group {
+  cursor: pointer;
+}
+
+.state-label-number {
+  font-size: 24px;
+  font-weight: 700;
+  fill: #1a237e;
+  pointer-events: none;
+  text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff, 0 0 8px rgba(255, 255, 255, 0.9);
+}
+
+/* Removendo estilos antigos de marcadores e labels com fundo */
+.state-label-bg,
+.establishment-marker {
+  display: none;
+}
+
+/* Labels dos estados */
+.state-label {
+  font-size: 2.5px;
+  font-weight: 700;
+  fill: #667eea;
+  pointer-events: none;
+  text-shadow: 0 0 2px white;
+}
+
+/* Estilos para a lista de estabelecimentos */
+.establishments-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.establishment-list-item {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.establishment-list-item:hover {
+  background-color: #f5f5f5;
+}
+
+.establishment-list-item:last-child {
+  border-bottom: none;
+}
+
+/* Legenda */
+.map-legend {
+  padding: 20px 28px;
+  background: #fafafa;
+  border-top: 1px solid #e0e0e0;
+}
+
+.legend-title {
+  font-weight: 600 !important;
+  color: #424242 !important;
+  margin-bottom: 12px !important;
+}
+
+/* Ajustes na legenda */
+.legend-items {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Removendo o item de marcador da legenda */
+.legend-marker {
+  display: none;
+}
+
+.legend-state-label {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  color: #667eea;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Dialog */
+.dialog-title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  font-weight: 600 !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-close-button {
+  color: white !important;
+}
+
+.dialog-footer {
+  margin-top: 16px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid #e0e0e0 !important;
+  font-style: italic !important;
+  color: #757575 !important;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .brazil-map-container {
+    padding: 12px;
+  }
+
+  .map-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .map-viewport {
+    height: 400px;
+  }
+
+  .map-controls {
+    top: 80px;
+    right: 12px;
+  }
+
+  .legend-items {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .state-label {
+    font-size: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-viewport {
+    height: 350px;
+  }
+
+  .map-title {
+    font-size: 1.2rem !important;
+  }
+
+  .control-button {
+    padding: 6px !important;
+  }
+}
+
+/* Animações */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.establishment-marker:active {
+  animation: pulse 0.3s ease;
+}
+
+/* Scrollbar customizada para o viewport */
+.map-viewport::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.map-viewport::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.map-viewport::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.map-viewport::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
