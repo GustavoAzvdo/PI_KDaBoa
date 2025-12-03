@@ -285,7 +285,7 @@ descricao.replace(/<[^>]+>/g, '').trim() !== '' &&
 
       try {
 
-        await api.put('/gerente/establishment/', formData, {
+        await api.put('/gerente/establishment', formData, {
           withCredentials: true,
         });
 
