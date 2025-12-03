@@ -49,7 +49,7 @@ const Photos = ({ card }: PhotosProps) => {
           let imageUrl = gal.foto;
 
           if (gal.foto && !gal.foto.startsWith('http')) {
-            imageUrl = `https://vmlxc5dd-3000.brs.devtunnels.ms/gallery/${gal.foto}`;
+            imageUrl = `${import.meta.env.VITE_API_BACKEND}/gallery/${gal.foto}`;
           }
 
           return (

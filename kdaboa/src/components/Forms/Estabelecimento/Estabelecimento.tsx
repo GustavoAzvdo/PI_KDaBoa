@@ -461,7 +461,7 @@ descricao.replace(/<[^>]+>/g, '').trim() !== '' &&
                       bgcolor: imageUrl ? 'transparent' : '#f8f9fa',
                       boxShadow: imageUrl ? '0 8px 25px rgba(103, 58, 183, 0.2)' : '0 4px 12px rgba(0,0,0,0.1)',
                     }}
-                    src={`http://localhost:3000/establishment/image/${nomeImagem}` || imageUrl || undefined}
+                    src={`${import.meta.env.VITE_API_BACKEND}/establishment/image/${nomeImagem}` || imageUrl || undefined}
                   >
                     {!imageUrl && (
                       <InsertPhoto sx={{
