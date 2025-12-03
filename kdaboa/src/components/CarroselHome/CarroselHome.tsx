@@ -111,7 +111,7 @@ const CarroselHome = ({ eventos }: { eventos: EventoProps[] }) => {
                                     sx={{
                                         width: {xs: '100%', md: '630px', sm: '100%'},
                                         height: "100%",
-                                        objectFit: "fill",
+                                        objectFit: {xs: 'cover', md: 'fill', sm: 'cover'},
                                        
                                     }}
                                 />
@@ -134,18 +134,18 @@ const CarroselHome = ({ eventos }: { eventos: EventoProps[] }) => {
                                     }}
                                 >
                                     {/* nome do evento */}
-                                    <Typography variant="h5" component="h3" fontWeight="bold" sx={{ fontFamily: 'var(--notosans)' }}>
+                                    <Typography variant="h5" component="h3" fontWeight="bold" sx={{ fontFamily: 'var(--notosans)' , textShadow: '1px 1px 2px rgba(0, 0, 0, 1)' }}>
                                         {evento.nome_evento}
                                     </Typography>
 
                                     {/* data */}
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
                                         <CalendarToday fontSize='small' />
-                                        <Typography variant="body2" sx={{ fontFamily: 'var(--notosans)' }}>
+                                        <Typography variant="body2" sx={{ fontFamily: 'var(--notosans)' ,  textShadow: '1px 1px 2px rgba(0, 0, 0, 1)'}}>
                                             {new Date(evento.data_inicio).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
                                         </Typography>
                                         <LocalActivityOutlined fontSize='small' sx={{ ml: 2 }} />
-                                        <Typography variant="body2" sx={{ fontFamily: 'var(--notosans)' }}>
+                                        <Typography variant="body2" sx={{ fontFamily: 'var(--notosans)',  textShadow: '1px 1px 2px rgba(0, 0, 0, 1)' }}>
                                             {evento.Endereco.cidade} - {evento.Endereco.estado}
                                         </Typography>
                                     </Box>
