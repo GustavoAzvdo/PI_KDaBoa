@@ -6,7 +6,7 @@ interface BannerEventProps {
 }
 
 const BannerEvent = ({ evento }: BannerEventProps) => {
-  const imageUrl = `http://localhost:3000/event/image/${evento.foto.split('/').pop()}`;
+  const imageUrl = `${evento.foto}`;
 
   return (
     <Box

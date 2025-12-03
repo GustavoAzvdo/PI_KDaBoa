@@ -77,6 +77,7 @@ const Home = () => {
 
        
         setEventos(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error("Erro ao carregar eventos:", error);
       }
