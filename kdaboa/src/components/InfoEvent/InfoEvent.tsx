@@ -265,7 +265,7 @@ const InfoEvent = ({ evento }: { evento: EventoProps }) => {
                             >
                                 <Box sx={{ position: 'relative' }}>
                                     <Avatar
-                                        src={`http://localhost:3000/establishment/image/${evento.Estabelecimento.imagem?.split('/').pop()}`}
+                                        src={`${evento.Estabelecimento.imagem}`}
                                         sx={{
                                             width: 80,
                                             height: 80,

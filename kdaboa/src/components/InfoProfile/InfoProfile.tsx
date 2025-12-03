@@ -90,7 +90,7 @@ const InfoProfile = ({ profileData }: InfoProfileProps) => {
                 <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-start' }, alignItems: 'center' }}>
                     <Box sx={{ py: 4, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', gap: 3 }}>
                         <Avatar
-                            src={`http://localhost:3000/establishment/image/${estabelecimento.imagem?.split('/').pop()}`}
+                            src={`${estabelecimento.imagem}`}
                             sx={{ width: { xs: 80, md: 130 }, height: { xs: 80, md: 130 } }}
                         />
                         <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
