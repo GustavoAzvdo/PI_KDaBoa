@@ -121,7 +121,8 @@ const NavbarEvent = ({ evento }: NavbarEventProps) => {
       `📍 Local: ${enderecoCompleto}\n\n` +
       `🏢 Estabelecimento: ${evento.Estabelecimento.nome}\n\n` +
       `📞 Contato: ${telefone}\n\n` +
-      `📝 Descrição: _${evento.descricao}_\n`
+      `📝 Descrição: _${evento.descricao}_\n` +
+      `Confira mais detalhes e outros eventos em: https://kdaboa.vercel.app/view-event/${evento.id_evento}`
     );
     setWhatsMessage(message);
     setShareOpen(true);
