@@ -30,7 +30,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
         year: 'numeric',
     });
 
-    const nomeImagemDoAvatar = card.Estabelecimento?.imagem?.split('/').pop() || '';
+    const nomeImagemDoAvatar = card.Estabelecimento.imagem;
 
     const buildShareMessage = () => {
         const enderecoObj = card.Endereco || {};
@@ -163,7 +163,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                 </Box>
                 <CardHeader
                     avatar={
-                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src={nomeImagemDoAvatar ? `http://localhost:3000/establishment/image/${nomeImagemDoAvatar}` : undefined}>
+                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src={nomeImagemDoAvatar || undefined}>
                             {card.Estabelecimento?.nome?.charAt(0)}
                         </Avatar>
                     }
