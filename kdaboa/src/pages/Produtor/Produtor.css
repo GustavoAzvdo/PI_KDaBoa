@@ -60,7 +60,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 30px 82px 10px 120px!important;
+  padding: 30px 120px 20px 120px!important;
   gap: 24px !important;
   width: 100% !important;
   box-sizing: border-box !important;
@@ -120,7 +120,7 @@
 
 /* área da imagem */
 .hero-right {
-  flex: 0 0 360px !important;
+  flex: 0 0 350px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -355,14 +355,14 @@ padding-left: 12px;
 
 /* ================================
    CTA FINAL
-================================ */
+
 .produtor-cta {
   background: linear-gradient(to bottom, #fff 0%, #fff 100%) !important;
   padding: 120px 0 !important;
   text-align: center !important;
 }
 
-/* destacando texto e botão */
+
 .cta-text {
   font-size: clamp(20px, 2.4vw, 28px) !important;
   color: #111 !important;
@@ -382,7 +382,7 @@ padding-left: 12px;
   transition: all 0.2s ease !important;
 }
 
-/* botão maior de CTA */
+
 .cta-btn-large {
   padding: 14px 28px !important;
   font-size: 18px !important;
@@ -393,7 +393,7 @@ padding-left: 12px;
   background: #6A00F4 !important;
   color: #fff !important;
 }
-
+================================ */
 /* ================================
    ANIMAÇÕES SUAVES
 ================================ */

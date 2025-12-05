@@ -1,11 +1,10 @@
-import React from "react";
-import { Box, Container, Typography, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Container, Typography, Button, Grid } from "@mui/material";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-
+import api from "../../api/api";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination, A11y } from "swiper/modules";
-
 import "./Produtor.css";
 import Title from "../../components/Title/Title";
 import interrogacao from  '../../assets/interrogacao.png';
@@ -16,6 +15,7 @@ import nuvem from  '../../assets/nuvem.png';
 import ideaImg from  '../../assets/ideia.png';
 import produtorBanner from '../../assets/produtor-banner.gif';
 import BrazilMap from "../../components/BrazilMap/BrazilMap"
+import BoxInfo from "../../components/BoxInfo/BoxInfo";
 
 export const ProdutorMapPage: React.FC = () => {
   return (  
@@ -25,8 +25,6 @@ export const ProdutorMapPage: React.FC = () => {
   )
 }
 
-
-
 const comments: any[] = [
   // você pode preencher dinamicamente
 ];
@@ -34,30 +32,64 @@ const comments: any[] = [
 const slides = [
   {
     id: 1,
+    title: "Cadastre-se e atraia!",
+    subtitle: "KDaBOA conecta seu estabelecimento a milhares de usuários em busca de eventos.",
+    img: logohero1,
+    ctaPrimary: "Cadastrar meu estabelecimento",
+  },
+  {
+    id: 2,
     title: "Divulgue conosco agora!",
-    subtitle: "Divulgue eventos e atraia público qualificado para suas noites.",
+    subtitle: "Receba clientes novos diariamente divulgando seus eventos no KDaBOA.",
     img: logohero,
     ctaPrimary: "Quero divulgar meu evento",
   },
   {
-    id: 2,
-    title: "Filtre seu evento!",
-    subtitle: "Segmentação por categoria e visibilidade local para resultados reais.",
-    img: logohero1,
-    ctaPrimary: "Começar agora",
-  },
-  {
     id: 3,
-    title: "Gestão simples e fácil!",
-    subtitle: "Publique eventos, acompanhe performance e otimize promoções.",
+    title: "Cadastre seu funcionário!",
+    subtitle: "Gerencie seus eventos com facilidade cadastrando seus funcionários no KDaBOA.",
     img: logohero2,
-    ctaPrimary: "Minha dashboard",
+    ctaPrimary: "Minha Dashboard",
   },
 ];
 
 const Produtor: React.FC = () => {
+
+  const [stats, setStats] = useState<{ eventos: number | null; estabelecimentos: number| null; cidades: number| null }>({
+    eventos: 0,
+    estabelecimentos: 0,
+    cidades: 0,
+  });
+
+  const calculaStats = (eventosData: any[]) => {
+    const totalEventos = eventosData.length;
+    const cidadesUnicas = new Set(eventosData.map((e: any) => e.Endereco.cidade)).size;
+    const estabUnicos = new Set(eventosData.map((e: any) => e.id_estabelecimento)).size;
+
+    setStats({
+      eventos: totalEventos,
+      estabelecimentos: estabUnicos,
+      cidades: cidadesUnicas,
+    })
+  }
+
+  const fetchEventos = async () => {
+    try {
+      const res: any = await api.get("/event");
+      const eventosData = res.data;
+      calculaStats(eventosData);
+    } catch (err) {
+      console.error("Erro ao buscar eventos:", err);
+    }
+  };
+
+  useEffect(() => {
+      fetchEventos();
+    }, []);
+  
   return (
     <>
+    
       <Navbar />
 
       {/* HERO */}
@@ -121,40 +153,68 @@ const Produtor: React.FC = () => {
               marginLeft: "12px"
             }} />
           </Title>
+          
+           <Grid
+          container
+          spacing={4}
+          textAlign="center"
+          sx={{ display: "flex", alignItems: "center", justifyContent: "space-around", my: 4 , mb: 10}}
+        >
+          {[
+            { number: stats.eventos, label: "Eventos cadastrados", color: "#6C15D5" },
+            { number: stats.estabelecimentos, label: "Estabelecimentos parceiros", color: "#FF8e38" },
+            { number: stats.cidades, label: "Cidades atendidas", color: "#6C15D5" },
+          ].map((stat, index) => (
+            <Grid size={{ xs: 4, sm: 4, md: 3 }} key={index}>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontFamily: "var(--notosans)",
+                  fontWeight: "bold",
+                  color: stat.color,
+                  mb: 1,
+                }}
+              >
+                {stat.number}+
+              </Typography>
+              <Typography color="text.secondary">{stat.label}</Typography>
+            </Grid>
+          ))}
+        </Grid>
 
           <Box className="beneficios-grid">
             <Box className="beneficio-card">
               <Typography className="beneficio-title">Visibilidade local</Typography>
               <Typography className="beneficio-text">
-                Seja visto por pessoas perto de você, no momento certo.
+                Aumente o público da sua casa em dias fracos.
               </Typography>
             </Box>
 
             <Box className="beneficio-card">
-              <Typography className="beneficio-title">Segmentação por categoria</Typography>
+              <Typography className="beneficio-title">Divulgação por localidade</Typography>
               <Typography className="beneficio-text">
-                Mostre seus eventos para quem realmente se interessa.
+                Seu evento aparece no topo para usuários próximos.
               </Typography>
             </Box>
 
             <Box className="beneficio-card">
-              <Typography className="beneficio-title">Gestão simplificada</Typography>
+              <Typography className="beneficio-title">Processo simplificado</Typography>
               <Typography className="beneficio-text">
-                Publique, edite e acompanhe seu desempenho facilmente.
+                Divulgue seu evento em menos de 30 segundos.
               </Typography>
             </Box>
 
             <Box className="beneficio-card">
-              <Typography className="beneficio-title">Estatísticas rápidas</Typography>
+              <Typography className="beneficio-title">KDaBOA em crescimento</Typography>
               <Typography className="beneficio-text">
-                Veja visualizações e interações em tempo real.
+                Receba novos clientes vindos do KDaBOA todos os dias.
               </Typography>
             </Box>
           </Box>
         </Container>
       </Box>
 
-  <BrazilMap />
+
 
       {/* COMO FUNCIONA */}
       <Box className="produtor-como">
@@ -225,16 +285,11 @@ O que dizem nossos Parceiros
 </Box>
 </Box>
 
-      {/* CTA */}
-      <Box className="produtor-cta">
-        <Container>
-          <Title>Cadastre agora seu estabelecimento!</Title>
+ <BrazilMap />
 
-          <Button variant="contained" className="cta-btn cta-btn-large">
-            Começar agora
-          </Button>
-        </Container>
-      </Box>
+<Container>
+        <BoxInfo />
+</Container>
 
       <Footer />
     </>

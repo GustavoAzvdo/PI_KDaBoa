@@ -202,6 +202,7 @@ const Home = () => {
         <BoxInfo />
 
       </Container>
+
       <Footer />
     </>
   )

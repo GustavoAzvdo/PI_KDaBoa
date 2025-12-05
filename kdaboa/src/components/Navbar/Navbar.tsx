@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Button, Container, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlined from '@mui/icons-material/PersonOutlined';
-import { BadgeOutlined, HomeOutlined, Search, DashboardOutlined, LogoutOutlined, Face, Login, Badge } from '@mui/icons-material';
+import { CampaignOutlined, HomeOutlined, Search, DashboardOutlined, LogoutOutlined, Face, Login } from '@mui/icons-material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import logo from '../../assets/logo.png';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
@@ -208,7 +208,7 @@ const Navbar = () => {
                       <Typography textAlign="center" sx={{ fontFamily: 'Fredoka', fontSize: '1.1rem' }}>
                         Divulgue conosco
                       </Typography>
-                      <Badge />
+                      <CampaignOutlined />
                     </MenuItem>,
 
                     <MenuItem
@@ -295,7 +295,7 @@ const Navbar = () => {
               <Button
                 component={RouterLink}
                 to="/produtor"
-                startIcon={<BadgeOutlined />}
+                startIcon={<CampaignOutlined />}
                 sx={{
                   color: 'black',
                   fontSize: '1.2rem',
