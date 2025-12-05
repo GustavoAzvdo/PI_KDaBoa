@@ -15,7 +15,6 @@ import nuvem from  '../../assets/nuvem.png';
 import ideaImg from  '../../assets/ideia.png';
 import produtorBanner from '../../assets/produtor-banner.gif';
 import BrazilMap from "../../components/BrazilMap/BrazilMap"
-import BoxInfo from "../../components/BoxInfo/BoxInfo";
 
 export const ProdutorMapPage: React.FC = () => {
   return (  
@@ -286,10 +285,6 @@ O que dizem nossos Parceiros
 </Box>
 
  <BrazilMap />
-
-<Container>
-        <BoxInfo />
-</Container>
 
       <Footer />
     </>
