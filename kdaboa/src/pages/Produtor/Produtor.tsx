@@ -15,6 +15,8 @@ import nuvem from  '../../assets/nuvem.png';
 import ideaImg from  '../../assets/ideia.png';
 import produtorBanner from '../../assets/produtor-banner.gif';
 import BrazilMap from "../../components/BrazilMap/BrazilMap"
+import people from '../../assets/people.png';
+import shop from '../../assets/shop.png';
 
 export const ProdutorMapPage: React.FC = () => {
   return (  
@@ -141,19 +143,17 @@ const Produtor: React.FC = () => {
         </Container>
       </Box>
 
-      {/* BENEFÍCIOS */}
-      <Box className="produtor-beneficios">
-        <Container>
-          <Title>
-            Por que divulgar seus eventos conosco
-            <Box component='img' src={interrogacao} sx={{
+      {/* Números kdaboa */}
+      <Title>
+            A plataforma que cresce todos os dias
+            <Box component='img' src={people} sx={{
               width: { xs: 40, sm: 60, md: 70 },
               height: "auto",
               marginLeft: "12px"
             }} />
           </Title>
-          
-           <Grid
+
+            <Grid
           container
           spacing={4}
           textAlign="center"
@@ -181,6 +181,20 @@ const Produtor: React.FC = () => {
           ))}
         </Grid>
 
+      {/* BENEFÍCIOS */}
+      <Box className="produtor-beneficios">
+        <Container>
+          <Title>
+            Por que divulgar seus eventos conosco
+            <Box component='img' src={interrogacao} sx={{
+              width: { xs: 40, sm: 60, md: 70 },
+              height: "auto",
+              marginLeft: "12px"
+            }} />
+          </Title>
+          
+         
+
           <Box className="beneficios-grid">
             <Box className="beneficio-card">
               <Typography className="beneficio-title">Visibilidade local</Typography>
@@ -190,9 +204,9 @@ const Produtor: React.FC = () => {
             </Box>
 
             <Box className="beneficio-card">
-              <Typography className="beneficio-title">Divulgação por localidade</Typography>
+              <Typography className="beneficio-title">Foco em localidade</Typography>
               <Typography className="beneficio-text">
-                Seu evento aparece no topo para usuários próximos.
+                seu evento se destaca para usuários próximos.
               </Typography>
             </Box>
 
@@ -204,7 +218,7 @@ const Produtor: React.FC = () => {
             </Box>
 
             <Box className="beneficio-card">
-              <Typography className="beneficio-title">KDaBOA em crescimento</Typography>
+              <Typography className="beneficio-title">Crescimento KDaBOA</Typography>
               <Typography className="beneficio-text">
                 Receba novos clientes vindos do KDaBOA todos os dias.
               </Typography>
@@ -212,6 +226,8 @@ const Produtor: React.FC = () => {
           </Box>
         </Container>
       </Box>
+
+ 
 
 
 
@@ -286,6 +302,35 @@ O que dizem nossos Parceiros
 
  <BrazilMap />
 
+<Box
+  className="produtor-cta"
+  sx={{
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 3,
+    py: 8,
+  }}
+>
+  <Title>
+    Pronto para atrair mais clientes hoje?
+    <Box
+      component="img"
+      src={shop}
+      sx={{
+        width: { xs: 40, sm: 60, md: 70 },
+        height: "auto",
+        marginLeft: "12px",
+      }}
+    />
+  </Title>
+
+  <Button className="cta-btn">
+    Quero começar agora
+  </Button>
+</Box>
       <Footer />
     </>
   );

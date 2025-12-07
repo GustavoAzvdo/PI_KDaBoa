@@ -116,9 +116,9 @@ const generateMockData = (): Establishment[] => {
     })
   }
 
-  // Rio de Janeiro - 5 estabelecimentos
+  // Rio de Janeiro - 8 estabelecimentos
   const rjCities = ["Rio de Janeiro", "Niterói", "Petrópolis"]
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 8; i++) {
     establishments.push({
       id: `est-${id++}`,
       name: `KDABOA ${rjCities[i % rjCities.length]} ${Math.floor(i / rjCities.length) + 1}`,
@@ -132,10 +132,10 @@ const generateMockData = (): Establishment[] => {
     })
   }
 
-  // Outros estados - 100 estabelecimentos distribuídos
+  // Outros estados - 95 estabelecimentos distribuídos
   const otherStates = Object.keys(stateCentroids).filter((code) => code !== "SP" && code !== "RJ")
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 95; i++) {
     const stateCode = otherStates[i % otherStates.length]
     const stateInfo = stateCentroids[stateCode]
 
@@ -227,7 +227,7 @@ const BrazilMap: React.FC = () => {
       <Paper elevation={3} className="map-paper">
         <div className="map-header">
           <Typography variant="h5" component="h2" className="map-title">
-            Mapa de Estabelecimentos KDABOA
+            Mapa de Estabelecimentos KDaBOA
           </Typography>
           <Chip label={`${establishments.length} estabelecimentos`} color="primary" size="small" />
         </div>
