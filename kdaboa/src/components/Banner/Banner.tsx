@@ -47,7 +47,7 @@ const Banner = () => {
               overflow: "hidden",
             }}>
               <RotatingText
-                texts={['eventos', ' shows ', ' rolês ', 'festivais', 'encontros', ' afters ', ' roteiros ', ' sunsets ']}
+                texts={['eventos', ' shows ', ' rolês ', 'festivais', 'encontros', ' afters ', 'roteiros', 'sunsets']}
                 staggerFrom={"last"}
                 initial={{ y: "130%" }}
                 animate={{ y: 0 }}
