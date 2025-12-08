@@ -21,7 +21,8 @@ const Banner = () => {
           flexWrap: 'wrap',
           justifyContent: 'center', 
           alignItems: 'center',
-          gap: 1 
+          width: 'auto',
+          height: 'auto',
         }}>
 
           <Typography variant='h1'
@@ -39,13 +40,14 @@ const Banner = () => {
 
             <Box sx={{
               color: 'white',
-              px: 2,
+              py: 1,
+              px: 3,
               bgcolor: 'var(--roxoForteDashboard)', borderRadius: 2, display: "inline-flex",
               transition: "width 1s ease, min-width 0.4s ease",
               overflow: "hidden",
             }}>
               <RotatingText
-                texts={[' eventos ', ' shows ', ' rolês ', ' festivais ', ' encontros ', ' afters ']}
+                texts={['eventos', ' shows ', ' rolês ', 'festivais', 'encontros', ' afters ', ' roteiros ', ' sunsets ']}
                 staggerFrom={"last"}
                 initial={{ y: "130%" }}
                 animate={{ y: 0 }}
