@@ -16,47 +16,57 @@ const Banner = () => {
           height: '100%', // garante centralização vertical se necessário
         }}
       >
-        <Typography variant='h1'
-          sx={{
-            padding: '40px',
-            fontSize: { xs: '62px', sm: '65px', md: '73px' },
-            fontWeight: '650',
-            marginBottom: '20px',
-            fontFamily: 'var(--notosans)',
-          }}
-        >
-          <span style={{ paddingRight: '10px' }}>
-            Os melhores
-          </span>
+        <Box sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center', 
+          alignItems: 'center',
+          gap: 1 
+        }}>
 
-          <Box sx={{
-            color: 'white',
-            px: 2,
-            bgcolor: 'var(--roxoForteDashboard)', borderRadius: 2, display: "inline-flex",
-            transition: "width 1s ease, min-width 0.4s ease", 
-            overflow: "hidden",
-          }}>
-            <RotatingText
-              texts={[' eventos ', ' shows ', ' rolês ', ' festivais ', ' encontros ', ' afters ']}
-              staggerFrom={"last"}
-              initial={{ y: "130%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-100%", opacity: 0 }}
-              animatePresenceMode='wait'
-              splitBy='characters'
+          <Typography variant='h1'
+            sx={{
+              padding: '40px',
+              fontSize: { xs: '62px', sm: '65px', md: '73px' },
+              fontWeight: '650',
+              marginBottom: '20px',
+              fontFamily: 'var(--notosans)',
+            }}
+          >
+            <span style={{ paddingRight: '10px' }}>
+              Os melhores
+            </span>
 
-              staggerDuration={0.045}
-              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-              transition={{ type: "spring", damping: 30, stiffness: 500 }}
-              rotationInterval={3000}
-            />
+            <Box sx={{
+              color: 'white',
+              px: 2,
+              bgcolor: 'var(--roxoForteDashboard)', borderRadius: 2, display: "inline-flex",
+              transition: "width 1s ease, min-width 0.4s ease",
+              overflow: "hidden",
+            }}>
+              <RotatingText
+                texts={[' eventos ', ' shows ', ' rolês ', ' festivais ', ' encontros ', ' afters ']}
+                staggerFrom={"last"}
+                initial={{ y: "130%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-100%", opacity: 0 }}
+                animatePresenceMode='wait'
+                splitBy='characters'
 
-          </Box>
-          <span style={{ paddingLeft: '10px' }}>
-            em um só lugar!
+                staggerDuration={0.045}
+                splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                transition={{ type: "spring", damping: 30, stiffness: 500 }}
+                rotationInterval={3000}
+              />
 
-          </span>
-        </Typography>
+            </Box>
+            <span style={{ paddingLeft: '10px' }}>
+              em um só lugar!
+
+            </span>
+          </Typography>
+
+        </Box>
       </Box>
     </Box>
   )
