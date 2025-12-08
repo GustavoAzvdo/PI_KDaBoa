@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, Card, Stack, Container } from '@mui/material'
-import { PersonOutlined, MailOutline } from '@mui/icons-material';
+import { PersonOutlined, MailOutline, HomeOutlined } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import logo from '../../../assets/logo.png'
 import { useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import api from '../../../api/api'
 
 const Signin = () => {
-   
+
     const [nameTouched, setNameTouched] = useState(false);
     const [emailTouched, setEmailTouched] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -96,21 +96,38 @@ const Signin = () => {
     });
 
     return (
-        <Box className='container_signin' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' , py: 2}}>
-         <Card 
-            elevation={2}
-            sx={{
-                width: { xs: '90%', sm: '400px' }, // responsivo
-                maxWidth: '500px',
-                height: 'auto',
-                maxHeight: '100vh', // limita altura máxima
-                borderRadius: 2,
-                border: '1px solid #e0e0e0',
-                backgroundColor: 'white',
-                overflow: 'auto' // scroll interno se necessário
-            }}
-        >
-                
+        <Box className='container_signin' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', py: 2 }}>
+            <Card
+                elevation={2}
+                sx={{
+                    width: { xs: '90%', sm: '400px' }, // responsivo
+                    maxWidth: '500px',
+                    height: 'auto',
+                    maxHeight: '100vh', // limita altura máxima
+                    borderRadius: 2,
+                    border: '1px solid #e0e0e0',
+                    backgroundColor: 'white',
+                    overflow: 'auto' // scroll interno se necessário
+                }}
+            >
+                <Box>
+                    <Button
+                        component={RouterLink}
+                        to='/'
+                        size='small'
+                        variant='text'
+                        startIcon={<HomeOutlined fontSize='small' />}
+                        sx={{
+                            fontWeight: 400,
+                            fontFamily: 'var(--fredoka)',
+                            px: 1,
+                            py: 1,
+                            borderBottomRightRadius: 10
+                        }}
+                    >
+                        Voltar para tela inicial
+                    </Button>
+                </Box>
 
                 <Container>
                     <Stack direction={'column'} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -123,11 +140,11 @@ const Signin = () => {
                                 height: '60px'
                             }}
                         />
-                        
+
                         <Typography variant='h4' sx={{ pt: 1, fontFamily: 'var(--fredoka)', fontWeight: '500' }}>
                             Criar Conta
                         </Typography>
-                   
+
                         <Typography fontSize='15px' sx={{ pt: 1, pb: 3, color: 'text.secondary', fontFamily: 'var(--notosans)' }}>
                             Crie sua conta para continuar!
                         </Typography>
@@ -216,16 +233,16 @@ const Signin = () => {
                     </Box>
                 </Container>
             </Card>
-            
+
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={5000}
                 onClose={handleCloseSnackbar}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
-                <Alert 
-                    onClose={handleCloseSnackbar} 
-                    severity={snackbarSeverity} 
+                <Alert
+                    onClose={handleCloseSnackbar}
+                    severity={snackbarSeverity}
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
