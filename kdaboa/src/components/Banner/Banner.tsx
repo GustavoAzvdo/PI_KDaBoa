@@ -32,8 +32,8 @@ const Banner = () => {
           <Box sx={{
             color: 'white',
             px: 2,
-            bgcolor: 'var(--roxoForteDashboard)', pb: 1, borderRadius: 2, display: "inline-flex",
-            transition: "width 1s ease, min-width 0.4s ease", // suaviza a mudança de tamanho
+            bgcolor: 'var(--roxoForteDashboard)', borderRadius: 2, display: "inline-flex",
+            transition: "width 1s ease, min-width 0.4s ease", 
             overflow: "hidden",
           }}>
             <RotatingText
