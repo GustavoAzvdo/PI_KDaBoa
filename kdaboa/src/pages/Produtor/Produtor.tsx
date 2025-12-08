@@ -17,7 +17,7 @@ import produtorBanner from '../../assets/produtor-banner.gif';
 import BrazilMap from "../../components/BrazilMap/BrazilMap"
 import people from '../../assets/people.png';
 import shop from '../../assets/shop.png';
-
+import {Link as RouterLink} from 'react-router-dom';
 export const ProdutorMapPage: React.FC = () => {
   return (  
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
@@ -125,6 +125,8 @@ const Produtor: React.FC = () => {
                       <Button
                         variant="contained"
                         className="hero-btn-primary"
+                        component={RouterLink}
+                        to="/login"
                         aria-label={slide.ctaPrimary}
                       >
                         {slide.ctaPrimary}
@@ -327,7 +329,7 @@ O que dizem nossos Parceiros
     />
   </Title>
 
-  <Button className="cta-btn">
+  <Button className="cta-btn" component={RouterLink} to="/login" variant="contained" size="large">
     Quero começar agora
   </Button>
 </Box>

@@ -297,7 +297,7 @@ const Navbar = () => {
                 to="/produtor"
                 startIcon={<CampaignOutlined />}
                 sx={{
-                  color: 'black',
+                  color: pathname === '/produtor' ? '#6c15d5' : 'black',
                   fontSize: '1.2rem',
                   fontWeight: 500,
                   fontFamily: 'Fredoka, sans-serif',
@@ -305,7 +305,7 @@ const Navbar = () => {
                   '&::after': {
                     content: '""',
                     position: 'absolute',
-                    width: '0%',
+                   width: pathname === '/produtor' ? '100%' : '0%',
                     height: '2px',
                     left: 0,
                     bottom: 0,
