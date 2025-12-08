@@ -49,7 +49,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             `📍 Local: ${enderecoCompleto || 'Não informado'}\n` +
             `🏢 Estabelecimento: ${card.Estabelecimento?.nome || 'Não informado'}\n\n` +
             `📝 ${card.descricao || ''}\n\n` +
-            `🔗 ${window.location.origin}/view-event/${card.id_evento}`
+            `🔗 https://kdaboa.vercel.app/view-event/${card.id_evento}`
         );
     };
 
@@ -209,7 +209,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             <ShareEvento
                 open={shareOpen}
                 onClose={() => setShareOpen(false)}
-                eventUrl={`${window.location.origin}/view-event/${card.id_evento}`}
+                eventUrl={`https://kdaboa.vercel.app/view-event/${card.id_evento}`}
                 eventTitle={card.nome_evento}
                 whatsMessage={whatsMessage}
             />
