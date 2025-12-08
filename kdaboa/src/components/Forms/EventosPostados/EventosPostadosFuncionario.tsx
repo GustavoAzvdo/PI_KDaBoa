@@ -1,17 +1,6 @@
 import {
-    Box,
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    CardMedia,
-    Chip,
-    Grid,
-    Stack,
-    Typography,
-    TextField,       // Importado
-    InputAdornment,   // Importado
-    Divider
+    Box, Button, Card, CardActions, CardContent, CardMedia, Chip,
+    Grid, Stack, Typography, TextField, InputAdornment, Divider
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api';
@@ -20,7 +9,7 @@ import dayjs from 'dayjs';
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { useEventos } from '../../../context/EventoContext';
-import { Adjust, Category, Edit, Search } from '@mui/icons-material'; // Search Importado
+import { Adjust, Category, Edit, Search } from '@mui/icons-material';
 
 interface Evento {
     data_criacao: string;
@@ -36,17 +25,16 @@ interface Evento {
     estatus: number;
 }
 
+// manda a props e senta na graxa
 interface EventosPostadosProps {
-    router: { navigate: (path: string) => void };
+    router: any; 
 }
 
 const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
     const [eventos, setEventos] = useState<Evento[]>([]);
-    // 1. Estado para a pesquisa
     const [searchTerm, setSearchTerm] = useState('');
-
     const [idsComAlteracao, setIdsComAlteracao] = useState<number[]>([]);
-
+    
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [message,] = useState('');
     const [severity,] = useState<'success' | 'error' | 'warning' | 'info'>('success');
@@ -56,7 +44,6 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
 
     const checarAlteracoes = async (listaEventos: Evento[]) => {
         const idsEncontrados: number[] = [];
-
         await Promise.all(listaEventos.map(async (evento) => {
             try {
                 const response: any = await api.get(`/gerente/event/alteration/${evento.id_evento}`, { withCredentials: true });
@@ -67,18 +54,14 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
                 // Ignora erro
             }
         }));
-
         setIdsComAlteracao(idsEncontrados);
     };
 
     const fetchEventos = async () => {
         try {
             const response: any = await api.get('/gerente/event', { withCredentials: true });
-
-            const eventosAprovados = response.data.filter((evento: any) =>
-                Number(evento.estatus) === 1
-            );
-
+            const eventosAprovados = response.data.filter((evento: any) => Number(evento.estatus) === 1);
+            
             const eventosFormatados = eventosAprovados.map((evento: any) => {
                 return {
                     id_evento: evento.id_evento,
@@ -123,7 +106,6 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
             foto: evento.foto,
             endereco: evento.id_endereco,
         });
-
         router.navigate('/eventos/criar_evento');
     };
 
@@ -131,14 +113,25 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
         fetchEventos();
     }, []);
 
-    // 2. Lógica de Filtragem
+   
+    useEffect(() => {
+        if (router.locationState?.targetEventId && eventos.length > 0) {
+         
+            const eventoAlvo = eventos.find(e => e.id_evento === router.locationState.targetEventId);
+            
+            if (eventoAlvo) {
+                setSearchTerm(eventoAlvo.nome_evento);
+            }
+        }
+    }, [eventos, router.locationState]);
+
+    // Filtra visualmente
     const eventosFiltrados = eventos.filter((evento) =>
         evento.nome_evento.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <Grid container spacing={3}>
-
             <Grid size={{ xs: 12 }} sx={{ my: 2 }}>
                 <TextField
                     fullWidth
@@ -146,7 +139,6 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
                     placeholder="Pesquisar evento pelo nome..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -158,7 +150,6 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
                 <Divider sx={{ mt: 3 }} />
             </Grid>
 
-            {/* caso ache porra nenhuma */}
             {eventosFiltrados.length === 0 && searchTerm !== '' && (
                 <Grid size={{ xs: 12 }}>
                     <Box sx={{ textAlign: 'center', py: 4, color: 'text.secondary' }}>
@@ -167,211 +158,70 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
                 </Grid>
             )}
 
-     
             {eventosFiltrados.map((evento) => {
                 const temAlteracao = idsComAlteracao.includes(evento.id_evento);
-
                 return (
                     <Grid size={{ xs: 12, sm: 6, md: 4 }} key={evento.id_evento}>
-                        <Card
-                            elevation={4}
-                            sx={{
-                                height: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                borderRadius: 2,
-                                overflow: 'hidden',
-                                transition: 'all 0.3s ease-in-out',
-                                border: temAlteracao ? '3px solid #FF8e38' : 'none',
-                                position: 'relative',
-                                '&:hover': {
-                                    transform: 'translateY(-8px)',
-                                    boxShadow: temAlteracao ? '0 8px 16px #FF8e38' : '0 12px 40px rgba(108, 21, 213, 0.2)',
-                                }
-                            }}
-                        >
-                            {/* Badge de Aviso */}
+                        <Card elevation={4} sx={{
+                            height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 2,
+                            overflow: 'hidden', transition: 'all 0.3s ease-in-out',
+                            border: temAlteracao ? '3px solid #FF8e38' : 'none', position: 'relative',
+                            '&:hover': { transform: 'translateY(-8px)', boxShadow: temAlteracao ? '0 8px 16px #FF8e38' : '0 12px 40px rgba(108, 21, 213, 0.2)', }
+                        }}>
                             {temAlteracao && (
-                                <>
-                                    <Box sx={{
-                                        position: 'absolute',
-                                        top: 10,
-                                        right: 10,
-                                        zIndex: 2,
-                                        backgroundColor: '#ff8e38',
-                                        color: 'white',
-                                        padding: '2px 8px',
-                                        borderRadius: '4px',
-                                        fontSize: '0.75rem',
-                                        fontWeight: 'bold',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                    }}>
-                                        <Stack direction="row" alignItems="center" spacing={0.5}>
-                                            <Adjust sx={{ fontSize: 16 }} />
-                                            <Typography variant="caption">Alteração Pendente</Typography>
-                                        </Stack>
-                                    </Box>
-                                </>
+                                <Box sx={{ position: 'absolute', top: 10, right: 10, zIndex: 2, backgroundColor: '#ff8e38', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+                                    <Stack direction="row" alignItems="center" spacing={0.5}>
+                                        <Adjust sx={{ fontSize: 16 }} />
+                                        <Typography variant="caption">Alteração Pendente</Typography>
+                                    </Stack>
+                                </Box>
                             )}
 
-                            {/* Imagem do evento */}
-                            <Box sx={{
-                                position: 'relative',
-                                width: '100%',
-                                height: '220px',
-                                overflow: 'hidden'
-                            }}>
-                                <CardMedia
-                                    component="img"
-                                    image={evento.foto}
-                                    alt={evento.nome_evento}
-                                    sx={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                    }}
-                                />
-                                <Box sx={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    height: '50%',
-                                    background: 'linear-gradient(transparent, rgba(0,0,0,0.6))',
-                                    zIndex: 1
-                                }} />
+                            <Box sx={{ position: 'relative', width: '100%', height: '220px', overflow: 'hidden' }}>
+                                <CardMedia component="img" image={evento.foto} alt={evento.nome_evento} sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%', background: 'linear-gradient(transparent, rgba(0,0,0,0.6))', zIndex: 1 }} />
                             </Box>
 
-                            <CardContent
-                                sx={{
-                                    flexGrow: 1,
-                                    p: 3,
-                                    fontFamily: 'Noto Sans, sans-serif !important',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: 2
-                                }}
-                            >
-                                <Typography
-                                    variant='h6'
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        color: '#2c2c2c',
-                                        lineHeight: 1.3,
-                                        fontSize: '1.3rem'
-                                    }}
-                                >
+                            <CardContent sx={{ flexGrow: 1, p: 3, fontFamily: 'Noto Sans, sans-serif !important', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                <Typography variant='h6' sx={{ fontWeight: 'bold', color: '#2c2c2c', lineHeight: 1.3, fontSize: '1.3rem' }}>
                                     {evento.nome_evento}
                                 </Typography>
-
                                 <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            color: '#666',
-                                            lineHeight: 1.5,
-                                            display: '-webkit-box',
-                                            WebkitLineClamp: 2,
-                                            WebkitBoxOrient: 'vertical',
-                                            overflow: 'hidden'
-                                        }}
-                                    >
+                                    <Typography variant="body2" sx={{ color: '#666', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                                         {evento.descricao}
                                     </Typography>
                                 </Box>
-
                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        <Box sx={{
-                                            width: 8,
-                                            height: 8,
-                                            borderRadius: '50%',
-                                            bgcolor: '#6C15D5'
-                                        }} />
+                                        <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#6C15D5' }} />
                                         <Typography variant="body2" sx={{ fontWeight: '500', color: '#444' }}>
                                             {dayjs(evento.data_inicio).format('DD/MM/YYYY HH:mm')} - {dayjs(evento.data_fim).format('HH:mm')}
                                         </Typography>
                                     </Box>
-
                                     {evento.id_endereco && (
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                            <Box sx={{
-                                                width: 8,
-                                                height: 8,
-                                                borderRadius: '50%',
-                                                bgcolor: '#6C15D5'
-                                            }} />
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    color: '#666',
-                                                    display: '-webkit-box',
-                                                    WebkitLineClamp: 1,
-                                                    WebkitBoxOrient: 'vertical',
-                                                    overflow: 'hidden'
-                                                }}
-                                            >
+                                            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#6C15D5' }} />
+                                            <Typography variant="body2" sx={{ color: '#666', display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                                                 {evento.id_endereco.logradouro}, {evento.id_endereco.numero} - {evento.id_endereco.bairro}
                                             </Typography>
                                         </Box>
                                     )}
-
                                     {evento.Evento_Categoria.length > 0 && (
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
                                             <Category sx={{ fontSize: 18, color: '#6c15d5', mr: 1 }} />
                                             {evento.Evento_Categoria.slice(0, 3).map((categoria, idx) => (
-                                                <Chip
-                                                    key={idx}
-                                                    label={categoria}
-                                                    size="small"
-                                                    sx={{
-                                                        bgcolor: 'rgba(108, 21, 213, 0.1)',
-                                                        color: '#6C15D5',
-                                                    }}
-                                                />
+                                                <Chip key={idx} label={categoria} size="small" sx={{ bgcolor: 'rgba(108, 21, 213, 0.1)', color: '#6C15D5' }} />
                                             ))}
                                             {evento.Evento_Categoria.length > 3 && (
-                                                <Chip
-                                                    label={`+${evento.Evento_Categoria.length - 3}`}
-                                                    size="small"
-                                                    sx={{
-                                                        bgcolor: '#f0f0f0',
-                                                        color: '#666',
-                                                        fontSize: '0.7rem',
-                                                        fontWeight: '600'
-                                                    }}
-                                                />
+                                                <Chip label={`+${evento.Evento_Categoria.length - 3}`} size="small" sx={{ bgcolor: '#f0f0f0', color: '#666', fontSize: '0.7rem', fontWeight: '600' }} />
                                             )}
                                         </Box>
                                     )}
                                 </Box>
                             </CardContent>
 
-                            <CardActions
-                                sx={{
-                                    p: 3,
-                                    pt: 0,
-                                    gap: 1.5,
-                                    display: 'flex',
-                                    justifyContent: 'space-between'
-                                }}
-                            >
-                                <Button
-                                    variant='contained'
-                                    startIcon={<Edit />}
-                                    onClick={() => handleEdit(evento)}
-                                    sx={{
-                                        flex: 1,
-                                        bgcolor: '#6C15D5',
-                                        color: 'white',
-                                        textTransform: 'none',
-                                        py: 1,
-                                        transition: 'all 0.3s ease',
-                                        '&:hover': {
-                                            bgcolor: '#5a12b8',
-                                        }
-                                    }}
-                                >
+                            <CardActions sx={{ p: 3, pt: 0, gap: 1.5, display: 'flex', justifyContent: 'space-between' }}>
+                                <Button variant='contained' startIcon={<Edit />} onClick={() => handleEdit(evento)} sx={{ flex: 1, bgcolor: '#6C15D5', color: 'white', textTransform: 'none', py: 1, transition: 'all 0.3s ease', '&:hover': { bgcolor: '#5a12b8', } }}>
                                     Editar
                                 </Button>
                             </CardActions>
@@ -379,13 +229,7 @@ const EventosPostadosFuncionario = ({ router }: EventosPostadosProps) => {
                     </Grid>
                 );
             })}
-            <CustomSnackbar
-                open={openSnackbar}
-                message={message}
-                severity={severity}
-                onClose={() => setOpenSnackbar(false)}
-                autoHideDuration={autoHideDuration}
-            />
+            <CustomSnackbar open={openSnackbar} message={message} severity={severity} onClose={() => setOpenSnackbar(false)} autoHideDuration={autoHideDuration} />
         </Grid>
     );
 };

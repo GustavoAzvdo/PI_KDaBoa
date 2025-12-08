@@ -8,8 +8,8 @@ import {
     Chip,
     Grid,
     Stack,
-    TextField, // Importado
-    InputAdornment, // Importado
+    TextField,
+    InputAdornment,
     Typography,
     Divider
 } from '@mui/material';
@@ -20,7 +20,7 @@ import dayjs from 'dayjs';
 import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { useEventos } from '../../../context/EventoContext';
-import { Adjust, Category, Delete, Edit, Search } from '@mui/icons-material'; // Importado Search
+import { Adjust, Category, Delete, Edit, Search } from '@mui/icons-material';
 
 interface Evento {
     data_criacao: string;
@@ -36,13 +36,17 @@ interface Evento {
     estatus: number;
 }
 
+// Interface ajustada para aceitar locationState (igual ao funcionário) e pathname
 interface EventosPostadosProps {
-    router: { navigate: (path: string) => void };
+    router: {
+        navigate: (path: string) => void;
+        pathname: string;
+        locationState?: { targetEventId?: number };
+    };
 }
 
 const EventosPostados = ({ router }: EventosPostadosProps) => {
     const [eventos, setEventos] = useState<Evento[]>([]);
-    // Estado para a pesquisa
     const [searchTerm, setSearchTerm] = useState('');
     
     const [idsComAlteracao, setIdsComAlteracao] = useState<number[]>([]);
@@ -147,13 +151,37 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
         fetchEventos();
     }, []);
 
+   
+    useEffect(() => {
+        if (eventos.length > 0) {
+            let targetId: number | null = null;
+            if (router.locationState?.targetEventId) {
+                targetId = router.locationState.targetEventId;
+            } 
+            else if (router.pathname.includes('?id=')) {
+                const idFromUrl = router.pathname.split('?id=')[1];
+                targetId = Number(idFromUrl);
+            }
+
+            if (targetId) {
+                const eventoEncontrado = eventos.find(e => e.id_evento === targetId);
+                
+                if (eventoEncontrado) {
+                    setSearchTerm(eventoEncontrado.nome_evento);
+                    setMessage(`Filtrando evento: ${eventoEncontrado.nome_evento}`);
+                    setSeverity('info');
+                    setOpenSnackbar(true);
+                }
+            }
+        }
+    }, [eventos, router.locationState, router.pathname]); 
+
     const eventosFiltrados = eventos.filter((evento) => 
         evento.nome_evento.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <Grid container spacing={3}>
-            {/* --- BARRA DE PESQUISA --- */}
             <Grid size={{xs: 12}} sx={{my: 2}}>
                 <TextField
                     fullWidth
@@ -161,7 +189,6 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                     placeholder="Pesquisar evento pelo nome..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                  
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -172,6 +199,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                 />
                 <Divider sx={{ mt: 3 }} />
             </Grid>
+
             {/* Mensagem se não encontrar nada */}
             {eventosFiltrados.length === 0 && searchTerm !== '' && (
                  <Grid size={{ xs: 12 }}>
@@ -181,12 +209,10 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                  </Grid>
             )}
 
-          
             {eventosFiltrados.map((evento) => {
                 const temAlteracao = idsComAlteracao.includes(evento.id_evento);
 
                 return (
-
                     <Grid size={{ xs: 12, sm: 6, md: 4 }} key={evento.id_evento}>
                         <Card
                             elevation={4}
@@ -206,26 +232,24 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                             }}
                         >
                             {temAlteracao && (
-                                <>
-                                    <Box sx={{
-                                        position: 'absolute',
-                                        top: 10,
-                                        right: 10,
-                                        zIndex: 2,
-                                        backgroundColor: '#ff8e38',
-                                        color: 'white',
-                                        padding: '2px 8px',
-                                        borderRadius: '4px',
-                                        fontSize: '0.75rem',
-                                        fontWeight: 'bold',
-                                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                    }}>
-                                        <Stack direction="row" alignItems="center" spacing={0.5}>
-                                            <Adjust sx={{ fontSize: 16 }} />
-                                            <Typography variant="caption">Alteração Pendente</Typography>
-                                        </Stack>
-                                    </Box>
-                                </>
+                                <Box sx={{
+                                    position: 'absolute',
+                                    top: 10,
+                                    right: 10,
+                                    zIndex: 2,
+                                    backgroundColor: '#ff8e38',
+                                    color: 'white',
+                                    padding: '2px 8px',
+                                    borderRadius: '4px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 'bold',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                }}>
+                                    <Stack direction="row" alignItems="center" spacing={0.5}>
+                                        <Adjust sx={{ fontSize: 16 }} />
+                                        <Typography variant="caption">Alteração Pendente</Typography>
+                                    </Stack>
+                                </Box>
                             )}
 
                             <Box sx={{

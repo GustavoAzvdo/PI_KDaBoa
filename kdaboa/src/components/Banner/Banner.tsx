@@ -1,5 +1,6 @@
 import './Banner.css'
 import { Box, Typography } from '@mui/material'
+import RotatingText from '../../../ReactBits/RotatingText'
 const Banner = () => {
   return (
     <Box className="banner-container " sx={{ height: '430px' }} >
@@ -16,15 +17,45 @@ const Banner = () => {
         }}
       >
         <Typography variant='h1'
-        sx={{
+          sx={{
             padding: '40px',
             fontSize: { xs: '62px', sm: '65px', md: '73px' },
             fontWeight: '650',
             marginBottom: '20px',
             fontFamily: 'var(--notosans)',
-        }}
+          }}
         >
-          Os melhores eventos em um só lugar!
+          <span style={{ paddingRight: '10px' }}>
+            Os melhores
+          </span>
+
+          <Box sx={{
+            color: 'white',
+            px: 2,
+            bgcolor: 'var(--roxoForteDashboard)', pb: 1, borderRadius: 2, display: "inline-flex",
+            transition: "width 1s ease, min-width 0.4s ease", // suaviza a mudança de tamanho
+            overflow: "hidden",
+          }}>
+            <RotatingText
+              texts={[' eventos ', ' shows ', ' rolês ', ' festivais ', ' encontros ', ' afters ']}
+              staggerFrom={"last"}
+              initial={{ y: "130%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-100%", opacity: 0 }}
+              animatePresenceMode='wait'
+              splitBy='characters'
+
+              staggerDuration={0.045}
+              splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+              transition={{ type: "spring", damping: 30, stiffness: 500 }}
+              rotationInterval={3000}
+            />
+
+          </Box>
+          <span style={{ paddingLeft: '10px' }}>
+            em um só lugar!
+
+          </span>
         </Typography>
       </Box>
     </Box>

@@ -24,19 +24,29 @@ import CriarFuncionario from '../Forms/CriarFuncionario/CriarFuncionario';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import EventosCriados from '../Forms/EventosCriados/EventosCriados';
-import {Notificacoes} from './Notificacoes'
-function useDemoRouter(initialPath: string): Router {
+import { Notificacoes } from './Notificacoes'
+
+// Router atualizado para suportar query params e state (Igual ao do Funcionário)
+function useDemoRouter(initialPath: string): any {
   const [pathname, setPathname] = React.useState(initialPath);
+  const [routerState, setRouterState] = React.useState<any>(null);
 
   const router = React.useMemo(() => {
     return {
       pathname,
       searchParams: new URLSearchParams(),
-      navigate: (path: string | URL) => {
+      locationState: routerState,
+      navigate: (path: string | URL, state?: any) => {
         setPathname(String(path));
+
+        if (state) {
+          setRouterState(state);
+        } else {
+          setRouterState(null);
+        }
       },
     };
-  }, [pathname]);
+  }, [pathname, routerState]);
 
   return router;
 }
@@ -150,7 +160,6 @@ export default function DashboardLayoutBasic(props: any) {
 
   const router = useDemoRouter('/dashboard');
 
-  // Remove this const when copying and pasting into your project.
   const demoWindow = window ? window() : undefined;
 
 
@@ -205,7 +214,9 @@ export default function DashboardLayoutBasic(props: any) {
 
 
   function renderContent(pathname: string, router: Router) {
-    switch (pathname) {
+    const cleanPath = pathname.split('?')[0];
+
+    switch (cleanPath) {
       case '/dashboard/inicio':
         return (
           <BoasVindasGerente nome={user?.nome} router={router} />
@@ -284,7 +295,7 @@ export default function DashboardLayoutBasic(props: any) {
 
       <DashboardLayout
         slots={{
-          toolbarActions: Notificacoes ,
+          toolbarActions: () => <Notificacoes router={router} />,
         }}
       >
         <PageContainer>

@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Checkbox, Chip, Dialog, DialogContent, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip } from '@mui/material'
+import { CircularProgress, Autocomplete, Box, Button, Checkbox, Chip, Dialog, DialogContent, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField, Tooltip } from '@mui/material'
 import * as React from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, AttachFile, ArrowBack, Visibility } from '@mui/icons-material';
+import { Close, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon, CheckBox as CheckBoxIcon, ConfirmationNumber, AttachFile, ArrowBack, Visibility, Edit, Create } from '@mui/icons-material';
 import { styled } from '@mui/material/styles'
 import { dados } from '../../../categorys/dados';
 import { useState, useEffect } from 'react';
@@ -52,6 +52,7 @@ interface CategoryProps {
 const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
     // valores do form 
+    const [loading, setLoading] = useState<boolean>(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [nome, setNome] = useState<string>('');
     const [descricao, setDescricao] = React.useState<string>('');
@@ -112,63 +113,63 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
 
 
     const API_URL = 'http://localhost:3000';
-     useEffect(() => {
-            if (eventoEditando) {
-                console.log('Editando evento:', eventoEditando);
-                setEventoTitle('Editar evento');
-                setIsEdit(true);
-    
-                // Campos simples
-                setNome(eventoEditando.nome_evento || '');
-                setDescricao(eventoEditando.descricao || '');
-                setData_criacao(eventoEditando.data_criacao ? dayjs(eventoEditando.data_criacao) : null);
-                setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
-                setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
-    
-    
-                if (eventoEditando.endereco && eventoEditando.endereco.id_endereco) {
-    
-                    setEnderecoModo('alterar');
-    
-    
-                    const enderecoEncontrado = enderecos.find(
-                        (end) => end.id_endereco === eventoEditando.endereco!.id_endereco
-                    );
-                    setSelectedEndereco(enderecoEncontrado || eventoEditando.endereco);
-                } else {
-    
-                    setEnderecoModo('manter');
-    
-                }
-    
-                // Histórico
-                
-    
-                // Foto
-                if (eventoEditando.foto) {
-                    const nomeArquivo = eventoEditando.foto.split('/').pop() || 'imagem.png';
-                    const urlCompleta = `${API_URL}/event/image/${nomeArquivo}?t=${new Date().getTime()}`;
-                    setPreviewUrl(urlCompleta);
-                    setFileName(nomeArquivo);
-                    setFotoFile(null);
-                } else {
-                    setFotoUrl('');
-                    setFileName('');
-                    setFotoFile(null);
-                    setPreviewUrl('');
-                }
-    
-                // Categorias
-                const categoriaIds = eventoEditando.categorias
-                    .map(cat => dados.find(d => d.title === cat)?.id)
-                    .filter((id): id is number => id !== undefined);
-                setCtg(categoriaIds);
-    
+    useEffect(() => {
+        if (eventoEditando) {
+            console.log('Editando evento:', eventoEditando);
+            setEventoTitle('Editar evento');
+            setIsEdit(true);
+
+            // Campos simples
+            setNome(eventoEditando.nome_evento || '');
+            setDescricao(eventoEditando.descricao || '');
+            setData_criacao(eventoEditando.data_criacao ? dayjs(eventoEditando.data_criacao) : null);
+            setDataInicio(eventoEditando.data_inicio ? dayjs(eventoEditando.data_inicio) : null);
+            setDataFim(eventoEditando.data_fim ? dayjs(eventoEditando.data_fim) : null);
+
+
+            if (eventoEditando.endereco && eventoEditando.endereco.id_endereco) {
+
+                setEnderecoModo('alterar');
+
+
+                const enderecoEncontrado = enderecos.find(
+                    (end) => end.id_endereco === eventoEditando.endereco!.id_endereco
+                );
+                setSelectedEndereco(enderecoEncontrado || eventoEditando.endereco);
             } else {
-                resetForm();
+
+                setEnderecoModo('manter');
+
             }
-    
-        }, [eventoEditando, enderecos]);
+
+            // Histórico
+
+
+            // Foto
+            if (eventoEditando.foto) {
+                const nomeArquivo = eventoEditando.foto.split('/').pop() || 'imagem.png';
+                const urlCompleta = `${API_URL}/event/image/${nomeArquivo}?t=${new Date().getTime()}`;
+                setPreviewUrl(urlCompleta);
+                setFileName(nomeArquivo);
+                setFotoFile(null);
+            } else {
+                setFotoUrl('');
+                setFileName('');
+                setFotoFile(null);
+                setPreviewUrl('');
+            }
+
+            // Categorias
+            const categoriaIds = eventoEditando.categorias
+                .map(cat => dados.find(d => d.title === cat)?.id)
+                .filter((id): id is number => id !== undefined);
+            setCtg(categoriaIds);
+
+        } else {
+            resetForm();
+        }
+
+    }, [eventoEditando, enderecos]);
 
     const handleAddEndereco = (novoEndereco: EnderecoData) => {
         setEnd((prev) => [...prev, novoEndereco]); ''
@@ -257,6 +258,7 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
     const handleEditEvento = async () => {
         console.log('fotoFile:', fotoFile);
         console.log('fileName:', fileName);
+        setLoading(true);
         try {
             const formData = new FormData();
             // formData.append('id_evento', eventoEditando?.id_evento.toString() || '');
@@ -318,12 +320,16 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
+        finally {
+            setLoading(false);
+        }
         setEventoEditando(null)
     };
 
     const handlePostEvento = async () => {
         console.log('fotoFile:', fotoFile);
         console.log('fileName:', fileName);
+        setLoading(true);
         try {
             const formData = new FormData();
             formData.append('nome_evento', nome);
@@ -374,6 +380,9 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
             setSnackbarMessage('Erro ao criar evento. Tente novamente.');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
+        }
+        finally {
+            setLoading(false);
         }
         setEventoEditando(null)
     };
@@ -813,31 +822,46 @@ const CriarEventoFuncionario = ({ onCategoryChange, setEventoTitle }: CategoryPr
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', pt: 1 }}>
                         {!isEdit ? (
                             <Button
-                                disabled={!allFieldsFilled()}
+                                disabled={!allFieldsFilled() || loading}
                                 sx={{
                                     mb: 2,
                                     backgroundColor: 'var(--roxo)',
                                     width: { xs: '100%', sm: '100%', md: '25%' },
+                                    // Mantém visualmente agradável enquanto carrega
+                                    '&.Mui-disabled': {
+                                        backgroundColor: loading ? 'var(--roxo)' : undefined,
+                                        opacity: loading ? 0.7 : undefined,
+                                        color: loading ? '#fff' : undefined
+                                    }
                                 }}
                                 variant='contained'
                                 onClick={() => handlePostEvento()}
+                                // Troca ícone pelo Spinner
+                                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Create />}
                             >
                                 <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
-                                    Criar evento
+                                    {loading ? 'Criando...' : 'Criar evento'}
                                 </Typography>
                             </Button>
                         ) : (
                             <Button
-                                disabled={!allFieldsFilled()}
+                                disabled={!allFieldsFilled() || loading}
                                 sx={{
                                     mb: 2,
                                     backgroundColor: 'var(--roxo)',
                                     width: { xs: '100%', sm: '100%', md: '25%' },
+                                    '&.Mui-disabled': {
+                                        backgroundColor: loading ? 'var(--roxo)' : undefined,
+                                        opacity: loading ? 0.7 : undefined,
+                                        color: loading ? '#fff' : undefined
+                                    }
                                 }}
                                 variant='contained'
-                                onClick={() => handleEditEvento()}>
+                                onClick={() => handleEditEvento()}
+                                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Edit />}
+                            >
                                 <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
-                                    Editar evento
+                                    {loading ? 'Salvando...' : 'Editar evento'}
                                 </Typography>
                             </Button>
                         )}

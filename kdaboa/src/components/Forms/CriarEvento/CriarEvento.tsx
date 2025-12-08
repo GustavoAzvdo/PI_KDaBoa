@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
+import { CircularProgress, Autocomplete, Box, Button, Checkbox, Chip, FormControl, FormControlLabel, Grid, IconButton, InputAdornment, Radio, RadioGroup, TextField } from '@mui/material'
 import * as React from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -65,6 +65,7 @@ export interface Alteracao {
 const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
 
     // --- ESTADOS ---
+    const [loading, setLoading] = useState<boolean>(false);
     const [alteracoes, setAlteracoes] = useState<Alteracao[]>([]);
     const [popoverAnchor, setPopoverAnchor] = useState<HTMLElement | null>(null);
     const [activeAlteracao, setActiveAlteracao] = useState<Alteracao | null>(null);
@@ -241,7 +242,6 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             reader.onloadend = () => { setFotoUrl(reader.result as string); };
             reader.readAsDataURL(compressedFile);
 
-            // Preview
             setFileName(file.name);
             setFotoFile(file);
             const localPreview = URL.createObjectURL(file);
@@ -270,8 +270,9 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
     }, [enderecoModo, enderecos]);
 
     const handleEditEvento = async () => {
+        setLoading(true);
         try {
-            // 1. Prepara os dados para salvar (igual ao seu código atual)
+
             const formData = new FormData();
             formData.append('nome_evento', nome);
             formData.append('descricao', descricao);
@@ -288,22 +289,20 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                 formData.append('images', fotoFile);
             }
 
-            // 2. Envia a atualização oficial do evento (O SAVE DO GERENTE)
             await api.put(`/gerente/event/${eventoEditando?.id_evento}`, formData, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            // 3. A MÁGICA: Limpa todas as pendências restantes (Categorias, Fotos, etc)
-            // Se o gerente salvou manualmente, consideramos que as sugestões antigas devem ser descartadas/rejeitadas.
+
             if (alteracoes.length > 0) {
-                // Mapeia todas as alterações pendentes e manda rejeitar (accept: false)
+
                 const promessasLimpeza = alteracoes.map(alteracao =>
                     api.put(`/gerente/event/alteration/${eventoEditando?.id_evento}/${alteracao.id_his}`, {}, {
                         params: { accept: false },
                         withCredentials: true
                     }).catch(err => console.log(`Erro ao limpar id ${alteracao.id_his}`, err))
-                    // O catch aqui garante que se um falhar, não trava o resto
+
                 );
 
                 await Promise.all(promessasLimpeza);
@@ -312,11 +311,7 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setSnackbarMessage('Evento atualizado e pendências resolvidas!');
             setSnackbarSeverity('success');
             setSnackbarOpen(true);
-
-            // 4. Limpa o estado local visual imediatamente para sumir as bordas laranjas
             setAlteracoes([]);
-
-            // 5. Reseta o formulário
             resetForm();
 
         } catch (error) {
@@ -325,9 +320,13 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }
+        finally {
+            setLoading(false);
+        }
     };
 
     const handlePostEvento = async () => {
+        setLoading(true);
         try {
             const formData = new FormData();
             formData.append('nome_evento', nome);
@@ -357,6 +356,9 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
             setSnackbarMessage('Erro ao criar evento. Tente novamente.');
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -976,20 +978,27 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', pt: 1 }}>
                         {!isEdit ? (
                             <span>
-
                                 <Button
-                                    disabled={!allFieldsFilled()}
+                                 
+                                    disabled={!allFieldsFilled() || loading}
                                     sx={{
                                         mb: 2,
                                         backgroundColor: 'var(--roxo)',
                                         width: '100%',
+                                
+                                        '&.Mui-disabled': {
+                                            backgroundColor: loading ? 'var(--roxo)' : undefined,
+                                            opacity: loading ? 0.7 : undefined,
+                                            color: loading ? '#fff' : undefined
+                                        }
                                     }}
                                     variant='contained'
                                     onClick={() => handlePostEvento()}
-                                    startIcon={<Create />}
+                                  
+                                    startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Create />}
                                 >
                                     <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
-                                        Criar evento
+                                        {loading ? 'Criando...' : 'Criar evento'}
                                     </Typography>
                                 </Button>
                             </span>
@@ -997,20 +1006,24 @@ const CriarEvento = ({ onCategoryChange, setEventoTitle }: CategoryProps) => {
                             <Tooltip title={alteracoes.length > 0 ? "Analise todas as alterações pendentes antes de salvar." : ""}>
                                 <span>
                                     <Button
-                                        disabled={!allFieldsFilled() || alteracoes.length > 0}
-                                        startIcon={<Edit />}
+                                        // Adicionado "|| loading"
+                                        disabled={!allFieldsFilled() || alteracoes.length > 0 || loading}
+                                        // Lógica do ícone
+                                        startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Edit />}
                                         sx={{
                                             mb: 2,
                                             backgroundColor: 'var(--roxo)',
-
                                             '&.Mui-disabled': {
-                                                backgroundColor: alteracoes.length > 0 ? '#e0e0e0' : undefined
+                                                // Lógica para manter cor se for loading ou cinza se for alteração pendente
+                                                backgroundColor: (alteracoes.length > 0 && !loading) ? '#e0e0e0' : (loading ? 'var(--roxo)' : undefined),
+                                                opacity: loading ? 0.7 : undefined,
+                                                color: loading ? '#fff' : undefined
                                             }
                                         }}
                                         variant='contained'
                                         onClick={() => handleEditEvento()}>
                                         <Typography sx={{ fontSize: 19, fontFamily: 'var(--notosans) !important', px: 2, fontWeight: '450' }}>
-                                            {alteracoes.length > 0 ? 'Analise alterações' : 'Editar evento'}
+                                            {loading ? 'Salvando...' : (alteracoes.length > 0 ? 'Analise alterações' : 'Editar evento')}
                                         </Typography>
                                     </Button>
                                 </span>

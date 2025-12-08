@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
-import { CelebrationOutlined, CalendarToday, LocalActivityOutlined, Share } from '@mui/icons-material';
+import { CelebrationOutlined, CalendarToday, Share, PlaceOutlined } from '@mui/icons-material';
 import "./CardEventHome.css"
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Chip, Tooltip, Typography } from '@mui/material';
@@ -49,7 +49,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             `📍 Local: ${enderecoCompleto || 'Não informado'}\n` +
             `🏢 Estabelecimento: ${card.Estabelecimento?.nome || 'Não informado'}\n\n` +
             `📝 ${card.descricao || ''}\n\n` +
-            `🔗 ${window.location.origin}/view-event/${card.id_evento}`
+            `🔗 https://kdaboa.vercel.app/view-event/${card.id_evento}`
         );
     };
 
@@ -178,7 +178,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
                             </Box>
 
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, pt: 1 }}>
-                                <LocalActivityOutlined fontSize='small' />
+                                <PlaceOutlined fontSize='small' />
                                 {card.Endereco.cidade} - {card.Endereco.estado}
 
                             </Box>
@@ -209,7 +209,7 @@ export default function RecipeReviewCard({ card }: CardEventHomeProps) {
             <ShareEvento
                 open={shareOpen}
                 onClose={() => setShareOpen(false)}
-                eventUrl={`${window.location.origin}/view-event/${card.id_evento}`}
+                eventUrl={`https://kdaboa.vercel.app/view-event/${card.id_evento}`}
                 eventTitle={card.nome_evento}
                 whatsMessage={whatsMessage}
             />
