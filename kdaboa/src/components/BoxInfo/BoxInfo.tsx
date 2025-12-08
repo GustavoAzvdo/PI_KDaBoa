@@ -224,8 +224,15 @@ const BoxInfo = () => {
           container
           spacing={4}
           textAlign="center"
-          sx={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}
+          sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-around" }}
         >
+          <Grid size={{ xs: 12 }} sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+            <Button endIcon={<PersonAddAlt1Outlined />} component={RouterLink} variant='outlined' color='inherit' size='large' to="/produtor" className="btn-cadastrar">
+              <Typography className="btn-text">
+               Saber mais
+              </Typography>
+            </Button>
+          </Grid>
           {[
             { number: stats.eventos, label: "Eventos cadastrados", color: "#6C15D5" },
             { number: stats.estabelecimentos, label: "Estabelecimentos parceiros", color: "#FF8e38" },
@@ -246,6 +253,8 @@ const BoxInfo = () => {
               <Typography color="text.secondary">{stat.label}</Typography>
             </Grid>
           ))}
+
+
         </Grid>
 
       </Grid>
