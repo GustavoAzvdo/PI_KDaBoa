@@ -202,10 +202,10 @@ export function NotificacoesFuncionários({ router }: NotificacoesProps) {
                     notifications.map((item) => (
                         <MenuItem
                             key={item.id}
-                            onClick={() => handleNotificationClick(item)}
+                            onClick={item.read ? undefined : () => handleNotificationClick(item)}
                             sx={{
                                 py: 2, px: 2, whiteSpace: 'normal', alignItems: 'flex-start',
-                                borderBottom: '1px solid #f0f0f0', cursor: 'pointer',
+                                borderBottom: '1px solid #f0f0f0', cursor: item.read ? 'default' : 'pointer',
                                 backgroundColor: item.read ? 'inherit' : 'rgba(100, 100, 255, 0.08)',
                                 transition: 'background-color 0.3s',
                                 '&:hover': { backgroundColor: item.read ? '#f9f9f9' : 'rgba(100, 100, 255, 0.15)' }
