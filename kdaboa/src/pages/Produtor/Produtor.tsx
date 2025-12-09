@@ -54,13 +54,13 @@ const slides = [
   },
 ];
 
-useEffect(()=> {
-  window.scrollTo(0,0);
-})
 
 
 const Produtor: React.FC = () => {
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  })
   const [stats, setStats] = useState<{ eventos: number | null; estabelecimentos: number | null; cidades: number | null }>({
     eventos: 0,
     estabelecimentos: 0,
