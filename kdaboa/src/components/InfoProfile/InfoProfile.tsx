@@ -111,7 +111,7 @@ const InfoProfile = ({ profileData }: InfoProfileProps) => {
 
                 <Grid size={{ xs: 12 }} sx={{ py: 4, margin: 'auto', textAlign: 'justify' }}>
                     <Box className="title-description" sx={{ paddingX: { xs: 5, md: 0 }, }}>
-                        <Typography variant="h3" className="description-title" sx={{ paddingTop: 5, textAlign: { xs: 'center', md: 'left' } }}>DESCRIÇÃO DO ESTABELECIMENTO</Typography>
+                        <Typography variant="h3" sx={{ paddingTop: 5, textAlign: { xs: 'center', md: 'left'  }, fontSize: { xs: '1.95rem !important', sm: '2.5rem !important', md: '2.6rem !important' } }}>DESCRIÇÃO DO ESTABELECIMENTO</Typography>
 
                         {showFull ? (
 
@@ -172,7 +172,7 @@ const InfoProfile = ({ profileData }: InfoProfileProps) => {
 
                 <Grid container size={{ xs: 12 }} sx={{ margin: 'auto', paddingTop: 4, display: 'flex', justifyContent: 'start', width: '100%' }}>
                         <Box className="title-photos" sx={{ textAlign: { xs: 'center', sm: 'center', md: 'start' } }}>
-                            <Typography variant='h3' className='title-photos-text' sx={{ paddingTop: 1, pb: 3 }}>
+                            <Typography variant='h3' sx={{ paddingTop: 1, pb: 3 , fontSize: { xs: '1.95rem !important', sm: '2.5rem !important', md: '2.6rem !important'}}}>
                                 FOTOS DO ESTABELECIMENTO
                             </Typography>
                         </Box>

@@ -9,7 +9,7 @@ import show from "../../assets/show.png"
 import restaurante from "../../assets/restaurante.png"
 import happy from "../../assets/happy.png"
 import './BoxInfo.css'
-import { LocalActivityOutlined, LocationOnOutlined, PersonAddAlt1Outlined, SearchOutlined, StarOutlined } from "@mui/icons-material"
+import { LocalActivityOutlined, LocationOnOutlined, PersonAddAlt1Outlined, ReadMoreOutlined, SearchOutlined, StarOutlined } from "@mui/icons-material"
 import Title from "../Title/Title"
 import eventosproximos from '../../assets/eventos-proximos.png'
 import check from '../../assets/check.png'
@@ -227,7 +227,7 @@ const BoxInfo = () => {
           sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-around" }}
         >
           <Grid size={{ xs: 12 }} sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-            <Button endIcon={<PersonAddAlt1Outlined />} component={RouterLink} variant='outlined' color='inherit' size='large' to="/produtor" className="btn-cadastrar">
+            <Button endIcon={<ReadMoreOutlined />} component={RouterLink} variant='outlined' color='inherit' size='large' to="/produtor" className="btn-cadastrar">
               <Typography className="btn-text">
                Saber mais
               </Typography>
@@ -308,7 +308,7 @@ const BoxInfo = () => {
               {
                 icon: <SearchOutlined sx={{ fontSize: 32 }} />,
                 title: "Busca Inteligente",
-                description: "Encontre eventos por nome, categoria, data ou localização.",
+                description: "Encontre eventos por nome, categoria, data ou cidade.",
               },
               {
                 icon: <StarOutlined sx={{ fontSize: 32 }} />,
