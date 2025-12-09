@@ -11,7 +11,12 @@ import {
     TextField,
     InputAdornment,
     Typography,
-    Divider
+    Divider,
+    Dialog,                
+    DialogActions,          
+    DialogContent,          
+    DialogContentText,      
+    DialogTitle            
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import api from '../../../api/api';
@@ -21,6 +26,8 @@ import { EnderecoData } from '../Endereco/Endereco';
 import CustomSnackbar from '../../CustomSnackbar/CustomSnackbar';
 import { useEventos } from '../../../context/EventoContext';
 import { Adjust, Category, Delete, Edit, Search } from '@mui/icons-material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded'; 
 
 interface Evento {
     data_criacao: string;
@@ -36,7 +43,6 @@ interface Evento {
     estatus: number;
 }
 
-// Interface ajustada para aceitar locationState (igual ao funcionário) e pathname
 interface EventosPostadosProps {
     router: {
         navigate: (path: string) => void;
@@ -54,6 +60,8 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
     const [message, setMessage] = useState('');
     const [severity, setSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('success');
     const [autoHideDuration,] = useState(4000);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [idToDelete, setIdToDelete] = useState<number | null>(null);
 
     const { setEventoEditando } = useEventos();
 
@@ -114,12 +122,24 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
         }
     }
 
-    const handleDelete = async (id_evento: number) => {
+    const handleOpenDeleteDialog = (id_evento: number) => {
+        setIdToDelete(id_evento);
+        setOpenDeleteDialog(true);
+    };
+
+    const handleCloseDeleteDialog = () => {
+        setOpenDeleteDialog(false);
+        setIdToDelete(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!idToDelete) return;
+
         try {
-            await api.delete(`/gerente/event/${id_evento}`, {
+            await api.delete(`/gerente/event/${idToDelete}`, {
                 withCredentials: true
             });
-            setEventos(eventos.filter(evento => evento.id_evento !== id_evento));
+            setEventos(eventos.filter(evento => evento.id_evento !== idToDelete));
             setOpenSnackbar(true);
             setMessage('Evento excluído com sucesso!');
             setSeverity('success');
@@ -128,6 +148,8 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
             setOpenSnackbar(true);
             setMessage('Erro ao excluir evento!');
             setSeverity('error');
+        } finally {
+            handleCloseDeleteDialog(); 
         }
     };
 
@@ -415,7 +437,7 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                                     variant='outlined'
                                     color="error"
                                     startIcon={<Delete />}
-                                    onClick={() => handleDelete(evento.id_evento)}
+                                    onClick={() => handleOpenDeleteDialog(evento.id_evento)}
                                     sx={{
                                         flex: 1,
                                         textTransform: 'none',
@@ -433,6 +455,76 @@ const EventosPostados = ({ router }: EventosPostadosProps) => {
                     </Grid>
                 );
             })}
+
+            <Dialog
+                open={openDeleteDialog}
+                onClose={handleCloseDeleteDialog}
+                PaperProps={{
+                    sx: {
+                        borderRadius: 2,
+                        padding: 1,
+                        maxWidth: '360px'
+                    }
+                }}
+            >
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 2 }}>
+                    <WarningAmberRoundedIcon
+                        sx={{
+                            fontSize: 60,
+                            color: 'warning.main',
+                            bgcolor: '#fff4e5',
+                            borderRadius: '50%',
+                            p: 1,
+                            mb: 2
+                        }}
+                    />
+
+                    <DialogTitle  sx={{ fontWeight: 'bold', textAlign: 'center', fontFamily: 'var(--notosans)' }}>
+                        Deseja excluir este evento?
+                    </DialogTitle>
+                </Box>
+
+                <DialogContent>
+                    <DialogContentText  sx={{ textAlign: 'center', color: 'text.secondary', fontFamily: 'var(--notosans)' }}>
+                        Você está prestes a excluir o evento permanentemente.
+                        <br />
+                        <Typography component="span" sx={{ fontWeight: 'bold', color: 'error.main', display: 'block', mt: 1 }}>
+                            Essa ação é irreversível e não poderá ser desfeita!
+                        </Typography>
+                    </DialogContentText>
+                </DialogContent>
+
+                <DialogActions sx={{ justifyContent: 'center', pb: 3, gap: 2 }}>
+                    <Button
+                        onClick={handleCloseDeleteDialog}
+                        variant="outlined"
+                        sx={{
+                            color: 'text.primary',
+                            textTransform: 'none',
+                            px: 3,
+                           
+                        }}
+                    >
+                        Cancelar
+                    </Button>
+
+                    <Button
+                        onClick={handleConfirmDelete}
+                        variant="contained"
+                        color="error"
+                        autoFocus
+                        endIcon={<DeleteOutlineIcon />}
+                        sx={{
+                            textTransform: 'none',
+                            px: 3,
+                            boxShadow: 'none'
+                        }}
+                    >
+                        Sim, excluir
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <CustomSnackbar
                 open={openSnackbar}
                 message={message}
