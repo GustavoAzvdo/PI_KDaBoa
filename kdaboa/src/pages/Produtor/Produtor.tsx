@@ -7,19 +7,19 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination, A11y } from "swiper/modules";
 import "./Produtor.css";
 import Title from "../../components/Title/Title";
-import interrogacao from  '../../assets/interrogacao.png';
-import logohero from  '../../assets/logohero.png';
-import logohero1 from  '../../assets/logohero1.png';
-import logohero2 from  '../../assets/logohero2.png';
-import nuvem from  '../../assets/nuvem.png';
-import ideaImg from  '../../assets/ideia.png';
+import interrogacao from '../../assets/interrogacao.png';
+import logohero from '../../assets/logohero.png';
+import logohero1 from '../../assets/logohero1.png';
+import logohero2 from '../../assets/logohero2.png';
+import nuvem from '../../assets/nuvem.png';
+import ideaImg from '../../assets/ideia.png';
 import produtorBanner from '../../assets/produtor-banner.gif';
 import BrazilMap from "../../components/BrazilMap/BrazilMap"
 import people from '../../assets/people.png';
 import shop from '../../assets/shop.png';
-import {Link as RouterLink} from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 export const ProdutorMapPage: React.FC = () => {
-  return (  
+  return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
       <BrazilMap />
     </main>
@@ -54,9 +54,14 @@ const slides = [
   },
 ];
 
+useEffect(()=> {
+  window.scrollTo(0,0);
+})
+
+
 const Produtor: React.FC = () => {
 
-  const [stats, setStats] = useState<{ eventos: number | null; estabelecimentos: number| null; cidades: number| null }>({
+  const [stats, setStats] = useState<{ eventos: number | null; estabelecimentos: number | null; cidades: number | null }>({
     eventos: 0,
     estabelecimentos: 0,
     cidades: 0,
@@ -85,12 +90,12 @@ const Produtor: React.FC = () => {
   };
 
   useEffect(() => {
-      fetchEventos();
-    }, []);
-  
+    fetchEventos();
+  }, []);
+
   return (
     <>
-    
+
       <Navbar />
 
       {/* HERO */}
@@ -147,41 +152,41 @@ const Produtor: React.FC = () => {
 
       {/* Números kdaboa */}
       <Title>
-            A plataforma que cresce todos os dias
-            <Box component='img' src={people} sx={{
-              width: { xs: 40, sm: 60, md: 70 },
-              height: "auto",
-              marginLeft: "12px"
-            }} />
-          </Title>
+        A plataforma que cresce todos os dias
+        <Box component='img' src={people} sx={{
+          width: { xs: 40, sm: 60, md: 70 },
+          height: "auto",
+          marginLeft: "12px"
+        }} />
+      </Title>
 
-            <Grid
-          container
-          spacing={4}
-          textAlign="center"
-          sx={{ display: "flex", alignItems: "center", justifyContent: "space-around", my: 4 , mb: 10}}
-        >
-          {[
-            { number: stats.eventos, label: "Eventos cadastrados", color: "#6C15D5" },
-            { number: stats.estabelecimentos, label: "Estabelecimentos parceiros", color: "#FF8e38" },
-            { number: stats.cidades, label: "Cidades atendidas", color: "#6C15D5" },
-          ].map((stat, index) => (
-            <Grid size={{ xs: 4, sm: 4, md: 3 }} key={index}>
-              <Typography
-                variant="h3"
-                sx={{
-                  fontFamily: "var(--notosans)",
-                  fontWeight: "bold",
-                  color: stat.color,
-                  mb: 1,
-                }}
-              >
-                {stat.number}+
-              </Typography>
-              <Typography color="text.secondary">{stat.label}</Typography>
-            </Grid>
-          ))}
-        </Grid>
+      <Grid
+        container
+        spacing={4}
+        textAlign="center"
+        sx={{ display: "flex", alignItems: "center", justifyContent: "space-around", my: 4, mb: 10 }}
+      >
+        {[
+          { number: stats.eventos, label: "Eventos cadastrados", color: "#6C15D5" },
+          { number: stats.estabelecimentos, label: "Estabelecimentos parceiros", color: "#FF8e38" },
+          { number: stats.cidades, label: "Cidades atendidas", color: "#6C15D5" },
+        ].map((stat, index) => (
+          <Grid size={{ xs: 4, sm: 4, md: 3 }} key={index}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontFamily: "var(--notosans)",
+                fontWeight: "bold",
+                color: stat.color,
+                mb: 1,
+              }}
+            >
+              {stat.number}+
+            </Typography>
+            <Typography color="text.secondary">{stat.label}</Typography>
+          </Grid>
+        ))}
+      </Grid>
 
       {/* BENEFÍCIOS */}
       <Box className="produtor-beneficios">
@@ -194,8 +199,8 @@ const Produtor: React.FC = () => {
               marginLeft: "12px"
             }} />
           </Title>
-          
-         
+
+
 
           <Box className="beneficios-grid">
             <Box className="beneficio-card">
@@ -229,7 +234,7 @@ const Produtor: React.FC = () => {
         </Container>
       </Box>
 
- 
+
 
 
 
@@ -273,66 +278,66 @@ const Produtor: React.FC = () => {
         </Container>
       </Box>
 
-    <Box className="produtor-testimonials">
+      <Box className="produtor-testimonials">
 
-       < Title >
-O que dizem nossos Parceiros         
-<Box component='img' src={nuvem} sx={{
+        < Title >
+          O que dizem nossos Parceiros
+          <Box component='img' src={nuvem} sx={{
             width: { xs: 40, sm: 60, md: 70 }, // muda conforme a tela
             height: "auto", // mantém a proporção
           }} />
-      </Title>
+        </Title>
 
-<Box className="testimonials-marquee">
-  <Box className="marquee-track">
-   <Box className="marquee-item card-comment">“Desde que comecei a divulgar no Kdaboa, as noites ficaram muito mais cheias.” <span className="author">— Dono do Bar XYZ</span></Box>
-<Box className="marquee-item card-comment">“Plataforma simples e com ótimo alcance regional.” <span className="author">— Casa Cultural ABC</span></Box>
-<Box className="marquee-item card-comment">“Excelente para atrair novos clientes toda semana.” <span className="author">— Bistrô do Centro</span></Box>
-<Box className="marquee-item card-comment">“Nunca recebi tantas visitas após divulgar aqui.” <span className="author">— Espaço Lounge 77</span></Box>
-    {comments.map((c, index) => (
-      <Box key={`c1-${index}`} className="marquee-item card-comment">{c}</Box>
-    ))}
+        <Box className="testimonials-marquee">
+          <Box className="marquee-track">
+            <Box className="marquee-item card-comment">“Desde que comecei a divulgar no Kdaboa, as noites ficaram muito mais cheias.” <span className="author">— Dono do Bar XYZ</span></Box>
+            <Box className="marquee-item card-comment">“Plataforma simples e com ótimo alcance regional.” <span className="author">— Casa Cultural ABC</span></Box>
+            <Box className="marquee-item card-comment">“Excelente para atrair novos clientes toda semana.” <span className="author">— Bistrô do Centro</span></Box>
+            <Box className="marquee-item card-comment">“Nunca recebi tantas visitas após divulgar aqui.” <span className="author">— Espaço Lounge 77</span></Box>
+            {comments.map((c, index) => (
+              <Box key={`c1-${index}`} className="marquee-item card-comment">{c}</Box>
+            ))}
 
-   <Box className="marquee-item card-comment">“Desde que comecei a divulgar no Kdaboa, as noites ficaram muito mais cheias.” <span className="author">— Dono do Bar XYZ</span></Box>
-<Box className="marquee-item card-comment">“Plataforma simples e com ótimo alcance regional.” <span className="author">— Casa Cultural ABC</span></Box>
-    {comments.map((c, index) => (
-      <Box key={`c2-${index}`} className="marquee-item card-comment">{c}</Box>
-    ))}
-  </Box>
-</Box>
-</Box>
+            <Box className="marquee-item card-comment">“Desde que comecei a divulgar no Kdaboa, as noites ficaram muito mais cheias.” <span className="author">— Dono do Bar XYZ</span></Box>
+            <Box className="marquee-item card-comment">“Plataforma simples e com ótimo alcance regional.” <span className="author">— Casa Cultural ABC</span></Box>
+            {comments.map((c, index) => (
+              <Box key={`c2-${index}`} className="marquee-item card-comment">{c}</Box>
+            ))}
+          </Box>
+        </Box>
+      </Box>
 
- <BrazilMap />
+      <BrazilMap />
 
-<Box
-  className="produtor-cta"
-  sx={{
-    textAlign: "center",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 3,
-    py: 8,
-  }}
->
-  <Title>
-    Pronto para atrair mais clientes hoje?
-    <Box
-      component="img"
-      src={shop}
-      sx={{
-        width: { xs: 40, sm: 60, md: 70 },
-        height: "auto",
-        marginLeft: "12px",
-      }}
-    />
-  </Title>
+      <Box
+        className="produtor-cta"
+        sx={{
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 3,
+          py: 8,
+        }}
+      >
+        <Title>
+          Pronto para atrair mais clientes hoje?
+          <Box
+            component="img"
+            src={shop}
+            sx={{
+              width: { xs: 40, sm: 60, md: 70 },
+              height: "auto",
+              marginLeft: "12px",
+            }}
+          />
+        </Title>
 
-  <Button className="cta-btn" component={RouterLink} to="/login" variant="contained" size="large">
-    Quero começar agora
-  </Button>
-</Box>
+        <Button className="cta-btn" component={RouterLink} to="/login" variant="contained" size="large">
+          Quero começar agora
+        </Button>
+      </Box>
       <Footer />
     </>
   );
