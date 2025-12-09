@@ -4,6 +4,8 @@ import RotatingText from '../../../ReactBits/RotatingText'
 const Banner = () => {
   return (
     <Box className="banner-container " sx={{ height: '430px' }} >
+      {/* <Container> */}
+
       <Box className="banner-content"
         sx={{
           width: { xs: '100%', sm: '100%', md: '50%' },
@@ -16,10 +18,11 @@ const Banner = () => {
           height: '100%', // garante centralização vertical se necessário
         }}
       >
+
         <Box sx={{
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'center', 
+          justifyContent: 'center',
           alignItems: 'center',
           width: 'auto',
           height: 'auto',
@@ -70,6 +73,7 @@ const Banner = () => {
 
         </Box>
       </Box>
+      {/* </Container> */}
     </Box>
   )
 }
