@@ -89,15 +89,13 @@ const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onP
                                     sx={{
                                         minWidth: 0,
                                         padding: 0,
-                                        '&:hover .icons': {
-                                            color: '#fff !important',
-                                        }
+                                       
                                     }}
                                 >
                                     {showPassword ? (
-                                        <VisibilityOffOutlined className="icons"  />
+                                        <VisibilityOffOutlined color='disabled'  />
                                     ) : (
-                                        <VisibilityOutlined className="icons" />
+                                        <VisibilityOutlined color='disabled'  />
                                     )}
                                 </Button>
                             </InputAdornment>
@@ -155,16 +153,14 @@ const Password: React.FC<PasswordProps> = ({ pegarSenha, onValidationChange, onP
 
                                         minWidth: 0,
                                         padding: 0,
-                                        '&:hover .icons': {
-                                            color: '#fff !important',
-                                        }
+                                        
                                     }}
 
                                 >
                                     {showConfirmPassword ? (
-                                        <VisibilityOffOutlined className="icons" />
+                                        <VisibilityOffOutlined  color='disabled'/>
                                     ) : (
-                                        <VisibilityOutlined className="icons" />
+                                        <VisibilityOutlined color='disabled'/>
                                     )}
                                 </Button>
                             </InputAdornment>

@@ -1,5 +1,5 @@
-import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, Card, Stack, Container, LinearProgress } from '@mui/material'
-import { HttpsOutlined, EmailOutlined, HomeOutlined,  LoginOutlined } from '@mui/icons-material';
+import { Box, Typography, TextField, InputAdornment, Button, Link, Snackbar, Alert, Card, Stack, Container, LinearProgress, IconButton } from '@mui/material'
+import { EmailOutlined, HomeOutlined, LoginOutlined,  VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { CircularProgress } from '@mui/material'
@@ -24,6 +24,7 @@ const Login = () => {
 
     const [email, setEmail] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
+    const [verSenha, setVerSenha] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [attemptsLeft, setAttemptsLeft] = useState<number>(() => {
@@ -274,14 +275,23 @@ const Login = () => {
                                     fullWidth
                                     margin='normal'
                                     id="outlined-password"
-                                    type="password" required
+                                    type={verSenha ? "text" : "password"} required
                                     label="Senha"
                                     variant="outlined"
                                     value={senha}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSenha(e.target.value)}
                                     InputProps={{
                                         endAdornment: <InputAdornment position="end" >
-                                            <HttpsOutlined className='icons' />
+                                            <IconButton
+                                                onClick={() => setVerSenha(!verSenha)}
+                                                sx={{
+                                                    minWidth: 0,
+                                                    padding: 0,
+
+                                                }}
+                                            >
+                                                {verSenha ? <VisibilityOffOutlined color='disabled'/> : <VisibilityOutlined color='disabled' />}
+                                            </IconButton>
                                         </InputAdornment>
                                     }}
                                 />
@@ -297,7 +307,7 @@ const Login = () => {
                                 startIcon={isLoading ? <CircularProgress color="inherit" size={20} /> : null}
                             >
                                 <Typography className='btn' >
-                                    {isLoading ? 'Entrando...' : <Box><Typography  sx={{ display: 'flex', alignItems: 'center' }}>Entrar <LoginOutlined sx={{ ml: 1 }} fontSize='small'/></Typography></Box>}
+                                    {isLoading ? 'Entrando...' : <Box><Typography sx={{ display: 'flex', alignItems: 'center' }}>Entrar <LoginOutlined sx={{ ml: 1 }} fontSize='small' /></Typography></Box>}
                                 </Typography>
                             </Button>
 
